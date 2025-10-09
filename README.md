@@ -1,0 +1,201 @@
+# God Panel - Modern Admin Dashboard
+
+A modern, feature-rich admin dashboard built with **Nuxt.js 4.1.2**, **Vuetify 3**, **Tailwind CSS**, and **TypeScript**. This project provides a complete admin panel solution with authentication, theming, RTL support, and a responsive design.
+
+## ✨ Features
+
+- 🚀 **Nuxt.js 4.1.2** - Latest version with SSR and SSG support
+- 🎨 **Vuetify 3** - Material Design components
+- 💨 **Tailwind CSS** - Utility-first CSS framework
+- 🔒 **TypeScript** - Full type safety
+- ✅ **Zod Validation** - Runtime type validation
+- 🌍 **RTL Support** - Right-to-left language support
+- 🔐 **JWT Authentication** - Secure authentication system
+- 🎯 **Pinia Store** - State management
+- 🌐 **i18n Ready** - Internationalization support
+- 📱 **Responsive Design** - Mobile-first approach
+- 🎭 **Theme System** - Light/Dark mode with custom themes
+- 📊 **Dashboard Layouts** - Multiple layout options (vertical, horizontal, mini)
+
+## 🛠️ Tech Stack
+
+- **Framework:** Nuxt.js 4.1.2
+- **UI Library:** Vuetify 3
+- **Styling:** Tailwind CSS
+- **Language:** TypeScript
+- **State Management:** Pinia
+- **Validation:** Zod
+- **HTTP Client:** Axios
+- **Icons:** Material Design Icons
+
+## 📦 Installation
+
+1. **Clone the repository**
+   ```bash
+   git clone https://github.com/your-username/god-panel-nuxt.git
+   cd god-panel-nuxt
+   ```
+
+2. **Install dependencies**
+   ```bash
+   # npm
+   npm install
+
+   # yarn
+   yarn install
+
+   # pnpm
+   pnpm install
+   ```
+
+3. **Environment Setup**
+   Create a `.env` file in the root directory:
+   ```env
+   NUXT_PUBLIC_API_BASE=/api
+   API_BASE_URL=http://localhost:3001
+   ```
+
+4. **Development Server**
+   ```bash
+   # npm
+   npm run dev
+
+   # yarn
+   yarn dev
+
+   # pnpm
+   pnpm dev
+   ```
+
+   Visit `http://localhost:3000` to see the application.
+
+## 🚀 Build & Production
+
+```bash
+# Build for production
+npm run build
+
+# Preview production build
+npm run preview
+
+# Generate static site
+npm run generate
+```
+
+## 📁 Project Structure
+
+```
+god-panel-nuxt/
+├── app/
+│   └── app.vue                 # Root component
+├── assets/
+│   └── css/
+│       └── main.css           # Global styles
+├── components/                 # Vue components
+├── composables/                # Vue composables
+├── layouts/                    # Page layouts
+│   ├── default.vue
+│   └── dashboard.vue
+├── middleware/                 # Route middleware
+│   ├── auth.ts
+│   └── guest.ts
+├── pages/                      # File-based routing
+│   ├── index.vue
+│   ├── dashboard/
+│   │   └── index.vue
+│   └── auth/
+│       └── login.vue
+├── plugins/                    # Nuxt plugins
+│   └── vuetify.ts
+├── public/                     # Static assets
+├── stores/                     # Pinia stores
+│   ├── auth.ts
+│   └── settings.ts
+├── types/                      # TypeScript types
+│   ├── index.ts
+│   └── validation.ts
+├── utils/                      # Utility functions
+└── nuxt.config.ts             # Nuxt configuration
+```
+
+## 🎨 Customization
+
+### Themes
+The application supports multiple theme configurations:
+- Light/Dark mode
+- Custom color schemes
+- RTL/LTR direction support
+
+### Layouts
+Choose from different dashboard layouts:
+- Vertical sidebar
+- Horizontal navigation
+- Mini sidebar mode
+
+## 🔧 Configuration
+
+### Nuxt Config
+Key configuration options in `nuxt.config.ts`:
+
+```typescript
+export default defineNuxtConfig({
+  modules: [
+    '@nuxtjs/tailwindcss',
+    '@nuxtjs/axios',
+    '@pinia/nuxt',
+    '@nuxtjs/color-mode',
+    '@nuxtjs/i18n'
+  ],
+
+  // Vuetify, Axios, i18n, and other configurations
+})
+```
+
+## 📱 Responsive Design
+
+The application is fully responsive and works on:
+- Desktop computers
+- Tablets
+- Mobile devices
+- Different screen orientations
+
+## 🌐 Internationalization
+
+Built-in support for multiple languages with RTL support for Arabic, Hebrew, and other RTL languages.
+
+## 🔐 Authentication
+
+JWT-based authentication system with:
+- Login/Register pages
+- Protected routes
+- Role-based access control
+- Automatic token refresh
+
+## 📊 Features Overview
+
+- **Dashboard:** Overview with stats, charts, and recent activity
+- **Authentication:** Complete auth flow with validation
+- **Settings:** Theme customization and user preferences
+- **Navigation:** Responsive navigation with multiple layouts
+- **Components:** Reusable UI components
+- **State Management:** Centralized state with Pinia
+- **API Integration:** Axios-based API communication
+
+## 🤝 Contributing
+
+1. Fork the repository
+2. Create a feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit your changes (`git commit -m 'Add some amazing feature'`)
+4. Push to the branch (`git push origin feature/amazing-feature`)
+5. Open a Pull Request
+
+## 📄 License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+## 🙏 Acknowledgments
+
+- [Nuxt.js](https://nuxt.com/) - The framework
+- [Vuetify](https://vuetifyjs.com/) - UI components
+- [Tailwind CSS](https://tailwindcss.com/) - Styling
+- [Minimals](https://minimals.cc/) - Original design inspiration
