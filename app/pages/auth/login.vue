@@ -1,70 +1,172 @@
 <template>
   <div class="login-page">
-    <v-container fluid class="login-container">
-      <v-row class="login-row">
-        <v-col cols="12" md="6" class="login-form-col">
-          <v-card class="login-card pa-8">
-            <v-card-title class="text-center mb-6">
-              <h1 class="login-title">Welcome Back</h1>
-              <p class="login-subtitle">Sign in to your account</p>
-            </v-card-title>
+    <!-- Top Header -->
+    <div class="top-header">
+      <div class="header-content">
+        <div class="help-section">
+          <span class="help-text">Need help?</span>
+          <v-btn icon size="small" class="help-icon">
+            <v-icon size="20">mdi-help-circle-outline</v-icon>
+          </v-btn>
+        </div>
+        <div class="logo-section">
+          <v-img
+            src="/logo-single.svg"
+            width="40"
+            height="40"
+            class="logo"
+          />
+        </div>
+      </div>
+    </div>
 
-            <v-card-text>
-              <form @submit.prevent="handleSubmit">
+    <!-- Main Content -->
+    <div class="main-content">
+      <!-- Left Panel -->
+      <div class="left-panel">
+        <div class="background-blur">
+          <v-img
+            src="/assets/background/background-3-blur.webp"
+            class="background-image"
+            cover
+          />
+        </div>
+        <div class="welcome-content">
+          <div class="welcome-text">
+            <h1 class="welcome-title">Hi, Welcome back</h1>
+            <p class="welcome-subtitle">More effectively with optimized workflows.</p>
+          </div>
+          <div class="illustration">
+            <v-img
+              src="https://placehold.co/432x324"
+              width="384"
+              height="288"
+              class="illustration-image"
+            />
+          </div>
+        </div>
+      </div>
+
+      <!-- Right Panel -->
+      <div class="right-panel">
+        <div class="login-form-container">
+          <!-- Form Header -->
+          <div class="form-header">
+            <h2 class="form-title">Sign in to your account</h2>
+            <div class="register-link">
+              <span class="register-text">Don't have an account?</span>
+              <NuxtLink to="/auth/register" class="register-link-text">
+                Get started
+              </NuxtLink>
+            </div>
+          </div>
+
+          <!-- Login Form -->
+          <div class="login-form">
+            <form @submit.prevent="handleSubmit">
+              <!-- Email Field -->
+              <div class="form-field">
                 <v-text-field
                   v-model="form.email"
-                  label="Email"
-                  type="email"
+                  placeholder="demo@minimals.cc"
                   variant="outlined"
-                  :error-messages="errors.email"
-                  prepend-inner-icon="mdi-email"
-                  class="mb-4"
+                  class="custom-text-field"
+                  :class="{ 'has-value': form.email }"
                 />
-
-                <v-text-field
-                  v-model="form.password"
-                  label="Password"
-                  type="password"
-                  variant="outlined"
-                  :error-messages="errors.password"
-                  prepend-inner-icon="mdi-lock"
-                  class="mb-6"
-                />
-
-                <v-btn
-                  type="submit"
-                  color="primary"
-                  size="large"
-                  block
-                  :loading="loading"
-                  class="mb-4"
-                >
-                  Sign In
-                </v-btn>
-
-                <div class="text-center">
-                  <router-link to="/auth/register" class="text-decoration-none">
-                    Don't have an account? Sign up
-                  </router-link>
+                <div class="field-label">
+                  <span class="label-text">Email address</span>
                 </div>
-              </form>
-            </v-card-text>
-          </v-card>
-        </v-col>
+              </div>
 
-        <v-col cols="12" md="6" class="login-image-col">
-          <div class="login-image">
-            <v-icon size="120" color="primary" class="mb-4">mdi-account-circle</v-icon>
-            <h2>Secure Access</h2>
-            <p>Your data is protected with enterprise-grade security</p>
+              <!-- Password Section -->
+              <div class="password-section">
+                <div class="forgot-password-link">
+                  <NuxtLink to="/auth/forgot-password" class="forgot-link">
+                    Forgot password?
+                  </NuxtLink>
+                </div>
+                <div class="form-field">
+                  <v-text-field
+                    v-model="form.password"
+                    placeholder="6+ characters"
+                    type="password"
+                    variant="outlined"
+                    class="custom-text-field"
+                    :class="{ 'has-value': form.password }"
+                  />
+                  <div class="field-label">
+                    <span class="label-text">Password</span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Sign In Button -->
+              <v-btn
+                type="submit"
+                size="large"
+                block
+                class="sign-in-btn"
+                :loading="loading"
+              >
+                Sign in
+              </v-btn>
+
+              <!-- Divider -->
+              <div class="divider-section">
+                <div class="divider-line"></div>
+                <span class="divider-text">OR</span>
+                <div class="divider-line"></div>
+              </div>
+
+              <!-- Social Login -->
+              <div class="social-login">
+                <v-btn
+                  icon
+                  size="small"
+                  variant="outlined"
+                  class="social-btn"
+                  @click="loginWithGoogle"
+                >
+                  <div class="google-icon">
+                    <div class="google-colors">
+                      <div class="google-blue"></div>
+                      <div class="google-red"></div>
+                      <div class="google-yellow"></div>
+                      <div class="google-green"></div>
+                    </div>
+                  </div>
+                </v-btn>
+                <v-btn
+                  icon
+                  size="small"
+                  variant="outlined"
+                  class="social-btn"
+                  @click="loginWithGithub"
+                >
+                  <v-icon size="20" color="currentColor">mdi-github</v-icon>
+                </v-btn>
+                <v-btn
+                  icon
+                  size="small"
+                  variant="outlined"
+                  class="social-btn"
+                  @click="loginWithTwitter"
+                >
+                  <div class="twitter-icon">
+                    <v-icon size="16" color="currentColor">mdi-twitter</v-icon>
+                  </div>
+                </v-btn>
+              </div>
+            </form>
           </div>
-        </v-col>
-      </v-row>
-    </v-container>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
 <script setup lang="ts">
+import { reactive, ref, onMounted } from 'vue'
 import { loginSchema, type LoginForm } from '~/types/validation'
 
 const authStore = useAuthStore()
@@ -72,7 +174,7 @@ const router = useRouter()
 
 // Form state
 const form = reactive<LoginForm>({
-  email: '',
+  email: 'demo@minimals.cc',
   password: ''
 })
 
@@ -99,11 +201,11 @@ const handleSubmit = async () => {
   try {
     const result = await authStore.login(form)
 
-    if (result.success) {
+    if (result?.success) {
       await router.push('/dashboard')
     } else {
       // Handle error - you might want to show a snackbar
-      console.error('Login failed:', result.error)
+      console.error('Login failed:', result?.error)
     }
   } catch (error) {
     console.error('Login error:', error)
@@ -112,14 +214,25 @@ const handleSubmit = async () => {
   }
 }
 
-// Redirect if already authenticated
-if (authStore.isAuthenticated) {
-  await router.push('/dashboard')
+// Social login handlers
+const loginWithGoogle = () => {
+  // Implement Google OAuth login
+  console.log('Login with Google')
+}
+
+const loginWithGithub = () => {
+  // Implement GitHub OAuth login
+  console.log('Login with GitHub')
+}
+
+const loginWithTwitter = () => {
+  // Implement Twitter OAuth login
+  console.log('Login with Twitter')
 }
 
 // Page meta
 definePageMeta({
-  layout: 'default',
+  layout: false, // No layout for login page
   middleware: 'guest'
 })
 
@@ -127,76 +240,568 @@ definePageMeta({
 useHead({
   title: 'Login - God Panel'
 })
+
+// Redirect if already authenticated
+onMounted(() => {
+  if (authStore.isAuthenticated) {
+    router.push('/dashboard')
+  }
+})
 </script>
 
 <style scoped>
 .login-page {
+  width: 100%;
   min-height: 100vh;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  display: flex;
-  align-items: center;
-}
-
-.login-container {
-  min-height: 100vh;
-  display: flex;
-  align-items: center;
-}
-
-.login-card {
-  max-width: 400px;
-  margin: 0 auto;
-  border-radius: 16px;
-  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
-}
-
-.login-title {
-  font-size: 2rem;
-  font-weight: 700;
-  color: #2d3748;
-  margin-bottom: 0.5rem;
-}
-
-.login-subtitle {
-  color: #718096;
-  margin-bottom: 0;
-}
-
-.login-image {
+  position: relative;
+  background-color: rgb(var(--v-theme-background-default, #ffffff));
   display: flex;
   flex-direction: column;
+  overflow: hidden;
+}
+
+/* Top Header */
+.top-header {
+  width: 100%;
+  height: 64px;
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 10;
+  display: flex;
+  justify-content: space-between;
   align-items: center;
-  justify-content: center;
-  height: 100%;
-  color: white;
-  text-align: center;
-  padding: 2rem;
+  padding: 0 24px;
 }
 
-.login-image h2 {
-  font-size: 2rem;
+.header-content {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.help-section {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 8px;
+}
+
+.help-text {
+  color: rgb(var(--v-theme-text-primary, #212b36));
+  font-size: 14px;
   font-weight: 600;
-  margin-bottom: 1rem;
+  font-family: 'Public Sans', sans-serif;
+  line-height: 22px;
 }
 
-.login-image p {
-  font-size: 1.125rem;
-  opacity: 0.9;
-  max-width: 300px;
+.help-icon {
+  width: 36px !important;
+  height: 36px !important;
+  border-radius: 50%;
 }
 
-/* Responsive */
+.logo-section {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+}
+
+.logo {
+  border-radius: 50%;
+  background-color: rgb(255, 86, 48);
+}
+
+/* Main Content */
+.main-content {
+  display: flex;
+  min-height: 100vh;
+  width: 100%;
+}
+
+/* Left Panel */
+.left-panel {
+  width: 480px;
+  min-height: 100vh;
+  position: relative;
+  background-color: rgb(var(--v-theme-background-default, #ffffff));
+  overflow: hidden;
+}
+
+.background-blur {
+  width: 1440px;
+  height: 1080px;
+  position: absolute;
+  left: -480px;
+  top: -28px;
+  opacity: 0.1;
+  overflow: hidden;
+}
+
+.background-image {
+  width: 1440px;
+  height: 1080px;
+  filter: blur(8px);
+}
+
+.welcome-content {
+  width: 480px;
+  padding: 0 24px;
+  position: absolute;
+  top: 274px;
+  left: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 64px;
+}
+
+.welcome-text {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 16px;
+}
+
+.welcome-title {
+  width: 100%;
+  text-align: center;
+  color: rgb(var(--v-theme-text-primary, #212b36));
+  font-size: 48px;
+  font-weight: 700;
+  font-family: 'Barlow', sans-serif;
+  line-height: 48px;
+  margin: 0;
+}
+
+.welcome-subtitle {
+  width: 100%;
+  text-align: center;
+  color: rgb(var(--v-theme-text-secondary, #637381));
+  font-size: 16px;
+  font-weight: 400;
+  font-family: 'Public Sans', sans-serif;
+  line-height: 24px;
+  margin: 0;
+}
+
+.illustration {
+  width: 384px;
+  height: 288px;
+  position: relative;
+}
+
+.illustration-image {
+  width: 384px;
+  height: 288px;
+}
+
+/* Right Panel */
+.right-panel {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 0 40px;
+}
+
+.login-form-container {
+  flex: 1;
+  max-width: 384px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+  gap: 40px;
+  border-radius: 16px;
+}
+
+/* Form Header */
+.form-header {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 24px;
+  overflow: hidden;
+}
+
+.form-title {
+  width: 100%;
+  text-align: center;
+  color: rgb(var(--v-theme-text-primary, #212b36));
+  font-size: 20px;
+  font-weight: 700;
+  font-family: 'Public Sans', sans-serif;
+  line-height: 30px;
+  margin: 0;
+}
+
+.register-link {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 4px;
+}
+
+.register-text {
+  color: rgb(var(--v-theme-text-secondary, #637381));
+  font-size: 14px;
+  font-weight: 400;
+  font-family: 'Public Sans', sans-serif;
+  line-height: 22px;
+}
+
+.register-link-text {
+  color: rgb(var(--v-theme-primary, #1976d2));
+  font-size: 14px;
+  font-weight: 600;
+  font-family: 'Public Sans', sans-serif;
+  line-height: 22px;
+  text-decoration: none;
+}
+
+/* Login Form */
+.login-form {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 24px;
+}
+
+/* Form Fields */
+.form-field {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  align-items: flex-end;
+  position: relative;
+}
+
+.custom-text-field {
+  width: 100%;
+  height: 56px;
+  padding: 14px 20px;
+  border-radius: 8px;
+  border: 1px solid rgba(145, 158, 171, 0.2);
+  background-color: rgb(var(--v-theme-background-paper, #ffffff));
+  font-size: 16px;
+  font-weight: 400;
+  font-family: 'Public Sans', sans-serif;
+  line-height: 24px;
+  text-align: right;
+  color: rgb(var(--v-theme-text-primary, #212b36));
+}
+
+.custom-text-field:focus {
+  border-color: rgb(var(--v-theme-primary, #1976d2));
+  box-shadow: 0 0 0 2px rgba(25, 118, 210, 0.2);
+}
+
+.custom-text-field.has-value {
+  border-color: rgba(145, 158, 171, 0.2);
+}
+
+.custom-text-field::placeholder {
+  color: rgb(var(--v-theme-text-disabled, #919eab));
+}
+
+.field-label {
+  position: absolute;
+  top: -5px;
+  right: 0;
+  display: flex;
+  justify-content: flex-end;
+  align-items: flex-start;
+  padding: 0 2px;
+  background-color: rgb(var(--v-theme-background-paper, #ffffff));
+}
+
+.label-text {
+  color: rgb(var(--v-theme-text-secondary, #637381));
+  font-size: 12px;
+  font-weight: 600;
+  font-family: 'Public Sans', sans-serif;
+  line-height: 18px;
+}
+
+/* Password Section */
+.password-section {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 12px;
+}
+
+.forgot-password-link {
+  width: 100%;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+}
+
+.forgot-link {
+  color: rgb(var(--v-theme-text-primary, #212b36));
+  font-size: 14px;
+  font-weight: 400;
+  font-family: 'Public Sans', sans-serif;
+  line-height: 22px;
+  text-decoration: none;
+}
+
+/* Sign In Button */
+.sign-in-btn {
+  width: 100%;
+  height: 48px;
+  min-width: 64px;
+  padding: 0 16px;
+  background-color: rgb(var(--v-theme-primary, #1976d2));
+  border-radius: 8px;
+  color: rgb(var(--v-theme-primary-contrast, #ffffff));
+  font-size: 16px;
+  font-weight: 700;
+  font-family: 'Public Sans', sans-serif;
+  line-height: 24px;
+  text-align: center;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.sign-in-btn:hover {
+  background-color: rgb(var(--v-theme-primary-dark, #1565c0));
+}
+
+/* Divider */
+.divider-section {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+  gap: 16px;
+}
+
+.divider-line {
+  flex: 1;
+  height: 1px;
+  border: 1px dashed rgba(145, 158, 171, 0.2);
+}
+
+.divider-text {
+  color: rgb(var(--v-theme-text-disabled, #919eab));
+  font-size: 12px;
+  font-weight: 700;
+  font-family: 'Public Sans', sans-serif;
+  line-height: 18px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+/* Social Login */
+.social-login {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+}
+
+.social-btn {
+  width: 36px !important;
+  height: 36px !important;
+  border-radius: 50%;
+  border: 1px solid rgba(145, 158, 171, 0.2);
+  background-color: rgb(var(--v-theme-background-paper, #ffffff));
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  transition: border-color 0.2s ease;
+}
+
+.social-btn:hover {
+  border-color: rgb(var(--v-theme-primary, #1976d2));
+}
+
+/* Google Icon */
+.google-icon {
+  width: 20px;
+  height: 20px;
+  position: relative;
+}
+
+.google-colors {
+  width: 20px;
+  height: 20px;
+  position: relative;
+}
+
+.google-blue {
+  width: 16px;
+  height: 16px;
+  position: absolute;
+  left: 1.67px;
+  top: 1.67px;
+  background-color: #4285f4;
+  border-radius: 2px;
+}
+
+.google-red {
+  width: 14px;
+  height: 7px;
+  position: absolute;
+  left: 2.63px;
+  top: 1.67px;
+  background-color: #ea4335;
+  border-radius: 1px;
+}
+
+.google-yellow {
+  width: 14px;
+  height: 7px;
+  position: absolute;
+  left: 2.58px;
+  top: 11.69px;
+  background-color: #fbbc05;
+  border-radius: 1px;
+}
+
+.google-green {
+  width: 8px;
+  height: 8px;
+  position: absolute;
+  left: 10px;
+  top: 8.33px;
+  background-color: #34a853;
+  border-radius: 1px;
+}
+
+/* Twitter Icon */
+.twitter-icon {
+  width: 16px;
+  height: 16px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* RTL Support */
+[dir="rtl"] {
+  direction: rtl;
+}
+
+[dir="rtl"] .custom-text-field,
+[dir="rtl"] .welcome-title,
+[dir="rtl"] .welcome-subtitle,
+[dir="rtl"] .form-title,
+[dir="rtl"] .register-text,
+[dir="rtl"] .register-link-text,
+[dir="rtl"] .forgot-link,
+[dir="rtl"] .divider-text,
+[dir="rtl"] .help-text {
+  text-align: right;
+}
+
+[dir="rtl"] .register-link {
+  justify-content: flex-end;
+}
+
+[dir="rtl"] .field-label {
+  right: auto;
+  left: 0;
+  justify-content: flex-start;
+}
+
+/* Mobile Styles */
 @media (max-width: 768px) {
-  .login-row {
-    flex-direction: column-reverse;
+  .left-panel {
+    display: none;
   }
 
-  .login-image-col {
-    min-height: 200px;
+  .right-panel {
+    padding: 0 16px;
   }
 
-  .login-card {
-    margin: 2rem auto;
+  .top-header {
+    padding: 0 16px;
+  }
+
+  .welcome-content {
+    padding: 0 16px;
+    top: 120px;
+  }
+
+  .welcome-title {
+    font-size: 36px;
+    line-height: 48px;
+  }
+
+  .form-title {
+    font-size: 18px;
+    line-height: 28px;
+  }
+
+  .login-form-container {
+    max-width: 100%;
+    gap: 32px;
+  }
+
+  .illustration {
+    width: 320px;
+    height: 240px;
+  }
+
+  .illustration-image {
+    width: 320px;
+    height: 240px;
+  }
+}
+
+/* Very Small Mobile */
+@media (max-width: 480px) {
+  .main-content {
+    flex-direction: column;
+  }
+
+  .right-panel {
+    padding: 16px;
+    min-height: 100vh;
+  }
+
+  .login-form-container {
+    padding: 16px 0;
+  }
+
+  .welcome-content {
+    position: static;
+    padding: 16px;
+    gap: 32px;
+  }
+
+  .welcome-title {
+    font-size: 28px;
+    line-height: 36px;
+  }
+
+  .illustration {
+    width: 280px;
+    height: 210px;
+  }
+
+  .illustration-image {
+    width: 280px;
+    height: 280px;
   }
 }
 </style>
