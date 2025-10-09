@@ -1,9 +1,11 @@
 <template>
   <v-app-bar
-    color="primary"
-    dark
-    elevation="0"
+    :color="`rgb(var(--v-theme-surface))`"
+    elevation="1"
     class="dashboard-header"
+    :style="{
+      borderBottom: `1px solid rgb(var(--v-theme-surface-variant))`
+    }"
   >
     <!-- Mobile menu button -->
     <v-app-bar-nav-icon
@@ -35,6 +37,9 @@
       hide-details
       single-line
     />
+
+    <!-- Theme Toggle -->
+    <ThemeToggle />
 
     <!-- Notifications -->
     <v-menu offset-y>
@@ -144,6 +149,7 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
+import ThemeToggle from '~/components/theme/ThemeToggle.vue'
 
 interface Props {
   mobile?: boolean
@@ -219,25 +225,47 @@ const handleLogout = async () => {
 
 <style scoped>
 .dashboard-header {
-  border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+  background-color: rgb(var(--v-theme-surface)) !important;
+  color: rgb(var(--v-theme-on-surface));
 }
 
 .search-field {
   max-width: 300px;
   margin-right: 16px;
+  background-color: rgb(var(--v-theme-surface-variant));
+}
+
+.search-field :deep(.v-field) {
+  background-color: rgb(var(--v-theme-surface-variant));
+  color: rgb(var(--v-theme-on-surface));
 }
 
 .notification-btn,
 .user-btn {
   margin-left: 8px;
+  color: rgb(var(--v-theme-on-surface-variant));
 }
 
-.notification-list {
-  min-width: 320px;
+.notification-btn:hover,
+.user-btn:hover {
+  background-color: rgba(var(--v-theme-on-surface-rgb), 0.08);
 }
 
+.notification-list,
 .user-menu {
-  min-width: 250px;
+  background-color: rgb(var(--v-theme-surface));
+  border: 1px solid rgb(var(--v-theme-surface-variant));
+  border-radius: 8px;
+}
+
+.notification-list :deep(.v-list-item),
+.user-menu :deep(.v-list-item) {
+  color: rgb(var(--v-theme-on-surface));
+}
+
+.notification-list :deep(.v-list-item:hover),
+.user-menu :deep(.v-list-item:hover) {
+  background-color: rgba(var(--v-theme-on-surface-rgb), 0.08);
 }
 
 @media (max-width: 768px) {

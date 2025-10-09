@@ -3,8 +3,38 @@ import * as components from 'vuetify/components'
 import * as directives from 'vuetify/directives'
 import { VLayout, VAppBar, VMain, VNavigationDrawer } from 'vuetify/components'
 import 'vuetify/styles'
+import { createTheme } from '~/theme/create-theme'
 
 export default defineNuxtPlugin((nuxtApp) => {
+  // Get settings from the store
+  const settingsStore = useSettingsStore()
+
+  // Create theme using our theme system
+  const theme = createTheme(settingsStore.settings)
+
+  // Convert our color schemes to Vuetify format
+  const convertColorScheme = (scheme) => {
+    const palette = scheme.palette
+    return {
+      colors: {
+        primary: palette.primary.main,
+        secondary: palette.secondary.main,
+        accent: palette.secondary.light,
+        error: palette.error.main,
+        info: palette.info.main,
+        success: palette.success.main,
+        warning: palette.warning.main,
+        background: palette.background.default,
+        surface: palette.background.paper,
+        'on-primary': palette.primary.contrastText,
+        'on-secondary': palette.secondary.contrastText,
+        'on-background': palette.text.primary,
+        'on-surface': palette.text.primary,
+        'on-error': palette.error.contrastText,
+      }
+    }
+  }
+
   const vuetify = createVuetify({
     components: {
       ...components,
@@ -15,43 +45,19 @@ export default defineNuxtPlugin((nuxtApp) => {
     },
     directives,
     theme: {
-      defaultTheme: 'light',
+      defaultTheme: settingsStore.settings.themeMode,
       themes: {
-        light: {
-          colors: {
-            primary: '#1976D2',
-            secondary: '#424242',
-            accent: '#82B1FF',
-            error: '#FF5252',
-            info: '#2196F3',
-            success: '#4CAF50',
-            warning: '#FFC107'
-          }
-        },
-        dark: {
-          colors: {
-            primary: '#2196F3',
-            secondary: '#424242',
-            accent: '#FF4081',
-            error: '#FF5252',
-            info: '#2196F3',
-            success: '#4CAF50',
-            warning: '#FFC107'
-          }
-        }
-      }
+        light: convertColorScheme(theme.colorSchemes.light),
+        dark: convertColorScheme(theme.colorSchemes.dark),
+      },
+      variations: {
+        colors: ['primary', 'secondary', 'accent', 'error', 'info', 'success', 'warning'],
+        lighten: 5,
+        darken: 5,
+      },
     },
-    defaults: {
-      VBtn: {
-        variant: 'flat'
-      },
-      VTextField: {
-        variant: 'outlined'
-      },
-      VCard: {
-        elevation: 2
-      }
-    }
+    defaults: theme.components,
+    rtl: settingsStore.settings.direction === 'rtl',
   })
 
   nuxtApp.vueApp.use(vuetify)

@@ -202,16 +202,21 @@ const handleLogout = async () => {
 }
 
 .nav-item:hover {
-  background: rgb(var(--v-theme-surface-variant));
+  background: rgba(var(--v-theme-on-surface-rgb), 0.08);
 }
 
 .nav-item-active {
-  background: rgb(var(--v-theme-primary));
-  color: rgb(var(--v-theme-on-primary));
+  background: rgba(var(--v-theme-primary-rgb), 0.12);
+  color: rgb(var(--v-theme-primary));
+  box-shadow: var(--v-custom-shadows-z1);
+}
+
+.nav-item-active:hover {
+  background: rgba(var(--v-theme-primary-rgb), 0.16);
 }
 
 .nav-item-active .v-icon {
-  color: rgb(var(--v-theme-on-primary)) !important;
+  color: rgb(var(--v-theme-primary)) !important;
 }
 
 .nav-title {

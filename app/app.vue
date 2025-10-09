@@ -1,5 +1,5 @@
 <template>
-  <div id="app">
+  <div id="app" :dir="settingsStore.settings.direction">
     <v-app>
       <NuxtRouteAnnouncer />
       <NuxtLayout>
@@ -82,6 +82,9 @@
 </style>
 
 <script setup lang="ts">
+// Get settings store for RTL support
+const settingsStore = useSettingsStore()
+
 // Global snackbar state
 const snackbar = reactive({
   show: false,
