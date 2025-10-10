@@ -61,38 +61,42 @@
             </div>
           </div>
 
+          <!-- Info Alert -->
+          <v-alert
+            type="info"
+            variant="tonal"
+            density="comfortable"
+            class="info-alert"
+          >
+            Use <strong>{{ form.email }}</strong> with password <strong>@demo1</strong>
+          </v-alert>
+
           <!-- Login Form -->
           <div class="login-form">
             <form @submit.prevent="handleSubmit">
               <!-- Email Field -->
-              <div class="form-field">
-                <v-text-field
-                  v-model="form.email"
-                  placeholder="demo@minimals.cc"
-                  :class="{ 'has-value': form.email }"
-                />
-                <div class="field-label">
-                  <span class="label-text">Email address</span>
-                </div>
-              </div>
+              <v-text-field
+                v-model="form.email"
+                label="Email address"
+                placeholder="demo@minimals.cc"
+                variant="outlined"
+                density="comfortable"
+              />
 
-              <!-- Password Section -->
+              <!-- Password Field -->
               <div class="password-section">
+                <v-text-field
+                  v-model="form.password"
+                  label="Password"
+                  placeholder="6+ characters"
+                  type="password"
+                  variant="outlined"
+                  density="comfortable"
+                />
                 <div class="forgot-password-link">
                   <NuxtLink to="/auth/forgot-password" class="forgot-link">
                     Forgot password?
                   </NuxtLink>
-                </div>
-                <div class="form-field">
-                  <v-text-field
-                    v-model="form.password"
-                    placeholder="6+ characters"
-                    type="password"
-                    :class="{ 'has-value': form.password }"
-                  />
-                  <div class="field-label">
-                    <span class="label-text">Password</span>
-                  </div>
                 </div>
               </div>
 
@@ -101,6 +105,7 @@
                 type="submit"
                 size="large"
                 block
+                color="primary"
                 :loading="loading"
               >
                 Sign in
@@ -397,14 +402,11 @@ onMounted(() => {
 }
 
 .login-form-container {
-  flex: 1;
-  max-width: 384px;
+  width: 100%;
+  max-width: 420px;
   display: flex;
   flex-direction: column;
-  justify-content: flex-start;
-  align-items: flex-start;
   gap: 40px;
-  border-radius: 16px;
 }
 
 /* Form Header */
@@ -453,44 +455,17 @@ onMounted(() => {
   text-decoration: none;
 }
 
+/* Info Alert */
+.info-alert {
+  margin-bottom: 24px;
+}
+
 /* Login Form */
 .login-form {
   width: 100%;
   display: flex;
   flex-direction: column;
-  justify-content: flex-start;
-  align-items: center;
   gap: 24px;
-}
-
-/* Form Fields */
-.form-field {
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-end;
-  align-items: flex-end;
-  position: relative;
-}
-
-
-.field-label {
-  position: absolute;
-  top: -5px;
-  right: 0;
-  display: flex;
-  justify-content: flex-end;
-  align-items: flex-start;
-  padding: 0 2px;
-  background-color: rgb(var(--v-theme-background-paper, #ffffff));
-}
-
-.label-text {
-  color: rgb(var(--v-theme-text-secondary, #637381));
-  font-size: 12px;
-  font-weight: 600;
-  font-family: 'Public Sans', sans-serif;
-  line-height: 18px;
 }
 
 /* Password Section */
@@ -498,15 +473,12 @@ onMounted(() => {
   width: 100%;
   display: flex;
   flex-direction: column;
-  justify-content: flex-start;
-  align-items: center;
-  gap: 12px;
+  gap: 8px;
 }
 
 .forgot-password-link {
-  width: 100%;
   display: flex;
-  justify-content: flex-start;
+  justify-content: flex-end;
   align-items: center;
 }
 
@@ -636,12 +608,6 @@ onMounted(() => {
 
 [dir="rtl"] .register-link {
   justify-content: flex-end;
-}
-
-[dir="rtl"] .field-label {
-  right: auto;
-  left: 0;
-  justify-content: flex-start;
 }
 
 /* Mobile Styles */
