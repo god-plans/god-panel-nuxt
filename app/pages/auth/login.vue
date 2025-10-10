@@ -5,7 +5,7 @@
       <div class="header-content">
         <div class="help-section">
           <span class="help-text">Need help?</span>
-          <v-btn icon size="small" class="help-icon">
+          <v-btn icon size="small" rounded="lg">
             <v-icon size="20">mdi-help-circle-outline</v-icon>
           </v-btn>
         </div>
@@ -69,8 +69,6 @@
                 <v-text-field
                   v-model="form.email"
                   placeholder="demo@minimals.cc"
-                  variant="outlined"
-                  class="custom-text-field"
                   :class="{ 'has-value': form.email }"
                 />
                 <div class="field-label">
@@ -90,8 +88,6 @@
                     v-model="form.password"
                     placeholder="6+ characters"
                     type="password"
-                    variant="outlined"
-                    class="custom-text-field"
                     :class="{ 'has-value': form.password }"
                   />
                   <div class="field-label">
@@ -105,7 +101,6 @@
                 type="submit"
                 size="large"
                 block
-                class="sign-in-btn"
                 :loading="loading"
               >
                 Sign in
@@ -124,7 +119,6 @@
                   icon
                   size="small"
                   variant="outlined"
-                  class="social-btn"
                   @click="loginWithGoogle"
                 >
                   <div class="google-icon">
@@ -140,7 +134,6 @@
                   icon
                   size="small"
                   variant="outlined"
-                  class="social-btn"
                   @click="loginWithGithub"
                 >
                   <v-icon size="20" color="currentColor">mdi-github</v-icon>
@@ -149,7 +142,6 @@
                   icon
                   size="small"
                   variant="outlined"
-                  class="social-btn"
                   @click="loginWithTwitter"
                 >
                   <div class="twitter-icon">
@@ -296,11 +288,6 @@ onMounted(() => {
   line-height: 22px;
 }
 
-.help-icon {
-  width: 36px !important;
-  height: 36px !important;
-  border-radius: 50%;
-}
 
 .logo-section {
   display: flex;
@@ -486,33 +473,6 @@ onMounted(() => {
   position: relative;
 }
 
-.custom-text-field {
-  width: 100%;
-  height: 56px;
-  padding: 14px 20px;
-  border-radius: 8px;
-  border: 1px solid rgba(145, 158, 171, 0.2);
-  background-color: rgb(var(--v-theme-background-paper, #ffffff));
-  font-size: 16px;
-  font-weight: 400;
-  font-family: 'Public Sans', sans-serif;
-  line-height: 24px;
-  text-align: right;
-  color: rgb(var(--v-theme-text-primary, #212b36));
-}
-
-.custom-text-field:focus {
-  border-color: rgb(var(--v-theme-primary, #1976d2));
-  box-shadow: 0 0 0 2px rgba(25, 118, 210, 0.2);
-}
-
-.custom-text-field.has-value {
-  border-color: rgba(145, 158, 171, 0.2);
-}
-
-.custom-text-field::placeholder {
-  color: rgb(var(--v-theme-text-disabled, #919eab));
-}
 
 .field-label {
   position: absolute;
@@ -559,28 +519,6 @@ onMounted(() => {
   text-decoration: none;
 }
 
-/* Sign In Button */
-.sign-in-btn {
-  width: 100%;
-  height: 48px;
-  min-width: 64px;
-  padding: 0 16px;
-  background-color: rgb(var(--v-theme-primary, #1976d2));
-  border-radius: 8px;
-  color: rgb(var(--v-theme-primary-contrast, #ffffff));
-  font-size: 16px;
-  font-weight: 700;
-  font-family: 'Public Sans', sans-serif;
-  line-height: 24px;
-  text-align: center;
-  border: none;
-  cursor: pointer;
-  transition: background-color 0.2s ease;
-}
-
-.sign-in-btn:hover {
-  background-color: rgb(var(--v-theme-primary-dark, #1565c0));
-}
 
 /* Divider */
 .divider-section {
@@ -617,22 +555,6 @@ onMounted(() => {
   gap: 8px;
 }
 
-.social-btn {
-  width: 36px !important;
-  height: 36px !important;
-  border-radius: 50%;
-  border: 1px solid rgba(145, 158, 171, 0.2);
-  background-color: rgb(var(--v-theme-background-paper, #ffffff));
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  cursor: pointer;
-  transition: border-color 0.2s ease;
-}
-
-.social-btn:hover {
-  border-color: rgb(var(--v-theme-primary, #1976d2));
-}
 
 /* Google Icon */
 .google-icon {
@@ -701,7 +623,6 @@ onMounted(() => {
   direction: rtl;
 }
 
-[dir="rtl"] .custom-text-field,
 [dir="rtl"] .welcome-title,
 [dir="rtl"] .welcome-subtitle,
 [dir="rtl"] .form-title,
