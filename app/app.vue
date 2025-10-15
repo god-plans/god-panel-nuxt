@@ -59,8 +59,53 @@
   direction: rtl;
 }
 
-[dir="rtl"] .v-text-field input {
+[dir="rtl"] .v-text-field input,
+[dir="rtl"] .v-text-field textarea {
   text-align: right;
+}
+
+[dir="rtl"] .v-btn {
+  flex-direction: row-reverse;
+}
+
+[dir="rtl"] .v-app-bar-nav-icon {
+  margin-left: auto;
+  margin-right: 0;
+}
+
+[dir="rtl"] .v-navigation-drawer {
+  transform: translateX(100%);
+}
+
+[dir="rtl"] .v-navigation-drawer--open {
+  transform: translateX(0);
+}
+
+[dir="rtl"] .v-list-item__prepend {
+  margin-right: 16px;
+  margin-left: 0;
+}
+
+[dir="rtl"] .v-list-item__append {
+  margin-left: 16px;
+  margin-right: 0;
+}
+
+[dir="rtl"] .v-chip {
+  flex-direction: row-reverse;
+}
+
+[dir="rtl"] .v-menu {
+  transform-origin: top right;
+}
+
+[dir="rtl"] .v-card-actions {
+  flex-direction: row-reverse;
+}
+
+[dir="rtl"] .v-alert .v-alert__prepend {
+  margin-right: 12px;
+  margin-left: 0;
 }
 
 /* Custom scrollbar */
@@ -84,6 +129,14 @@
 <script setup lang="ts">
 // Get settings store for RTL support
 const settingsStore = useSettingsStore()
+
+// Initialize dynamic fonts
+const { loadFont } = useDynamicFonts()
+
+// Load initial font on mount
+onMounted(() => {
+  loadFont(settingsStore.settings.fontFamily)
+})
 
 // Global snackbar state
 const snackbar = reactive({

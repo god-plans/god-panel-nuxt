@@ -6,7 +6,7 @@
   />
 
   <!-- Layout Section -->
-  <div class="dashboard-layout" :style="layoutVars">
+  <div class="dashboard-layout" :class="{ 'compact-mode': settingsStore.settings.compactLayout }" :style="layoutVars">
     <!-- Navigation Sidebar -->
     <DashboardNav
       v-if="!isHorizontalLayout"
@@ -51,11 +51,11 @@ const layoutVars = computed(() => ({
   '--layout-transition-easing': 'linear',
   '--layout-transition-duration': '120ms',
   '--layout-nav-mini-width': '88px',
-  '--layout-nav-vertical-width': '300px',
-  '--layout-nav-horizontal-height': '64px',
-  '--layout-dashboard-content-pt': '8px',
-  '--layout-dashboard-content-pb': '64px',
-  '--layout-dashboard-content-px': '40px'
+  '--layout-nav-vertical-width': settingsStore.settings.compactLayout ? '260px' : '300px',
+  '--layout-nav-horizontal-height': settingsStore.settings.compactLayout ? '56px' : '64px',
+  '--layout-dashboard-content-pt': settingsStore.settings.compactLayout ? '4px' : '8px',
+  '--layout-dashboard-content-pb': settingsStore.settings.compactLayout ? '32px' : '64px',
+  '--layout-dashboard-content-px': settingsStore.settings.compactLayout ? '24px' : '40px'
 }))
 
 const toggleNav = () => {
@@ -84,6 +84,19 @@ const closeMobileNav = () => {
 }
 
 .dashboard-layout:has(.nav-mini) .has-sidebar {
+  padding-left: var(--layout-nav-mini-width);
+}
+
+/* Compact mode adjustments */
+.compact-mode {
+  --layout-spacing-reduced: 0.75;
+}
+
+.compact-mode .dashboard-layout:has(.has-sidebar) {
+  padding-left: var(--layout-nav-vertical-width);
+}
+
+.compact-mode .dashboard-layout:has(.nav-mini) .has-sidebar {
   padding-left: var(--layout-nav-mini-width);
 }
 

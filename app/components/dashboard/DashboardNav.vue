@@ -4,9 +4,9 @@
     :permanent="!mobile"
     :temporary="mobile"
     :mini="mini && !mobile"
-    :width="mini && !mobile ? 88 : 300"
+    :width="getNavWidth()"
     class="dashboard-nav"
-    :class="{ 'nav-mini': mini && !mobile }"
+    :class="{ 'nav-mini': mini && !mobile, 'nav-compact': settingsStore.settings.compactLayout }"
   >
     <!-- Mobile Header -->
     <div v-if="mobile" class="mobile-header">
@@ -113,6 +113,16 @@ defineEmits<{
 const route = useRoute()
 const router = useRouter()
 const authStore = useAuthStore()
+const settingsStore = useSettingsStore()
+
+// Get navigation width based on settings
+const getNavWidth = () => {
+  if (props.mobile) return 300
+  if (props.mini) return 88
+
+  // Compact mode reduces width
+  return settingsStore.settings.compactLayout ? 260 : 300
+}
 
 // Navigation drawer state for mobile
 const drawer = ref(!props.mobile)
@@ -262,6 +272,25 @@ const handleLogout = async () => {
 .mobile-title {
   font-weight: 600;
   color: rgb(var(--v-theme-on-surface));
+}
+
+/* Compact mode styles */
+.nav-compact .nav-header {
+  padding: 12px 16px;
+}
+
+.nav-compact .nav-item {
+  margin: 2px 8px;
+  padding: 8px 12px;
+  min-height: 44px;
+}
+
+.nav-compact .nav-title {
+  font-size: 0.8rem;
+}
+
+.nav-compact .logo {
+  width: 100px !important;
 }
 
 /* Mobile styles */

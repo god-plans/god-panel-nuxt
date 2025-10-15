@@ -30,6 +30,16 @@ export function updateCoreWithSettings(theme, settings) {
             default: getBackgroundDefault(settings.contrast),
             defaultChannel: hexToRgbChannel(getBackgroundDefault(settings.contrast)),
           },
+          /** [2] High contrast adjustments */
+          ...(settings.contrast === 'hight' && {
+            text: {
+              primary: grey[900],
+              secondary: grey[800],
+              disabled: grey[600],
+            },
+            divider: grey[300],
+            surfaceVariant: grey[200],
+          }),
         },
       },
       dark: {
@@ -37,6 +47,16 @@ export function updateCoreWithSettings(theme, settings) {
           ...colorSchemes?.dark?.palette,
           /** [1] */
           primary: getPalettePrimary(settings.primaryColor),
+          /** [2] High contrast adjustments for dark mode */
+          ...(settings.contrast === 'hight' && {
+            text: {
+              primary: grey[50],
+              secondary: grey[100],
+              disabled: grey[300],
+            },
+            divider: grey[700],
+            surfaceVariant: grey[800],
+          }),
         },
       },
     },
@@ -56,14 +76,37 @@ export function updateCoreWithSettings(theme, settings) {
 export function updateComponentsWithSettings(theme, settings) {
   const components = { ...coreComponents };
 
-  /** [2] */
-  if (settings.contrast === 'high') {
+  /** [2] High contrast component adjustments */
+  if (settings.contrast === 'hight') {
     const VCard = {
       ...components.VCard,
-      elevation: 1, // Lower elevation for high contrast
+      elevation: 2, // Higher elevation for better definition
+    };
+
+    const VBtn = {
+      ...components.VBtn,
+      style: [
+        ...(components.VBtn?.style || []),
+        {
+          borderWidth: '2px',
+          borderStyle: 'solid',
+        },
+      ],
+    };
+
+    const VTextField = {
+      ...components.VTextField,
+      style: [
+        ...(components.VTextField?.style || []),
+        {
+          borderWidth: '2px',
+        },
+      ],
     };
 
     components.VCard = VCard;
+    components.VBtn = VBtn;
+    components.VTextField = VTextField;
   }
 
   return { ...theme, components };
