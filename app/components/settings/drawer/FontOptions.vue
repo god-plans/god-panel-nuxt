@@ -135,5 +135,11 @@ const getFontFamily = (font: string) => {
   font-weight: 500;
   text-align: center;
   line-height: 14px;
+  color: rgb(var(--v-theme-on-surface));
+  transition: color 0.2s ease;
+}
+
+.font-option--selected .font-option__name {
+  color: rgb(var(--v-theme-primary));
 }
 </style>

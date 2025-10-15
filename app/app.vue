@@ -1,6 +1,6 @@
 <template>
   <div id="app" :dir="settingsStore.settings.direction">
-    <v-app>
+    <v-app :theme="settingsStore.settings.colorScheme">
       <NuxtRouteAnnouncer />
       <NuxtLayout>
         <NuxtPage />
@@ -35,11 +35,14 @@
 /* Custom global styles */
 @layer base {
   html {
-    font-family: 'Inter', sans-serif;
+    font-family: var(--v-theme-font-family, 'Inter', sans-serif);
+    transition: background-color 0.3s ease, color 0.3s ease;
   }
 
   body {
-    @apply bg-gray-50 text-gray-900 dark:bg-gray-900 dark:text-gray-100;
+    margin: 0;
+    padding: 0;
+    transition: background-color 0.3s ease, color 0.3s ease;
   }
 }
 
@@ -52,6 +55,39 @@
   .card-shadow {
     @apply shadow-lg hover:shadow-xl transition-shadow duration-300;
   }
+}
+
+/* Theme color application for all text elements */
+.v-application {
+  color: rgb(var(--v-theme-on-background)) !important;
+}
+
+.v-card {
+  background-color: rgb(var(--v-theme-surface)) !important;
+  color: rgb(var(--v-theme-on-surface)) !important;
+}
+
+.v-card-title,
+.v-card-subtitle,
+.v-card-text {
+  color: inherit !important;
+}
+
+.v-list-item-title,
+.v-list-item-subtitle {
+  color: rgb(var(--v-theme-on-surface)) !important;
+}
+
+.v-btn {
+  color: inherit;
+}
+
+.v-icon {
+  color: inherit;
+}
+
+.text-h1, .text-h2, .text-h3, .text-h4, .text-h5, .text-h6 {
+  color: rgb(var(--v-theme-on-surface)) !important;
 }
 
 /* RTL Support */
@@ -114,19 +150,24 @@
 }
 
 ::-webkit-scrollbar-track {
-  @apply bg-gray-100;
+  background: rgba(var(--v-theme-on-surface), 0.05);
 }
 
 ::-webkit-scrollbar-thumb {
-  @apply bg-gray-300 rounded-full;
+  background: rgba(var(--v-theme-on-surface), 0.2);
+  border-radius: 4px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  @apply bg-gray-400;
+  background: rgba(var(--v-theme-on-surface), 0.3);
 }
 </style>
 
 <script setup lang="ts">
+import { reactive, provide, onMounted, onErrorCaptured } from 'vue'
+import { useSettingsStore } from '~/stores/settings'
+import { useDynamicFonts } from '~/composables/useDynamicFonts'
+
 // Get settings store for RTL support
 const settingsStore = useSettingsStore()
 

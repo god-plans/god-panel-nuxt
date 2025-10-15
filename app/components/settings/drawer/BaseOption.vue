@@ -120,6 +120,11 @@ const getIcon = (icon: string) => {
   font-weight: 600;
   font-size: 14px;
   color: rgb(var(--v-theme-on-surface));
+  transition: color 0.2s ease;
+}
+
+.base-option--selected .base-option__label {
+  color: rgb(var(--v-theme-primary));
 }
 
 .base-option__switch {

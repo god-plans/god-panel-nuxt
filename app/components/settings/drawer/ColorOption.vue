@@ -86,5 +86,11 @@ const handleClick = () => {
   font-weight: 600;
   text-transform: capitalize;
   line-height: 14px;
+  color: rgb(var(--v-theme-on-surface));
+  transition: color 0.2s ease;
+}
+
+.color-option--selected .color-option__label {
+  color: rgb(var(--v-theme-primary));
 }
 </style>
