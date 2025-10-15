@@ -130,7 +130,7 @@ export function createVuetifyInstance(settings) {
 
     // Theme configuration
     theme: {
-      defaultTheme: settings.themeMode || 'light',
+      defaultTheme: settings.colorScheme || 'light',
       themes: {
         light: convertColorScheme(theme.colorSchemes.light),
         dark: convertColorScheme(theme.colorSchemes.dark),
@@ -158,7 +158,7 @@ export function createVuetifyInstance(settings) {
     animation: animationConfig,
 
     // RTL support
-    rtl: settings.themeDirection === 'rtl',
+    rtl: settings.direction === 'rtl',
 
     // Display configuration
     display: {

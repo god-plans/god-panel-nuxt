@@ -29,15 +29,14 @@ export const userSchema = z.object({
 
 // Settings Schema
 export const settingsSchema = z.object({
-  themeMode: z.enum(['light', 'dark', 'auto']),
-  themeDirection: z.enum(['ltr', 'rtl']),
-  themeColor: z.enum(['default', 'purple', 'cyan', 'blue', 'orange', 'red']),
-  themeStretch: z.boolean(),
-  themeLayout: z.enum(['vertical', 'horizontal', 'mini']),
+  colorScheme: z.enum(['light', 'dark']),
+  direction: z.enum(['ltr', 'rtl']),
+  contrast: z.enum(['default', 'hight']),
+  primaryColor: z.enum(['default', 'purple', 'cyan', 'blue', 'orange', 'red']),
   navLayout: z.enum(['vertical', 'horizontal', 'mini']),
   navColor: z.enum(['integrate', 'apparent']),
   compactLayout: z.boolean(),
-  fontFamily: z.enum(['Inter', 'Roboto', 'Poppins', 'Barlow'])
+  fontFamily: z.enum(['Inter', 'Roboto', 'Poppins', 'Barlow', 'DM Sans', 'Nunito Sans'])
 })
 
 // Form Types

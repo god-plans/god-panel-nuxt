@@ -17,7 +17,7 @@
 
     <!-- Top Navigation for Horizontal Layout -->
     <DashboardHeader
-      v-if="isHorizontalLayout"
+   
       @toggle-nav="openMobileNav"
     />
 
@@ -28,11 +28,18 @@
       </DashboardContent>
     </DashboardMain>
   </div>
+
+  <!-- Settings Drawer -->
+  <SettingsDrawer />
 </template>
 
 <script setup lang="ts">
 import DashboardMain from '~/layouts/dashboard/main.vue'
 import DashboardContent from '~/layouts/dashboard/content.vue'
+import DashboardNav from '~/components/dashboard/DashboardNav.vue'
+import DashboardNavMobile from '~/components/dashboard/DashboardNavMobile.vue'
+import DashboardHeader from '~/components/dashboard/DashboardHeader.vue'
+import SettingsDrawer from '~/components/settings/drawer/SettingsDrawer.vue'
 
 const settingsStore = useSettingsStore()
 const mobileNavOpen = ref(false)

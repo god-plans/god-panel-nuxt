@@ -2,26 +2,29 @@ import { defineStore } from 'pinia'
 import { settingsSchema, type Settings } from '~/types/validation'
 
 const defaultSettings: Settings = {
-  themeMode: 'light',
-  themeDirection: 'ltr',
-  themeColor: 'default',
-  themeStretch: false,
-  themeLayout: 'vertical',
+  colorScheme: 'light',
+  direction: 'ltr',
+  contrast: 'default',
+  primaryColor: 'default',
   navLayout: 'vertical',
   navColor: 'integrate',
-  compactLayout: false,
+  compactLayout: true,
   fontFamily: 'Inter'
 }
 
 export const useSettingsStore = defineStore('settings', () => {
   // State
   const settings = ref<Settings>(defaultSettings)
+  const openDrawer = ref(false)
 
   // Getters
-  const isRtl = computed(() => settings.value.themeDirection === 'rtl')
-  const isMiniLayout = computed(() => settings.value.themeLayout === 'mini')
-  const isHorizontalLayout = computed(() => settings.value.themeLayout === 'horizontal')
-  const isVerticalLayout = computed(() => settings.value.themeLayout === 'vertical')
+  const isRtl = computed(() => settings.value.direction === 'rtl')
+  const isMiniLayout = computed(() => settings.value.navLayout === 'mini')
+  const isHorizontalLayout = computed(() => settings.value.navLayout === 'horizontal')
+  const isVerticalLayout = computed(() => settings.value.navLayout === 'vertical')
+  const canReset = computed(() => {
+    return JSON.stringify(settings.value) !== JSON.stringify(defaultSettings)
+  })
 
   // Actions
   const initialize = () => {
@@ -60,6 +63,20 @@ export const useSettingsStore = defineStore('settings', () => {
     }
   }
 
+  // Drawer actions
+  const onOpenDrawer = () => {
+    openDrawer.value = true
+  }
+
+  const onCloseDrawer = () => {
+    openDrawer.value = false
+  }
+
+  const onReset = () => {
+    settings.value = { ...defaultSettings }
+    saveToStorage()
+  }
+
   // Initialize on store creation
   if (process.client) {
     initialize()
@@ -68,15 +85,20 @@ export const useSettingsStore = defineStore('settings', () => {
   return {
     // State
     settings,
+    openDrawer,
     // Getters
     isRtl,
     isMiniLayout,
     isHorizontalLayout,
     isVerticalLayout,
+    canReset,
     // Actions
     initialize,
     updateSettings,
     updateField,
-    resetSettings
+    resetSettings,
+    onOpenDrawer,
+    onCloseDrawer,
+    onReset
   }
 })

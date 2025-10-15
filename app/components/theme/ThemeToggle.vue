@@ -9,12 +9,13 @@
       <v-btn
         icon
         v-bind="props"
-        :color="settingsStore.settings.themeMode === 'dark' ? 'warning' : 'primary'"
+        :color="settingsStore.settings.colorScheme === 'dark' ? 'warning' : 'primary'"
         variant="text"
         size="small"
+        @click="settingsStore.onOpenDrawer"
       >
         <v-icon>
-          {{ settingsStore.settings.themeMode === 'dark' ? 'mdi-weather-sunny' : 'mdi-weather-night' }}
+          {{ settingsStore.settings.colorScheme === 'dark' ? 'mdi-weather-sunny' : 'mdi-weather-night' }}
         </v-icon>
       </v-btn>
     </template>
@@ -29,7 +30,7 @@
         <div class="menu-item">
           <span class="item-label">Theme Mode</span>
           <v-btn-toggle
-            v-model="settingsStore.settings.themeMode"
+            v-model="colorScheme"
             mandatory
             size="small"
           >
@@ -48,7 +49,7 @@
         <div class="menu-item">
           <span class="item-label">Direction</span>
           <v-btn-toggle
-            v-model="settingsStore.settings.themeDirection"
+            v-model="direction"
             mandatory
             size="small"
           >
@@ -65,11 +66,11 @@
               v-for="(color, key) in primaryColors"
               :key="key"
               class="color-swatch"
-              :class="{ active: settingsStore.settings.themeColor === key }"
+              :class="{ active: settingsStore.settings.primaryColor === key }"
               :style="{ backgroundColor: `rgb(var(--v-theme-${key === 'default' ? 'primary' : key}))` }"
-              @click="settingsStore.settings.themeColor = key"
+              @click="settingsStore.settings.primaryColor = key"
             >
-              <v-icon v-if="settingsStore.settings.themeColor === key" size="16" color="white">
+              <v-icon v-if="settingsStore.settings.primaryColor === key" size="16" color="white">
                 mdi-check
               </v-icon>
             </button>
@@ -99,11 +100,22 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, computed } from 'vue'
 import { useSettingsStore } from '~/stores/settings'
 
 const settingsStore = useSettingsStore()
 const menu = ref(false)
+
+// Computed properties for v-model bindings
+const colorScheme = computed({
+  get: () => settingsStore.settings.colorScheme,
+  set: (value: 'light' | 'dark') => settingsStore.updateField('colorScheme', value)
+})
+
+const direction = computed({
+  get: () => settingsStore.settings.direction,
+  set: (value: 'ltr' | 'rtl') => settingsStore.updateField('direction', value)
+})
 
 // Primary color options
 const primaryColors = ref({

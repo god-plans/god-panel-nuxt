@@ -6,10 +6,10 @@ import { updateCoreWithSettings, updateComponentsWithSettings } from './with-set
 export function createTheme(settings) {
   // Map settings properties to theme properties
   const themeSettings = {
-    colorScheme: settings.themeMode,
-    direction: settings.themeDirection,
-    primaryColor: settings.themeColor,
-    contrast: settings.themeStretch ? 'high' : 'default',
+    colorScheme: settings.colorScheme,
+    direction: settings.direction,
+    primaryColor: settings.primaryColor,
+    contrast: settings.contrast === 'hight' ? 'high' : 'default',
     fontFamily: settings.fontFamily,
   };
 

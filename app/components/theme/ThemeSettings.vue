@@ -10,7 +10,7 @@
       <div class="setting-group">
         <label class="setting-label">Theme Mode</label>
         <v-btn-toggle
-          v-model="localSettings.themeMode"
+          v-model="localSettings.colorScheme"
           mandatory
           class="theme-toggle"
         >
@@ -29,7 +29,7 @@
       <div class="setting-group">
         <label class="setting-label">Direction</label>
         <v-btn-toggle
-          v-model="localSettings.themeDirection"
+          v-model="localSettings.direction"
           mandatory
           class="direction-toggle"
         >
@@ -53,8 +53,8 @@
             variant="outlined"
             size="small"
             class="color-btn"
-            :class="{ active: localSettings.themeColor === key }"
-            @click="localSettings.themeColor = key"
+            :class="{ active: localSettings.primaryColor === key }"
+            @click="localSettings.primaryColor = key"
           >
             <div
               class="color-swatch"
@@ -69,7 +69,7 @@
       <div class="setting-group">
         <label class="setting-label">Layout</label>
         <v-select
-          v-model="localSettings.themeLayout"
+          v-model="localSettings.navLayout"
           :items="layoutOptions"
           variant="outlined"
           density="compact"
@@ -92,7 +92,7 @@
       <!-- Contrast Toggle -->
       <div class="setting-group">
         <v-switch
-          v-model="localSettings.themeStretch"
+          v-model="isHighContrast"
           label="High Contrast"
           color="primary"
           density="compact"
@@ -139,6 +139,14 @@ const primaryColors = ref({
   red: 'Red',
 })
 
+// High contrast computed property
+const isHighContrast = computed({
+  get: () => localSettings.contrast === 'hight',
+  set: (value: boolean) => {
+    localSettings.contrast = value ? 'hight' : 'default'
+  }
+})
+
 // Layout options
 const layoutOptions = ref([
   { title: 'Vertical', value: 'vertical' },
@@ -152,6 +160,8 @@ const fontOptions = ref([
   { title: 'Roboto', value: 'Roboto' },
   { title: 'Poppins', value: 'Poppins' },
   { title: 'Barlow', value: 'Barlow' },
+  { title: 'DM Sans', value: 'DM Sans' },
+  { title: 'Nunito Sans', value: 'Nunito Sans' },
 ])
 
 // Apply settings
