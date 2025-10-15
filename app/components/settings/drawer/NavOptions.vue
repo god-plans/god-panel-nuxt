@@ -2,19 +2,20 @@
   <div class="nav-options">
     <div class="nav-options__header">
       <span class="nav-options__title">Nav</span>
-      <v-tooltip v-if="tooltip" location="top">
-        <template #activator="{ props }">
-          <v-icon v-bind="props" size="14" class="nav-options__info">mdi-information-outline</v-icon>
+      <v-tooltip location="right" v-if="tooltip">
+        <template #activator="{ props: tooltipProps }">
+          <v-icon v-bind="tooltipProps" size="14" class="nav-options__info">
+            mdi-information-outline
+          </v-icon>
         </template>
         {{ tooltip }}
       </v-tooltip>
     </div>
 
     <div class="nav-options__content">
-      <!-- Layout Options -->
-      <div v-if="!hideNavLayout" class="nav-section">
-        <div class="nav-section__label">Layout</div>
-        <div class="layout-options">
+      <div v-if="!hideNavLayout" class="nav-option-section">
+        <span class="nav-option-section__label">Layout</span>
+        <div class="nav-option-section__options">
           <LayoutOption
             v-for="layout in options.layouts"
             :key="layout"
@@ -25,10 +26,9 @@
         </div>
       </div>
 
-      <!-- Color Options -->
-      <div v-if="!hideNavColor" class="nav-section">
-        <div class="nav-section__label">Color</div>
-        <div class="color-options">
+      <div v-if="!hideNavColor" class="nav-option-section">
+        <span class="nav-option-section__label">Color</span>
+        <div class="nav-option-section__options">
           <ColorOption
             v-for="color in options.colors"
             :key="color"
@@ -48,29 +48,26 @@ import ColorOption from './ColorOption.vue'
 
 interface Props {
   value: {
-    color: string
     layout: string
+    color: string
   }
   options: {
-    colors: string[]
     layouts: string[]
+    colors: string[]
   }
-  hideNavColor?: boolean
   hideNavLayout?: boolean
+  hideNavColor?: boolean
   tooltip?: string
 }
 
 const props = withDefaults(defineProps<Props>(), {
-  hideNavColor: false,
   hideNavLayout: false,
+  hideNavColor: false,
   tooltip: 'Dashboard only'
 })
 
 const emit = defineEmits<{
-  'click-option': [{
-    color?: string
-    layout?: string
-  }]
+  'click-option': [option: { layout?: string; color?: string }]
 }>()
 
 const handleLayoutClick = (layout: string) => {
@@ -84,18 +81,19 @@ const handleColorClick = (color: string) => {
 
 <style scoped>
 .nav-options {
-  padding: 16px 0 16px 16px;
-  border: 1px solid rgb(var(--v-theme-surface-variant));
-  border-radius: 12px;
+  padding: 32px 16px 16px 16px;
+  border: 1px solid rgba(var(--v-theme-on-surface), 0.12);
+  border-radius: 16px;
   position: relative;
+  --item-radius: 12px;
+  --item-bg: rgba(var(--v-theme-on-surface), 0.2);
+  --item-border-color: rgba(var(--v-theme-on-surface), 0.08);
 }
 
 .nav-options__header {
   position: absolute;
   top: -12px;
   left: 16px;
-  background: rgb(var(--v-theme-surface));
-  padding: 0 8px;
   display: flex;
   align-items: center;
   gap: 4px;
@@ -104,41 +102,46 @@ const handleColorClick = (color: string) => {
 .nav-options__title {
   font-size: 13px;
   font-weight: 600;
-  color: rgb(var(--v-theme-on-surface));
-  background: rgb(var(--v-theme-surface));
-  padding: 4px 8px;
-  border-radius: 11px;
-  border: 1px solid rgb(var(--v-theme-surface-variant));
+  line-height: 22px;
+  color: rgb(var(--v-theme-background));
+  background: rgb(var(--v-theme-on-surface));
+  padding: 0 10px;
+  border-radius: 22px;
+  display: inline-flex;
+  align-items: center;
 }
 
 .nav-options__info {
-  opacity: 0.6;
-  cursor: help;
+  opacity: 0.48;
+  cursor: pointer;
+  color: rgb(var(--v-theme-background));
+  background: rgb(var(--v-theme-on-surface));
+  border-radius: 50%;
+  padding: 4px;
 }
 
 .nav-options__content {
   display: flex;
   flex-direction: column;
   gap: 20px;
-  margin-top: 8px;
 }
 
-.nav-section {
+.nav-option-section {
   display: flex;
   flex-direction: column;
   gap: 12px;
 }
 
-.nav-section__label {
+.nav-option-section__label {
   font-size: 11px;
   font-weight: 600;
-  color: rgb(var(--v-theme-on-surface-variant));
+  line-height: 14px;
+  color: rgba(var(--v-theme-on-surface), 0.7);
   text-transform: uppercase;
   letter-spacing: 0.5px;
 }
 
-.layout-options,
-.color-options {
+.nav-option-section__options {
   display: flex;
   gap: 12px;
 }

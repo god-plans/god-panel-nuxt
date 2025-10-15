@@ -54,53 +54,47 @@
     </div>
 
     <!-- Content -->
-    <v-card-text class="settings-drawer__content">
-      <v-row class="mb-6">
-        <!-- Color Scheme -->
-        <v-col v-if="!hideColorScheme" cols="6">
+    <div class="settings-drawer__scrollable">
+      <div class="settings-drawer__content">
+        <!-- Base Options Grid -->
+        <div class="settings-drawer__grid">
           <BaseOption
+            v-if="!hideColorScheme"
             icon="moon"
             label="Dark mode"
             :selected="settingsStore.settings.colorScheme === 'dark'"
             @click="toggleColorScheme"
           />
-        </v-col>
 
-        <!-- Contrast -->
-        <v-col v-if="!hideContrast" cols="6">
           <BaseOption
+            v-if="!hideContrast"
             icon="contrast"
             label="Contrast"
             :selected="settingsStore.settings.contrast === 'hight'"
             @click="toggleContrast"
           />
-        </v-col>
 
-        <!-- Direction -->
-        <v-col v-if="!hideDirection" cols="6">
           <BaseOption
+            v-if="!hideDirection"
             icon="align-right"
             label="Right to left"
             :selected="settingsStore.settings.direction === 'rtl'"
             @click="toggleDirection"
           />
-        </v-col>
 
-        <!-- Compact Layout -->
-        <v-col v-if="!hideCompact" cols="6">
           <BaseOption
+            v-if="!hideCompact"
             tooltip="Dashboard only and available at large resolutions > 1600px (xl)"
             icon="autofit-width"
             label="Compact"
             :selected="settingsStore.settings.compactLayout"
             @click="toggleCompactLayout"
           />
-        </v-col>
-      </v-row>
+        </div>
 
-      <!-- Navigation Options -->
-      <div v-if="!(hideNavLayout && hideNavColor)" class="mb-6">
+        <!-- Navigation Options -->
         <NavOptions
+          v-if="!(hideNavLayout && hideNavColor)"
           :value="{
             color: settingsStore.settings.navColor,
             layout: settingsStore.settings.navLayout
@@ -113,25 +107,31 @@
           :hide-nav-layout="hideNavLayout"
           @click-option="handleNavOptionClick"
         />
-      </div>
 
-      <!-- Presets -->
-      <div v-if="!hidePresets" class="mb-6">
+        <!-- Presets -->
         <PresetsOptions
+          v-if="!hidePresets"
           :value="settingsStore.settings.primaryColor"
+          :options="[
+            { name: 'default', value: '#00A76F' },
+            { name: 'cyan', value: '#078DEE' },
+            { name: 'purple', value: '#7635dc' },
+            { name: 'blue', value: '#0C68E9' },
+            { name: 'orange', value: '#fda92d' },
+            { name: 'red', value: '#FF3030' },
+          ]"
           @click-option="handlePresetClick"
         />
-      </div>
 
-      <!-- Font Options -->
-      <div v-if="!hideFont">
+        <!-- Font Options -->
         <FontOptions
+          v-if="!hideFont"
           :value="settingsStore.settings.fontFamily"
           :options="fontOptions"
           @click-option="handleFontClick"
         />
       </div>
-    </v-card-text>
+    </div>
   </v-navigation-drawer>
 </template>
 
@@ -219,15 +219,15 @@ const handleReset = () => {
 
 <style scoped>
 .settings-drawer {
-  background: rgb(var(--v-theme-surface));
+  background: rgba(var(--v-theme-background), 0.9);
+  backdrop-filter: blur(20px);
 }
 
 .settings-drawer__header {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 16px 16px 16px 24px;
-  border-bottom: 1px solid rgb(var(--v-theme-surface-variant));
+  padding: 16px 8px 16px 20px;
   min-height: 64px;
 }
 
@@ -236,18 +236,49 @@ const handleReset = () => {
   align-items: center;
   font-size: 18px;
   font-weight: 600;
+  flex-grow: 1;
   color: rgb(var(--v-theme-on-surface));
 }
 
 .header-actions {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 4px;
+}
+
+.settings-drawer__scrollable {
+  height: calc(100vh - 64px);
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+.settings-drawer__scrollable::-webkit-scrollbar {
+  width: 6px;
+}
+
+.settings-drawer__scrollable::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.settings-drawer__scrollable::-webkit-scrollbar-thumb {
+  background: rgba(var(--v-theme-on-surface), 0.2);
+  border-radius: 3px;
+}
+
+.settings-drawer__scrollable::-webkit-scrollbar-thumb:hover {
+  background: rgba(var(--v-theme-on-surface), 0.3);
 }
 
 .settings-drawer__content {
-  padding: 24px 16px 32px 16px;
-  height: calc(100vh - 64px);
-  overflow-y: auto;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 48px;
+}
+
+.settings-drawer__grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
 }
 </style>

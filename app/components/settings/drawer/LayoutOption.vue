@@ -1,29 +1,25 @@
 <template>
-  <v-btn
-    variant="outlined"
+  <button
+    type="button"
     class="layout-option"
-    :class="{ 'layout-option--selected': selected }"
+    :class="[
+      `layout-option--${option}`,
+      { 'layout-option--selected': selected }
+    ]"
     @click="handleClick"
   >
     <div class="layout-option__nav">
-      <!-- Navigation indicator -->
-      <div class="nav-indicator">
-        <div class="nav-indicator__circle" :class="{ 'nav-indicator--active': selected }"></div>
-        <div class="nav-indicator__bar nav-indicator__bar--primary" :class="{ 'nav-indicator--active': selected }"></div>
-        <div class="nav-indicator__bar nav-indicator__bar--secondary" :class="{ 'nav-indicator--active': selected }"></div>
-      </div>
-
-      <!-- Content area -->
-      <div class="layout-option__content">
-        <div class="content-area" :class="{ 'content-area--active': selected }"></div>
-      </div>
+      <div class="layout-option__circle" />
+      <div class="layout-option__primary-item" />
+      <div class="layout-option__secondary-item" />
     </div>
-  </v-btn>
+    <div class="layout-option__content" />
+  </button>
 </template>
 
 <script setup lang="ts">
 interface Props {
-  option: string
+  option: 'vertical' | 'horizontal' | 'mini'
   selected?: boolean
 }
 
@@ -42,124 +38,125 @@ const handleClick = () => {
 
 <style scoped>
 .layout-option {
-  width: 64px;
+  flex: 1;
   height: 64px;
-  padding: 8px;
-  border-radius: 8px;
-  border: 2px solid rgb(var(--v-theme-surface-variant));
-  background: rgb(var(--v-theme-surface));
+  padding: 0;
+  border-radius: var(--item-radius);
+  border: 1px solid var(--item-border-color);
+  background: transparent;
   transition: all 0.2s ease;
+  display: flex;
+  cursor: pointer;
   overflow: hidden;
 }
 
 .layout-option:hover {
-  border-color: rgb(var(--v-theme-primary));
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  background: rgba(var(--v-theme-on-surface), 0.04);
 }
 
 .layout-option--selected {
-  border-color: rgb(var(--v-theme-primary));
-  box-shadow: 0 0 0 2px rgba(var(--v-theme-primary-rgb), 0.3);
+  box-shadow: -8px 8px 20px -4px rgba(var(--v-theme-on-surface), 0.12);
 }
 
 .layout-option__nav {
-  width: 100%;
-  height: 100%;
+  flex-shrink: 0;
+  padding: 6px;
+  width: 32px;
   display: flex;
   flex-direction: column;
-  border-radius: 4px;
-  overflow: hidden;
-}
-
-.nav-indicator {
-  display: flex;
-  align-items: center;
-  padding: 6px;
-  border-right: 1px solid rgb(var(--v-theme-surface-variant));
-  background: rgb(var(--v-theme-surface-variant));
   gap: 4px;
+  border-right: 1px solid var(--item-border-color);
 }
 
-.nav-indicator__circle {
-  width: 6px;
-  height: 6px;
-  border-radius: 50%;
-  background: rgb(var(--v-theme-on-surface-variant));
+.layout-option--mini .layout-option__nav {
+  width: 22px;
+}
+
+.layout-option--horizontal {
+  flex-direction: column;
+}
+
+.layout-option--horizontal .layout-option__nav {
+  width: 100%;
+  height: 22px;
+  flex-direction: row;
+  align-items: center;
+  border-right: none;
+  border-bottom: 1px solid var(--item-border-color);
+}
+
+.layout-option__circle {
+  flex-shrink: 0;
+  width: 10px;
+  height: 10px;
+  border-radius: 8px;
+  background: var(--item-bg);
   opacity: 0.8;
   transition: all 0.2s ease;
 }
 
-.nav-indicator--active {
-  background: rgb(var(--v-theme-primary)) !important;
-  opacity: 1 !important;
+.layout-option--selected .layout-option__circle {
+  opacity: 1;
+  background: linear-gradient(135deg, rgb(var(--v-theme-primary)) 0%, rgb(var(--v-theme-primary)) 100%);
 }
 
-.nav-indicator__bar {
-  width: 2px;
-  border-radius: 1px;
-  background: rgb(var(--v-theme-on-surface-variant));
+.layout-option__primary-item {
+  flex-shrink: 0;
+  width: 100%;
+  height: 4px;
+  border-radius: 8px;
+  background: var(--item-bg);
+  opacity: 0.48;
   transition: all 0.2s ease;
 }
 
-.nav-indicator__bar--primary {
-  height: 12px;
-  opacity: 0.48;
-}
-
-.nav-indicator__bar--secondary {
-  height: 8px;
-  opacity: 0.24;
-}
-
-/* Mini layout adjustments */
-.layout-option[data-option="mini"] .nav-indicator {
+.layout-option--horizontal .layout-option__primary-item {
   width: 16px;
+  height: 4px;
 }
 
-/* Horizontal layout adjustments */
-.layout-option[data-option="horizontal"] .layout-option__nav {
-  flex-direction: row;
+.layout-option--selected .layout-option__primary-item {
+  background: linear-gradient(135deg, rgb(var(--v-theme-primary)) 0%, rgb(var(--v-theme-primary)) 100%);
 }
 
-.layout-option[data-option="horizontal"] .nav-indicator {
-  border-right: none;
-  border-bottom: 1px solid rgb(var(--v-theme-surface-variant));
+.layout-option__secondary-item {
+  flex-shrink: 0;
   width: 100%;
-  height: 16px;
-  flex-direction: row;
-  padding: 4px 6px;
+  max-width: 14px;
+  height: 4px;
+  border-radius: 8px;
+  background: var(--item-bg);
+  opacity: 0.24;
+  transition: all 0.2s ease;
 }
 
-.layout-option[data-option="horizontal"] .nav-indicator__bar {
-  width: 8px;
-  height: 2px;
+.layout-option--horizontal .layout-option__secondary-item {
+  max-width: 10px;
 }
 
-.layout-option[data-option="horizontal"] .nav-indicator__bar--primary {
-  width: 12px;
-}
-
-.layout-option[data-option="horizontal"] .nav-indicator__bar--secondary {
-  width: 8px;
+.layout-option--selected .layout-option__secondary-item {
+  background: linear-gradient(135deg, rgb(var(--v-theme-primary)) 0%, rgb(var(--v-theme-primary)) 100%);
 }
 
 .layout-option__content {
   flex: 1;
   padding: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
-.content-area {
+.layout-option__content::before {
+  content: '';
   width: 100%;
   height: 100%;
-  border-radius: 2px;
-  background: rgb(var(--v-theme-surface-variant));
+  border-radius: 6px;
+  background: var(--item-bg);
   opacity: 0.2;
   transition: all 0.2s ease;
 }
 
-.content-area--active {
-  background: rgb(var(--v-theme-primary));
-  opacity: 0.3;
+.layout-option--selected .layout-option__content::before {
+  background: linear-gradient(135deg, rgb(var(--v-theme-primary)) 0%, rgb(var(--v-theme-primary)) 100%);
 }
 </style>

@@ -5,22 +5,23 @@
     </div>
 
     <div class="font-options__grid">
-      <v-btn
+      <button
         v-for="font in options"
         :key="font"
-        variant="outlined"
+        type="button"
         class="font-option"
         :class="{ 'font-option--selected': value === font }"
         :style="{ fontFamily: getFontFamily(font) }"
         @click="handleClick(font)"
       >
-        <div class="font-option__content">
-          <v-icon class="font-option__icon" :class="{ 'font-option__icon--active': value === font }">
-            mdi-format-font
-          </v-icon>
-          <div class="font-option__name">{{ font }}</div>
-        </div>
-      </v-btn>
+        <img
+          src="/assets/icons/setting/ic-font.svg"
+          alt="font"
+          class="font-option__icon"
+          :class="{ 'font-option__icon--active': value === font }"
+        >
+        <span class="font-option__name">{{ font }}</span>
+      </button>
     </div>
   </div>
 </template>
@@ -56,9 +57,9 @@ const getFontFamily = (font: string) => {
 
 <style scoped>
 .font-options {
-  padding: 16px 0 16px 16px;
-  border: 1px solid rgb(var(--v-theme-surface-variant));
-  border-radius: 12px;
+  padding: 32px 16px 16px 16px;
+  border: 1px solid rgba(var(--v-theme-on-surface), 0.12);
+  border-radius: 16px;
   position: relative;
 }
 
@@ -66,80 +67,70 @@ const getFontFamily = (font: string) => {
   position: absolute;
   top: -12px;
   left: 16px;
-  background: rgb(var(--v-theme-surface));
-  padding: 0 8px;
 }
 
 .font-options__title {
   font-size: 13px;
   font-weight: 600;
-  color: rgb(var(--v-theme-on-surface));
-  background: rgb(var(--v-theme-surface));
-  padding: 4px 8px;
-  border-radius: 11px;
-  border: 1px solid rgb(var(--v-theme-surface-variant));
+  line-height: 22px;
+  color: rgb(var(--v-theme-background));
+  background: rgb(var(--v-theme-on-surface));
+  padding: 0 10px;
+  border-radius: 22px;
+  display: inline-flex;
+  align-items: center;
 }
 
 .font-options__grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   gap: 12px;
-  margin-top: 8px;
 }
 
 .font-option {
-  height: 64px;
-  padding: 12px;
-  border-radius: 8px;
-  border: 2px solid rgb(var(--v-theme-surface-variant));
-  background: rgb(var(--v-theme-surface));
+  padding: 16px;
+  border-radius: 12px;
+  border: 1px solid transparent;
+  background: transparent;
   transition: all 0.2s ease;
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
-  gap: 8px;
+  gap: 6px;
+  cursor: pointer;
+  font-weight: 500;
+  font-size: 12px;
+  color: rgba(var(--v-theme-on-surface), 0.6);
 }
 
 .font-option:hover {
-  border-color: rgb(var(--v-theme-primary));
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  border-color: rgba(var(--v-theme-on-surface), 0.08);
 }
 
 .font-option--selected {
-  border-color: rgb(var(--v-theme-primary));
-  box-shadow: 0 0 0 2px rgba(var(--v-theme-primary-rgb), 0.3);
-}
-
-.font-option__content {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 6px;
+  color: rgb(var(--v-theme-on-surface));
+  border-color: rgba(var(--v-theme-on-surface), 0.08);
+  box-shadow: -8px 8px 20px -4px rgba(var(--v-theme-on-surface), 0.12);
 }
 
 .font-option__icon {
   width: 28px;
   height: 28px;
-  border-radius: 4px;
-  transition: all 0.2s ease;
+  opacity: 0.6;
 }
 
 .font-option__icon--active {
-  background: linear-gradient(135deg, rgb(var(--v-theme-primary-light)), rgb(var(--v-theme-primary)));
-  color: rgb(var(--v-theme-on-primary));
+  opacity: 1;
+  filter: brightness(0) saturate(100%);
+  background: linear-gradient(135deg, rgb(var(--v-theme-primary)) 0%, rgb(var(--v-theme-primary)) 100%);
+  -webkit-mask: url(/assets/icons/setting/ic-font.svg) no-repeat center;
+  mask: url(/assets/icons/setting/ic-font.svg) no-repeat center;
+  -webkit-mask-size: contain;
+  mask-size: contain;
 }
 
 .font-option__name {
-  font-size: 12px;
-  font-weight: 500;
   text-align: center;
   line-height: 14px;
-  color: rgb(var(--v-theme-on-surface));
-  transition: color 0.2s ease;
-}
-
-.font-option--selected .font-option__name {
-  color: rgb(var(--v-theme-primary));
 }
 </style>

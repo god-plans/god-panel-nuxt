@@ -1,20 +1,19 @@
 <template>
-  <v-btn
-    variant="outlined"
+  <button
+    type="button"
     class="color-option"
     :class="{ 'color-option--selected': selected }"
     @click="handleClick"
   >
-    <div class="color-option__content">
-      <v-icon class="color-option__icon" :class="{ 'color-option__icon--active': selected }">
-        {{ option === 'integrate' ? 'mdi-view-dashboard-outline' : 'mdi-view-dashboard' }}
-      </v-icon>
-
-      <div class="color-option__label">
-        {{ option.charAt(0).toUpperCase() + option.slice(1) }}
-      </div>
-    </div>
-  </v-btn>
+    <img
+      :src="`/assets/icons/setting/ic-sidebar-${option === 'integrate' ? 'outline' : 'filled'}.svg`"
+      :alt="option"
+      class="color-option__icon"
+    >
+    <span class="color-option__label">
+      {{ option.charAt(0).toUpperCase() + option.slice(1) }}
+    </span>
+  </button>
 </template>
 
 <script setup lang="ts">
@@ -38,59 +37,56 @@ const handleClick = () => {
 
 <style scoped>
 .color-option {
+  flex: 1;
   min-height: 56px;
   padding: 12px;
-  border-radius: 8px;
-  border: 1px solid rgb(var(--v-theme-surface-variant));
-  background: rgb(var(--v-theme-surface));
-  color: rgb(var(--v-theme-on-surface-variant));
+  border-radius: var(--item-radius);
+  border: none;
+  background: transparent;
+  color: rgba(var(--v-theme-on-surface), 0.6);
   transition: all 0.2s ease;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.color-option:hover {
-  border-color: rgb(var(--v-theme-primary));
-  background: rgba(var(--v-theme-primary-rgb), 0.04);
-}
-
-.color-option--selected {
-  border-width: 2px;
-  border-color: rgb(var(--v-theme-primary));
-  color: rgb(var(--v-theme-on-surface));
-  box-shadow: 0 0 0 2px rgba(var(--v-theme-primary-rgb), 0.3);
-}
-
-.color-option__content {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 8px;
+  justify-content: center;
+  gap: 6px;
+  cursor: pointer;
+}
+
+.color-option:hover {
+  background: rgba(var(--v-theme-on-surface), 0.04);
+}
+
+.color-option--selected {
+  border: 1px solid var(--item-border-color);
+  color: rgb(var(--v-theme-on-surface));
+  box-shadow: -8px 8px 20px -4px rgba(var(--v-theme-on-surface), 0.12);
 }
 
 .color-option__icon {
   width: 24px;
   height: 24px;
-  transition: all 0.2s ease;
+  opacity: 0.7;
 }
 
-.color-option__icon--active {
-  background: linear-gradient(135deg, rgb(var(--v-theme-primary-light)), rgb(var(--v-theme-primary)));
-  border-radius: 4px;
-  color: rgb(var(--v-theme-on-primary));
+.color-option--selected .color-option__icon {
+  opacity: 1;
+  filter: brightness(0) saturate(100%);
+  background: linear-gradient(135deg, rgb(var(--v-theme-primary)) 0%, rgb(var(--v-theme-primary)) 100%);
+  -webkit-mask-image: var(--icon-mask);
+  mask-image: var(--icon-mask);
+  -webkit-mask-size: contain;
+  mask-size: contain;
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+  -webkit-mask-position: center;
+  mask-position: center;
 }
 
 .color-option__label {
-  font-size: 12px;
+  font-size: 13px;
   font-weight: 600;
+  line-height: 18px;
   text-transform: capitalize;
-  line-height: 14px;
-  color: rgb(var(--v-theme-on-surface));
-  transition: color 0.2s ease;
-}
-
-.color-option--selected .color-option__label {
-  color: rgb(var(--v-theme-primary));
 }
 </style>
