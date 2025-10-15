@@ -5,8 +5,13 @@
     :temporary="mobile"
     :mini="mini && !mobile"
     :width="getNavWidth()"
+    :location="settingsStore.settings.direction === 'rtl' ? 'right' : 'left'"
     class="dashboard-nav"
-    :class="{ 'nav-mini': mini && !mobile, 'nav-compact': settingsStore.settings.compactLayout }"
+    :class="{
+      'nav-mini': mini && !mobile,
+      'nav-compact': settingsStore.settings.compactLayout,
+      'nav-rtl': settingsStore.settings.direction === 'rtl'
+    }"
   >
     <!-- Mobile Header -->
     <div v-if="mobile" class="mobile-header">
@@ -291,6 +296,35 @@ const handleLogout = async () => {
 
 .nav-compact .logo {
   width: 100px !important;
+}
+
+/* RTL mode styles */
+.nav-rtl .nav-header {
+  flex-direction: row-reverse;
+}
+
+.nav-rtl .toggle-btn {
+  order: -1;
+  margin-left: 0;
+  margin-right: auto;
+}
+
+.nav-rtl .nav-item {
+  flex-direction: row-reverse;
+  text-align: right;
+}
+
+.nav-rtl .nav-title {
+  text-align: right;
+}
+
+.nav-rtl .mobile-header {
+  flex-direction: row-reverse;
+}
+
+.nav-rtl .mobile-menu-btn {
+  margin-left: 12px;
+  margin-right: 0;
 }
 
 /* Mobile styles */

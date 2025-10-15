@@ -6,7 +6,7 @@
   />
 
   <!-- Layout Section -->
-  <div class="dashboard-layout" :class="{ 'compact-mode': settingsStore.settings.compactLayout }" :style="layoutVars">
+  <div class="dashboard-layout" :class="{ 'compact-mode': settingsStore.settings.compactLayout, 'rtl-mode': settingsStore.settings.direction === 'rtl' }" :style="layoutVars">
     <!-- Navigation Sidebar -->
     <DashboardNav
       v-if="!isHorizontalLayout"
@@ -87,6 +87,17 @@ const closeMobileNav = () => {
   padding-left: var(--layout-nav-mini-width);
 }
 
+/* RTL mode adjustments */
+.rtl-mode.dashboard-layout:has(.has-sidebar) {
+  padding-left: 0;
+  padding-right: var(--layout-nav-vertical-width);
+}
+
+.rtl-mode.dashboard-layout:has(.nav-mini) .has-sidebar {
+  padding-left: 0;
+  padding-right: var(--layout-nav-mini-width);
+}
+
 /* Compact mode adjustments */
 .compact-mode {
   --layout-spacing-reduced: 0.75;
@@ -100,9 +111,26 @@ const closeMobileNav = () => {
   padding-left: var(--layout-nav-mini-width);
 }
 
+/* Compact + RTL mode adjustments */
+.compact-mode.rtl-mode.dashboard-layout:has(.has-sidebar) {
+  padding-left: 0;
+  padding-right: var(--layout-nav-vertical-width);
+}
+
+.compact-mode.rtl-mode.dashboard-layout:has(.nav-mini) .has-sidebar {
+  padding-left: 0;
+  padding-right: var(--layout-nav-mini-width);
+}
+
 @media (max-width: 768px) {
   .dashboard-layout {
     padding-left: 0;
+    padding-right: 0;
+  }
+
+  .rtl-mode.dashboard-layout {
+    padding-left: 0;
+    padding-right: 0;
   }
 }
 </style>

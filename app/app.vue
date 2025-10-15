@@ -133,10 +133,12 @@ const settingsStore = useSettingsStore()
 // Initialize dynamic fonts
 const { loadFont } = useDynamicFonts()
 
-// Load initial font on mount
-onMounted(() => {
-  loadFont(settingsStore.settings.fontFamily)
-})
+// Load initial font on client side
+if (process.client) {
+  onMounted(() => {
+    loadFont(settingsStore.settings.fontFamily)
+  })
+}
 
 // Global snackbar state
 const snackbar = reactive({
