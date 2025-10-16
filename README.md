@@ -1,32 +1,39 @@
 # God Panel - Modern Admin Dashboard
 
-A modern, feature-rich admin dashboard built with **Nuxt.js 4.1.2**, **Vuetify 3**, **Tailwind CSS**, and **TypeScript**. This project provides a complete admin panel solution with authentication, theming, RTL support, and a responsive design.
+A modern, feature-rich admin dashboard built with **Nuxt.js 4.1.2**, **Vuetify 3**, and **TypeScript**. This project provides a complete admin panel solution with authentication, theming, RTL support, and a responsive design.
 
 ## ✨ Features
 
 - 🚀 **Nuxt.js 4.1.2** - Latest version with SSR and SSG support
-- 🎨 **Vuetify 3** - Material Design components
-- 💨 **Tailwind CSS** - Utility-first CSS framework
-- 🔒 **TypeScript** - Full type safety
-- ✅ **Zod Validation** - Runtime type validation
+- 🎨 **Vuetify 3** - Material Design components with custom theming
+- 💨 **CSS Variables** - Dynamic theming with CSS custom properties
+- 🔒 **TypeScript** - Full type safety with Zod validation
+- ✅ **Zod Validation** - Comprehensive runtime type validation
 - 🌍 **RTL Support** - Right-to-left language support
-- 🔐 **JWT Authentication** - Secure authentication system
-- 🎯 **Pinia Store** - State management
+- 🔐 **JWT Authentication** - Secure authentication with API integration
+- 🎯 **Pinia Store** - Centralized state management
 - 🌐 **i18n Ready** - Internationalization support
 - 📱 **Responsive Design** - Mobile-first approach
-- 🎭 **Theme System** - Light/Dark mode with custom themes
+- 🎭 **Advanced Theme System** - Light/Dark mode with custom colors and fonts
 - 📊 **Dashboard Layouts** - Multiple layout options (vertical, horizontal, mini)
+- 🧭 **Breadcrumb Navigation** - Automatic breadcrumb generation
+- 📈 **Progress Indicators** - Loading bars and animations
+- 🎯 **Settings Drawer** - Comprehensive theme and layout customization
+- 🏗️ **Component Library** - Reusable components (LoadingScreen, SearchNotFound, etc.)
+- 🔄 **Motion Animations** - Smooth transitions and lazy loading
+- 💾 **Dual Persistence** - LocalStorage and cookies for SSR support
 
 ## 🛠️ Tech Stack
 
 - **Framework:** Nuxt.js 4.1.2
 - **UI Library:** Vuetify 3
-- **Styling:** Tailwind CSS
+- **Styling:** CSS Variables + Vuetify Theme System
 - **Language:** TypeScript
 - **State Management:** Pinia
 - **Validation:** Zod
 - **HTTP Client:** Axios
 - **Icons:** Material Design Icons
+- **Persistence:** Cookies + LocalStorage
 
 ## 📦 Installation
 
@@ -51,8 +58,7 @@ A modern, feature-rich admin dashboard built with **Nuxt.js 4.1.2**, **Vuetify 3
 3. **Environment Setup**
    Create a `.env` file in the root directory:
    ```env
-   NUXT_PUBLIC_API_BASE=/api
-   API_BASE_URL=http://localhost:3001
+   NUXT_PUBLIC_API_URL=http://localhost:4000
    ```
 
 4. **Development Server**
@@ -173,13 +179,15 @@ JWT-based authentication system with:
 
 ## 📊 Features Overview
 
-- **Dashboard:** Overview with stats, charts, and recent activity
-- **Authentication:** Complete auth flow with validation
-- **Settings:** Theme customization and user preferences
-- **Navigation:** Responsive navigation with multiple layouts
-- **Components:** Reusable UI components
-- **State Management:** Centralized state with Pinia
-- **API Integration:** Axios-based API communication
+- **Dashboard:** Rich overview with stats cards, analytics charts, and recent activity
+- **Authentication:** Complete JWT auth flow with API integration and error handling
+- **Settings:** Advanced theme customization with tooltips and dual persistence
+- **Navigation:** Responsive navigation with breadcrumbs and multiple layout options
+- **Components:** Comprehensive component library (ProgressBar, MotionLazy, LoadingScreen, SearchNotFound)
+- **State Management:** Centralized state with Pinia and type-safe stores
+- **API Integration:** Axios-based API communication with interceptors and error handling
+- **Theming:** Dynamic theme system with CSS variables and font switching
+- **Animations:** Motion animations and lazy loading for enhanced UX
 
 ## 🤝 Contributing
 

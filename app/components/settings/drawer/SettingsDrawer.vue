@@ -62,6 +62,7 @@
             v-if="!hideColorScheme"
             icon="moon"
             label="Dark mode"
+            tooltip="Toggle between light and dark theme"
             :selected="settingsStore.settings.colorScheme === 'dark'"
             @click="toggleColorScheme"
           />
@@ -69,7 +70,8 @@
           <BaseOption
             v-if="!hideContrast"
             icon="contrast"
-            label="Contrast"
+            label="High contrast"
+            tooltip="Increase contrast for better accessibility"
             :selected="settingsStore.settings.contrast === 'high'"
             @click="toggleContrast"
           />
@@ -77,14 +79,15 @@
           <BaseOption
             v-if="!hideDirection"
             icon="align-right"
-            label="Right to left"
+            label="RTL"
+            tooltip="Right-to-left layout for Arabic/Hebrew languages"
             :selected="settingsStore.settings.direction === 'rtl'"
             @click="toggleDirection"
           />
 
           <BaseOption
             v-if="!hideCompact"
-            tooltip="Dashboard only and available at large resolutions > 1600px (xl)"
+            tooltip="Compact dashboard layout for more content space"
             icon="autofit-width"
             label="Compact"
             :selected="settingsStore.settings.compactLayout"

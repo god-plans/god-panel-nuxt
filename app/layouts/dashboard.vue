@@ -1,12 +1,18 @@
 <template>
-  <!-- Mobile Navigation -->
-  <DashboardNavMobile
-    v-model:open="mobileNavOpen"
-    @close="closeMobileNav"
-  />
+  <div>
+    <!-- Progress Bar -->
+    <ProgressBar :is-loading="isLoading" :progress="loadingProgress" />
 
-  <!-- Layout Section -->
-  <div class="dashboard-layout" :class="{ 'compact-mode': settingsStore.settings.compactLayout, 'rtl-mode': settingsStore.settings.direction === 'rtl' }" :style="layoutVars">
+    <!-- Motion Lazy Container -->
+    <MotionLazy>
+    <!-- Mobile Navigation -->
+    <DashboardNavMobile
+      v-model:open="mobileNavOpen"
+      @close="closeMobileNav"
+    />
+
+    <!-- Layout Section -->
+    <div class="dashboard-layout" :class="{ 'compact-mode': settingsStore.settings.compactLayout, 'rtl-mode': settingsStore.settings.direction === 'rtl' }" :style="layoutVars">
     <!-- Navigation Sidebar -->
     <DashboardNav
       v-if="!isHorizontalLayout"
@@ -21,16 +27,18 @@
       @toggle-nav="openMobileNav"
     />
 
-    <!-- Main Content -->
-    <DashboardMain :is-nav-horizontal="isHorizontalLayout">
-      <DashboardContent max-width="xl">
-        <slot />
-      </DashboardContent>
-    </DashboardMain>
-  </div>
+      <!-- Main Content -->
+      <DashboardMain :is-nav-horizontal="isHorizontalLayout">
+        <DashboardContent max-width="xl">
+          <slot />
+        </DashboardContent>
+      </DashboardMain>
+    </div>
 
-  <!-- Settings Drawer -->
-  <SettingsDrawer />
+      <!-- Settings Drawer -->
+      <SettingsDrawer />
+    </MotionLazy>
+  </div>
 </template>
 
 <script setup lang="ts">
@@ -40,9 +48,18 @@ import DashboardNav from '~/components/dashboard/DashboardNav.vue'
 import DashboardNavMobile from '~/components/dashboard/DashboardNavMobile.vue'
 import DashboardHeader from '~/components/dashboard/DashboardHeader.vue'
 import SettingsDrawer from '~/components/settings/drawer/SettingsDrawer.vue'
+import ProgressBar from '~/components/common/ProgressBar.vue'
+import MotionLazy from '~/components/common/MotionLazy.vue'
+import { useSettingsStore } from '~/stores/settings'
+import { useRouter } from 'vue-router'
+import { ref, computed, onMounted } from 'vue'
 
 const settingsStore = useSettingsStore()
 const mobileNavOpen = ref(false)
+
+// Loading states for progress bar
+const isLoading = ref(false)
+const loadingProgress = ref(0)
 
 const isHorizontalLayout = computed(() => settingsStore.settings.navLayout === 'horizontal')
 const isMiniLayout = computed(() => settingsStore.settings.navLayout === 'mini')
@@ -70,6 +87,41 @@ const openMobileNav = () => {
 const closeMobileNav = () => {
   mobileNavOpen.value = false
 }
+
+// Route loading simulation
+const router = useRouter()
+let progressInterval: NodeJS.Timeout | null = null
+
+const startLoading = () => {
+  isLoading.value = true
+  loadingProgress.value = 0
+
+  progressInterval = setInterval(() => {
+    loadingProgress.value += Math.random() * 15
+    if (loadingProgress.value >= 90) {
+      if (progressInterval) clearInterval(progressInterval)
+    }
+  }, 100)
+}
+
+const completeLoading = () => {
+  loadingProgress.value = 100
+  setTimeout(() => {
+    isLoading.value = false
+    loadingProgress.value = 0
+  }, 200)
+}
+
+// Watch for route changes
+onMounted(() => {
+  router.beforeEach(() => {
+    startLoading()
+  })
+
+  router.afterEach(() => {
+    completeLoading()
+  })
+})
 </script>
 
 <style scoped>

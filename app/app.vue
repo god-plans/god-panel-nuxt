@@ -27,11 +27,6 @@
 </template>
 
 <style>
-/* Tailwind CSS */
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
-
 /* Custom global styles */
 @layer base {
   html {
@@ -49,11 +44,24 @@
 @layer components {
   /* Custom component styles */
   .btn-primary {
-    @apply bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-lg transition-colors;
+    background-color: rgb(var(--v-theme-primary));
+    color: rgb(var(--v-theme-on-primary));
+    padding: 8px 16px;
+    border-radius: 8px;
+    transition: all 0.2s ease;
+  }
+
+  .btn-primary:hover {
+    background-color: rgb(var(--v-theme-primary-variant));
   }
 
   .card-shadow {
-    @apply shadow-lg hover:shadow-xl transition-shadow duration-300;
+    box-shadow: var(--v-shadow-2);
+    transition: box-shadow 0.3s ease;
+  }
+
+  .card-shadow:hover {
+    box-shadow: var(--v-shadow-4);
   }
 }
 

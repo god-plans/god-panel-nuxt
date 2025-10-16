@@ -1,5 +1,6 @@
 import { defineStore } from 'pinia'
 import { settingsSchema, type Settings } from '~/types/validation'
+import { useCookie } from '#app'
 
 const defaultSettings: Settings = {
   colorScheme: 'light',
@@ -17,6 +18,14 @@ export const useSettingsStore = defineStore('settings', () => {
   const settings = ref<Settings>(defaultSettings)
   const openDrawer = ref(false)
 
+  // Cookies for SSR support
+  const settingsCookie = useCookie('settings', {
+    default: () => defaultSettings,
+    encode: JSON.stringify,
+    decode: JSON.parse,
+    maxAge: 60 * 60 * 24 * 365, // 1 year
+  })
+
   // Getters
   const isRtl = computed(() => settings.value.direction === 'rtl')
   const isMiniLayout = computed(() => settings.value.navLayout === 'mini')
@@ -28,6 +37,19 @@ export const useSettingsStore = defineStore('settings', () => {
 
   // Actions
   const initialize = () => {
+    // Try to load from cookies first (for SSR)
+    try {
+      const cookieSettings = settingsCookie.value
+      if (cookieSettings && typeof cookieSettings === 'object') {
+        const validated = settingsSchema.parse(cookieSettings)
+        settings.value = { ...defaultSettings, ...validated }
+        return
+      }
+    } catch (error) {
+      console.warn('Invalid settings in cookie, trying localStorage')
+    }
+
+    // Fallback to localStorage on client
     if (process.client) {
       const stored = localStorage.getItem('settings')
       if (stored) {
@@ -58,6 +80,10 @@ export const useSettingsStore = defineStore('settings', () => {
   }
 
   const saveToStorage = () => {
+    // Save to cookies for SSR support
+    settingsCookie.value = settings.value
+
+    // Also save to localStorage on client for immediate persistence
     if (process.client) {
       localStorage.setItem('settings', JSON.stringify(settings.value))
     }
