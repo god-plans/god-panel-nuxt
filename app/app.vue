@@ -14,12 +14,7 @@
       >
         {{ snackbar.message }}
         <template #actions>
-          <v-btn
-            variant="text"
-            @click="snackbar.show = false"
-          >
-            Close
-          </v-btn>
+          <v-btn variant="text" @click="snackbar.show = false"> Close </v-btn>
         </template>
       </v-snackbar>
     </v-app>
@@ -30,7 +25,7 @@
 /* Custom global styles */
 @layer base {
   html {
-    font-family: var(--v-theme-font-family, 'Inter', sans-serif);
+    font-family: var(--v-theme-font-family, "Inter", sans-serif);
     transition: background-color 0.3s ease, color 0.3s ease;
   }
 
@@ -94,7 +89,12 @@
   color: inherit;
 }
 
-.text-h1, .text-h2, .text-h3, .text-h4, .text-h5, .text-h6 {
+.text-h1,
+.text-h2,
+.text-h3,
+.text-h4,
+.text-h5,
+.text-h6 {
   color: rgb(var(--v-theme-on-surface)) !important;
 }
 
@@ -172,83 +172,49 @@
 </style>
 
 <script setup lang="ts">
-import { reactive, provide, onMounted, onErrorCaptured, watch } from 'vue'
-import { useSettingsStore } from '~/stores/settings'
-import { useDynamicFonts } from '~/composables/useDynamicFonts'
+import { reactive, provide, onMounted, onErrorCaptured, watch } from "vue";
+import { useSettingsStore } from "~/stores/settings";
+import { useDynamicFonts } from "~/composables/useDynamicFonts";
 
 // Get settings store for RTL support
-const settingsStore = useSettingsStore()
+const settingsStore = useSettingsStore();
 
 // Initialize dynamic fonts
-const { loadFont } = useDynamicFonts()
+const { loadFont } = useDynamicFonts();
 
 // Load initial font on client side
 if (process.client) {
   onMounted(() => {
-    loadFont(settingsStore.settings.fontFamily)
-  })
+    loadFont(settingsStore.settings.fontFamily);
+  });
 
   // Watch for font family changes
-  watch(() => settingsStore.settings.fontFamily, (newFont) => {
-    loadFont(newFont)
-  }, { immediate: false })
+  watch(
+    () => settingsStore.settings.fontFamily,
+    (newFont) => {
+      loadFont(newFont);
+    },
+    { immediate: false }
+  );
 }
 
 // Global snackbar state
 const snackbar = reactive({
   show: false,
-  message: '',
-  color: 'info',
-  timeout: 5000
-})
+  message: "",
+  color: "info",
+  timeout: 5000,
+});
 
 // Provide snackbar globally
-provide('snackbar', snackbar)
+provide("snackbar", snackbar);
 
 // Global error handler
 onErrorCaptured((error) => {
-  console.error('Global error:', error)
-  snackbar.message = 'An unexpected error occurred'
-  snackbar.color = 'error'
-  snackbar.show = true
-})
+  console.error("Global error:", error);
+  snackbar.message = "An unexpected error occurred";
+  snackbar.color = "error";
+  snackbar.show = true;
+});
 </script>
 
-<style>
-/* Global styles */
-html {
-  font-family: 'Inter', sans-serif;
-}
-
-body {
-  margin: 0;
-  padding: 0;
-}
-
-/* RTL Support */
-[dir="rtl"] {
-  direction: rtl;
-}
-
-[dir="rtl"] .v-text-field input {
-  text-align: right;
-}
-
-/* Custom scrollbar */
-::-webkit-scrollbar {
-  width: 8px;
-}
-
-::-webkit-scrollbar-track {
-  background: #f1f1f1;
-}
-
-::-webkit-scrollbar-thumb {
-  background: #c1c1c1;
-  border-radius: 4px;
-}
-
-::-webkit-scrollbar-thumb:hover {
-  background: #a8a8a8;
-}
-</style>

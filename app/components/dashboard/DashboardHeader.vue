@@ -47,11 +47,12 @@
       placeholder="Search..."
       variant="solo"
       density="comfortable"
-      prepend-inner-icon="mdi-magnify"
       class="search-field"
       hide-details
       single-line
-    />
+    >
+      prepend-inner-icon="mdi-magnify"
+    </v-text-field>
 
     <!-- Theme Toggle -->
     <ThemeToggle />

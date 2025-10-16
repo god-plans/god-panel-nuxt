@@ -5,11 +5,9 @@
     :class="{ 'color-option--selected': selected }"
     @click="handleClick"
   >
-    <img
-      :src="`/assets/icons/setting/ic-sidebar-${option === 'integrate' ? 'outline' : 'filled'}.svg`"
-      :alt="option"
-      class="color-option__icon"
-    >
+    <v-icon class="color-option__icon">
+      {{ option === 'integrate' ? 'mdi-view-sidebar-outline' : 'mdi-view-sidebar' }}
+    </v-icon>
     <span class="color-option__label">
       {{ option.charAt(0).toUpperCase() + option.slice(1) }}
     </span>

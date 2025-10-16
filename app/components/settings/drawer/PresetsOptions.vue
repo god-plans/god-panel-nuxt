@@ -14,11 +14,7 @@
         :style="{ color: option.value, ...(value === option.name && { backgroundColor: `${option.value}14` }) }"
         @click="handleClick(option.name)"
       >
-        <img
-          src="/assets/icons/setting/ic-siderbar-duotone.svg"
-          alt="preset"
-          class="preset-option__icon"
-        >
+        <v-icon class="preset-option__icon">mdi-view-dashboard-outline</v-icon>
       </button>
     </div>
   </div>

@@ -54,7 +54,7 @@
         :class="{ 'nav-item-active': isActive(item.path) }"
       >
         <template #prepend>
-          <SvgColor :src="item.icon" size="20" />
+          <v-icon size="20">{{ item.icon }}</v-icon>
         </template>
         <v-list-item-title v-if="!mini || mobile" class="nav-title">
           {{ item.title }}
@@ -94,7 +94,6 @@ import { useRoute, useRouter } from 'vue-router'
 import { dashboardNavItems, isActiveRoute, type NavItem } from '../../utils/routes'
 import { useAuthStore } from '../../stores/auth'
 import { useSettingsStore } from '../../stores/settings'
-import SvgColor from '../common/SvgColor.vue'
 
 interface Props {
   mini?: boolean

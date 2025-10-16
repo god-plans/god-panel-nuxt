@@ -39,7 +39,7 @@
         @click="close"
       >
         <template #prepend>
-          <v-icon :icon="item.icon" size="20" />
+          <v-icon size="20">{{ item.icon }}</v-icon>
         </template>
         <v-list-item-title class="nav-title">
           {{ item.title }}

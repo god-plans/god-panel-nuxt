@@ -39,3 +39,4 @@ const props = withDefaults(defineProps<Props>(), {
   box-shadow: 0 0 10px rgba(var(--v-theme-primary), 0.5);
 }
 </style>
+

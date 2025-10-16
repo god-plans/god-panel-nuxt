@@ -37,7 +37,10 @@ export const useSettingsStore = defineStore('settings', () => {
 
   // Actions
   const initialize = () => {
-    // Try to load from cookies first (for SSR)
+    // Always start with defaults
+    settings.value = { ...defaultSettings }
+
+    // Try to load from cookies first (works on both server and client)
     try {
       const cookieSettings = settingsCookie.value
       if (cookieSettings && typeof cookieSettings === 'object') {
@@ -46,10 +49,12 @@ export const useSettingsStore = defineStore('settings', () => {
         return
       }
     } catch (error) {
-      console.warn('Invalid settings in cookie, trying localStorage')
+      if (process.client) {
+        console.warn('Invalid settings in cookie, trying localStorage')
+      }
     }
 
-    // Fallback to localStorage on client
+    // Fallback to localStorage on client only
     if (process.client) {
       const stored = localStorage.getItem('settings')
       if (stored) {
@@ -104,9 +109,8 @@ export const useSettingsStore = defineStore('settings', () => {
   }
 
   // Initialize on store creation
-  if (process.client) {
-    initialize()
-  }
+  // Always initialize to ensure SSR compatibility
+  initialize()
 
   return {
     // State

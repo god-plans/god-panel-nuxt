@@ -14,12 +14,12 @@
         :style="{ fontFamily: getFontFamily(font) }"
         @click="handleClick(font)"
       >
-        <img
-          src="/assets/icons/setting/ic-font.svg"
-          alt="font"
+        <v-icon
           class="font-option__icon"
           :class="{ 'font-option__icon--active': value === font }"
         >
+          mdi-format-font
+        </v-icon>
         <span class="font-option__name">{{ font }}</span>
       </button>
     </div>
@@ -121,12 +121,7 @@ const getFontFamily = (font: string) => {
 
 .font-option__icon--active {
   opacity: 1;
-  filter: brightness(0) saturate(100%);
-  background: linear-gradient(135deg, rgb(var(--v-theme-primary)) 0%, rgb(var(--v-theme-primary)) 100%);
-  -webkit-mask: url(/assets/icons/setting/ic-font.svg) no-repeat center;
-  mask: url(/assets/icons/setting/ic-font.svg) no-repeat center;
-  -webkit-mask-size: contain;
-  mask-size: contain;
+  color: rgb(var(--v-theme-primary));
 }
 
 .font-option__name {

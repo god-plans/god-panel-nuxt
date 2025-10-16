@@ -7,8 +7,6 @@ import { aliases, mdi } from 'vuetify/iconsets/mdi'
 import { createTheme } from '~/theme/create-theme'
 
 export default defineNuxtPlugin((nuxtApp) => {
-  const settingsStore = useSettingsStore()
-
   // Helper function to convert theme to Vuetify format
   const convertThemeToVuetify = (settings: any) => {
     const theme = createTheme(settings)
@@ -39,15 +37,27 @@ export default defineNuxtPlugin((nuxtApp) => {
     }
   }
 
+  // Default settings for SSR - matches Settings type exactly
+  const defaultSettings = {
+    colorScheme: 'light',
+    direction: 'ltr',
+    contrast: 'default',
+    primaryColor: 'default',
+    navLayout: 'vertical',
+    navColor: 'integrate',
+    compactLayout: false,
+    fontFamily: 'Inter'
+  }
+
   // Create Vuetify instance
   const vuetify = createVuetify({
     components,
     directives,
     theme: {
-      defaultTheme: settingsStore.settings.colorScheme,
+      defaultTheme: defaultSettings.colorScheme,
       themes: {
-        light: convertThemeToVuetify({ ...settingsStore.settings, colorScheme: 'light' }),
-        dark: convertThemeToVuetify({ ...settingsStore.settings, colorScheme: 'dark' }),
+        light: convertThemeToVuetify({ ...defaultSettings, colorScheme: 'light' }),
+        dark: convertThemeToVuetify({ ...defaultSettings, colorScheme: 'dark' }),
       },
     },
     icons: {
@@ -55,13 +65,13 @@ export default defineNuxtPlugin((nuxtApp) => {
       aliases,
       sets: { mdi },
     },
-    defaults: createTheme(settingsStore.settings).components,
   })
 
   nuxtApp.vueApp.use(vuetify)
 
   // Watch for settings changes and update theme dynamically
   if (process.client) {
+    const settingsStore = useSettingsStore()
     watch(
       () => settingsStore.settings,
       (newSettings) => {
@@ -104,3 +114,4 @@ export default defineNuxtPlugin((nuxtApp) => {
     }
   }
 })
+

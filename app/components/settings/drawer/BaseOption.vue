@@ -6,11 +6,9 @@
     @click="handleClick"
   >
     <div class="base-option__top">
-      <img
-        :src="`/assets/icons/setting/ic-${icon}.svg`"
-        :alt="label"
-        class="base-option__icon"
-      >
+      <v-icon class="base-option__icon">
+        {{ getIcon(icon) }}
+      </v-icon>
       <v-switch
         :model-value="selected"
         readonly
@@ -53,6 +51,16 @@ const emit = defineEmits<{
 
 const handleClick = () => {
   emit('click')
+}
+
+const getIcon = (iconName: string) => {
+  const iconMap: Record<string, string> = {
+    moon: 'mdi-weather-night',
+    contrast: 'mdi-contrast-circle',
+    'align-right': 'mdi-format-align-right',
+    'autofit-width': 'mdi-arrow-collapse-horizontal'
+  }
+  return iconMap[iconName] || 'mdi-circle'
 }
 </script>
 
