@@ -6,6 +6,9 @@ const ROOTS = {
   DASHBOARD: '/dashboard',
 } as const
 
+// Icon helper function for custom SVG icons
+const icon = (name: string) => `/assets/icons/navbar/${name}.svg`
+
 export const paths = {
   faqs: '/faqs',
   minimalStore: 'https://mui.com/store/items/minimal-dashboard/',
@@ -82,37 +85,37 @@ export const dashboardNavItems: NavItem[] = [
     key: 'dashboard',
     title: 'Dashboard',
     path: paths.dashboard.root,
-    icon: 'mdi-view-dashboard'
+    icon: icon('ic-dashboard')
   },
   {
     key: 'users',
     title: 'Users',
     path: paths.dashboard.users,
-    icon: 'mdi-account-group'
+    icon: icon('ic-user')
   },
   {
     key: 'products',
     title: 'Products',
     path: paths.dashboard.products,
-    icon: 'mdi-package-variant'
+    icon: icon('ic-product')
   },
   {
     key: 'orders',
     title: 'Orders',
     path: paths.dashboard.orders,
-    icon: 'mdi-shopping-cart'
+    icon: icon('ic-order')
   },
   {
     key: 'analytics',
     title: 'Analytics',
     path: paths.dashboard.analytics,
-    icon: 'mdi-chart-line'
+    icon: icon('ic-analytics')
   },
   {
     key: 'settings',
     title: 'Settings',
     path: paths.dashboard.settings,
-    icon: 'mdi-cog'
+    icon: icon('ic-parameter')
   }
 ]
 
@@ -140,7 +143,7 @@ export const generateBreadcrumbs = (currentPath: string): NavItem[] => {
         key: segment,
         title: segment.charAt(0).toUpperCase() + segment.slice(1),
         path: accumulatedPath,
-        icon: 'mdi-circle-small'
+        icon: icon('ic-blank')
       })
     }
   })
