@@ -164,7 +164,7 @@
 </style>
 
 <script setup lang="ts">
-import { reactive, provide, onMounted, onErrorCaptured } from 'vue'
+import { reactive, provide, onMounted, onErrorCaptured, watch } from 'vue'
 import { useSettingsStore } from '~/stores/settings'
 import { useDynamicFonts } from '~/composables/useDynamicFonts'
 
@@ -179,6 +179,11 @@ if (process.client) {
   onMounted(() => {
     loadFont(settingsStore.settings.fontFamily)
   })
+
+  // Watch for font family changes
+  watch(() => settingsStore.settings.fontFamily, (newFont) => {
+    loadFont(newFont)
+  }, { immediate: false })
 }
 
 // Global snackbar state

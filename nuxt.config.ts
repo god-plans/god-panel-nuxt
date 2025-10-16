@@ -22,8 +22,7 @@ export default defineNuxtConfig({
   // Runtime config for API
   runtimeConfig: {
     public: {
-      apiBase: process.env.NUXT_PUBLIC_API_BASE || '/api',
-      apiUrl: process.env.API_BASE_URL || 'http://localhost:3001',
+      apiUrl: process.env.NUXT_PUBLIC_API_URL || 'http://localhost:4000',
       appName: 'God Panel',
       version: '1.0.0'
     }
@@ -41,8 +40,8 @@ export default defineNuxtConfig({
     storageKey: 'nuxt-color-mode'
   },
 
-  // CSS - Import in global styles instead
-  // css: ['~/assets/css/main.css'],
+  // CSS
+  css: ['~/assets/css/main.css'],
 
   // Build configuration
   build: {

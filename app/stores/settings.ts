@@ -4,7 +4,7 @@ import { settingsSchema, type Settings } from '~/types/validation'
 const defaultSettings: Settings = {
   colorScheme: 'light',
   direction: 'ltr',
-  contrast: 'default',
+  contrast: 'high',
   primaryColor: 'default',
   navLayout: 'vertical',
   navColor: 'integrate',

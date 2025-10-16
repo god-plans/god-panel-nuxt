@@ -91,14 +91,9 @@
 <script setup lang="ts">
 import { ref, computed } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
-
-interface NavItem {
-  key: string
-  title: string
-  path: string
-  icon: string
-  badge?: string | number
-}
+import { dashboardNavItems, isActiveRoute, type NavItem } from '~/utils/routes'
+import { useAuthStore } from '~/stores/auth'
+import { useSettingsStore } from '~/stores/settings'
 
 interface Props {
   mini?: boolean
@@ -132,49 +127,12 @@ const getNavWidth = () => {
 // Navigation drawer state for mobile
 const drawer = ref(!props.mobile)
 
-// Navigation items
-const navItems = ref<NavItem[]>([
-  {
-    key: 'dashboard',
-    title: 'Dashboard',
-    path: '/dashboard',
-    icon: 'mdi-view-dashboard'
-  },
-  {
-    key: 'users',
-    title: 'Users',
-    path: '/dashboard/users',
-    icon: 'mdi-account-group'
-  },
-  {
-    key: 'products',
-    title: 'Products',
-    path: '/dashboard/products',
-    icon: 'mdi-package-variant'
-  },
-  {
-    key: 'orders',
-    title: 'Orders',
-    path: '/dashboard/orders',
-    icon: 'mdi-shopping-cart'
-  },
-  {
-    key: 'analytics',
-    title: 'Analytics',
-    path: '/dashboard/analytics',
-    icon: 'mdi-chart-line'
-  },
-  {
-    key: 'settings',
-    title: 'Settings',
-    path: '/dashboard/settings',
-    icon: 'mdi-cog'
-  }
-])
+// Navigation items from centralized config
+const navItems = ref(dashboardNavItems)
 
 // Check if navigation item is active
 const isActive = (path: string) => {
-  return route.path === path || route.path.startsWith(path + '/')
+  return isActiveRoute(route.path, path)
 }
 
 // Handle logout

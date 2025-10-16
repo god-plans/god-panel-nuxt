@@ -70,7 +70,7 @@
             v-if="!hideContrast"
             icon="contrast"
             label="Contrast"
-            :selected="settingsStore.settings.contrast === 'hight'"
+            :selected="settingsStore.settings.contrast === 'high'"
             @click="toggleContrast"
           />
 
@@ -182,7 +182,7 @@ const toggleColorScheme = () => {
 }
 
 const toggleContrast = () => {
-  const newContrast = settingsStore.settings.contrast === 'default' ? 'hight' : 'default'
+  const newContrast = settingsStore.settings.contrast === 'default' ? 'high' : 'default'
   settingsStore.updateField('contrast', newContrast)
 }
 

@@ -26,7 +26,6 @@
 
 <script setup lang="ts">
 import { computed } from 'vue'
-import primaryColors from '~/theme/with-settings/primary-color.json'
 
 interface PresetOption {
   name: string

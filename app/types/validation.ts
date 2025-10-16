@@ -31,7 +31,7 @@ export const userSchema = z.object({
 export const settingsSchema = z.object({
   colorScheme: z.enum(['light', 'dark']),
   direction: z.enum(['ltr', 'rtl']),
-  contrast: z.enum(['default', 'hight']),
+  contrast: z.enum(['default', 'high']),
   primaryColor: z.enum(['default', 'purple', 'cyan', 'blue', 'orange', 'red']),
   navLayout: z.enum(['vertical', 'horizontal', 'mini']),
   navColor: z.enum(['integrate', 'apparent']),

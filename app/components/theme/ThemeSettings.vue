@@ -141,9 +141,9 @@ const primaryColors = ref({
 
 // High contrast computed property
 const isHighContrast = computed({
-  get: () => localSettings.contrast === 'hight',
+  get: () => localSettings.contrast === 'high',
   set: (value: boolean) => {
-    localSettings.contrast = value ? 'hight' : 'default'
+    localSettings.contrast = value ? 'high' : 'default'
   }
 })
 

@@ -31,7 +31,7 @@ export function updateCoreWithSettings(theme, settings) {
             defaultChannel: hexToRgbChannel(getBackgroundDefault(settings.contrast)),
           },
           /** [2] High contrast adjustments */
-          ...(settings.contrast === 'hight' && {
+          ...(settings.contrast === 'high' && {
             text: {
               primary: grey[900],
               secondary: grey[800],
@@ -48,7 +48,7 @@ export function updateCoreWithSettings(theme, settings) {
           /** [1] */
           primary: getPalettePrimary(settings.primaryColor),
           /** [2] High contrast adjustments for dark mode */
-          ...(settings.contrast === 'hight' && {
+          ...(settings.contrast === 'high' && {
             text: {
               primary: grey[50],
               secondary: grey[100],

@@ -9,7 +9,7 @@ export function createTheme(settings) {
     colorScheme: settings.colorScheme,
     direction: settings.direction,
     primaryColor: settings.primaryColor,
-    contrast: settings.contrast === 'hight' ? 'high' : 'default',
+    contrast: settings.contrast,
     fontFamily: settings.fontFamily,
   };
 

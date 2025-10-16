@@ -106,12 +106,21 @@ export const useAuthStore = defineStore('auth', () => {
     }
   }
 
-  const logout = () => {
-    user.value = null
-    if (process.client) {
-      localStorage.removeItem(STORAGE_KEY)
+  const logout = async () => {
+    try {
+      // Call logout API to invalidate server-side session
+      const { $axios } = useNuxtApp()
+      await $axios.post('/auth/logout')
+    } catch (error) {
+      console.warn('Logout API call failed:', error)
+      // Continue with local logout even if API call fails
+    } finally {
+      // Clear local state regardless of API response
+      user.value = null
+      if (process.client) {
+        localStorage.removeItem(STORAGE_KEY)
+      }
     }
-    // Token will be removed automatically when making requests
   }
 
   const updateProfile = async (updates: Partial<User>) => {

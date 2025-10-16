@@ -24,6 +24,21 @@
       contain
     />
 
+    <!-- Breadcrumbs for desktop -->
+    <div v-if="!mobile" class="breadcrumbs">
+      <v-breadcrumbs :items="breadcrumbItems" divider="mdi-chevron-right">
+        <template #item="{ item }">
+          <v-breadcrumbs-item
+            :to="item.href"
+            :disabled="item.disabled"
+            class="breadcrumb-item"
+          >
+            {{ item.title }}
+          </v-breadcrumbs-item>
+        </template>
+      </v-breadcrumbs>
+    </div>
+
     <v-spacer />
 
     <!-- Search -->
@@ -147,8 +162,10 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
-import { useRouter } from 'vue-router'
+import { ref, computed } from 'vue'
+import { useRouter, useRoute } from 'vue-router'
+import { generateBreadcrumbs } from '~/utils/routes'
+import { useAuthStore } from '~/stores/auth'
 import ThemeToggle from '~/components/theme/ThemeToggle.vue'
 
 interface Props {
@@ -164,10 +181,21 @@ defineEmits<{
 }>()
 
 const router = useRouter()
+const route = useRoute()
 const authStore = useAuthStore()
 
 // Reactive data
 const searchQuery = ref('')
+
+// Breadcrumbs
+const breadcrumbItems = computed(() => {
+  const breadcrumbs = generateBreadcrumbs(route.path)
+  return breadcrumbs.map((crumb, index) => ({
+    title: crumb.title,
+    href: index === breadcrumbs.length - 1 ? undefined : crumb.path,
+    disabled: index === breadcrumbs.length - 1
+  }))
+})
 
 // Mock notifications - in real app, this would come from API
 const notifications = ref([
@@ -226,6 +254,19 @@ const handleLogout = async () => {
 <style scoped>
 .dashboard-header {
   background-color: rgb(var(--v-theme-surface)) !important;
+  color: rgb(var(--v-theme-on-surface));
+}
+
+.breadcrumbs {
+  margin-left: 16px;
+}
+
+.breadcrumb-item {
+  color: rgb(var(--v-theme-on-surface-variant));
+  text-decoration: none;
+}
+
+.breadcrumb-item:hover {
   color: rgb(var(--v-theme-on-surface));
 }
 

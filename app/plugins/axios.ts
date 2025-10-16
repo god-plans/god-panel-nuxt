@@ -42,9 +42,9 @@ export default defineNuxtPlugin(() => {
         if (process.client) {
           localStorage.removeItem('auth-token')
           // Redirect to login if not already there
-          const router = useRouter()
-          if (router.currentRoute.value.path !== '/auth/login') {
-            router.push('/auth/login')
+          const currentPath = window.location.pathname
+          if (currentPath !== '/auth/login') {
+            navigateTo('/auth/login')
           }
         }
       }
