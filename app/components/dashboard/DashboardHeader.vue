@@ -26,7 +26,7 @@
 
     <!-- Breadcrumbs for desktop -->
     <div v-if="!mobile" class="breadcrumbs">
-      <v-breadcrumbs :items="breadcrumbItems" divider="mdi-chevron-right">
+      <v-breadcrumbs :items="breadcrumbItems" >
         <template #item="{ item }">
           <v-breadcrumbs-item
             :to="item.href"
@@ -50,8 +50,9 @@
       class="search-field"
       hide-details
       single-line
-    >
       prepend-inner-icon="mdi-magnify"
+    >
+      
     </v-text-field>
 
     <!-- Theme Toggle -->

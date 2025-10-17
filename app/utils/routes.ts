@@ -50,9 +50,6 @@ export const paths = {
       six: `${ROOTS.DASHBOARD}/group/six`,
     },
     // Additional routes for the Nuxt version
-    users: `${ROOTS.DASHBOARD}/users`,
-    products: `${ROOTS.DASHBOARD}/products`,
-    orders: `${ROOTS.DASHBOARD}/orders`,
     analytics: `${ROOTS.DASHBOARD}/analytics`,
     settings: `${ROOTS.DASHBOARD}/settings`,
     profile: `${ROOTS.DASHBOARD}/profile`,
@@ -83,24 +80,6 @@ export const dashboardNavItems: NavItem[] = [
     title: 'Dashboard',
     path: paths.dashboard.root,
     icon: 'mdi-view-dashboard'
-  },
-  {
-    key: 'users',
-    title: 'Users',
-    path: paths.dashboard.users,
-    icon: 'mdi-account-group'
-  },
-  {
-    key: 'products',
-    title: 'Products',
-    path: paths.dashboard.products,
-    icon: 'mdi-package-variant'
-  },
-  {
-    key: 'orders',
-    title: 'Orders',
-    path: paths.dashboard.orders,
-    icon: 'mdi-shopping-cart'
   },
   {
     key: 'analytics',

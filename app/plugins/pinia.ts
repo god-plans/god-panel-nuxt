@@ -14,3 +14,4 @@ export default defineNuxtPlugin(() => {
 
   // Auth store initialization will be handled by its own logic
 })
+

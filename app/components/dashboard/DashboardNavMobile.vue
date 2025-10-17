@@ -78,8 +78,9 @@
 </template>
 
 <script setup lang="ts">
-import { computed } from 'vue'
+import { ref, computed } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
+import { useAuthStore } from '../../stores/auth'
 
 interface Props {
   open: boolean
@@ -111,24 +112,6 @@ const navItems = ref<NavItem[]>([
     title: 'Dashboard',
     path: '/dashboard',
     icon: 'mdi-view-dashboard'
-  },
-  {
-    key: 'users',
-    title: 'Users',
-    path: '/dashboard/users',
-    icon: 'mdi-account-group'
-  },
-  {
-    key: 'products',
-    title: 'Products',
-    path: '/dashboard/products',
-    icon: 'mdi-package-variant'
-  },
-  {
-    key: 'orders',
-    title: 'Orders',
-    path: '/dashboard/orders',
-    icon: 'mdi-shopping-cart'
   },
   {
     key: 'analytics',
