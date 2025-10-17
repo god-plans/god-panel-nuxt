@@ -53,13 +53,16 @@
         class="nav-item"
         :class="{ 'nav-item-active': isActive(item.path) }"
       >
-        <template #prepend>
+        <template v-if="mini && !mobile" #default>
+          <v-icon size="20">{{ item.icon }}</v-icon>
+        </template>
+        <template v-else #prepend>
           <v-icon size="20">{{ item.icon }}</v-icon>
         </template>
         <v-list-item-title v-if="!mini || mobile" class="nav-title">
           {{ item.title }}
         </v-list-item-title>
-        <template #append v-if="item.badge">
+        <template #append v-if="item.badge && (!mini || mobile)">
           <v-chip
             :text="item.badge"
             size="small"
@@ -130,10 +133,10 @@ const drawer = ref(!props.mobile)
 // Navigation items from centralized config
 const navItems = ref(dashboardNavItems)
 
-// Check if navigation item is active
-const isActive = (path: string) => {
+// Check if navigation item is active (computed for reactivity)
+const isActive = computed(() => (path: string) => {
   return isActiveRoute(route.path, path)
-}
+})
 
 // Handle logout
 const handleLogout = async () => {
@@ -214,6 +217,7 @@ const handleLogout = async () => {
 .nav-mini .nav-item {
   margin: 2px 4px;
   justify-content: center;
+  padding: 12px;
 }
 
 .nav-mini .nav-title {

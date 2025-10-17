@@ -160,6 +160,12 @@
         </v-list-item>
       </v-list>
     </v-menu>
+
+    <!-- Logout Confirmation Dialog -->
+    <LogoutConfirmDialog
+      v-model="showLogoutDialog"
+      @confirm="performLogout"
+    />
   </v-app-bar>
 </template>
 
@@ -169,6 +175,7 @@ import { useRouter, useRoute } from 'vue-router'
 import { generateBreadcrumbs } from '~/utils/routes'
 import { useAuthStore } from '~/stores/auth'
 import SettingsButton from '~/components/theme/SettingsButton.vue'
+import LogoutConfirmDialog from '~/components/common/LogoutConfirmDialog.vue'
 
 interface Props {
   mobile?: boolean
@@ -188,6 +195,7 @@ const authStore = useAuthStore()
 
 // Reactive data
 const searchQuery = ref('')
+const showLogoutDialog = ref(false)
 
 // Breadcrumbs
 const breadcrumbItems = computed(() => {
@@ -247,7 +255,12 @@ const goToSettings = () => {
   router.push('/dashboard/settings')
 }
 
-const handleLogout = async () => {
+const handleLogout = () => {
+  showLogoutDialog.value = true
+}
+
+const performLogout = async () => {
+  showLogoutDialog.value = false
   await authStore.logout()
   await router.push('/auth/login')
 }
@@ -275,12 +288,29 @@ const handleLogout = async () => {
 .search-field {
   max-width: 300px;
   margin-right: 16px;
-  background-color: rgb(var(--v-theme-surface-variant));
 }
 
 .search-field :deep(.v-field) {
-  background-color: rgb(var(--v-theme-surface-variant));
-  color: rgb(var(--v-theme-on-surface));
+  background-color: rgb(var(--v-theme-surface-variant)) !important;
+  color: rgb(var(--v-theme-on-surface)) !important;
+  border-color: rgb(var(--v-theme-outline)) !important;
+}
+
+.search-field :deep(.v-field:hover) {
+  border-color: rgb(var(--v-theme-outline-variant)) !important;
+}
+
+.search-field :deep(.v-field--focused) {
+  border-color: rgb(var(--v-theme-primary)) !important;
+  box-shadow: 0 0 0 2px rgba(var(--v-theme-primary-rgb), 0.2) !important;
+}
+
+.search-field :deep(.v-field__input) {
+  color: rgb(var(--v-theme-on-surface)) !important;
+}
+
+.search-field :deep(.v-field__input::placeholder) {
+  color: rgb(var(--v-theme-on-surface-variant)) !important;
 }
 
 .notification-btn,
@@ -309,6 +339,26 @@ const handleLogout = async () => {
 .notification-list :deep(.v-list-item:hover),
 .user-menu :deep(.v-list-item:hover) {
   background-color: rgba(var(--v-theme-on-surface-rgb), 0.08);
+}
+
+/* RTL Support */
+[dir="rtl"] .dashboard-header {
+  direction: rtl;
+}
+
+[dir="rtl"] .dashboard-header .v-app-bar {
+  flex-direction: row-reverse;
+}
+
+[dir="rtl"] .search-field {
+  margin-left: 16px;
+  margin-right: 0;
+}
+
+[dir="rtl"] .notification-btn,
+[dir="rtl"] .user-btn {
+  margin-right: 8px;
+  margin-left: 0;
 }
 
 @media (max-width: 768px) {

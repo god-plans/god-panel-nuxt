@@ -1,7 +1,7 @@
 <template>
   <v-navigation-drawer
     v-model="settingsStore.openDrawer"
-    location="right"
+    :location="settingsStore.settings.direction === 'rtl' ? 'left' : 'right'"
     width="360"
     class="settings-drawer"
     temporary

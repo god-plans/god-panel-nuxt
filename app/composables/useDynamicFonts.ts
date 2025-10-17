@@ -56,7 +56,15 @@ export function useDynamicFonts() {
   const loadFont = async (fontName: string): Promise<void> => {
     const fontDef = FONT_DEFINITIONS[fontName]
 
-    if (!fontDef || loadedFonts.value.has(fontName)) {
+    if (!fontDef) {
+      return
+    }
+
+    // Always apply the font immediately, even if previously loaded
+    applyFont(fontName)
+
+    // If already loaded, no need to load again
+    if (loadedFonts.value.has(fontName)) {
       return
     }
 
@@ -123,8 +131,8 @@ export function useDynamicFonts() {
   if (process.client) {
     watch(
       () => settingsStore.settings.fontFamily,
-      (newFont) => {
-        if (newFont) {
+      (newFont, oldFont) => {
+        if (newFont && newFont !== oldFont) {
           loadFont(newFont)
         }
       },

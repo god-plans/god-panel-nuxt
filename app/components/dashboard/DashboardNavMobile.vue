@@ -74,6 +74,12 @@
         </v-list>
       </div>
     </template>
+
+    <!-- Logout Confirmation Dialog -->
+    <LogoutConfirmDialog
+      v-model="showLogoutDialog"
+      @confirm="performLogout"
+    />
   </v-navigation-drawer>
 </template>
 
@@ -81,6 +87,7 @@
 import { ref, computed } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useAuthStore } from '../../stores/auth'
+import LogoutConfirmDialog from '../common/LogoutConfirmDialog.vue'
 
 interface Props {
   open: boolean
@@ -121,10 +128,13 @@ const navItems = ref<NavItem[]>([
   }
 ])
 
+// Logout dialog state
+const showLogoutDialog = ref(false)
+
 // Computed properties
-const isActive = (path: string) => {
+const isActive = computed(() => (path: string) => {
   return route.path === path || route.path.startsWith(path + '/')
-}
+})
 
 // Methods
 const close = () => {
@@ -136,10 +146,15 @@ const handleSettings = () => {
   close()
 }
 
-const handleLogout = async () => {
+const handleLogout = () => {
+  showLogoutDialog.value = true
+}
+
+const performLogout = async () => {
+  showLogoutDialog.value = false
+  close()
   await authStore.logout()
   await router.push('/auth/login')
-  close()
 }
 </script>
 

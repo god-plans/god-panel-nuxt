@@ -121,7 +121,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, reactive, watch } from 'vue'
+import { ref, reactive, watch, computed } from 'vue'
 import { useSettingsStore } from '~/stores/settings'
 
 const settingsStore = useSettingsStore()
