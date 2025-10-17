@@ -55,8 +55,8 @@
       
     </v-text-field>
 
-    <!-- Theme Toggle -->
-    <ThemeToggle />
+    <!-- Settings Button -->
+    <SettingsButton />
 
     <!-- Notifications -->
     <v-menu offset-y>
@@ -168,7 +168,7 @@ import { ref, computed } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import { generateBreadcrumbs } from '~/utils/routes'
 import { useAuthStore } from '~/stores/auth'
-import ThemeToggle from '~/components/theme/ThemeToggle.vue'
+import SettingsButton from '~/components/theme/SettingsButton.vue'
 
 interface Props {
   mobile?: boolean

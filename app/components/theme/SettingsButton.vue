@@ -1,0 +1,16 @@
+<template>
+  <v-btn
+    icon
+    variant="text"
+    size="small"
+    @click="settingsStore.onOpenDrawer"
+  >
+    <v-icon>mdi-cog</v-icon>
+  </v-btn>
+</template>
+
+<script setup lang="ts">
+import { useSettingsStore } from '~/stores/settings'
+
+const settingsStore = useSettingsStore()
+</script>
