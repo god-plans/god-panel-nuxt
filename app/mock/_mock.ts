@@ -205,7 +205,7 @@ export const _mock = {
   // Image
   image: {
     cover: (index: number) => `/assets/images/cover/cover-${(index % 5) + 1}.webp`,
-    avatar: (index: number) => `/assets/images/avatar/avatar-${(index % 5) + 1}.webp`,
+    avatar: (index: number) => `/assets/images/avatar/avatar-${(index % 5) + 1}.svg`,
     travel: (index: number) => `/assets/images/travel/travel-${(index % 5) + 1}.webp`,
     course: (index: number) => `/assets/images/course/course-${(index % 5) + 1}.webp`,
     company: (index: number) => `/assets/images/company/company-${(index % 5) + 1}.webp`,

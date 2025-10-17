@@ -142,9 +142,33 @@ export const useAuthStore = defineStore('auth', () => {
     }
   }
 
+  // Demo login for development
+  const demoLogin = () => {
+    const demoUser = {
+      id: 'demo-user-1',
+      displayName: 'Demo User',
+      email: 'demo@example.com',
+      photoURL: '/assets/images/avatar/avatar-1.svg',
+      phoneNumber: '+1234567890',
+      role: 'admin' as const,
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
+      accessToken: 'demo-token'
+    }
+    user.value = demoUser
+    if (process.client) {
+      localStorage.setItem(STORAGE_KEY, 'demo-token')
+    }
+  }
+
   // Initialize auth state
   if (process.client) {
-    initialize()
+    // For development, auto-login with demo user
+    if (process.dev) {
+      demoLogin()
+    } else {
+      initialize()
+    }
   }
 
   return {
@@ -163,6 +187,7 @@ export const useAuthStore = defineStore('auth', () => {
     login,
     register,
     logout,
-    updateProfile
+    updateProfile,
+    demoLogin
   }
 })

@@ -205,7 +205,7 @@ const notifications = ref([
     id: 1,
     title: 'New order received',
     message: 'Order #1234 has been placed',
-    icon: 'mdi-shopping-cart',
+    icon: 'mdi-cart',
     color: 'success',
     read: false
   },

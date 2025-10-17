@@ -68,7 +68,7 @@
             density="comfortable"
             class="info-alert"
           >
-            Use <strong>{{ form.email }}</strong> with password <strong>@demo1</strong>
+            Use <strong>{{ form.email }}</strong> with password <strong>{{ form.password }}</strong>
           </v-alert>
 
           <!-- Login Form -->
@@ -78,7 +78,7 @@
               <v-text-field
                 v-model="form.email"
                 label="Email address"
-                placeholder="demo@minimals.cc"
+                placeholder="godpanel"
                 variant="outlined"
                 density="comfortable"
               />
@@ -109,6 +109,19 @@
                 :loading="loading"
               >
                 Sign in
+              </v-btn>
+
+              <!-- Demo Login Button (Development Only) -->
+              <v-btn
+                v-if="isDev"
+                variant="outlined"
+                size="large"
+                block
+                color="secondary"
+                @click="demoLogin"
+                class="mt-2"
+              >
+                Demo Login
               </v-btn>
 
               <!-- Divider -->
@@ -169,10 +182,13 @@ import { loginSchema, type LoginForm } from '~/types/validation'
 const authStore = useAuthStore()
 const router = useRouter()
 
+// Check if we're in development mode
+const isDev = ref(import.meta.env.DEV)
+
 // Form state
 const form = reactive<LoginForm>({
-  email: 'demo@minimals.cc',
-  password: ''
+  email: 'godpanel',
+  password: 'god123'
 })
 
 const errors = ref<Record<string, string[]>>({})
@@ -206,6 +222,19 @@ const handleSubmit = async () => {
     }
   } catch (error) {
     console.error('Login error:', error)
+  } finally {
+    loading.value = false
+  }
+}
+
+// Demo login handler
+const demoLogin = async () => {
+  loading.value = true
+  try {
+    authStore.demoLogin()
+    await router.push('/dashboard')
+  } catch (error) {
+    console.error('Demo login error:', error)
   } finally {
     loading.value = false
   }
