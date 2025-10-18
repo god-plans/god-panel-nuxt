@@ -27,11 +27,10 @@
 
     <!-- Logo Section -->
     <div v-else class="nav-header">
-      <v-img
-        :src="mini ? '/logo-single.png' : '/logo-full.png'"
-        :width="mini ? 40 : 120"
+      <Logo
+        :variant="mini ? 'icon' : 'compact'"
+        :size="mini ? 'sm' : 'md'"
         class="logo"
-        contain
       />
       <v-spacer v-if="!mini" />
       <v-btn
@@ -159,6 +158,7 @@ import { useRoute, useRouter } from 'vue-router'
 import { dashboardNavItems, isActiveRoute, type NavItem } from '../../utils/routes'
 import { useAuthStore } from '../../stores/auth'
 import { useSettingsStore } from '../../stores/settings'
+import Logo from '../common/Logo.vue'
 
 const { t } = useI18n()
 

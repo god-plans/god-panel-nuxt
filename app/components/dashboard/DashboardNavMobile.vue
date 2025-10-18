@@ -8,11 +8,10 @@
   >
     <!-- Header -->
     <div class="nav-header">
-      <v-img
-        src="/logo-full.png"
-        width="120"
+      <Logo
+        variant="compact"
+        size="md"
         class="logo"
-        contain
       />
     </div>
 
@@ -149,6 +148,7 @@ import { useRoute, useRouter } from 'vue-router'
 import { dashboardNavItems, isActiveRoute, type NavItem } from '../../utils/routes'
 import { useAuthStore } from '../../stores/auth'
 import LogoutConfirmDialog from '../common/LogoutConfirmDialog.vue'
+import Logo from '../common/Logo.vue'
 
 const { t } = useI18n()
 

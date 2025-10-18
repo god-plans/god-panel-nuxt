@@ -13,7 +13,7 @@
     <!-- Stats Cards -->
     <v-row class="mb-6">
       <v-col cols="12" sm="6" md="3">
-        <v-card class="stat-card" elevation="2">
+        <v-card class="stat-card" >
           <v-card-text class="pa-4">
             <div class="d-flex align-center">
               <v-avatar size="48" color="primary" class="me-3">
@@ -29,7 +29,7 @@
       </v-col>
 
       <v-col cols="12" sm="6" md="3">
-        <v-card class="stat-card" elevation="2">
+        <v-card class="stat-card" >
           <v-card-text class="pa-4">
             <div class="d-flex align-center">
               <v-avatar size="48" color="success" class="me-3">
@@ -45,7 +45,7 @@
       </v-col>
 
       <v-col cols="12" sm="6" md="3">
-        <v-card class="stat-card" elevation="2">
+        <v-card class="stat-card" >
           <v-card-text class="pa-4">
             <div class="d-flex align-center">
               <v-avatar size="48" color="warning" class="me-3">
@@ -61,7 +61,7 @@
       </v-col>
 
       <v-col cols="12" sm="6" md="3">
-        <v-card class="stat-card" elevation="2">
+        <v-card class="stat-card" >
           <v-card-text class="pa-4">
             <div class="d-flex align-center">
               <v-avatar size="48" color="info" class="me-3">
@@ -80,7 +80,7 @@
     <!-- Charts and Tables -->
     <v-row>
       <v-col cols="12" md="8">
-        <v-card class="chart-card" elevation="2">
+        <v-card class="chart-card" >
           <v-card-title>{{ t('pages.dashboard.analyticsOverview') }}</v-card-title>
           <v-card-text>
             <div class="chart-placeholder">
@@ -92,7 +92,7 @@
       </v-col>
 
       <v-col cols="12" md="4">
-        <v-card class="recent-activity" elevation="2">
+        <v-card class="recent-activity" >
           <v-card-title>{{ t('pages.dashboard.recentActivity') }}</v-card-title>
           <v-card-text>
             <v-list density="compact">

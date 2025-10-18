@@ -1,5 +1,5 @@
 <template>
-  <v-card class="theme-settings" elevation="2">
+  <v-card class="theme-settings" >
     <v-card-title class="text-h6 mb-4">
       <v-icon class="me-2">mdi-palette</v-icon>
       {{ t('settings.general') }}

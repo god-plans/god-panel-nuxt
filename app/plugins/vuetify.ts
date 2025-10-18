@@ -60,11 +60,189 @@ export default defineNuxtPlugin((nuxtApp) => {
         light: convertThemeToVuetify({ ...defaultSettings, colorScheme: 'light' }),
         dark: convertThemeToVuetify({ ...defaultSettings, colorScheme: 'dark' }),
       },
+      // Modern theme configuration
+      variations: {
+        colors: ['primary', 'secondary', 'success', 'info', 'warning', 'error'],
+        lighten: 5,
+        darken: 5,
+      },
     },
     icons: {
       defaultSet: 'mdi',
       aliases,
       sets: { mdi },
+    },
+    // Modern design defaults
+    defaults: {
+      // Global component defaults for modern look
+      VAppBar: {
+        elevation: 0, // Remove shadows
+        flat: true,
+        height: 64,
+      },
+      VCard: {
+        elevation: 0, // Remove shadows
+        flat: true,
+        rounded: 'lg', // Large border radius
+        border: true,
+      },
+      VBtn: {
+        rounded: 'lg', // Large border radius
+        elevation: 0, // Remove shadows
+        variant: 'flat',
+      },
+      VTextField: {
+        rounded: 'lg', // Large border radius
+        variant: 'outlined',
+        density: 'comfortable',
+      },
+      VSelect: {
+        rounded: 'lg', // Large border radius
+        variant: 'outlined',
+        density: 'comfortable',
+      },
+      VChip: {
+        rounded: 'lg', // Large border radius
+        elevation: 0, // Remove shadows
+      },
+      VSheet: {
+        rounded: 'lg', // Large border radius
+        elevation: 0, // Remove shadows
+      },
+      VNavigationDrawer: {
+        elevation: 0, // Remove shadows
+        border: true,
+      },
+      VDialog: {
+        rounded: 'xl', // Extra large border radius
+        elevation: 0, // Remove shadows
+      },
+      VMenu: {
+        rounded: 'lg', // Large border radius
+        elevation: 0, // Remove shadows
+      },
+      VTabs: {
+        rounded: 'lg', // Large border radius
+      },
+      VExpansionPanels: {
+        rounded: 'lg', // Large border radius
+        elevation: 0, // Remove shadows
+      },
+      VExpansionPanel: {
+        rounded: 'lg', // Large border radius
+      },
+      VList: {
+        rounded: 'lg', // Large border radius
+      },
+      VListItem: {
+        rounded: 'lg', // Large border radius
+      },
+      VAvatar: {
+        rounded: 'xl', // Extra large border radius
+      },
+      VBadge: {
+        rounded: 'xl', // Extra large border radius
+      },
+      VProgressCircular: {
+        rounded: 'xl', // Extra large border radius
+      },
+      VProgressLinear: {
+        rounded: 'xl', // Extra large border radius
+      },
+      VSlider: {
+        rounded: 'xl', // Extra large border radius
+      },
+      VSwitch: {
+        rounded: 'xl', // Extra large border radius
+      },
+      VCheckbox: {
+        rounded: 'xl', // Extra large border radius
+      },
+      VRadio: {
+        rounded: 'xl', // Extra large border radius
+      },
+      VTable: {
+        rounded: 'lg', // Large border radius
+      },
+      VDataTable: {
+        rounded: 'lg', // Large border radius
+      },
+      VPagination: {
+        rounded: 'lg', // Large border radius
+      },
+      VStepper: {
+        rounded: 'lg', // Large border radius
+      },
+      VStepperHeader: {
+        rounded: 'lg', // Large border radius
+      },
+      VStepperStep: {
+        rounded: 'lg', // Large border radius
+      },
+      VTimeline: {
+        rounded: 'lg', // Large border radius
+      },
+      VTimelineItem: {
+        rounded: 'lg', // Large border radius
+      },
+      VAlert: {
+        rounded: 'lg', // Large border radius
+        elevation: 0, // Remove shadows
+        border: true,
+      },
+      VBanner: {
+        rounded: 'lg', // Large border radius
+        elevation: 0, // Remove shadows
+      },
+      VBottomNavigation: {
+        rounded: 'lg', // Large border radius
+        elevation: 0, // Remove shadows
+      },
+      VBottomSheet: {
+        rounded: 'xl', // Extra large border radius
+        elevation: 0, // Remove shadows
+      },
+      VSnackbar: {
+        rounded: 'lg', // Large border radius
+        elevation: 0, // Remove shadows
+      },
+      VTooltip: {
+        rounded: 'lg', // Large border radius
+        elevation: 0, // Remove shadows
+      },
+      VOverlay: {
+        rounded: 'lg', // Large border radius
+      },
+      // Form components
+      VForm: {
+        rounded: 'lg', // Large border radius
+      },
+      VAutocomplete: {
+        rounded: 'lg', // Large border radius
+        variant: 'outlined',
+        density: 'comfortable',
+      },
+      VCombobox: {
+        rounded: 'lg', // Large border radius
+        variant: 'outlined',
+        density: 'comfortable',
+      },
+      VTextarea: {
+        rounded: 'lg', // Large border radius
+        variant: 'outlined',
+        density: 'comfortable',
+      },
+      VFileInput: {
+        rounded: 'lg', // Large border radius
+        variant: 'outlined',
+        density: 'comfortable',
+      },
+      VRangeSlider: {
+        rounded: 'xl', // Extra large border radius
+      },
+      VRating: {
+        rounded: 'lg', // Large border radius
+      },
     },
   })
 

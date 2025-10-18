@@ -13,7 +13,7 @@
     <!-- Analytics Cards -->
     <v-row class="mb-6">
       <v-col cols="12" sm="6" lg="3">
-        <v-card class="metric-card" elevation="2">
+        <v-card class="metric-card" >
           <v-card-text class="pa-4">
             <div class="metric-header">
               <v-icon color="primary" size="24">mdi-eye</v-icon>
@@ -29,7 +29,7 @@
       </v-col>
 
       <v-col cols="12" sm="6" lg="3">
-        <v-card class="metric-card" elevation="2">
+        <v-card class="metric-card" >
           <v-card-text class="pa-4">
             <div class="metric-header">
               <v-icon color="success" size="24">mdi-account-multiple</v-icon>
@@ -45,7 +45,7 @@
       </v-col>
 
       <v-col cols="12" sm="6" lg="3">
-        <v-card class="metric-card" elevation="2">
+        <v-card class="metric-card" >
           <v-card-text class="pa-4">
             <div class="metric-header">
               <v-icon color="warning" size="24">mdi-clock-outline</v-icon>
@@ -61,7 +61,7 @@
       </v-col>
 
       <v-col cols="12" sm="6" lg="3">
-        <v-card class="metric-card" elevation="2">
+        <v-card class="metric-card" >
           <v-card-text class="pa-4">
             <div class="metric-header">
               <v-icon color="error" size="24">mdi-exit-run</v-icon>
@@ -80,7 +80,7 @@
     <!-- Charts Section -->
     <v-row class="mb-6">
       <v-col cols="12" lg="8">
-        <v-card elevation="2">
+        <v-card >
           <v-card-title>Traffic Overview</v-card-title>
           <v-card-text>
             <div class="chart-container">
@@ -95,7 +95,7 @@
       </v-col>
 
       <v-col cols="12" lg="4">
-        <v-card elevation="2">
+        <v-card >
           <v-card-title>Top Pages</v-card-title>
           <v-card-text>
             <v-list density="compact">
@@ -128,7 +128,7 @@
     <!-- Additional Analytics -->
     <v-row>
       <v-col cols="12" md="6">
-        <v-card elevation="2">
+        <v-card >
           <v-card-title>Device Breakdown</v-card-title>
           <v-card-text>
             <div class="device-stats">
@@ -178,7 +178,7 @@
       </v-col>
 
       <v-col cols="12" md="6">
-        <v-card elevation="2">
+        <v-card >
           <v-card-title>Geographic Data</v-card-title>
           <v-card-text>
             <div class="geo-stats">

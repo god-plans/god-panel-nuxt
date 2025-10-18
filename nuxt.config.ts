@@ -61,4 +61,20 @@ export default defineNuxtConfig({
     typeCheck: false // Disable during development for better performance
   },
 
+  // App configuration
+  app: {
+    head: {
+      title: 'Gods Projects - Divine Innovation',
+      meta: [
+        { name: 'description', content: 'Modern dashboard built with divine innovation and cutting-edge technology.' },
+        { name: 'viewport', content: 'width=device-width, initial-scale=1' },
+        { name: 'theme-color', content: '#6366f1' }
+      ],
+      link: [
+        { rel: 'icon', type: 'image/svg+xml', href: '/logo-gods-projects-professional-icon.svg' },
+        { rel: 'apple-touch-icon', href: '/logo-gods-projects-professional-icon.svg' }
+      ]
+    }
+  },
+
 })
