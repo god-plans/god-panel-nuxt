@@ -22,7 +22,7 @@
       >
         <v-icon>mdi-menu</v-icon>
       </v-btn>
-      <span class="mobile-title">Menu</span>
+      <span class="mobile-title">{{ t('common.menu') }}</span>
     </div>
 
     <!-- Logo Section -->
@@ -60,7 +60,7 @@
           <v-icon size="20">{{ item.icon }}</v-icon>
         </template>
         <v-list-item-title v-if="!mini || mobile" class="nav-title">
-          {{ item.title }}
+          {{ t(item.title) }}
         </v-list-item-title>
         <template #append v-if="item.badge && (!mini || mobile)">
           <v-chip
@@ -82,7 +82,7 @@
               <v-icon>mdi-logout</v-icon>
             </template>
             <v-list-item-title v-if="!mini || mobile">
-              Logout
+              {{ t('common.logout') }}
             </v-list-item-title>
           </v-list-item>
         </v-list>
@@ -93,10 +93,13 @@
 
 <script setup lang="ts">
 import { ref, computed } from 'vue'
+import { useI18n } from 'vue-i18n'
 import { useRoute, useRouter } from 'vue-router'
 import { dashboardNavItems, isActiveRoute, type NavItem } from '../../utils/routes'
 import { useAuthStore } from '../../stores/auth'
 import { useSettingsStore } from '../../stores/settings'
+
+const { t } = useI18n()
 
 interface Props {
   mini?: boolean

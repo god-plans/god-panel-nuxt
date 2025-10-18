@@ -120,13 +120,13 @@ const navItems = ref<NavItem[]>([
   {
     key: 'dashboard',
     title: 'common.dashboard',
-    path: '/dashboard',
+    path: paths.dashboard.root,
     icon: 'mdi-view-dashboard'
   },
   {
     key: 'analytics',
-    title: 'nav.analytics',
-    path: '/dashboard/analytics',
+    title: 'common.analytics',
+    path: paths.dashboard.analytics,
     icon: 'mdi-chart-line'
   }
 ])

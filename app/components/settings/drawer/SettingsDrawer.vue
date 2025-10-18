@@ -10,13 +10,13 @@
     <div class="settings-drawer__header">
       <div class="header-title">
         <v-icon class="me-2">mdi-cog</v-icon>
-        Settings
+        {{ t('common.settingsTitle') }}
       </div>
 
       <div class="header-actions">
         <FullscreenButton />
 
-        <v-tooltip text="Reset">
+        <v-tooltip :text="t('common.reset')">
           <template #activator="{ props }">
             <v-btn
               v-bind="props"
@@ -37,7 +37,7 @@
           </template>
         </v-tooltip>
 
-        <v-tooltip text="Close">
+        <v-tooltip :text="t('common.close')">
           <template #activator="{ props }">
             <v-btn
               v-bind="props"
@@ -61,8 +61,8 @@
           <BaseOption
             v-if="!hideColorScheme"
             icon="moon"
-            label="Dark mode"
-            tooltip="Toggle between light and dark theme"
+            :label="t('common.darkMode')"
+            :tooltip="t('common.toggleDarkMode')"
             :selected="settingsStore.settings.colorScheme === 'dark'"
             @click="toggleColorScheme"
           />
@@ -70,8 +70,8 @@
           <BaseOption
             v-if="!hideContrast"
             icon="contrast"
-            label="High contrast"
-            tooltip="Increase contrast for better accessibility"
+            :label="t('common.highContrast')"
+            :tooltip="t('common.highContrastTooltip')"
             :selected="settingsStore.settings.contrast === 'high'"
             @click="toggleContrast"
           />
@@ -79,17 +79,17 @@
           <BaseOption
             v-if="!hideDirection"
             icon="align-right"
-            label="RTL"
-            tooltip="Right-to-left layout for Arabic/Hebrew languages"
+            :label="t('common.rtl')"
+            :tooltip="t('common.rtlTooltip')"
             :selected="settingsStore.settings.direction === 'rtl'"
             @click="toggleDirection"
           />
 
           <BaseOption
             v-if="!hideCompact"
-            tooltip="Compact dashboard layout for more content space"
+            :tooltip="t('common.compactTooltip')"
             icon="autofit-width"
-            label="Compact"
+            :label="t('common.compact')"
             :selected="settingsStore.settings.compactLayout"
             @click="toggleCompactLayout"
           />
@@ -116,12 +116,12 @@
           v-if="!hidePresets"
           :value="settingsStore.settings.primaryColor"
           :options="[
-            { name: 'default', value: '#00A76F' },
-            { name: 'cyan', value: '#078DEE' },
-            { name: 'purple', value: '#7635dc' },
-            { name: 'blue', value: '#0C68E9' },
-            { name: 'orange', value: '#fda92d' },
-            { name: 'red', value: '#FF3030' },
+            { name: t('common.default'), value: '#00A76F' },
+            { name: t('common.cyan'), value: '#078DEE' },
+            { name: t('common.purple'), value: '#7635dc' },
+            { name: t('common.blue'), value: '#0C68E9' },
+            { name: t('common.orange'), value: '#fda92d' },
+            { name: t('common.red'), value: '#FF3030' },
           ]"
           @click-option="handlePresetClick"
         />
@@ -139,12 +139,15 @@
 </template>
 
 <script setup lang="ts">
+import { useI18n } from 'vue-i18n'
 import { useSettingsStore } from '~/stores/settings'
 import BaseOption from './BaseOption.vue'
 import FullscreenButton from './FullscreenButton.vue'
 import NavOptions from './NavOptions.vue'
 import PresetsOptions from './PresetsOptions.vue'
 import FontOptions from './FontOptions.vue'
+
+const { t } = useI18n()
 
 interface Props {
   hideFont?: boolean

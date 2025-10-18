@@ -29,7 +29,7 @@
       <v-breadcrumbs :items="breadcrumbItems" >
         <template #item="{ item }">
           <v-breadcrumbs-item
-            :to="item.href"
+            :to="item.to"
             :disabled="item.disabled"
             class="breadcrumb-item"
           >
@@ -208,8 +208,8 @@ const showLogoutDialog = ref(false)
 const breadcrumbItems = computed(() => {
   const breadcrumbs = generateBreadcrumbs(route.path)
   return breadcrumbs.map((crumb, index) => ({
-    title: crumb.title,
-    href: index === breadcrumbs.length - 1 ? undefined : crumb.path,
+    title: crumb.title.includes('.') ? t(crumb.title) : crumb.title,
+    to: index === breadcrumbs.length - 1 ? undefined : crumb.path,
     disabled: index === breadcrumbs.length - 1
   }))
 })

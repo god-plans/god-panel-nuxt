@@ -53,6 +53,7 @@ export default defineNuxtPlugin((nuxtApp) => {
   const vuetify = createVuetify({
     components,
     directives,
+    rtl: defaultSettings.direction === 'rtl', // Enable RTL support
     theme: {
       defaultTheme: defaultSettings.colorScheme,
       themes: {
@@ -95,6 +96,9 @@ export default defineNuxtPlugin((nuxtApp) => {
             vuetify.theme.themes.value.dark!.colors[key] = value
           })
         }
+
+        // Update RTL setting
+        vuetify.rtl = newSettings.direction === 'rtl'
 
         // Update document attributes
         if (typeof document !== 'undefined') {

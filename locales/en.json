@@ -174,7 +174,25 @@
     "orderCompleted": "Order completed",
     "productUpdated": "Product updated",
     "settings": "Settings",
-    "menu": "Menu"
+    "menu": "Menu",
+    "logout": "Logout",
+    "settingsTitle": "Settings",
+    "darkMode": "Dark mode",
+    "highContrast": "High contrast",
+    "rtl": "RTL",
+    "compact": "Compact",
+    "reset": "Reset",
+    "close": "Close",
+    "toggleDarkMode": "Toggle between light and dark theme",
+    "highContrastTooltip": "Increase contrast for better accessibility",
+    "rtlTooltip": "Right-to-left layout for Arabic/Hebrew languages",
+    "compactTooltip": "Compact dashboard layout for more content space",
+    "default": "Default",
+    "purple": "Purple",
+    "cyan": "Cyan",
+    "blue": "Blue",
+    "orange": "Orange",
+    "red": "Red"
   },
   "auth": {
     "or": "OR"

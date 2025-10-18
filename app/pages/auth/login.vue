@@ -179,6 +179,7 @@
 import { reactive, ref, onMounted } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { loginSchema, type LoginForm } from '~/types/validation'
+import SettingsButton from '~/components/theme/SettingsButton.vue'
 
 const authStore = useAuthStore()
 const router = useRouter()

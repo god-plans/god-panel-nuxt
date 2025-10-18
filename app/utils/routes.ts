@@ -77,23 +77,35 @@ export interface NavItem {
 export const dashboardNavItems: NavItem[] = [
   {
     key: 'dashboard',
-    title: 'Dashboard',
+    title: 'common.dashboard',
     path: paths.dashboard.root,
     icon: 'mdi-view-dashboard'
   },
   {
     key: 'analytics',
-    title: 'Analytics',
+    title: 'common.analytics',
     path: paths.dashboard.analytics,
     icon: 'mdi-chart-line'
   },
   {
     key: 'settings',
-    title: 'Settings',
+    title: 'common.settings',
     path: paths.dashboard.settings,
     icon: 'mdi-cog'
   }
 ]
+
+// Route name mappings for breadcrumbs
+const routeTranslations: Record<string, string> = {
+  'dashboard': 'routes.dashboard',
+  'analytics': 'routes.analytics',
+  'settings': 'routes.settings',
+  'profile': 'routes.profile',
+  'notifications': 'routes.notifications',
+  'group': 'routes.group',
+  'five': 'routes.five',
+  'six': 'routes.six'
+}
 
 // Breadcrumb helper
 export const generateBreadcrumbs = (currentPath: string): NavItem[] => {
@@ -113,11 +125,14 @@ export const generateBreadcrumbs = (currentPath: string): NavItem[] => {
         ...navItem,
         path: accumulatedPath
       })
-    } else if (index === pathSegments.length - 1) {
-      // Last segment - create a generic breadcrumb
+    } else {
+      // Check if this segment has a translation key
+      const translationKey = routeTranslations[segment]
+      const title = translationKey ? translationKey : segment.charAt(0).toUpperCase() + segment.slice(1)
+
       breadcrumbs.push({
         key: segment,
-        title: segment.charAt(0).toUpperCase() + segment.slice(1),
+        title: title,
         path: accumulatedPath,
         icon: 'mdi-circle-small'
       })
