@@ -4,7 +4,7 @@
     <div class="top-header">
       <div class="header-content">
         <div class="help-section">
-          <span class="help-text">Need help?</span>
+          <span class="help-text">{{ $t('common.needHelp') }}</span>
           <v-btn icon size="small" rounded="lg">
             <v-icon size="20">mdi-help-circle-outline</v-icon>
           </v-btn>
@@ -33,8 +33,8 @@
         </div>
         <div class="welcome-content">
           <div class="welcome-text">
-            <h1 class="welcome-title">Hi, Welcome back</h1>
-            <p class="welcome-subtitle">More effectively with optimized workflows.</p>
+            <h1 class="welcome-title">{{ $t('auth.welcomeBack') }}</h1>
+            <p class="welcome-subtitle">{{ $t('auth.signInToAccount') }}</p>
           </div>
           <div class="illustration">
             <v-img
@@ -52,11 +52,11 @@
         <div class="login-form-container">
           <!-- Form Header -->
           <div class="form-header">
-            <h2 class="form-title">Sign in to your account</h2>
+            <h2 class="form-title">{{ $t('auth.signInToAccount') }}</h2>
             <div class="register-link">
-              <span class="register-text">Don't have an account?</span>
+              <span class="register-text">{{ $t('auth.dontHaveAccount') }}</span>
               <NuxtLink to="/auth/register" class="register-link-text">
-                Get started
+                {{ $t('auth.signUp') }}
               </NuxtLink>
             </div>
           </div>
@@ -77,7 +77,7 @@
               <!-- Email Field -->
               <v-text-field
                 v-model="form.email"
-                label="Email address"
+                :label="$t('common.email')"
                 placeholder="godpanel"
                 variant="outlined"
                 density="comfortable"
@@ -87,7 +87,7 @@
               <div class="password-section">
                 <v-text-field
                   v-model="form.password"
-                  label="Password"
+                  :label="$t('common.password')"
                   placeholder="6+ characters"
                   type="password"
                   variant="outlined"
@@ -95,7 +95,7 @@
                 />
                 <div class="forgot-password-link">
                   <NuxtLink to="/auth/forgot-password" class="forgot-link">
-                    Forgot password?
+                    {{ $t('auth.forgotPassword') }}
                   </NuxtLink>
                 </div>
               </div>
@@ -108,7 +108,7 @@
                 color="primary"
                 :loading="loading"
               >
-                Sign in
+                {{ $t('auth.signIn') }}
               </v-btn>
 
               <!-- Demo Login Button (Development Only) -->
@@ -121,7 +121,7 @@
                 @click="demoLogin"
                 class="mt-2"
               >
-                Demo Login
+                {{ $t('auth.signIn') }} Demo
               </v-btn>
 
               <!-- Divider -->

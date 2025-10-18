@@ -42,7 +42,7 @@
           <v-icon size="20">{{ item.icon }}</v-icon>
         </template>
         <v-list-item-title class="nav-title">
-          {{ item.title }}
+          {{ $t(item.title) }}
         </v-list-item-title>
         <template #append v-if="item.badge">
           <v-chip
@@ -63,13 +63,13 @@
             <template #prepend>
               <v-icon>mdi-cog</v-icon>
             </template>
-            <v-list-item-title>Settings</v-list-item-title>
+            <v-list-item-title>{{ $t('common.settings') }}</v-list-item-title>
           </v-list-item>
           <v-list-item @click="handleLogout" class="nav-item">
             <template #prepend>
               <v-icon>mdi-logout</v-icon>
             </template>
-            <v-list-item-title>Logout</v-list-item-title>
+            <v-list-item-title>{{ $t('common.logout') }}</v-list-item-title>
           </v-list-item>
         </v-list>
       </div>
@@ -116,13 +116,13 @@ interface NavItem {
 const navItems = ref<NavItem[]>([
   {
     key: 'dashboard',
-    title: 'Dashboard',
+    title: 'common.dashboard',
     path: '/dashboard',
     icon: 'mdi-view-dashboard'
   },
   {
     key: 'analytics',
-    title: 'Analytics',
+    title: 'nav.analytics',
     path: '/dashboard/analytics',
     icon: 'mdi-chart-line'
   }

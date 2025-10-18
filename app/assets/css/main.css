@@ -28,12 +28,68 @@
   }
 }
 
-/* RTL Support */
+/* RTL Support for Farsi */
 [dir="rtl"] {
   direction: rtl;
 }
 
-[dir="rtl"] .v-text-field input {
+[dir="rtl"] * {
+  text-align: right;
+}
+
+[dir="rtl"] .v-text-field input,
+[dir="rtl"] .v-text-field textarea,
+[dir="rtl"] .v-select input,
+[dir="rtl"] .v-autocomplete input {
+  text-align: right;
+  direction: rtl;
+}
+
+/* Adjust margins and paddings for RTL */
+[dir="rtl"] .v-text-field .v-field__prepend-inner,
+[dir="rtl"] .v-text-field .v-field__append-inner {
+  flex-direction: row-reverse;
+}
+
+[dir="rtl"] .v-btn {
+  flex-direction: row-reverse;
+}
+
+[dir="rtl"] .v-navigation-drawer {
+  transform: translateX(100%);
+}
+
+[dir="rtl"] .v-navigation-drawer.v-navigation-drawer--open {
+  transform: translateX(0);
+}
+
+/* RTL adjustments for navigation */
+[dir="rtl"] .v-app-bar-nav-icon {
+  order: 1;
+}
+
+[dir="rtl"] .v-app-bar-title {
+  order: 2;
+  margin-right: auto;
+  margin-left: 0;
+}
+
+/* RTL table adjustments */
+[dir="rtl"] table {
+  direction: rtl;
+}
+
+[dir="rtl"] th,
+[dir="rtl"] td {
+  text-align: right;
+}
+
+/* RTL form adjustments */
+[dir="rtl"] .v-form .v-row {
+  flex-direction: row-reverse;
+}
+
+[dir="rtl"] .v-col {
   text-align: right;
 }
 

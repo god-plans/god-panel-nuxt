@@ -44,7 +44,7 @@
     <!-- Search -->
     <v-text-field
       v-model="searchQuery"
-      placeholder="Search..."
+      :placeholder="$t('settings.search')"
       variant="solo"
       density="comfortable"
       class="search-field"
@@ -57,6 +57,9 @@
 
     <!-- Settings Button -->
     <SettingsButton />
+
+    <!-- Language Switcher -->
+    <LanguageSwitcher />
 
     <!-- Notifications -->
     <v-menu offset-y>
@@ -79,7 +82,7 @@
 
       <v-list class="notification-list">
         <v-list-item v-if="notifications.length === 0">
-          <v-list-item-title>No new notifications</v-list-item-title>
+          <v-list-item-title>{{ $t('settings.noNewNotifications') }}</v-list-item-title>
         </v-list-item>
 
         <v-list-item
@@ -98,7 +101,7 @@
 
         <v-divider v-if="notifications.length > 0" />
         <v-list-item v-if="notifications.length > 0" @click="viewAllNotifications">
-          <v-list-item-title class="text-primary">View all notifications</v-list-item-title>
+          <v-list-item-title class="text-primary">{{ $t('settings.viewAllNotifications') }}</v-list-item-title>
         </v-list-item>
       </v-list>
     </v-menu>
@@ -140,14 +143,14 @@
           <template #prepend>
             <v-icon>mdi-account</v-icon>
           </template>
-          <v-list-item-title>Profile</v-list-item-title>
+          <v-list-item-title>{{ $t('settings.profile') }}</v-list-item-title>
         </v-list-item>
 
         <v-list-item @click="goToSettings">
           <template #prepend>
             <v-icon>mdi-cog</v-icon>
           </template>
-          <v-list-item-title>Settings</v-list-item-title>
+          <v-list-item-title>{{ $t('common.settings') }}</v-list-item-title>
         </v-list-item>
 
         <v-divider />
@@ -156,7 +159,7 @@
           <template #prepend>
             <v-icon>mdi-logout</v-icon>
           </template>
-          <v-list-item-title>Logout</v-list-item-title>
+          <v-list-item-title>{{ $t('common.logout') }}</v-list-item-title>
         </v-list-item>
       </v-list>
     </v-menu>
@@ -175,6 +178,7 @@ import { useRouter, useRoute } from 'vue-router'
 import { generateBreadcrumbs } from '~/utils/routes'
 import { useAuthStore } from '~/stores/auth'
 import SettingsButton from '~/components/theme/SettingsButton.vue'
+import LanguageSwitcher from '~/components/theme/LanguageSwitcher.vue'
 import LogoutConfirmDialog from '~/components/common/LogoutConfirmDialog.vue'
 
 interface Props {
