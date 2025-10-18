@@ -110,5 +110,112 @@
     "serverError": "Server error",
     "validationError": "Validation error",
     "needHelp": "Need help?"
+  },
+  "footer": {
+    "product": "Product",
+    "features": "Features",
+    "pricing": "Pricing",
+    "documentation": "Documentation",
+    "api": "API",
+    "company": "Company",
+    "about": "About",
+    "blog": "Blog",
+    "careers": "Careers",
+    "contact": "Contact",
+    "support": "Support",
+    "helpCenter": "Help Center",
+    "privacyPolicy": "Privacy Policy",
+    "termsOfService": "Terms of Service",
+    "status": "Status",
+    "connect": "Connect",
+    "description": "A modern admin dashboard built with Nuxt.js, Vuetify, and Tailwind CSS. Features authentication, theming, and responsive design."
+  },
+  "theme": {
+    "themeMode": "Theme Mode",
+    "direction": "Direction",
+    "primaryColor": "Primary Color",
+    "layout": "Layout",
+    "fontFamily": "Font Family"
+  },
+  "settingsDrawer": {
+    "presets": "Presets",
+    "font": "Font",
+    "nav": "Nav",
+    "navLayout": "Layout",
+    "navColor": "Color",
+    "themeFeatures": "Theme Features",
+    "lightDarkMode": "Light and Dark mode switching",
+    "multipleLayouts": "Multiple layout options",
+    "fontCustomization": "Font family customization",
+    "highContrast": "High contrast mode",
+    "colorPalette": "Color Palette",
+    "typography": "Typography"
+  },
+  "dashboard": {
+    "analytics": "Analytics",
+    "analyticsDescription": "Track your performance metrics and insights",
+    "pageViews": "Page Views",
+    "uniqueVisitors": "Unique Visitors",
+    "bounceRate": "Bounce Rate",
+    "trafficOverview": "Traffic Overview",
+    "trafficChart": "Traffic Chart",
+    "trafficChartDescription": "Interactive chart would be displayed here",
+    "topPages": "Top Pages",
+    "deviceBreakdown": "Device Breakdown",
+    "geographicData": "Geographic Data",
+    "totalUsers": "Total Users",
+    "newOrders": "New Orders",
+    "products": "Products",
+    "revenue": "Revenue",
+    "analyticsOverview": "Analytics Overview",
+    "chartDisplay": "Chart will be displayed here",
+    "recentActivity": "Recent Activity",
+    "newUserRegistered": "New user registered",
+    "orderCompleted": "Order completed",
+    "productUpdated": "Product updated",
+    "settings": "Settings",
+    "menu": "Menu"
+  },
+  "auth": {
+    "or": "OR"
+  },
+  "pages": {
+    "dashboard": {
+      "welcomeBack": "Welcome back!",
+      "welcomeSubtitle": "Here's what's happening with your projects today.",
+      "analyticsOverview": "Analytics Overview",
+      "chartPlaceholder": "Chart will be displayed here",
+      "recentActivity": "Recent Activity",
+      "newUserRegistered": "New user registered",
+      "orderCompleted": "Order completed",
+      "productUpdated": "Product updated"
+    },
+    "settings": {
+      "title": "Settings",
+      "subtitle": "Customize your dashboard experience",
+      "aboutThemeSystem": "About Theme System",
+      "themeFeatures": "Theme Features",
+      "lightDarkMode": "Light and Dark mode switching",
+      "rtlLtrSupport": "RTL/LTR text direction support",
+      "primaryColors": "6 different primary color schemes",
+      "layoutOptions": "Multiple layout options",
+      "fontCustomization": "Font family customization",
+      "highContrast": "High contrast mode",
+      "colorPalette": "Color Palette",
+      "colorPaletteDesc": "The theme system uses a comprehensive color palette with primary, secondary, and semantic colors (success, warning, error, info).",
+      "typography": "Typography",
+      "typographyDesc": "Multiple font families and responsive typography scales ensure consistent and readable text across all devices."
+    },
+    "groups": {
+      "management": "Group Management",
+      "five": "Group Five",
+      "six": "Group Six"
+    },
+    "blank": {
+      "themeColors": "Theme Colors",
+      "shadowSystem": "Shadow System",
+      "typography": "Typography",
+      "placeholder": "This is a placeholder for your content"
+    }
   }
 }

@@ -1,7 +1,7 @@
 <template>
   <div class="nav-options">
     <div class="nav-options__header">
-      <span class="nav-options__title">Nav</span>
+      <span class="nav-options__title">{{ t('settingsDrawer.nav') }}</span>
       <v-tooltip location="right" v-if="tooltip">
         <template #activator="{ props: tooltipProps }">
           <v-icon v-bind="tooltipProps" size="14" class="nav-options__info">
@@ -14,7 +14,7 @@
 
     <div class="nav-options__content">
       <div v-if="!hideNavLayout" class="nav-option-section">
-        <span class="nav-option-section__label">Layout</span>
+        <span class="nav-option-section__label">{{ t('settingsDrawer.navLayout') }}</span>
         <div class="nav-option-section__options">
           <LayoutOption
             v-for="layout in options.layouts"
@@ -27,7 +27,7 @@
       </div>
 
       <div v-if="!hideNavColor" class="nav-option-section">
-        <span class="nav-option-section__label">Color</span>
+        <span class="nav-option-section__label">{{ t('settingsDrawer.navColor') }}</span>
         <div class="nav-option-section__options">
           <ColorOption
             v-for="color in options.colors"
@@ -43,8 +43,11 @@
 </template>
 
 <script setup lang="ts">
+import { useI18n } from 'vue-i18n'
 import LayoutOption from './LayoutOption.vue'
 import ColorOption from './ColorOption.vue'
+
+const { t } = useI18n()
 
 interface Props {
   value: {

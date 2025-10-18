@@ -1,7 +1,7 @@
 <template>
   <div class="presets-options">
     <div class="presets-options__header">
-      <span class="presets-options__title">Presets</span>
+      <span class="presets-options__title">{{ t('settingsDrawer.presets') }}</span>
     </div>
 
     <div class="presets-options__grid">
@@ -22,6 +22,9 @@
 
 <script setup lang="ts">
 import { computed } from 'vue'
+import { useI18n } from 'vue-i18n'
+
+const { t } = useI18n()
 
 interface PresetOption {
   name: string

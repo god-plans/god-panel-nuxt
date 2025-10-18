@@ -4,8 +4,8 @@
     <v-row class="mb-6">
       <v-col cols="12">
         <div class="page-header">
-          <h1 class="text-h4 font-weight-bold">Analytics</h1>
-          <p class="text-body-1 text-medium-emphasis mt-2">Track your performance metrics and insights</p>
+          <h1 class="text-h4 font-weight-bold">{{ t('dashboard.analytics') }}</h1>
+          <p class="text-body-1 text-medium-emphasis mt-2">{{ t('dashboard.analyticsDescription') }}</p>
         </div>
       </v-col>
     </v-row>
@@ -17,7 +17,7 @@
           <v-card-text class="pa-4">
             <div class="metric-header">
               <v-icon color="primary" size="24">mdi-eye</v-icon>
-              <span class="metric-label">Page Views</span>
+              <span class="metric-label">{{ t('dashboard.pageViews') }}</span>
             </div>
             <div class="metric-value">45,231</div>
             <div class="metric-change positive">
@@ -215,6 +215,10 @@
 </template>
 
 <script setup lang="ts">
+import { useI18n } from 'vue-i18n'
+
+const { t } = useI18n()
+
 // Page meta
 definePageMeta({
   layout: 'dashboard',

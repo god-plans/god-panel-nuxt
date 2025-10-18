@@ -2,9 +2,9 @@
   <DashboardContent max-width="lg">
     <div class="settings-page">
       <div class="page-header">
-        <h1 class="text-h4 mb-2">Settings</h1>
+        <h1 class="text-h4 mb-2">{{ t('pages.settings.title') }}</h1>
         <p class="text-body-1 text-medium-emphasis">
-          Customize your dashboard experience
+          {{ t('pages.settings.subtitle') }}
         </p>
       </div>
 
@@ -18,34 +18,34 @@
             <v-card elevation="2">
               <v-card-title class="text-h6 mb-4">
                 <v-icon class="me-2">mdi-information</v-icon>
-                About Theme System
+                {{ t('pages.settings.aboutThemeSystem') }}
               </v-card-title>
 
               <v-card-text>
                 <div class="info-section">
-                  <h4>Theme Features</h4>
+                  <h4>{{ t('pages.settings.themeFeatures') }}</h4>
                   <ul>
-                    <li>Light and Dark mode switching</li>
-                    <li>RTL/LTR text direction support</li>
-                    <li>6 different primary color schemes</li>
-                    <li>Multiple layout options</li>
-                    <li>Font family customization</li>
-                    <li>High contrast mode</li>
+                    <li>{{ t('pages.settings.lightDarkMode') }}</li>
+                    <li>{{ t('pages.settings.rtlLtrSupport') }}</li>
+                    <li>{{ t('pages.settings.primaryColors') }}</li>
+                    <li>{{ t('pages.settings.layoutOptions') }}</li>
+                    <li>{{ t('pages.settings.fontCustomization') }}</li>
+                    <li>{{ t('pages.settings.highContrast') }}</li>
                   </ul>
                 </div>
 
                 <v-divider class="my-4" />
 
                 <div class="info-section">
-                  <h4>Color Palette</h4>
-                  <p>The theme system uses a comprehensive color palette with primary, secondary, and semantic colors (success, warning, error, info).</p>
+                  <h4>{{ t('pages.settings.colorPalette') }}</h4>
+                  <p>{{ t('pages.settings.colorPaletteDesc') }}</p>
                 </div>
 
                 <v-divider class="my-4" />
 
                 <div class="info-section">
-                  <h4>Typography</h4>
-                  <p>Multiple font families and responsive typography scales ensure consistent and readable text across all devices.</p>
+                  <h4>{{ t('pages.settings.typography') }}</h4>
+                  <p>{{ t('pages.settings.typographyDesc') }}</p>
                 </div>
               </v-card-text>
             </v-card>
@@ -57,7 +57,10 @@
 </template>
 
 <script setup lang="ts">
+import { useI18n } from 'vue-i18n'
 import ThemeSettings from '~/components/theme/ThemeSettings.vue'
+
+const { t } = useI18n()
 
 // Page meta
 definePageMeta({

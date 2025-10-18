@@ -14,47 +14,46 @@
             contain
           />
           <p class="footer-description">
-            A modern admin dashboard built with Nuxt.js, Vuetify, and Tailwind CSS.
-            Features authentication, theming, and responsive design.
+            {{ t('footer.description') }}
           </p>
         </v-col>
 
         <!-- Quick Links -->
         <v-col cols="12" md="2" class="footer-section">
-          <h4 class="footer-title">Product</h4>
+          <h4 class="footer-title">{{ t('footer.product') }}</h4>
           <div class="footer-links">
-            <router-link to="/features" class="footer-link">Features</router-link>
-            <router-link to="/pricing" class="footer-link">Pricing</router-link>
-            <router-link to="/docs" class="footer-link">Documentation</router-link>
-            <router-link to="/api" class="footer-link">API</router-link>
+            <router-link to="/features" class="footer-link">{{ t('footer.features') }}</router-link>
+            <router-link to="/pricing" class="footer-link">{{ t('footer.pricing') }}</router-link>
+            <router-link to="/docs" class="footer-link">{{ t('footer.documentation') }}</router-link>
+            <router-link to="/api" class="footer-link">{{ t('footer.api') }}</router-link>
           </div>
         </v-col>
 
         <!-- Company -->
         <v-col cols="12" md="2" class="footer-section">
-          <h4 class="footer-title">Company</h4>
+          <h4 class="footer-title">{{ t('footer.company') }}</h4>
           <div class="footer-links">
-            <router-link to="/about" class="footer-link">About</router-link>
-            <router-link to="/blog" class="footer-link">Blog</router-link>
-            <router-link to="/careers" class="footer-link">Careers</router-link>
-            <router-link to="/contact" class="footer-link">Contact</router-link>
+            <router-link to="/about" class="footer-link">{{ t('footer.about') }}</router-link>
+            <router-link to="/blog" class="footer-link">{{ t('footer.blog') }}</router-link>
+            <router-link to="/careers" class="footer-link">{{ t('footer.careers') }}</router-link>
+            <router-link to="/contact" class="footer-link">{{ t('footer.contact') }}</router-link>
           </div>
         </v-col>
 
         <!-- Support -->
         <v-col cols="12" md="2" class="footer-section">
-          <h4 class="footer-title">Support</h4>
+          <h4 class="footer-title">{{ t('footer.support') }}</h4>
           <div class="footer-links">
-            <router-link to="/help" class="footer-link">Help Center</router-link>
-            <router-link to="/privacy" class="footer-link">Privacy Policy</router-link>
-            <router-link to="/terms" class="footer-link">Terms of Service</router-link>
-            <router-link to="/status" class="footer-link">Status</router-link>
+            <router-link to="/help" class="footer-link">{{ t('footer.helpCenter') }}</router-link>
+            <router-link to="/privacy" class="footer-link">{{ t('footer.privacyPolicy') }}</router-link>
+            <router-link to="/terms" class="footer-link">{{ t('footer.termsOfService') }}</router-link>
+            <router-link to="/status" class="footer-link">{{ t('footer.status') }}</router-link>
           </div>
         </v-col>
 
         <!-- Social Links -->
         <v-col cols="12" md="2" class="footer-section">
-          <h4 class="footer-title">Connect</h4>
+          <h4 class="footer-title">{{ t('footer.connect') }}</h4>
           <div class="social-links">
             <v-btn
               v-for="social in socialLinks"
@@ -83,6 +82,9 @@
 </template>
 
 <script setup lang="ts">
+import { useI18n } from 'vue-i18n'
+
+const { t } = useI18n()
 interface SocialLink {
   key: string
   icon: string

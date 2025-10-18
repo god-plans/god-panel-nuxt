@@ -2,13 +2,13 @@
   <v-card class="theme-settings" elevation="2">
     <v-card-title class="text-h6 mb-4">
       <v-icon class="me-2">mdi-palette</v-icon>
-      Theme Settings
+      {{ t('settings.general') }}
     </v-card-title>
 
     <v-card-text>
       <!-- Theme Mode -->
       <div class="setting-group">
-        <label class="setting-label">Theme Mode</label>
+        <label class="setting-label">{{ t('theme.themeMode') }}</label>
         <v-btn-toggle
           v-model="localSettings.colorScheme"
           mandatory
@@ -16,18 +16,18 @@
         >
           <v-btn value="light" variant="outlined" size="small">
             <v-icon class="me-1">mdi-weather-sunny</v-icon>
-            Light
+            {{ t('settings.light') }}
           </v-btn>
           <v-btn value="dark" variant="outlined" size="small">
             <v-icon class="me-1">mdi-weather-night</v-icon>
-            Dark
+            {{ t('settings.dark') }}
           </v-btn>
         </v-btn-toggle>
       </div>
 
       <!-- Direction -->
       <div class="setting-group">
-        <label class="setting-label">Direction</label>
+        <label class="setting-label">{{ t('theme.direction') }}</label>
         <v-btn-toggle
           v-model="localSettings.direction"
           mandatory
@@ -44,7 +44,7 @@
 
       <!-- Primary Color -->
       <div class="setting-group">
-        <label class="setting-label">Primary Color</label>
+        <label class="setting-label">{{ t('theme.primaryColor') }}</label>
         <div class="color-options">
           <v-btn
             v-for="(color, key) in primaryColors"
@@ -67,7 +67,7 @@
 
       <!-- Layout Options -->
       <div class="setting-group">
-        <label class="setting-label">Layout</label>
+        <label class="setting-label">{{ t('theme.layout') }}</label>
         <v-select
           v-model="localSettings.navLayout"
           :items="layoutOptions"
@@ -79,7 +79,7 @@
 
       <!-- Font Family -->
       <div class="setting-group">
-        <label class="setting-label">Font Family</label>
+        <label class="setting-label">{{ t('theme.fontFamily') }}</label>
         <v-select
           v-model="localSettings.fontFamily"
           :items="fontOptions"
@@ -93,7 +93,7 @@
       <div class="setting-group">
         <v-switch
           v-model="isHighContrast"
-          label="High Contrast"
+          :label="t('settingsDrawer.highContrast')"
           color="primary"
           density="compact"
           hide-details
@@ -107,13 +107,13 @@
           @click="resetToDefaults"
           class="me-2"
         >
-          Reset to Defaults
+          {{ t('common.reset') }}
         </v-btn>
         <v-btn
           color="primary"
           @click="applySettings"
         >
-          Apply Settings
+          {{ t('common.save') }}
         </v-btn>
       </div>
     </v-card-text>
@@ -122,7 +122,10 @@
 
 <script setup lang="ts">
 import { ref, reactive, watch, computed } from 'vue'
+import { useI18n } from 'vue-i18n'
 import { useSettingsStore } from '~/stores/settings'
+
+const { t } = useI18n()
 
 const settingsStore = useSettingsStore()
 
@@ -130,14 +133,14 @@ const settingsStore = useSettingsStore()
 const localSettings = reactive({ ...settingsStore.settings })
 
 // Primary color options
-const primaryColors = ref({
-  default: 'Default',
-  cyan: 'Cyan',
-  purple: 'Purple',
-  blue: 'Blue',
-  orange: 'Orange',
-  red: 'Red',
-})
+const primaryColors = computed(() => ({
+  default: t('common.default'),
+  cyan: t('common.cyan'),
+  purple: t('common.purple'),
+  blue: t('common.blue'),
+  orange: t('common.orange'),
+  red: t('common.red'),
+}))
 
 // High contrast computed property
 const isHighContrast = computed({

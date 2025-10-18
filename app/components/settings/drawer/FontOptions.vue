@@ -1,7 +1,7 @@
 <template>
   <div class="font-options">
     <div class="font-options__header">
-      <span class="font-options__title">Font</span>
+      <span class="font-options__title">{{ t('settingsDrawer.font') }}</span>
     </div>
 
     <div class="font-options__grid">
@@ -27,6 +27,9 @@
 </template>
 
 <script setup lang="ts">
+import { useI18n } from 'vue-i18n'
+
+const { t } = useI18n()
 interface Props {
   value: string
   options: string[]

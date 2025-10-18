@@ -8,7 +8,7 @@
       <div class="theme-showcase">
         <!-- Color Palette Display -->
         <v-card class="mb-4" elevation="1">
-          <v-card-title class="text-h6">Theme Colors</v-card-title>
+          <v-card-title class="text-h6">{{ t('pages.blank.themeColors') }}</v-card-title>
           <v-card-text>
             <div class="color-grid">
               <div
@@ -25,7 +25,7 @@
 
         <!-- Shadow Showcase -->
         <v-card class="mb-4" elevation="1">
-          <v-card-title class="text-h6">Shadow System</v-card-title>
+          <v-card-title class="text-h6">{{ t('pages.blank.shadowSystem') }}</v-card-title>
           <v-card-text>
             <div class="shadow-showcase">
               <v-sheet
@@ -43,7 +43,7 @@
 
         <!-- Typography Showcase -->
         <v-card class="mb-4" elevation="1">
-          <v-card-title class="text-h6">Typography</v-card-title>
+          <v-card-title class="text-h6">{{ t('pages.blank.typography') }}</v-card-title>
           <v-card-text>
             <div class="typography-showcase">
               <h1 style="font-family: var(--v-theme-font-family)">Heading 1</h1>
@@ -69,7 +69,7 @@
             mdi-view-dashboard
           </v-icon>
           <p :style="{ color: `rgb(var(--v-theme-on-surface-variant))` }">
-            This is a placeholder for your content
+            {{ t('pages.blank.placeholder') }}
           </p>
         </div>
       </v-sheet>
@@ -78,6 +78,10 @@
 </template>
 
 <script setup lang="ts">
+import { useI18n } from 'vue-i18n'
+
+const { t } = useI18n()
+
 interface Props {
   title?: string
 }
