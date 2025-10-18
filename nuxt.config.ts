@@ -10,8 +10,7 @@ export default defineNuxtConfig({
   // Modules
   modules: [
     '@pinia/nuxt',
-    '@nuxtjs/color-mode',
-    '@nuxtjs/i18n'
+    '@nuxtjs/color-mode'
   ],
 
   // Auto-imports for better DX
@@ -62,33 +61,4 @@ export default defineNuxtConfig({
     typeCheck: false // Disable during development for better performance
   },
 
-  // i18n configuration
-  // @ts-ignore
-  i18n: {
-    locales: [
-      {
-        code: 'en',
-        name: 'English',
-        iso: 'en-US',
-        dir: 'ltr'
-      },
-      {
-        code: 'fa',
-        name: 'فارسی',
-        iso: 'fa-IR',
-        dir: 'rtl'
-      }
-    ],
-    defaultLocale: 'en',
-    baseUrl: 'http://localhost:3000',
-    detectBrowserLanguage: {
-      useCookie: true,
-      cookieKey: 'i18n_redirected',
-      redirectOn: 'root',
-      alwaysRedirect: false,
-      fallbackLocale: 'en'
-    },
-    strategy: 'no_prefix',
-    vueI18n: './i18n.config.ts'
-  }
 })

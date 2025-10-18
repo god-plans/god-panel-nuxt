@@ -29,8 +29,10 @@
 
 <script setup lang="ts">
 import { computed } from 'vue'
+import { useI18n } from 'vue-i18n'
 
 const { $i18n } = useNuxtApp()
+const localeCookie = useCookie('locale', { default: () => 'en' })
 
 const currentLocale = computed(() => $i18n.locale.value)
 
@@ -40,7 +42,12 @@ const availableLocales = [
 ]
 
 const switchLocale = async (locale: string) => {
-  await $i18n.setLocale(locale)
+  // Update i18n locale
+  $i18n.locale.value = locale
+
+  // Save to cookie for persistence
+  localeCookie.value = locale
+
   // Direction, lang attributes, and settings are handled automatically by the i18n-direction plugin
 }
 </script>

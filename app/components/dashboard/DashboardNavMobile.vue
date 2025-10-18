@@ -42,7 +42,7 @@
           <v-icon size="20">{{ item.icon }}</v-icon>
         </template>
         <v-list-item-title class="nav-title">
-          {{ $t(item.title) }}
+          {{ t(item.title) }}
         </v-list-item-title>
         <template #append v-if="item.badge">
           <v-chip
@@ -63,13 +63,13 @@
             <template #prepend>
               <v-icon>mdi-cog</v-icon>
             </template>
-            <v-list-item-title>{{ $t('common.settings') }}</v-list-item-title>
+            <v-list-item-title>{{ t('common.settings') }}</v-list-item-title>
           </v-list-item>
           <v-list-item @click="handleLogout" class="nav-item">
             <template #prepend>
               <v-icon>mdi-logout</v-icon>
             </template>
-            <v-list-item-title>{{ $t('common.logout') }}</v-list-item-title>
+            <v-list-item-title>{{ t('common.logout') }}</v-list-item-title>
           </v-list-item>
         </v-list>
       </div>
@@ -85,9 +85,12 @@
 
 <script setup lang="ts">
 import { ref, computed } from 'vue'
+import { useI18n } from 'vue-i18n'
 import { useRoute, useRouter } from 'vue-router'
 import { useAuthStore } from '../../stores/auth'
 import LogoutConfirmDialog from '../common/LogoutConfirmDialog.vue'
+
+const { t } = useI18n()
 
 interface Props {
   open: boolean

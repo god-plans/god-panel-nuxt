@@ -7,15 +7,15 @@
     <v-card class="logout-dialog">
       <v-card-title class="text-center">
         <v-icon size="48" color="warning" class="mb-2">mdi-logout</v-icon>
-        <div class="text-h6 font-weight-bold">{{ $t('auth.logoutConfirmTitle') }}</div>
+        <div class="text-h6 font-weight-bold">{{ t('auth.logoutConfirmTitle') }}</div>
       </v-card-title>
 
       <v-card-text class="text-center">
         <p class="text-body-1 mb-4">
-          {{ $t('auth.logoutConfirmMessage') }}
+          {{ t('auth.logoutConfirmMessage') }}
         </p>
         <p class="text-body-2 text-medium-emphasis">
-          {{ $t('auth.logoutConfirmNote') }}
+          {{ t('auth.logoutConfirmNote') }}
         </p>
       </v-card-text>
 
@@ -25,7 +25,7 @@
           size="large"
           @click="cancel"
         >
-          {{ $t('common.cancel') }}
+          {{ t('common.cancel') }}
         </v-btn>
         <v-btn
           color="error"
@@ -34,7 +34,7 @@
           @click="confirm"
           :loading="loading"
         >
-          {{ $t('common.logout') }}
+          {{ t('common.logout') }}
         </v-btn>
       </v-card-actions>
     </v-card>
@@ -43,6 +43,9 @@
 
 <script setup lang="ts">
 import { ref } from 'vue'
+import { useI18n } from 'vue-i18n'
+
+const { t } = useI18n()
 
 interface Props {
   modelValue: boolean
