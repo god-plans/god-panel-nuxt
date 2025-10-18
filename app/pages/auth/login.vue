@@ -1,27 +1,5 @@
 <template>
   <div class="login-page">
-    <!-- Top Header -->
-    <div class="top-header">
-      <div class="header-content">
-        <div class="help-section">
-          <span class="help-text">{{ t('common.needHelp') }}</span>
-          <v-btn icon size="small" rounded="lg">
-            <v-icon size="20">mdi-help-circle-outline</v-icon>
-          </v-btn>
-        </div>
-        <div class="logo-section">
-          <v-img
-            src="/logo-single.svg"
-            width="40"
-            height="40"
-            class="logo"
-          />
-        </div>
-      </div>
-    </div>
-
-    <!-- Main Content -->
-    <div class="main-content">
       <!-- Left Panel -->
       <div class="left-panel">
         <div class="background-blur">
@@ -68,7 +46,7 @@
             density="comfortable"
             class="info-alert"
           >
-            Use <strong>{{ form.email }}</strong> with password <strong>{{ form.password }}</strong>
+{{ t('auth.demoCredentials') }} <strong>{{ form.email }}</strong> {{ t('auth.demoCredentialsWith') }} <strong>{{ form.password }}</strong>
           </v-alert>
 
           <!-- Login Form -->
@@ -171,7 +149,6 @@
           </div>
         </div>
       </div>
-    </div>
   </div>
 </template>
 
@@ -179,7 +156,6 @@
 import { reactive, ref, onMounted } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { loginSchema, type LoginForm } from '~/types/validation'
-import SettingsButton from '~/components/theme/SettingsButton.vue'
 
 const authStore = useAuthStore()
 const router = useRouter()
@@ -261,7 +237,7 @@ const loginWithTwitter = () => {
 
 // Page meta
 definePageMeta({
-  layout: false, // No layout for login page
+  layout: 'auth',
   middleware: 'guest'
 })
 
@@ -283,73 +259,21 @@ onMounted(() => {
   width: 100%;
   min-height: 100vh;
   position: relative;
-  background-color: rgb(var(--v-theme-background-default, #ffffff));
+  background-color: transparent;
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   overflow: hidden;
-}
-
-/* Top Header */
-.top-header {
-  width: 100%;
-  height: 64px;
-  position: absolute;
-  top: 0;
-  left: 0;
-  z-index: 10;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 0 24px;
-}
-
-.header-content {
-  width: 100%;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.help-section {
-  display: flex;
-  justify-content: flex-start;
-  align-items: center;
-  gap: 8px;
-}
-
-.help-text {
-  color: rgb(var(--v-theme-text-primary, #212b36));
-  font-size: 14px;
-  font-weight: 600;
-  font-family: 'Public Sans', sans-serif;
-  line-height: 22px;
-}
-
-
-.logo-section {
-  display: flex;
-  justify-content: flex-end;
-  align-items: center;
-}
-
-.logo {
-  border-radius: 50%;
-  background-color: rgb(255, 86, 48);
-}
-
-/* Main Content */
-.main-content {
-  display: flex;
-  min-height: 100vh;
-  width: 100%;
 }
 
 /* Left Panel */
 .left-panel {
-  width: 480px;
+  width: 50%;
   min-height: 100vh;
   position: relative;
-  background-color: rgb(var(--v-theme-background-default, #ffffff));
+  background: linear-gradient(135deg, rgb(var(--v-theme-primary, #1976d2)) 0%, rgb(var(--v-theme-secondary, #424242)) 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
   overflow: hidden;
 }
 
@@ -370,16 +294,16 @@ onMounted(() => {
 }
 
 .welcome-content {
-  width: 480px;
-  padding: 0 24px;
-  position: absolute;
-  top: 274px;
-  left: 0;
+  width: 100%;
+  max-width: 400px;
+  padding: 0 32px;
   display: flex;
   flex-direction: column;
-  justify-content: flex-start;
+  justify-content: center;
   align-items: center;
-  gap: 64px;
+  gap: 32px;
+  text-align: center;
+  animation: fadeInUp 0.8s ease-out;
 }
 
 .welcome-text {
@@ -388,29 +312,33 @@ onMounted(() => {
   flex-direction: column;
   justify-content: flex-start;
   align-items: center;
-  gap: 16px;
+  gap: 20px;
 }
 
 .welcome-title {
   width: 100%;
   text-align: center;
-  color: rgb(var(--v-theme-text-primary, #212b36));
-  font-size: 48px;
-  font-weight: 700;
+  color: #ffffff;
+  font-size: 36px;
+  font-weight: 800;
   font-family: 'Barlow', sans-serif;
-  line-height: 48px;
+  line-height: 44px;
   margin: 0;
+  letter-spacing: -0.02em;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+  animation: slideInLeft 0.6s ease-out 0.2s both;
 }
 
 .welcome-subtitle {
   width: 100%;
   text-align: center;
-  color: rgb(var(--v-theme-text-secondary, #637381));
-  font-size: 16px;
-  font-weight: 400;
+  color: rgba(255, 255, 255, 0.9);
+  font-size: 18px;
+  font-weight: 500;
   font-family: 'Public Sans', sans-serif;
-  line-height: 24px;
+  line-height: 28px;
   margin: 0;
+  animation: slideInRight 0.6s ease-out 0.4s both;
 }
 
 .illustration {
@@ -426,11 +354,14 @@ onMounted(() => {
 
 /* Right Panel */
 .right-panel {
-  flex: 1;
+  width: 50%;
+  min-height: 100vh;
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 0 40px;
+  padding: 40px;
+  position: relative;
+  background: rgb(var(--v-theme-background-default, #ffffff));
 }
 
 .login-form-container {
@@ -438,7 +369,29 @@ onMounted(() => {
   max-width: 420px;
   display: flex;
   flex-direction: column;
-  gap: 40px;
+  gap: 32px;
+  background: rgba(var(--v-theme-surface), 0.95);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(var(--v-theme-outline-variant), 0.1);
+  border-radius: 24px;
+  padding: 48px 40px;
+  box-shadow:
+    0 8px 32px rgba(0, 0, 0, 0.08),
+    0 2px 8px rgba(0, 0, 0, 0.04);
+  position: relative;
+  overflow: hidden;
+}
+
+/* Add a subtle gradient overlay */
+.login-form-container::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, rgb(var(--v-theme-primary)), rgb(var(--v-theme-secondary)));
+  border-radius: 24px 24px 0 0;
 }
 
 /* Form Header */
@@ -448,19 +401,22 @@ onMounted(() => {
   flex-direction: column;
   justify-content: flex-start;
   align-items: center;
-  gap: 24px;
+  gap: 20px;
   overflow: hidden;
+  margin-bottom: 8px;
+  position: relative;
 }
 
 .form-title {
   width: 100%;
   text-align: center;
   color: rgb(var(--v-theme-text-primary, #212b36));
-  font-size: 20px;
+  font-size: 24px;
   font-weight: 700;
   font-family: 'Public Sans', sans-serif;
-  line-height: 30px;
+  line-height: 32px;
   margin: 0;
+  letter-spacing: -0.025em;
 }
 
 .register-link {
@@ -489,7 +445,11 @@ onMounted(() => {
 
 /* Info Alert */
 .info-alert {
-  margin-bottom: 24px;
+  margin-bottom: 16px;
+  border-radius: 12px;
+  border: 1px solid rgba(var(--v-theme-info), 0.2);
+  background: rgba(var(--v-theme-info), 0.08);
+  backdrop-filter: blur(8px);
 }
 
 /* Login Form */
@@ -497,7 +457,83 @@ onMounted(() => {
   width: 100%;
   display: flex;
   flex-direction: column;
-  gap: 24px;
+  gap: 20px;
+}
+
+/* Form inputs styling */
+.login-form :deep(.v-text-field) {
+  border-radius: 12px;
+}
+
+.login-form :deep(.v-text-field .v-field) {
+  border-radius: 12px;
+  background: rgba(var(--v-theme-surface-variant), 0.3);
+  border: 1px solid rgba(var(--v-theme-outline-variant), 0.2);
+  transition: all 0.2s ease;
+}
+
+.login-form :deep(.v-text-field .v-field:hover) {
+  background: rgba(var(--v-theme-surface-variant), 0.4);
+  border-color: rgba(var(--v-theme-primary), 0.3);
+}
+
+.login-form :deep(.v-text-field .v-field:focus-within) {
+  background: rgba(var(--v-theme-surface), 0.8);
+  border-color: rgb(var(--v-theme-primary));
+  box-shadow: 0 0 0 3px rgba(var(--v-theme-primary), 0.1);
+}
+
+/* Button Styling */
+.login-form :deep(.v-btn) {
+  border-radius: 12px;
+  font-weight: 600;
+  font-size: 15px;
+  letter-spacing: 0.025em;
+  text-transform: none;
+  height: 48px;
+  transition: all 0.2s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.login-form :deep(.v-btn:not(.v-btn--variant-outlined)) {
+  background: linear-gradient(135deg, rgb(var(--v-theme-primary)), rgb(var(--v-theme-primary)) 80%, rgba(var(--v-theme-primary), 0.8));
+  box-shadow: 0 4px 12px rgba(var(--v-theme-primary), 0.3);
+}
+
+.login-form :deep(.v-btn:not(.v-btn--variant-outlined):hover) {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 16px rgba(var(--v-theme-primary), 0.4);
+}
+
+.login-form :deep(.v-btn.v-btn--variant-outlined) {
+  border: 2px solid rgba(var(--v-theme-outline), 0.5);
+  background: rgba(var(--v-theme-surface), 0.6);
+  backdrop-filter: blur(8px);
+}
+
+.login-form :deep(.v-btn.v-btn--variant-outlined:hover) {
+  border-color: rgb(var(--v-theme-primary));
+  background: rgba(var(--v-theme-primary), 0.05);
+  transform: translateY(-1px);
+}
+
+/* Social Login Buttons */
+.social-login :deep(.v-btn) {
+  border-radius: 12px;
+  width: 48px;
+  height: 48px;
+  min-width: 48px;
+  background: rgba(var(--v-theme-surface), 0.8);
+  border: 1px solid rgba(var(--v-theme-outline-variant), 0.3);
+  backdrop-filter: blur(8px);
+  transition: all 0.2s ease;
+}
+
+.social-login :deep(.v-btn:hover) {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  background: rgba(var(--v-theme-surface), 0.95);
 }
 
 /* Password Section */
@@ -644,26 +680,45 @@ onMounted(() => {
 
 /* Mobile Styles */
 @media (max-width: 768px) {
+  .login-page {
+    flex-direction: column;
+  }
+
   .left-panel {
-    display: none;
+    width: 100%;
+    min-height: 40vh;
+    background: linear-gradient(135deg, rgb(var(--v-theme-primary, #1976d2)) 0%, rgb(var(--v-theme-secondary, #424242)) 100%);
   }
 
   .right-panel {
-    padding: 0 16px;
-  }
-
-  .top-header {
-    padding: 0 16px;
+    width: 100%;
+    padding: 20px;
+    min-height: 60vh;
   }
 
   .welcome-content {
-    padding: 0 16px;
-    top: 120px;
+    padding: 20px;
+    max-width: 100%;
   }
 
   .welcome-title {
-    font-size: 36px;
-    line-height: 48px;
+    font-size: 28px;
+    line-height: 36px;
+  }
+
+  .welcome-subtitle {
+    font-size: 16px;
+    line-height: 24px;
+  }
+
+  .illustration {
+    width: 280px;
+    height: 210px;
+  }
+
+  .illustration-image {
+    width: 280px;
+    height: 210px;
   }
 
   .form-title {
@@ -689,9 +744,6 @@ onMounted(() => {
 
 /* Very Small Mobile */
 @media (max-width: 480px) {
-  .main-content {
-    flex-direction: column;
-  }
 
   .right-panel {
     padding: 16px;
@@ -721,6 +773,53 @@ onMounted(() => {
   .illustration-image {
     width: 280px;
     height: 280px;
+  }
+}
+
+/* Keyframe Animations */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideInLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-50px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes slideInRight {
+  from {
+    opacity: 0;
+    transform: translateX(50px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+/* Form entrance animation - already defined above */
+
+@keyframes slideInUp {
+  from {
+    opacity: 0;
+    transform: translateY(40px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
   }
 }
 </style>

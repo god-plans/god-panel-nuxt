@@ -60,8 +60,35 @@ export const paths = {
 // Type-safe route helper functions
 export const getRoute = (path: string) => path
 
+// Helper function to check if a nav item or its children are active
+const isItemActive = (item: NavItem, currentPath: string): boolean => {
+  // Check if current item is active
+  if (currentPath === item.path || currentPath.startsWith(item.path + '/')) {
+    return true
+  }
+
+  // Check if any children are active
+  if (item.children) {
+    return item.children.some(child => isItemActive(child, currentPath))
+  }
+
+  return false
+}
+
 export const isActiveRoute = (currentPath: string, routePath: string) => {
-  return currentPath === routePath || currentPath.startsWith(routePath + '/')
+  // First check direct match or starts with
+  if (currentPath === routePath || currentPath.startsWith(routePath + '/')) {
+    return true
+  }
+
+  // For parent items with children, check if any child is active
+  const parentItem = dashboardNavItems.find(item =>
+    item.children && item.children.some(child =>
+      currentPath === child.path || currentPath.startsWith(child.path + '/')
+    )
+  )
+
+  return parentItem?.path === routePath
 }
 
 // Navigation items configuration
@@ -88,6 +115,26 @@ export const dashboardNavItems: NavItem[] = [
     icon: 'mdi-chart-line'
   },
   {
+    key: 'group',
+    title: 'common.group',
+    path: paths.dashboard.group.root,
+    icon: 'mdi-folder-multiple',
+    children: [
+      {
+        key: 'group-five',
+        title: 'common.five',
+        path: paths.dashboard.group.five,
+        icon: 'mdi-numeric-5-circle'
+      },
+      {
+        key: 'group-six',
+        title: 'common.six',
+        path: paths.dashboard.group.six,
+        icon: 'mdi-numeric-6-circle'
+      }
+    ]
+  },
+  {
     key: 'settings',
     title: 'common.settings',
     path: paths.dashboard.settings,
@@ -107,6 +154,20 @@ const routeTranslations: Record<string, string> = {
   'six': 'routes.six'
 }
 
+// Helper function to find nav item recursively
+const findNavItem = (items: NavItem[], path: string): NavItem | null => {
+  for (const item of items) {
+    if (item.path === path) {
+      return item
+    }
+    if (item.children) {
+      const found = findNavItem(item.children, path)
+      if (found) return found
+    }
+  }
+  return null
+}
+
 // Breadcrumb helper
 export const generateBreadcrumbs = (currentPath: string): NavItem[] => {
   const breadcrumbs: NavItem[] = []
@@ -117,8 +178,8 @@ export const generateBreadcrumbs = (currentPath: string): NavItem[] => {
   pathSegments.forEach((segment, index) => {
     accumulatedPath += `/${segment}`
 
-    // Find matching nav item
-    const navItem = dashboardNavItems.find(item => item.path === accumulatedPath)
+    // Find matching nav item (including in children)
+    const navItem = findNavItem(dashboardNavItems, accumulatedPath)
 
     if (navItem) {
       breadcrumbs.push({

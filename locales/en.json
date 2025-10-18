@@ -2,7 +2,9 @@
   "common": {
     "home": "Home",
     "dashboard": "Dashboard",
+    "analytics": "Analytics",
     "settings": "Settings",
+    "group": "Group",
     "profile": "Profile",
     "logout": "Logout",
     "login": "Login",
@@ -45,7 +47,24 @@
     "noData": "No data available",
     "noResults": "No results found",
     "required": "Required",
-    "optional": "Optional"
+    "optional": "Optional",
+    "darkMode": "Dark Mode",
+    "lightMode": "Light Mode",
+    "systemMode": "System Mode",
+    "highContrast": "High Contrast",
+    "rtl": "RTL",
+    "compact": "Compact",
+
+    "toggleDarkMode": "Toggle between light and dark theme",
+    "highContrastTooltip": "Increase contrast for better accessibility",
+    "rtlTooltip": "Right-to-left layout for Arabic/Hebrew languages",
+    "compactTooltip": "Compact dashboard layout for more content space",
+    "default": "Default",
+    "purple": "Purple",
+    "cyan": "Cyan",
+    "blue": "Blue",
+    "orange": "Orange",
+    "red": "Red"
   },
   "nav": {
     "analytics": "Analytics",
@@ -72,6 +91,8 @@
     "passwordResetSent": "Password reset link sent to your email",
     "invalidCredentials": "Invalid email or password",
     "accountCreated": "Account created successfully",
+    "demoCredentials": "Use",
+    "demoCredentialsWith": "with password",
     "logoutConfirm": "Are you sure you want to logout?",
     "logoutConfirmTitle": "Confirm Logout",
     "logoutConfirmMessage": "Are you sure you want to log out of your account?",
@@ -195,7 +216,27 @@
     "red": "Red"
   },
   "auth": {
-    "or": "OR"
+    "or": "OR",
+    "demoCredentials": "Use",
+    "demoCredentialsWith": "with password",
+    "logoutConfirm": "Are you sure you want to logout?",
+    "logoutConfirmTitle": "Confirm Logout",
+    "logoutConfirmMessage": "Are you sure you want to log out of your account?",
+    "logoutConfirmNote": "You will need to sign in again to access your dashboard.",
+    "welcomeBack": "Welcome Back",
+    "signInToAccount": "Sign in to your account",
+    "signIn": "Sign In",
+    "forgotPassword": "Forgot Password?",
+    "dontHaveAccount": "Don't have an account?",
+    "signUp": "Sign Up",
+    "createAccount": "Create Account",
+    "alreadyHaveAccount": "Already have an account?",
+    "signInHere": "Sign in here",
+    "resetPassword": "Reset Password",
+    "enterEmailToReset": "Enter your email to reset your password",
+    "sendResetLink": "Send Reset Link",
+    "backToSignIn": "Back to Sign In",
+    "passwordResetSent": "Password reset link sent to your email"
   },
   "pages": {
     "dashboard": {
@@ -234,6 +275,14 @@
       "shadowSystem": "Shadow System",
       "typography": "Typography",
       "placeholder": "This is a placeholder for your content"
+    },
+    "routes": {
+      "dashboard": "Dashboard",
+      "analytics": "Analytics",
+      "settings": "Settings",
+      "group": "Group",
+      "five": "Five",
+      "six": "Six"
     }
   }
 }

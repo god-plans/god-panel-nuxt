@@ -2,7 +2,9 @@
   "common": {
     "home": "خانه",
     "dashboard": "داشبورد",
+    "analytics": "آمار",
     "settings": "تنظیمات",
+    "group": "گروه",
     "profile": "پروفایل",
     "logout": "خروج",
     "login": "ورود",
@@ -45,7 +47,14 @@
     "noData": "داده ای موجود نیست",
     "noResults": "نتیجه ای یافت نشد",
     "required": "الزامی",
-    "optional": "اختیاری"
+    "optional": "اختیاری",
+    "darkMode": "حالت تاریک",
+    "lightMode": "حالت روشن",
+    "systemMode": "حالت سیستم",
+    "highContrast": "کنتراست بالا",
+    "rtl": "راست به چپ",
+    "compact": "فشرده"
+
   },
   "nav": {
     "analytics": "تحلیل ها",
@@ -72,6 +81,8 @@
     "passwordResetSent": "لینک بازنشانی رمز عبور به ایمیل شما ارسال شد",
     "invalidCredentials": "ایمیل یا رمز عبور نامعتبر",
     "accountCreated": "حساب کاربری با موفقیت ایجاد شد",
+    "demoCredentials": "استفاده کنید",
+    "demoCredentialsWith": "با رمز عبور",
     "logoutConfirm": "آیا مطمئن هستید که می‌خواهید خارج شوید؟",
     "logoutConfirmTitle": "تأیید خروج",
     "logoutConfirmMessage": "آیا مطمئن هستید که می‌خواهید از حساب خود خارج شوید؟",
@@ -195,7 +206,29 @@
     "red": "قرمز"
   },
   "auth": {
-    "or": "یا"
+    "or": "یا",
+    "demoCredentials": "استفاده کنید",
+    "demoCredentialsWith": "با رمز عبور",
+    "logoutConfirm": "آیا مطمئن هستید که می‌خواهید خارج شوید؟",
+    "logoutConfirmTitle": "تأیید خروج",
+    "logoutConfirmMessage": "آیا مطمئن هستید که می‌خواهید از حساب خود خارج شوید؟",
+    "logoutConfirmNote": "برای دسترسی به داشبورد خود نیاز به ورود مجدد دارید.",
+    "welcomeBack": "خوش آمدید!",
+    "signInToAccount": "به حساب خود وارد شوید",
+    "signIn": "ورود",
+    "forgotPassword": "رمز عبور را فراموش کرده اید؟",
+    "dontHaveAccount": "حساب کاربری ندارید؟",
+    "signUp": "ثبت نام",
+    "createAccount": "ایجاد حساب",
+    "alreadyHaveAccount": "قبلاً حساب کاربری دارید؟",
+    "signInHere": "اینجا وارد شوید",
+    "resetPassword": "بازنشانی رمز عبور",
+    "enterEmailToReset": "ایمیل خود را برای بازنشانی رمز عبور وارد کنید",
+    "sendResetLink": "ارسال لینک بازنشانی",
+    "backToSignIn": "بازگشت به ورود",
+    "passwordResetSent": "لینک بازنشانی رمز عبور به ایمیل شما ارسال شد",
+    "invalidCredentials": "ایمیل یا رمز عبور نامعتبر",
+    "accountCreated": "حساب کاربری با موفقیت ایجاد شد"
   },
   "pages": {
     "dashboard": {
@@ -234,6 +267,14 @@
       "shadowSystem": "سیستم سایه",
       "typography": "تایپوگرافی",
       "placeholder": "این یک مکان نگهدار برای محتوای شما است"
+    },
+    "routes": {
+      "dashboard": "داشبورد",
+      "analytics": "آمار",
+      "settings": "تنظیمات",
+      "group": "گروه",
+      "five": "پنج",
+      "six": "شش"
     }
   }
 }
