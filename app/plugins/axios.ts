@@ -1,62 +1,18 @@
-import axios from 'axios'
+import { apiClient } from '~/services'
 
 export default defineNuxtPlugin(() => {
-  const config = useRuntimeConfig()
-
-  // Create axios instance
-  const instance = axios.create({
-    baseURL: config.public.apiUrl,
-    timeout: 10000,
-    headers: {
-      'Content-Type': 'application/json'
-    }
-  })
-
-  // Request interceptor
-  instance.interceptors.request.use(
-    (config) => {
-      // Add auth token if available
-      if (process.client) {
-        const token = localStorage.getItem('auth-token')
-        if (token) {
-          config.headers.Authorization = `Bearer ${token}`
-        }
-      }
-
-      return config
-    },
-    (error) => {
-      return Promise.reject(error)
-    }
-  )
-
-  // Response interceptor
-  instance.interceptors.response.use(
-    (response) => {
-      return response
-    },
-    (error) => {
-      // Handle common errors
-      if (error.response?.status === 401) {
-        // Token expired or invalid
-        if (process.client) {
-          localStorage.removeItem('auth-token')
-          // Redirect to login if not already there
-          const currentPath = window.location.pathname
-          if (currentPath !== '/auth/login') {
-            navigateTo('/auth/login')
-          }
-        }
-      }
-
-      return Promise.reject(error)
-    }
-  )
-
-  // Make axios available globally
+  // Provide the API client globally for backward compatibility
+  // New code should use the services directly
   return {
     provide: {
-      axios: instance
+      axios: apiClient.getClient(), // Provide axios instance for backward compatibility
+      apiClient: apiClient, // Provide the new API client
+      services: {
+        auth: () => import('~/services/auth.service').then(m => m.authService),
+        users: () => import('~/services/user.service').then(m => m.userService),
+        dashboard: () => import('~/services/dashboard.service').then(m => m.dashboardService),
+        settings: () => import('~/services/settings.service').then(m => m.settingsService),
+      }
     }
   }
 })

@@ -24,7 +24,13 @@ export default defineNuxtConfig({
     public: {
       apiUrl: process.env.NUXT_PUBLIC_API_URL || 'http://localhost:4000',
       appName: 'God Panel',
-      version: '1.0.0'
+      version: '1.0.0',
+      siteUrl: process.env.NUXT_PUBLIC_SITE_URL,
+      enableMockData: process.env.ENABLE_MOCK_DATA === 'true',
+    },
+    private: {
+      jwtSecret: process.env.JWT_SECRET,
+      refreshTokenExpiry: process.env.REFRESH_TOKEN_EXPIRY || '7d',
     }
   },
 
