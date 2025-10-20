@@ -1,7 +1,7 @@
 import { createI18n } from 'vue-i18n'
 import { watch } from 'vue'
-import en from '../locales/en.json'
-import fa from '../locales/fa.json'
+import en from '../../locales/en.json'
+import fa from '../../locales/fa.json'
 
 export default defineNuxtPlugin((nuxtApp) => {
   // Get current locale from cookie or default to 'en'

@@ -6,7 +6,7 @@
         <NuxtPage />
       </NuxtLayout>
 
-      <!-- Global snackbar for notifications -->
+      <!-- Global snackbar for notifications (legacy) -->
       <v-snackbar
         v-model="snackbar.show"
         :color="snackbar.color"
@@ -17,6 +17,9 @@
           <v-btn variant="text" @click="snackbar.show = false"> Close </v-btn>
         </template>
       </v-snackbar>
+
+      <!-- Toast notification container -->
+      <ToastContainer />
     </v-app>
   </div>
 </template>

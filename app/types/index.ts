@@ -65,6 +65,43 @@ export interface DashboardStats {
   totalProducts: number
 }
 
+// Toast Notification Types
+export interface Toast {
+  id: string
+  type: 'success' | 'error' | 'warning' | 'info' | 'loading'
+  message: string
+  title?: string
+  icon?: string
+  duration?: number
+  position: 'top-left' | 'top-center' | 'top-right' | 'bottom-left' | 'bottom-center' | 'bottom-right'
+  dismissible: boolean
+  pauseOnHover: boolean
+  showProgress: boolean
+  action?: {
+    label: string
+    handler: () => void
+  }
+  createdAt: Date
+  visible: boolean
+  paused?: boolean
+}
+
+export interface ToastOptions {
+  type?: 'success' | 'error' | 'warning' | 'info' | 'loading'
+  message: string
+  title?: string
+  icon?: string
+  duration?: number
+  position?: 'top-left' | 'top-center' | 'top-right' | 'bottom-left' | 'bottom-center' | 'bottom-right'
+  dismissible?: boolean
+  pauseOnHover?: boolean
+  showProgress?: boolean
+  action?: {
+    label: string
+    handler: () => void
+  }
+}
+
 // Common Types
 export type ThemeMode = 'light' | 'dark' | 'auto'
 export type ThemeLayout = 'vertical' | 'horizontal' | 'mini'
