@@ -50,7 +50,7 @@ export const useSettingsStore = defineStore('settings', () => {
       }
     } catch (error) {
       if (process.client) {
-        console.warn('Invalid settings in cookie, trying localStorage')
+        console.warn('Invalid settings in cookie, trying localStorage:', error)
       }
     }
 
@@ -63,7 +63,9 @@ export const useSettingsStore = defineStore('settings', () => {
           const validated = settingsSchema.parse(parsed)
           settings.value = { ...defaultSettings, ...validated }
         } catch (error) {
-          console.warn('Invalid settings in localStorage, using defaults')
+          console.warn('Invalid settings in localStorage, using defaults:', error)
+          // Clear corrupted localStorage data
+          localStorage.removeItem('settings')
         }
       }
     }

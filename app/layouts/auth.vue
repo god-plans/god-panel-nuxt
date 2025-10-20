@@ -4,14 +4,12 @@
     <div class="auth-header">
       <div class="header-content">
         <div class="help-section">
-          <span class="help-text">{{ t('common.needHelp') }}</span>
+          <span class="help-text">Need help?</span>
           <v-btn icon size="small" rounded="lg">
             <v-icon size="20">mdi-help-circle-outline</v-icon>
           </v-btn>
         </div>
         <div class="logo-section">
-          <LanguageSwitcher />
-          <SettingsButton />
           <v-img
             src="/logo-single.svg"
             width="40"
@@ -23,22 +21,28 @@
     </div>
 
     <!-- Main Content -->
-    <div class="auth-main">
-      <slot />
-    </div>
+    <AuthMain layout-query="md">
+      <AuthSection
+        title="Manage the job"
+        subtitle="More effectively with optimized workflows."
+        img-url="/assets/illustrations/illustration-dashboard.webp"
+        layout-query="md"
+      />
+      <AuthContent layout-query="md">
+        <slot />
+      </AuthContent>
+    </AuthMain>
 
     <!-- Settings Drawer -->
-    <SettingsDrawer />
+    <!-- <SettingsDrawer /> -->
   </div>
 </template>
 
 <script setup lang="ts">
-import { useI18n } from 'vue-i18n'
-import LanguageSwitcher from '~/components/theme/LanguageSwitcher.vue'
-import SettingsButton from '~/components/theme/SettingsButton.vue'
-import SettingsDrawer from '~/components/settings/drawer/SettingsDrawer.vue'
-
-const { t } = useI18n()
+// import SettingsDrawer from '~/components/settings/drawer/SettingsDrawer.vue'
+import AuthMain from '~/components/auth/Main.vue'
+import AuthSection from '~/components/auth/Section.vue'
+import AuthContent from '~/components/auth/Content.vue'
 </script>
 
 <style scoped>
@@ -51,7 +55,7 @@ const { t } = useI18n()
 }
 
 .auth-header {
-  position: absolute;
+  position: fixed;
   top: 0;
   left: 0;
   right: 0;
@@ -89,12 +93,10 @@ const { t } = useI18n()
   filter: none;
 }
 
-.auth-main {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  min-height: 100vh;
-  padding: 80px 24px 24px;
+/* CSS Variables for layout */
+.auth-layout {
+  --layout-header-desktop-height: 64px;
+  --layout-auth-content-width: 420px;
 }
 
 /* Responsive adjustments */
@@ -110,10 +112,6 @@ const { t } = useI18n()
 
   .logo-section {
     order: -1;
-  }
-
-  .auth-main {
-    padding-top: 120px;
   }
 }
 

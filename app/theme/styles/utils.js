@@ -64,10 +64,20 @@ export function hexToRgbChannel(hex) {
  * Converts a hex color to RGB channels
  */
 export function createPaletteChannel(hexPalette) {
+  // Handle null or undefined input
+  if (!hexPalette || typeof hexPalette !== 'object') {
+    console.warn('createPaletteChannel received invalid hexPalette:', hexPalette);
+    return {};
+  }
+
   const channelPalette = {};
 
   Object.entries(hexPalette).forEach(([key, value]) => {
-    channelPalette[`${key}Channel`] = hexToRgbChannel(value);
+    try {
+      channelPalette[`${key}Channel`] = hexToRgbChannel(value);
+    } catch (error) {
+      console.warn(`Failed to convert color for key ${key}:`, value, error);
+    }
   });
 
   return { ...hexPalette, ...channelPalette };

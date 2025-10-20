@@ -78,6 +78,7 @@
     "welcomeBack": "Welcome Back",
     "signInToAccount": "Sign in to your account",
     "signIn": "Sign In",
+    "signInLoading": "Signing in...",
     "forgotPassword": "Forgot Password?",
     "dontHaveAccount": "Don't have an account?",
     "signUp": "Sign Up",
@@ -96,7 +97,10 @@
     "logoutConfirm": "Are you sure you want to logout?",
     "logoutConfirmTitle": "Confirm Logout",
     "logoutConfirmMessage": "Are you sure you want to log out of your account?",
-    "logoutConfirmNote": "You will need to sign in again to access your dashboard."
+    "logoutConfirmNote": "You will need to sign in again to access your dashboard.",
+    "welcomeTitle": "Manage the job",
+    "welcomeSubtitle": "More effectively with optimized workflows.",
+    "loginFailed": "Login failed. Please try again."
   },
   "dashboard": {
     "welcome": "Welcome to Dashboard",

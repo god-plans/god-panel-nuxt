@@ -68,6 +68,7 @@
     "welcomeBack": "خوش آمدید",
     "signInToAccount": "به حساب خود وارد شوید",
     "signIn": "ورود",
+    "signInLoading": "در حال ورود...",
     "forgotPassword": "رمز عبور را فراموش کرده اید؟",
     "dontHaveAccount": "حساب کاربری ندارید؟",
     "signUp": "ثبت نام",
@@ -86,7 +87,10 @@
     "logoutConfirm": "آیا مطمئن هستید که می‌خواهید خارج شوید؟",
     "logoutConfirmTitle": "تأیید خروج",
     "logoutConfirmMessage": "آیا مطمئن هستید که می‌خواهید از حساب خود خارج شوید؟",
-    "logoutConfirmNote": "برای دسترسی به داشبورد خود نیاز به ورود مجدد دارید."
+    "logoutConfirmNote": "برای دسترسی به داشبورد خود نیاز به ورود مجدد دارید.",
+    "welcomeTitle": "مدیریت کار",
+    "welcomeSubtitle": "به طور مؤثرتری با گردش کار بهینه شده.",
+    "loginFailed": "ورود ناموفق بود. لطفاً دوباره امتحان کنید."
   },
   "dashboard": {
     "welcome": "به داشبورد خوش آمدید",

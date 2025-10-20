@@ -77,7 +77,7 @@ export function updateComponentsWithSettings(theme, settings) {
   const components = { ...coreComponents };
 
   /** [2] High contrast component adjustments */
-  if (settings.contrast === 'hight') {
+  if (settings.contrast === 'high') {
     const VCard = {
       ...components.VCard,
       elevation: 2, // Higher elevation for better definition
@@ -126,6 +126,12 @@ const PRIMARY_COLORS = {
 function getPalettePrimary(primaryColorName) {
   /** [1] */
   const selectedPrimaryColor = PRIMARY_COLORS[primaryColorName];
+
+  // Fallback to default if primaryColorName is invalid or selectedPrimaryColor is undefined
+  if (!selectedPrimaryColor) {
+    return corePrimaryPalette;
+  }
+
   const updatedPrimaryPalette = createPaletteChannel(selectedPrimaryColor);
 
   return primaryColorName === 'default' ? corePrimaryPalette : updatedPrimaryPalette;
