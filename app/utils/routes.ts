@@ -46,8 +46,8 @@ export const paths = {
     three: `${ROOTS.DASHBOARD}/three`,
     group: {
       root: `${ROOTS.DASHBOARD}/group`,
-      five: `${ROOTS.DASHBOARD}/group/five`,
-      six: `${ROOTS.DASHBOARD}/group/six`,
+      one: `${ROOTS.DASHBOARD}/group/one`,
+      two: `${ROOTS.DASHBOARD}/group/two`,
     },
     // Additional routes for the Nuxt version
     analytics: `${ROOTS.DASHBOARD}/analytics`,
@@ -121,15 +121,15 @@ export const dashboardNavItems: NavItem[] = [
     icon: 'mdi-folder-multiple',
     children: [
       {
-        key: 'group-five',
-        title: 'common.five',
-        path: paths.dashboard.group.five,
+        key: 'group-one',
+        title: 'common.one',
+        path: paths.dashboard.group.one,
         icon: 'mdi-numeric-5-circle'
       },
       {
-        key: 'group-six',
-        title: 'common.six',
-        path: paths.dashboard.group.six,
+          key: 'group-two',
+        title: 'common.two',
+        path: paths.dashboard.group.two,
         icon: 'mdi-numeric-6-circle'
       }
     ]
@@ -150,8 +150,8 @@ const routeTranslations: Record<string, string> = {
   'profile': 'routes.profile',
   'notifications': 'routes.notifications',
   'group': 'routes.group',
-  'five': 'routes.five',
-  'six': 'routes.six'
+  'one': 'routes.one',
+  'two': 'routes.two'
 }
 
 // Helper function to find nav item recursively

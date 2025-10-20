@@ -271,8 +271,8 @@
     },
     "groups": {
       "management": "Group Management",
-      "five": "Group Five",
-      "six": "Group Six"
+      "one": "Group One",
+      "two": "Group Two"
     },
     "blank": {
       "themeColors": "Theme Colors",
@@ -285,8 +285,8 @@
       "analytics": "Analytics",
       "settings": "Settings",
       "group": "Group",
-      "five": "Five",
-      "six": "Six"
+      "one": "One",
+      "two": "Two"
     }
   }
 }

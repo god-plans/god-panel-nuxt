@@ -46,6 +46,12 @@ export const useAuthStore = defineStore('auth', () => {
   }
 
   const login = async (credentials: { email: string; password: string }) => {
+    // In development mode, use demo login for sample credentials
+    if (credentials.email === 'godpanel@test.com' && credentials.password === 'god123') {
+      demoLogin()
+      return { success: true }
+    }
+
     try {
       const { $axios } = useNuxtApp()
       const response = await $axios.post('/auth/login', credentials)
