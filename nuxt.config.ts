@@ -9,6 +9,7 @@ export default defineNuxtConfig({
 
   // Modules
   modules: [
+    '@nuxtjs/tailwindcss',
     '@pinia/nuxt',
     '@nuxtjs/color-mode'
   ],
@@ -39,6 +40,7 @@ export default defineNuxtConfig({
     storageKey: 'nuxt-color-mode'
   },
 
+
   // CSS
   css: [
     '~/assets/css/main.css',
@@ -54,6 +56,39 @@ export default defineNuxtConfig({
 
   // SSR
   ssr: true,
+
+  // Nitro configuration for better performance
+  nitro: {
+    compressPublicAssets: true,
+    minify: true,
+    experimental: {
+      wasm: true
+    }
+  },
+
+  // Vite configuration for optimization
+  vite: {
+    optimizeDeps: {
+      include: ['vue', 'vue-router', 'pinia', '@vueuse/core']
+    },
+    build: {
+      rollupOptions: {
+        output: {
+          manualChunks: {
+            vendor: ['vue', 'vue-router'],
+            ui: ['vuetify', '@mdi/js'],
+            utils: ['axios', 'zod', 'clsx']
+          }
+        }
+      }
+    }
+  },
+
+  // Experimental features
+  experimental: {
+    payloadExtraction: false,
+    viewTransition: true
+  },
 
   // TypeScript
   typescript: {

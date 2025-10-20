@@ -26,6 +26,44 @@
   .card-shadow {
     @apply shadow-lg hover:shadow-xl transition-shadow duration-300;
   }
+
+  /* Vuetify component overrides */
+  .v-application {
+    color: rgb(var(--v-theme-on-background)) !important;
+  }
+
+  .v-card {
+    background-color: rgb(var(--v-theme-surface)) !important;
+    color: rgb(var(--v-theme-on-surface)) !important;
+  }
+
+  .v-card-title,
+  .v-card-subtitle,
+  .v-card-text {
+    color: inherit !important;
+  }
+
+  .v-list-item-title,
+  .v-list-item-subtitle {
+    color: rgb(var(--v-theme-on-surface)) !important;
+  }
+
+  .v-btn {
+    color: inherit;
+  }
+
+  .v-icon {
+    color: inherit;
+  }
+
+  .text-h1,
+  .text-h2,
+  .text-h3,
+  .text-h4,
+  .text-h5,
+  .text-h6 {
+    color: rgb(var(--v-theme-on-surface)) !important;
+  }
 }
 
 /* RTL Support for Farsi */
@@ -55,12 +93,44 @@
   flex-direction: row-reverse;
 }
 
+[dir="rtl"] .v-app-bar-nav-icon {
+  margin-left: auto;
+  margin-right: 0;
+}
+
 [dir="rtl"] .v-navigation-drawer {
   transform: translateX(100%);
 }
 
 [dir="rtl"] .v-navigation-drawer.v-navigation-drawer--open {
   transform: translateX(0);
+}
+
+[dir="rtl"] .v-list-item__prepend {
+  margin-right: 16px;
+  margin-left: 0;
+}
+
+[dir="rtl"] .v-list-item__append {
+  margin-left: 16px;
+  margin-right: 0;
+}
+
+[dir="rtl"] .v-chip {
+  flex-direction: row-reverse;
+}
+
+[dir="rtl"] .v-menu {
+  transform-origin: top right;
+}
+
+[dir="rtl"] .v-card-actions {
+  flex-direction: row-reverse;
+}
+
+[dir="rtl"] .v-alert .v-alert__prepend {
+  margin-right: 12px;
+  margin-left: 0;
 }
 
 /* RTL adjustments for navigation */
