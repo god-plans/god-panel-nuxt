@@ -25,7 +25,7 @@
       <AuthSection
         title="Manage the job"
         subtitle="More effectively with optimized workflows."
-        img-url="/assets/illustrations/illustration-dashboard.webp"
+        img-url="/assets/images/login.webp"
         layout-query="md"
       />
       <AuthContent layout-query="md">
