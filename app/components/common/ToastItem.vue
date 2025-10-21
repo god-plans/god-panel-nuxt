@@ -1,294 +1,223 @@
 <template>
   <div
+    class="toast-item"
     :class="[
-      'toast-item',
       `toast-item--${toast.type}`,
-      { 'toast-item--dismissible': toast.dismissible }
+      { 'toast-item--closable': toast.closable }
     ]"
-    @mouseenter="handleMouseEnter"
-    @mouseleave="handleMouseLeave"
+    @click="handleClick"
   >
     <div class="toast-item__content">
       <!-- Icon -->
-      <div v-if="toast.icon" class="toast-item__icon">
-        <v-icon
-          :color="iconColor"
-          :class="{ 'animate-spin': toast.type === 'loading' }"
-        >
-          {{ toast.icon }}
-        </v-icon>
+      <div class="toast-item__icon">
+        <Icon
+          :name="iconName"
+          :class="`toast-item__icon--${toast.type}`"
+        />
       </div>
 
-      <!-- Text Content -->
-      <div class="toast-item__text">
-        <div v-if="toast.title" class="toast-item__title">
+      <!-- Content -->
+      <div class="toast-item__body">
+        <div
+          v-if="toast.title"
+          class="toast-item__title"
+        >
           {{ toast.title }}
         </div>
-        <div class="toast-item__message">
-          {{ toast.message }}
+        <div
+          v-if="toast.description"
+          class="toast-item__description"
+        >
+          {{ toast.description }}
         </div>
       </div>
 
       <!-- Action Button -->
-      <div v-if="toast.action" class="toast-item__action">
-        <v-btn
-          size="small"
-          variant="text"
-          :color="actionColor"
-          @click="handleAction"
+      <div
+        v-if="toast.action"
+        class="toast-item__action"
+      >
+        <button
+          class="toast-item__action-button"
+          @click.stop="toast.action?.onClick"
         >
           {{ toast.action.label }}
-        </v-btn>
+        </button>
       </div>
 
-      <!-- Dismiss Button -->
-      <div v-if="toast.dismissible" class="toast-item__dismiss">
-        <v-btn
-          icon
-          size="small"
-          variant="text"
-          @click="handleDismiss"
-        >
-          <v-icon size="16">mdi-close</v-icon>
-        </v-btn>
-      </div>
+      <!-- Close Button -->
+      <button
+        v-if="toast.closable"
+        class="toast-item__close"
+        @click.stop="$emit('close', toast.id)"
+      >
+        <Icon name="mdi-close" />
+      </button>
     </div>
 
     <!-- Progress Bar -->
     <div
-      v-if="toast.showProgress && toast.duration && toast.duration > 0"
+      v-if="!toast.persistent && toast.duration > 0"
       class="toast-item__progress"
     >
       <div
         class="toast-item__progress-bar"
-        :style="{ width: progressWidth }"
+        :style="{ animationDuration: `${toast.duration}ms` }"
       />
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import type { Toast } from '~/types'
+import { computed } from 'vue'
+import type { Toast } from '~/composables/useToast'
 
-// Props
 interface Props {
   toast: Toast
 }
 
 const props = defineProps<Props>()
 
-// Emits
 const emit = defineEmits<{
-  dismiss: [toastId: string]
-  pause: [toastId: string]
-  resume: [toastId: string]
+  close: [id: string]
 }>()
 
-// Reactive state
-const progressWidth = ref('100%')
-const isHovered = ref(false)
-
-// Computed properties
-const iconColor = computed(() => {
-  switch (props.toast.type) {
-    case 'success': return 'success'
-    case 'error': return 'error'
-    case 'warning': return 'warning'
-    case 'info': return 'info'
-    case 'loading': return 'primary'
-    default: return 'grey'
+const iconName = computed(() => {
+  const icons = {
+    success: 'mdi-check-circle',
+    error: 'mdi-alert-circle',
+    warning: 'mdi-alert',
+    info: 'mdi-information',
+    loading: 'mdi-loading'
   }
+  return icons[props.toast.type]
 })
 
-const actionColor = computed(() => {
-  switch (props.toast.type) {
-    case 'success': return 'success'
-    case 'error': return 'error'
-    case 'warning': return 'warning'
-    case 'info': return 'info'
-    case 'loading': return 'primary'
-    default: return 'primary'
-  }
-})
-
-// Progress animation
-let progressInterval: NodeJS.Timeout | null = null
-
-const startProgress = () => {
-  if (!props.toast.duration || props.toast.duration <= 0) return
-
-  const startTime = Date.now()
-  const duration = props.toast.duration
-
-  progressInterval = setInterval(() => {
-    if (props.toast.paused) return
-
-    const elapsed = Date.now() - startTime
-    const remaining = Math.max(0, duration - elapsed)
-    const percentage = (remaining / duration) * 100
-
-    progressWidth.value = `${percentage}%`
-
-    if (percentage <= 0) {
-      stopProgress()
-      emit('dismiss', props.toast.id)
-    }
-  }, 50)
-}
-
-const stopProgress = () => {
-  if (progressInterval) {
-    clearInterval(progressInterval)
-    progressInterval = null
+const handleClick = () => {
+  // Auto-close on click unless persistent
+  if (!props.toast.persistent) {
+    emit('close', props.toast.id)
   }
 }
-
-// Lifecycle
-onMounted(() => {
-  if (props.toast.showProgress && props.toast.duration && props.toast.duration > 0) {
-    startProgress()
-  }
-})
-
-onUnmounted(() => {
-  stopProgress()
-})
-
-// Event handlers
-const handleDismiss = () => {
-  emit('dismiss', props.toast.id)
-}
-
-const handleAction = () => {
-  if (props.toast.action) {
-    props.toast.action.handler()
-  }
-}
-
-const handleMouseEnter = () => {
-  isHovered.value = true
-  if (props.toast.pauseOnHover) {
-    emit('pause', props.toast.id)
-  }
-}
-
-const handleMouseLeave = () => {
-  isHovered.value = false
-  if (props.toast.pauseOnHover) {
-    emit('resume', props.toast.id)
-  }
-}
-
-// Watch for pause changes
-watch(() => props.toast.paused, (paused) => {
-  if (paused) {
-    stopProgress()
-  } else if (!isHovered.value) {
-    startProgress()
-  }
-})
 </script>
 
-<style scoped lang="scss">
+<style scoped>
 .toast-item {
-  pointer-events: auto;
-  min-width: 300px;
-  max-width: 500px;
-  background: rgb(var(--v-theme-surface));
-  border: 1px solid rgb(var(--v-theme-outline-variant));
-  border-radius: 12px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-  overflow: hidden;
+  @apply bg-white dark:bg-gray-800 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700;
+  @apply min-w-80 max-w-96 pointer-events-auto;
+  @apply transition-all duration-300 ease-in-out;
   position: relative;
+  overflow: hidden;
+}
 
-  // Type-specific styles
-  &--success {
-    border-color: rgb(var(--v-theme-success));
-    background: rgb(var(--v-theme-success-container));
-  }
+.toast-item:hover {
+  @apply shadow-xl transform scale-105;
+}
 
-  &--error {
-    border-color: rgb(var(--v-theme-error));
-    background: rgb(var(--v-theme-error-container));
-  }
+.toast-item--success {
+  @apply border-l-4 border-l-green-500;
+}
 
-  &--warning {
-    border-color: rgb(var(--v-theme-warning));
-    background: rgb(var(--v-theme-warning-container));
-  }
+.toast-item--error {
+  @apply border-l-4 border-l-red-500;
+}
 
-  &--info {
-    border-color: rgb(var(--v-theme-info));
-    background: rgb(var(--v-theme-info-container));
-  }
+.toast-item--warning {
+  @apply border-l-4 border-l-yellow-500;
+}
 
-  &--loading {
-    border-color: rgb(var(--v-theme-primary));
-    background: rgb(var(--v-theme-surface));
-  }
+.toast-item--info {
+  @apply border-l-4 border-l-blue-500;
+}
+
+.toast-item--loading {
+  @apply border-l-4 border-l-purple-500;
 }
 
 .toast-item__content {
-  display: flex;
-  align-items: flex-start;
-  gap: 0.75rem;
-  padding: 1rem;
-  min-height: 3rem;
+  @apply flex items-start p-4 gap-3;
 }
 
 .toast-item__icon {
-  flex-shrink: 0;
-  margin-top: 0.125rem;
-
-  .animate-spin {
-    animation: spin 1s linear infinite;
-  }
+  @apply flex-shrink-0 mt-0.5;
 }
 
-.toast-item__text {
-  flex: 1;
-  min-width: 0;
+.toast-item__icon--success {
+  @apply text-green-500;
+}
+
+.toast-item__icon--error {
+  @apply text-red-500;
+}
+
+.toast-item__icon--warning {
+  @apply text-yellow-500;
+}
+
+.toast-item__icon--info {
+  @apply text-blue-500;
+}
+
+.toast-item__icon--loading {
+  @apply text-purple-500;
+}
+
+.toast-item__body {
+  @apply flex-1 min-w-0;
 }
 
 .toast-item__title {
-  font-weight: 600;
-  font-size: 0.875rem;
-  color: rgb(var(--v-theme-on-surface));
-  margin-bottom: 0.25rem;
-  line-height: 1.2;
+  @apply font-semibold text-gray-900 dark:text-gray-100 text-sm;
+  @apply mb-1;
 }
 
-.toast-item__message {
-  font-size: 0.875rem;
-  color: rgb(var(--v-theme-on-surface-variant));
-  line-height: 1.4;
-  word-wrap: break-word;
+.toast-item__description {
+  @apply text-gray-600 dark:text-gray-300 text-sm;
+  @apply leading-relaxed;
 }
 
 .toast-item__action {
-  flex-shrink: 0;
+  @apply flex-shrink-0;
 }
 
-.toast-item__dismiss {
-  flex-shrink: 0;
-  margin-left: 0.5rem;
+.toast-item__action-button {
+  @apply px-3 py-1 text-xs font-medium;
+  @apply bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300;
+  @apply rounded-md hover:bg-gray-200 dark:hover:bg-gray-600;
+  @apply transition-colors duration-200;
+}
+
+.toast-item__close {
+  @apply flex-shrink-0 p-1;
+  @apply text-gray-400 hover:text-gray-600 dark:hover:text-gray-200;
+  @apply transition-colors duration-200;
+  @apply rounded-md hover:bg-gray-100 dark:hover:bg-gray-700;
 }
 
 .toast-item__progress {
-  height: 3px;
-  background: rgba(255, 255, 255, 0.2);
-  position: relative;
-  overflow: hidden;
+  @apply absolute bottom-0 left-0 right-0 h-1;
+  @apply bg-gray-200 dark:bg-gray-700;
 }
 
 .toast-item__progress-bar {
-  height: 100%;
-  background: currentColor;
-  transition: width linear;
-  border-radius: 0 0 12px 12px;
+  @apply h-full bg-gray-400 dark:bg-gray-500;
+  animation: progress linear forwards;
 }
 
-// Animations
+@keyframes progress {
+  from {
+    width: 100%;
+  }
+  to {
+    width: 0%;
+  }
+}
+
+/* Loading animation */
+.toast-item--loading .toast-item__icon {
+  animation: spin 1s linear infinite;
+}
+
 @keyframes spin {
   from {
     transform: rotate(0deg);
@@ -298,37 +227,22 @@ watch(() => props.toast.paused, (paused) => {
   }
 }
 
-// Hover effects
-.toast-item:hover {
-  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
-}
-
-// Dark theme adjustments
-.v-theme--dark {
+/* Responsive design */
+@media (max-width: 640px) {
   .toast-item {
-    background: rgb(var(--v-theme-surface-variant));
-    border-color: rgb(var(--v-theme-outline));
+    @apply min-w-0 max-w-full mx-2;
   }
-
-  .toast-item__progress {
-    background: rgba(0, 0, 0, 0.2);
-  }
-}
-
-// Responsive design
-@media (max-width: 600px) {
-  .toast-item {
-    min-width: 280px;
-    max-width: calc(100vw - 2rem);
-  }
-
+  
   .toast-item__content {
-    padding: 0.875rem;
-    gap: 0.625rem;
+    @apply p-3 gap-2;
   }
-
-  .toast-item__message {
-    font-size: 0.8125rem;
+  
+  .toast-item__title {
+    @apply text-xs;
+  }
+  
+  .toast-item__description {
+    @apply text-xs;
   }
 }
 </style>

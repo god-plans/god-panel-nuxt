@@ -1,139 +1,149 @@
-import { toastService } from '~/services/toast.service'
-import type { ToastOptions } from '~/types'
+import { ref, reactive } from 'vue'
 
-// Toast composable for easy toast management in components
-export function useToast() {
-  // Success toast
-  const success = (message: string, options: Partial<ToastOptions> = {}) => {
-    return toastService.success(message, options)
+export interface ToastOptions {
+  title?: string
+  description?: string
+  duration?: number
+  position?: 'top-left' | 'top-right' | 'bottom-left' | 'bottom-right' | 'top-center' | 'bottom-center'
+  closable?: boolean
+  persistent?: boolean
+  action?: {
+    label: string
+    onClick: () => void
+  }
+}
+
+export interface Toast {
+  id: string
+  type: 'success' | 'error' | 'warning' | 'info' | 'loading'
+  title?: string
+  description?: string
+  duration: number
+  position: ToastOptions['position']
+  closable: boolean
+  persistent: boolean
+  action?: ToastOptions['action']
+  timestamp: number
+}
+
+const toasts = ref<Toast[]>([])
+const config = reactive({
+  position: 'bottom-right' as ToastOptions['position'],
+  duration: 5000,
+  maxToasts: 5
+})
+
+let toastIdCounter = 0
+
+const generateId = () => `toast-${++toastIdCounter}`
+
+const addToast = (type: Toast['type'], message: string, options: ToastOptions = {}) => {
+  const id = generateId()
+  const toast: Toast = {
+    id,
+    type,
+    title: options.title,
+    description: message,
+    duration: options.duration || config.duration,
+    position: options.position || config.position,
+    closable: options.closable !== false,
+    persistent: options.persistent || false,
+    action: options.action,
+    timestamp: Date.now()
   }
 
-  // Error toast
-  const error = (message: string, options: Partial<ToastOptions> = {}) => {
-    return toastService.error(message, options)
+  toasts.value.push(toast)
+
+  // Remove toast after duration (unless persistent)
+  if (!toast.persistent && toast.duration > 0) {
+    setTimeout(() => {
+      removeToast(id)
+    }, toast.duration)
   }
 
-  // Warning toast
-  const warning = (message: string, options: Partial<ToastOptions> = {}) => {
-    return toastService.warning(message, options)
+  // Limit number of toasts
+  if (toasts.value.length > config.maxToasts) {
+    toasts.value.shift()
   }
 
-  // Info toast
-  const info = (message: string, options: Partial<ToastOptions> = {}) => {
-    return toastService.info(message, options)
+  return id
+}
+
+const removeToast = (id: string) => {
+  const index = toasts.value.findIndex(toast => toast.id === id)
+  if (index > -1) {
+    toasts.value.splice(index, 1)
   }
+}
 
-  // Loading toast
-  const loading = (message: string, options: Partial<ToastOptions> = {}) => {
-    return toastService.loading(message, options)
+const clearAll = () => {
+  toasts.value = []
+}
+
+const success = (message: string, options?: ToastOptions) => {
+  return addToast('success', message, options)
+}
+
+const error = (message: string, options?: ToastOptions) => {
+  return addToast('error', message, options)
+}
+
+const warning = (message: string, options?: ToastOptions) => {
+  return addToast('warning', message, options)
+}
+
+const info = (message: string, options?: ToastOptions) => {
+  return addToast('info', message, options)
+}
+
+const loading = (message: string, options?: ToastOptions) => {
+  return addToast('loading', message, { ...options, persistent: true })
+}
+
+const promise = async <T>(
+  promise: Promise<T>,
+  messages: {
+    loading: string
+    success: string
+    error: string
+  },
+  options?: ToastOptions
+): Promise<T> => {
+  const loadingId = loading(messages.loading, options)
+  
+  try {
+    const result = await promise
+    removeToast(loadingId)
+    success(messages.success, options)
+    return result
+  } catch (err) {
+    removeToast(loadingId)
+    error(messages.error, options)
+    throw err
   }
+}
 
-  // Custom toast
-  const show = (options: ToastOptions & { type: 'success' | 'error' | 'warning' | 'info' | 'loading' }) => {
-    return toastService.show(options)
-  }
-
-  // Update toast
-  const update = (id: string, updates: Partial<ToastOptions>) => {
-    toastService.update(id, updates)
-  }
-
-  // Dismiss toast
-  const dismiss = (id: string) => {
-    toastService.dismiss(id)
-  }
-
-  // Dismiss all toasts
-  const dismissAll = () => {
-    toastService.dismissAll()
-  }
-
-  // Dismiss by type
-  const dismissByType = (type: 'success' | 'error' | 'warning' | 'info' | 'loading') => {
-    toastService.dismissByType(type)
-  }
-
-  // Get toasts
-  const getToasts = () => {
-    return toastService.getToasts()
-  }
-
-  // Get toast by ID
-  const getToast = (id: string) => {
-    return toastService.getToast(id)
-  }
-
-  // Set defaults
-  const setDefaults = (options: Partial<ToastOptions>) => {
-    toastService.setDefaults(options)
-  }
-
-  // Promise-based toast (shows loading, then success/error)
-  const promise = async <T>(
-    promise: Promise<T>,
-    messages: {
-      loading: string
-      success: string | ((result: T) => string)
-      error: string | ((error: any) => string)
-    },
-    options: {
-      loading?: Partial<ToastOptions>
-      success?: Partial<ToastOptions>
-      error?: Partial<ToastOptions>
-    } = {}
-  ): Promise<T> => {
-    const loadingId = toastService.loading(messages.loading, options.loading)
-
-    try {
-      const result = await promise
-
-      // Dismiss loading toast
-      toastService.dismiss(loadingId)
-
-      // Show success toast
-      const successMessage = typeof messages.success === 'function'
-        ? messages.success(result)
-        : messages.success
-
-      toastService.success(successMessage, options.success)
-
-      return result
-    } catch (err) {
-      // Dismiss loading toast
-      toastService.dismiss(loadingId)
-
-      // Show error toast
-      const errorMessage = typeof messages.error === 'function'
-        ? messages.error(err)
-        : messages.error
-
-      toastService.error(errorMessage, options.error)
-
-      throw err
-    }
-  }
-
+export const useToast = () => {
   return {
-    // Basic toast methods
+    // Toast methods
     success,
     error,
     warning,
     info,
     loading,
-    show,
-
+    promise,
+    
     // Management methods
-    update,
-    dismiss,
-    dismissAll,
-    dismissByType,
-
-    // Utility methods
-    getToasts,
-    getToast,
-    setDefaults,
-
-    // Advanced methods
-    promise
+    removeToast,
+    clearAll,
+    
+    // State
+    toasts: readonly(toasts),
+    config: readonly(config),
+    
+    // Update config
+    updateConfig: (newConfig: Partial<typeof config>) => {
+      Object.assign(config, newConfig)
+    }
   }
 }

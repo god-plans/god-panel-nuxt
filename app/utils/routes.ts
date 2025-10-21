@@ -54,6 +54,7 @@ export const paths = {
     settings: `${ROOTS.DASHBOARD}/settings`,
     profile: `${ROOTS.DASHBOARD}/profile`,
     notifications: `${ROOTS.DASHBOARD}/notifications`,
+    toastDemo: `${ROOTS.DASHBOARD}/toast-demo`,
   },
 } as const
 
@@ -139,6 +140,12 @@ export const dashboardNavItems: NavItem[] = [
     title: 'common.settings',
     path: paths.dashboard.settings,
     icon: 'mdi-cog'
+  },
+  {
+    key: 'toast-demo',
+    title: 'Toast Demo',
+    path: paths.dashboard.toastDemo,
+    icon: 'mdi-toast'
   }
 ]
 

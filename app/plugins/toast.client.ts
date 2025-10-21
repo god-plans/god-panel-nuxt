@@ -1,14 +1,4 @@
-import ToastContainer from '~/components/common/ToastContainer.vue'
-import { toastService } from '~/services/toast.service'
-
-export default defineNuxtPlugin((nuxtApp) => {
-  // Add toast container to the app
-  nuxtApp.vueApp.component('ToastContainer', ToastContainer)
-
-  // Provide toast service globally
-  return {
-    provide: {
-      toast: toastService
-    }
-  }
+export default defineNuxtPlugin(() => {
+  // This plugin ensures the toast system is available globally
+  // The ToastContainer component should be added to app.vue or layout
 })

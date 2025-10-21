@@ -32,6 +32,7 @@
 import { reactive, provide, onMounted, onErrorCaptured, watch } from "vue";
 import { useSettingsStore } from "~/stores/settings";
 import { useDynamicFonts } from "~/composables/useDynamicFonts";
+import ToastContainer from "~/components/common/ToastContainer.vue";
 
 // Get settings store for RTL support
 const settingsStore = useSettingsStore();
