@@ -11,33 +11,12 @@ export const paths = {
   minimalStore: 'https://mui.com/store/items/minimal-dashboard/',
   // AUTH
   auth: {
-    amplify: {
-      signIn: `${ROOTS.AUTH}/amplify/sign-in`,
-      verify: `${ROOTS.AUTH}/amplify/verify`,
-      signUp: `${ROOTS.AUTH}/amplify/sign-up`,
-      updatePassword: `${ROOTS.AUTH}/amplify/update-password`,
-      resetPassword: `${ROOTS.AUTH}/amplify/reset-password`,
-    },
+
     jwt: {
       signIn: `${ROOTS.AUTH}/jwt/sign-in`,
       signUp: `${ROOTS.AUTH}/jwt/sign-up`,
     },
-    firebase: {
-      signIn: `${ROOTS.AUTH}/firebase/sign-in`,
-      verify: `${ROOTS.AUTH}/firebase/verify`,
-      signUp: `${ROOTS.AUTH}/firebase/sign-up`,
-      resetPassword: `${ROOTS.AUTH}/firebase/reset-password`,
-    },
-    auth0: {
-      signIn: `${ROOTS.AUTH}/auth0/sign-in`,
-    },
-    supabase: {
-      signIn: `${ROOTS.AUTH}/supabase/sign-in`,
-      verify: `${ROOTS.AUTH}/supabase/verify`,
-      signUp: `${ROOTS.AUTH}/supabase/sign-up`,
-      updatePassword: `${ROOTS.AUTH}/supabase/update-password`,
-      resetPassword: `${ROOTS.AUTH}/supabase/reset-password`,
-    },
+
   },
   // DASHBOARD
   dashboard: {
@@ -128,7 +107,7 @@ export const dashboardNavItems: NavItem[] = [
         icon: 'mdi-numeric-5-circle'
       },
       {
-          key: 'group-two',
+        key: 'group-two',
         title: 'common.two',
         path: paths.dashboard.group.two,
         icon: 'mdi-numeric-6-circle'
@@ -145,7 +124,7 @@ export const dashboardNavItems: NavItem[] = [
     key: 'toast-demo',
     title: 'Toast Demo',
     path: paths.dashboard.toastDemo,
-    icon: 'mdi-toast'
+    icon: 'mdi-bell-alert'
   }
 ]
 

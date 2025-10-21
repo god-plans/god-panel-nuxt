@@ -1,5 +1,11 @@
 <template>
-  <BlankView :title="$t('pages.groups.six')" />
+  <v-container class="v-card my-4 rounded-lg">
+    <v-row>
+      <v-col cols="12">
+        <CommonBlank :title="$t('pages.groups.two')" />
+      </v-col>
+    </v-row>
+  </v-container>
 </template>
 
 <script setup lang="ts">
@@ -15,6 +21,6 @@ definePageMeta({
 
 // SEO
 useHead({
-  title: 'Group Six - God Panel'
+  title: 'Group Two - God Panel'
 })
 </script>

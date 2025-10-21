@@ -64,7 +64,10 @@
     "cyan": "Cyan",
     "blue": "Blue",
     "orange": "Orange",
-    "red": "Red"
+    "red": "Red",
+    "settingsTitle": "Settings",
+    "one": "One",
+    "two": "Two"
   },
   "nav": {
     "analytics": "Analytics",
