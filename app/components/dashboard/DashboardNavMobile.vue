@@ -5,6 +5,8 @@
     temporary
     :location="settingsStore.settings.direction === 'rtl' ? 'right' : 'left'"
     class="mobile-nav"
+    aria-label="Mobile navigation menu"
+    role="navigation"
   >
     <!-- Header -->
     <div class="nav-header">
@@ -36,6 +38,7 @@
           :active="isActive(item.path)"
           class="nav-item"
           :class="{ 'nav-item-active': isActive(item.path) }"
+          :aria-label="t(item.title)"
           @click="close"
         >
           <template #prepend>

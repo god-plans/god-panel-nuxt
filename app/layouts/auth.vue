@@ -70,7 +70,7 @@ const { t } = useI18n();
 }
 
 /* Responsive adjustments */
-@media (max-width: 768px) {
+@media (max-width: 959px) {
   .auth-header {
     padding: 12px 16px;
   }

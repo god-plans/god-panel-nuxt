@@ -3,6 +3,8 @@
     icon
     variant="text"
     size="small"
+    aria-label="Open settings"
+    title="Open settings"
     @click="settingsStore.onOpenDrawer"
   >
     <v-icon>mdi-cog</v-icon>

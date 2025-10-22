@@ -184,10 +184,12 @@ const { t } = useI18n();
 
 interface Props {
   mobile?: boolean;
+  isHorizontal?: boolean;
 }
 
 const props = withDefaults(defineProps<Props>(), {
   mobile: false,
+  isHorizontal: false,
 });
 
 defineEmits<{
@@ -366,7 +368,7 @@ const performLogout = async () => {
   margin-left: 0;
 }
 
-@media (max-width: 768px) {
+@media (max-width: 959px) {
   .search-field {
     display: none;
   }

@@ -5,6 +5,9 @@
     width="360"
     class="settings-drawer"
     temporary
+    aria-label="Settings panel"
+    role="dialog"
+    aria-modal="true"
   >
     <!-- Header -->
     <div class="settings-drawer__header">

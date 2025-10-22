@@ -440,7 +440,7 @@ watchEffect(() => {
 
 
 /* Mobile styles */
-@media (max-width: 768px) {
+@media (max-width: 959px) {
   .dashboard-nav {
     position: absolute;
     z-index: 1000;

@@ -50,25 +50,10 @@ export const useSettingsStore = defineStore('settings', () => {
       }
     } catch (error) {
       if (process.client) {
-        console.warn('Invalid settings in cookie, trying localStorage:', error)
+        console.warn('Invalid settings in cookie, using defaults:', error)
       }
     }
 
-    // Fallback to localStorage on client only
-    if (process.client) {
-      const stored = localStorage.getItem('settings')
-      if (stored) {
-        try {
-          const parsed = JSON.parse(stored)
-          const validated = settingsSchema.parse(parsed)
-          settings.value = { ...defaultSettings, ...validated }
-        } catch (error) {
-          console.warn('Invalid settings in localStorage, using defaults:', error)
-          // Clear corrupted localStorage data
-          localStorage.removeItem('settings')
-        }
-      }
-    }
   }
 
   const updateSettings = (newSettings: Partial<Settings>) => {
@@ -89,11 +74,6 @@ export const useSettingsStore = defineStore('settings', () => {
   const saveToStorage = () => {
     // Save to cookies for SSR support
     settingsCookie.value = settings.value
-
-    // Also save to localStorage on client for immediate persistence
-    if (process.client) {
-      localStorage.setItem('settings', JSON.stringify(settings.value))
-    }
   }
 
   // Drawer actions

@@ -7,7 +7,7 @@
     <MotionLazy>
     <!-- Mobile Navigation -->
     <DashboardNavMobile
-      v-model:open="mobileNavOpen"
+      v-model="mobileNavOpen"
       @close="closeMobileNav"
     />
 
@@ -15,17 +15,18 @@
     <div class="dashboard-layout" :class="{ 'compact-mode': settingsStore.settings.compactLayout, 'rtl-mode': settingsStore.settings.direction === 'rtl' }" :style="layoutVars">
     <!-- Navigation Sidebar -->
     <DashboardNav
-      v-if="!isHorizontalLayout"
+      v-if="!isHorizontalLayout && !mobile"
       :mini="isMiniLayout"
-      class="lg:block !hidden"
-    
+      class="lg:block "
+
       @toggle-mini="toggleNav"
       @open-mobile="openMobileNav"
     />
 
-    <!-- Top Navigation for Horizontal Layout -->
+    <!-- Top Navigation for Horizontal Layout and Mobile -->
     <DashboardHeader
-   
+      :is-horizontal="isHorizontalLayout"
+      :is-mobile="mobile"
       @toggle-nav="openMobileNav"
     />
 
@@ -61,6 +62,16 @@ const mobileNavOpen = ref(false)
 const isLoading = ref(false)
 const loadingProgress = ref(0)
 
+// Mobile detection
+const mobile = ref(false)
+onMounted(() => {
+  const checkMobile = () => {
+    mobile.value = window.innerWidth < 960
+  }
+  checkMobile()
+  window.addEventListener('resize', checkMobile)
+})
+
 const isHorizontalLayout = computed(() => settingsStore.settings.navLayout === 'horizontal')
 const isMiniLayout = computed(() => settingsStore.settings.navLayout === 'mini')
 
@@ -68,7 +79,7 @@ const layoutVars = computed(() => ({
   '--layout-transition-easing': 'linear',
   '--layout-transition-duration': '120ms',
   '--layout-nav-mini-width': '88px',
-  '--layout-nav-vertical-width': settingsStore.settings.compactLayout ? '260px' : '300px',
+  // '--layout-nav-vertical-width': settingsStore.settings.compactLayout ? '260px' : '300px',
   '--layout-nav-horizontal-height': settingsStore.settings.compactLayout ? '56px' : '64px',
   '--layout-dashboard-content-pt': settingsStore.settings.compactLayout ? '4px' : '8px',
   '--layout-dashboard-content-pb': settingsStore.settings.compactLayout ? '32px' : '64px',
@@ -131,21 +142,21 @@ onMounted(() => {
   transition: all var(--layout-transition-duration) var(--layout-transition-easing);
 }
 
-.dashboard-layout:has(.has-sidebar) {
+.dashboard-layout:has(.dashboard-nav:not(.nav-mini)) {
   padding-left: var(--layout-nav-vertical-width);
 }
 
-.dashboard-layout:has(.nav-mini) .has-sidebar {
+.dashboard-layout:has(.dashboard-nav.nav-mini) {
   padding-left: var(--layout-nav-mini-width);
 }
 
 /* RTL mode adjustments */
-.rtl-mode.dashboard-layout:has(.has-sidebar) {
+.rtl-mode.dashboard-layout:has(.dashboard-nav:not(.nav-mini)) {
   padding-left: 0;
   padding-right: var(--layout-nav-vertical-width);
 }
 
-.rtl-mode.dashboard-layout:has(.nav-mini) .has-sidebar {
+.rtl-mode.dashboard-layout:has(.dashboard-nav.nav-mini) {
   padding-left: 0;
   padding-right: var(--layout-nav-mini-width);
 }
@@ -155,34 +166,61 @@ onMounted(() => {
   --layout-spacing-reduced: 0.75;
 }
 
-.compact-mode .dashboard-layout:has(.has-sidebar) {
+.compact-mode .dashboard-layout:has(.dashboard-nav:not(.nav-mini)) {
   padding-left: var(--layout-nav-vertical-width);
 }
 
-.compact-mode .dashboard-layout:has(.nav-mini) .has-sidebar {
+.compact-mode .dashboard-layout:has(.dashboard-nav.nav-mini) {
   padding-left: var(--layout-nav-mini-width);
 }
 
 /* Compact + RTL mode adjustments */
-.compact-mode.rtl-mode.dashboard-layout:has(.has-sidebar) {
+.compact-mode.rtl-mode.dashboard-layout:has(.dashboard-nav:not(.nav-mini)) {
   padding-left: 0;
   padding-right: var(--layout-nav-vertical-width);
 }
 
-.compact-mode.rtl-mode.dashboard-layout:has(.nav-mini) .has-sidebar {
+.compact-mode.rtl-mode.dashboard-layout:has(.dashboard-nav.nav-mini) {
   padding-left: 0;
   padding-right: var(--layout-nav-mini-width);
 }
 
-@media (max-width: 768px) {
+@media (max-width: 959px) {
   .dashboard-layout {
-    padding-left: 0;
-    padding-right: 0;
+    padding-left: 16px !important;
+    padding-right: 16px !important;
   }
 
   .rtl-mode.dashboard-layout {
-    padding-left: 0;
-    padding-right: 0;
+    padding-left: 16px !important;
+    padding-right: 16px !important;
+  }
+
+  /* Mobile navigation adjustments */
+  .dashboard-layout:has(.dashboard-nav:not(.nav-mini)) {
+    padding-left: 16px !important;
+    padding-right: 16px !important;
+  }
+
+  .rtl-mode.dashboard-layout:has(.dashboard-nav:not(.nav-mini)) {
+    padding-left: 16px !important;
+    padding-right: 16px !important;
+  }
+
+  .dashboard-layout:has(.dashboard-nav.nav-mini) {
+    padding-left: 16px !important;
+    padding-right: 16px !important;
+  }
+
+  .rtl-mode.dashboard-layout:has(.dashboard-nav.nav-mini) {
+    padding-left: 16px !important;
+    padding-right: 16px !important;
+  }
+
+  /* Ensure proper spacing on mobile for all layout items */
+  .dashboard-layout > * {
+    margin-left: 0 !important;
+    margin-right: 0 !important;
   }
 }
 </style>

@@ -187,7 +187,7 @@ const currentYear = new Date().getFullYear()
 }
 
 /* Responsive */
-@media (max-width: 768px) {
+@media (max-width: 959px) {
   .footer-section {
     text-align: center;
     margin-bottom: 2rem;

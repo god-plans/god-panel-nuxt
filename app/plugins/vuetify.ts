@@ -1,4 +1,4 @@
-import { watch } from 'vue'
+import { watch, ref } from 'vue'
 import 'vuetify/styles'
 import { createVuetify } from 'vuetify'
 import * as components from 'vuetify/components'
@@ -7,6 +7,15 @@ import { aliases, mdi } from 'vuetify/iconsets/mdi'
 import { createTheme } from '~/theme/create-theme'
 
 export default defineNuxtPlugin((nuxtApp) => {
+  // Debounce utility function
+  const debounce = (func: Function, delay: number) => {
+    let timeoutId: NodeJS.Timeout
+    return (...args: any[]) => {
+      clearTimeout(timeoutId)
+      timeoutId = setTimeout(() => func.apply(null, args), delay)
+    }
+  }
+
   // Helper function to convert theme to Vuetify format
   const convertThemeToVuetify = (settings: any) => {
     const theme = createTheme(settings)
@@ -29,10 +38,10 @@ export default defineNuxtPlugin((nuxtApp) => {
         'on-secondary': palette.secondary?.contrastText || '#ffffff',
         'on-background': palette.text?.primary || '#212121',
         'on-surface': palette.text?.primary || '#212121',
-        'on-surface-variant': palette.text?.secondary || '#424242',
+        'on-surface-variant': palette.onSurfaceVariant || '#424242',
         'on-error': palette.error?.contrastText || '#ffffff',
-        'outline': palette.divider || '#e0e0e0',
-        'outline-variant': palette.divider || '#e0e0e0',
+        'outline': palette.outline || '#9e9e9e',
+        'outline-variant': palette.outlineVariant || '#e0e0e0',
       }
     }
   }
@@ -248,44 +257,54 @@ export default defineNuxtPlugin((nuxtApp) => {
 
   nuxtApp.vueApp.use(vuetify)
 
+  // Debounced theme update function
+  const updateTheme = debounce((newSettings: any) => {
+    // Update theme name
+    const themeName = newSettings.colorScheme
+    vuetify.theme.global.name.value = themeName
+
+    // Update both light and dark themes with new colors
+    const lightTheme = convertThemeToVuetify({ ...newSettings, colorScheme: 'light' })
+    const darkTheme = convertThemeToVuetify({ ...newSettings, colorScheme: 'dark' })
+
+    // Update theme colors - more reliable approach
+    if (vuetify.theme.themes.value.light) {
+      Object.entries(lightTheme.colors).forEach(([key, value]) => {
+        vuetify.theme.themes.value.light!.colors[key] = value
+      })
+      // Force theme update by setting the current theme again
+      vuetify.theme.global.name.value = 'light'
+    }
+
+    if (vuetify.theme.themes.value.dark) {
+      Object.entries(darkTheme.colors).forEach(([key, value]) => {
+        vuetify.theme.themes.value.dark!.colors[key] = value
+      })
+      // Force theme update by setting the current theme again
+      vuetify.theme.global.name.value = 'dark'
+    }
+
+    // Apply the current theme
+    vuetify.theme.global.name.value = themeName
+
+    // Update RTL setting
+    vuetify.rtl = newSettings.direction === 'rtl'
+
+    // Update document attributes
+    if (typeof document !== 'undefined') {
+      document.documentElement.setAttribute('dir', newSettings.direction)
+      if (newSettings.fontFamily) {
+        document.documentElement.style.setProperty('--v-theme-font-family', newSettings.fontFamily)
+      }
+    }
+  }, 100)
+
   // Watch for settings changes and update theme dynamically
   if (process.client) {
     const settingsStore = useSettingsStore()
     watch(
       () => settingsStore.settings,
-      (newSettings) => {
-        // Update theme name
-        const themeName = newSettings.colorScheme
-        vuetify.theme.global.name.value = themeName
-
-        // Update both light and dark themes with new colors
-        const lightTheme = convertThemeToVuetify({ ...newSettings, colorScheme: 'light' })
-        const darkTheme = convertThemeToVuetify({ ...newSettings, colorScheme: 'dark' })
-
-        // Update theme colors
-        if (vuetify.theme.themes.value.light) {
-          Object.entries(lightTheme.colors).forEach(([key, value]) => {
-            vuetify.theme.themes.value.light!.colors[key] = value
-          })
-        }
-
-        if (vuetify.theme.themes.value.dark) {
-          Object.entries(darkTheme.colors).forEach(([key, value]) => {
-            vuetify.theme.themes.value.dark!.colors[key] = value
-          })
-        }
-
-        // Update RTL setting
-        vuetify.rtl = newSettings.direction === 'rtl'
-
-        // Update document attributes
-        if (typeof document !== 'undefined') {
-          document.documentElement.setAttribute('dir', newSettings.direction)
-          if (newSettings.fontFamily) {
-            document.documentElement.style.setProperty('--v-theme-font-family', newSettings.fontFamily)
-          }
-        }
-      },
+      updateTheme,
       { deep: true, immediate: true }
     )
   }
