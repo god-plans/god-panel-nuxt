@@ -6,10 +6,10 @@
     :style="{
       borderBottom: `1px solid rgb(var(--v-theme-surface-variant))`,
     }"
-  >
+  > 
     <!-- Mobile menu button -->
     <v-app-bar-nav-icon
-      v-if="mobile"
+
       @click="$emit('toggle-nav')"
       class="d-lg-none"
     />

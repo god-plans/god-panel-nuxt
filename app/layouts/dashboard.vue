@@ -17,6 +17,8 @@
     <DashboardNav
       v-if="!isHorizontalLayout"
       :mini="isMiniLayout"
+      class="lg:block !hidden"
+    
       @toggle-mini="toggleNav"
       @open-mobile="openMobileNav"
     />

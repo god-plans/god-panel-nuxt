@@ -3,7 +3,7 @@
     :model-value="open"
     @update:model-value="$emit('update:open', $event)"
     temporary
-    location="left"
+    :location="settingsStore.settings.direction === 'rtl' ? 'right' : 'left'"
     class="mobile-nav"
   >
     <!-- Header -->
@@ -18,11 +18,11 @@
     <!-- User Info -->
     <div class="user-info">
       <v-avatar size="48" class="user-avatar">
-        <img :src="authStore.user?.photoURL || '/placeholder.svg'" :alt="authStore.displayName" />
+        <img :src="authStore.user?.photoURL || '/assets/images/avatar.webp'" :alt="authStore.displayName" />
       </v-avatar>
       <div class="user-details">
-        <div class="user-name">{{ authStore.displayName }}</div>
-        <div class="user-role">{{ authStore.userRole }}</div>
+        <div class="user-name">{{ authStore.displayName || 'Demo User' }}</div>
+        <div class="user-role">{{ authStore.userRole || 'User' }}</div>
       </div>
     </div>
 
@@ -149,8 +149,10 @@ import { dashboardNavItems, isActiveRoute, type NavItem } from '../../utils/rout
 import { useAuthStore } from '../../stores/auth'
 import LogoutConfirmDialog from '../common/LogoutConfirmDialog.vue'
 import Logo from '../common/Logo.vue'
+import { useSettingsStore } from '../../stores/settings'
 
 const { t } = useI18n()
+const settingsStore = useSettingsStore()
 
 interface Props {
   open: boolean
