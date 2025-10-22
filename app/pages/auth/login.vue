@@ -66,7 +66,7 @@
         <!-- Email Field -->
         <v-text-field
           v-model="form.email"
-          label="Email address"
+          :label="t('auth.email')"
           placeholder="godpanel"
           variant="outlined"
           density="comfortable"
@@ -82,7 +82,7 @@
           <v-text-field
             v-model="form.password"
             :label="t('auth.password')"
-            placeholder="6+ characters"
+            :placeholder="t('auth.passwordPlaceholder')"
             :type="passwordVisible ? 'text' : 'password'"
             variant="outlined"
             density="comfortable"
@@ -136,7 +136,7 @@ const errorMsg = ref('')
 
 // Form state
 const form = reactive<LoginForm>({
-  email: 'godpanel',
+  email: 'godpanel@test.com',
   password: 'god123'
 })
 

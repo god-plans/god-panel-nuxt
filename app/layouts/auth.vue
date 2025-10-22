@@ -5,7 +5,6 @@
       <div class="header-content">
         <!-- Settings Button -->
         <SettingsButton />
-
         <!-- Language Switcher -->
         <LanguageSwitcher />
       </div>
@@ -17,8 +16,8 @@
     <!-- Main Content -->
     <AuthMain layout-query="md">
       <AuthSection
-        title="Manage the job"
-        subtitle="More effectively with optimized workflows."
+        :title="t('auth.welcomeTitle')"
+        :subtitle="t('auth.welcomeSubtitle')"
         img-url="/assets/images/login.webp"
         layout-query="md"
       />
@@ -39,17 +38,19 @@ import AuthSection from "~/components/auth/Section.vue";
 import AuthContent from "~/components/auth/Content.vue";
 import SettingsButton from "~/components/theme/SettingsButton.vue";
 import LanguageSwitcher from "~/components/theme/LanguageSwitcher.vue";
+import { useI18n } from "vue-i18n";
+
+const { t } = useI18n();
 </script>
 
 <style scoped>
 .auth-header {
   position: fixed;
   top: 0;
-  
+
   right: 0;
   z-index: 10;
   padding: 16px 24px;
-
 }
 
 .logo-section {
@@ -75,7 +76,9 @@ import LanguageSwitcher from "~/components/theme/LanguageSwitcher.vue";
   }
 
   .header-content {
-    flex-direction: column;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
     gap: 12px;
   }
 
@@ -87,7 +90,9 @@ import LanguageSwitcher from "~/components/theme/LanguageSwitcher.vue";
 /* RTL support */
 [dir="rtl"] .header-content {
   direction: rtl;
-  flex-direction: row-reverse;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
 }
 
 [dir="rtl"] .help-section {

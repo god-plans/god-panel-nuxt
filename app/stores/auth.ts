@@ -154,7 +154,7 @@ export const useAuthStore = defineStore('auth', () => {
       id: 'demo-user-1',
       displayName: 'Demo User',
       email: 'demo@example.com',
-      photoURL: '/assets/images/avatar/avatar-1.svg',
+      photoURL: '/assets/images/avatar.webp',
       phoneNumber: '+1234567890',
       role: 'admin' as const,
       createdAt: new Date().toISOString(),

@@ -4,7 +4,7 @@
     elevation="1"
     class="dashboard-header"
     :style="{
-      borderBottom: `1px solid rgb(var(--v-theme-surface-variant))`
+      borderBottom: `1px solid rgb(var(--v-theme-surface-variant))`,
     }"
   >
     <!-- Mobile menu button -->
@@ -26,7 +26,7 @@
 
     <!-- Breadcrumbs for desktop -->
     <div v-if="!mobile" class="breadcrumbs">
-      <v-breadcrumbs :items="breadcrumbItems" >
+      <v-breadcrumbs :items="breadcrumbItems">
         <template #item="{ item }">
           <v-breadcrumbs-item
             :to="item.to"
@@ -52,23 +52,17 @@
       single-line
       prepend-inner-icon="mdi-magnify"
     >
-      
     </v-text-field>
-
-    <!-- Settings Button -->
-    <SettingsButton />
 
     <!-- Language Switcher -->
     <LanguageSwitcher />
+    <!-- Settings Button -->
+    <SettingsButton />
 
     <!-- Notifications -->
     <v-menu offset-y>
       <template #activator="{ props }">
-        <v-btn
-          icon
-          v-bind="props"
-          class="notification-btn"
-        >
+        <v-btn icon v-bind="props" class="notification-btn">
           <v-badge
             :content="notifications.length"
             :value="notifications.length > 0"
@@ -82,7 +76,9 @@
 
       <v-list class="notification-list">
         <v-list-item v-if="notifications.length === 0">
-          <v-list-item-title>{{ t('settings.noNewNotifications') }}</v-list-item-title>
+          <v-list-item-title>{{
+            t("settings.noNewNotifications")
+          }}</v-list-item-title>
         </v-list-item>
 
         <v-list-item
@@ -92,16 +88,25 @@
         >
           <template #prepend>
             <v-avatar size="32">
-              <v-icon :color="notification.color">{{ notification.icon }}</v-icon>
+              <v-icon :color="notification.color">{{
+                notification.icon
+              }}</v-icon>
             </v-avatar>
           </template>
           <v-list-item-title>{{ notification.title }}</v-list-item-title>
-          <v-list-item-subtitle>{{ notification.message }}</v-list-item-subtitle>
+          <v-list-item-subtitle>{{
+            notification.message
+          }}</v-list-item-subtitle>
         </v-list-item>
 
         <v-divider v-if="notifications.length > 0" />
-        <v-list-item v-if="notifications.length > 0" @click="viewAllNotifications">
-          <v-list-item-title class="text-primary">{{ t('settings.viewAllNotifications') }}</v-list-item-title>
+        <v-list-item
+          v-if="notifications.length > 0"
+          @click="viewAllNotifications"
+        >
+          <v-list-item-title class="text-primary">{{
+            t("settings.viewAllNotifications")
+          }}</v-list-item-title>
         </v-list-item>
       </v-list>
     </v-menu>
@@ -109,14 +114,10 @@
     <!-- User menu -->
     <v-menu offset-y>
       <template #activator="{ props }">
-        <v-btn
-          icon
-          v-bind="props"
-          class="user-btn"
-        >
+        <v-btn icon v-bind="props" class="user-btn">
           <v-avatar size="32">
             <img
-              :src="authStore.user?.photoURL || '/placeholder.svg'"
+              :src="authStore.user?.photoURL || '/assets/images/avatar.webp'"
               :alt="authStore.displayName"
             />
           </v-avatar>
@@ -128,13 +129,13 @@
           <template #prepend>
             <v-avatar size="40">
               <img
-                :src="authStore.user?.photoURL || '/placeholder.svg'"
+                :src="authStore.user?.photoURL || '/assets/images/avatar.webp'"
                 :alt="authStore.displayName"
               />
             </v-avatar>
           </template>
-          <v-list-item-title>{{ authStore.displayName }}</v-list-item-title>
-          <v-list-item-subtitle>{{ authStore.userEmail }}</v-list-item-subtitle>
+          <v-list-item-title>{{ authStore.displayName || 'Demo User' }}</v-list-item-title>
+          <v-list-item-subtitle>{{ authStore.userEmail || 'demo@example.com' }}</v-list-item-subtitle>
         </v-list-item>
 
         <v-divider />
@@ -143,14 +144,14 @@
           <template #prepend>
             <v-icon>mdi-account</v-icon>
           </template>
-          <v-list-item-title>{{ t('settings.profile') }}</v-list-item-title>
+          <v-list-item-title>{{ t("settings.profile") }}</v-list-item-title>
         </v-list-item>
 
         <v-list-item @click="goToSettings">
           <template #prepend>
             <v-icon>mdi-cog</v-icon>
           </template>
-          <v-list-item-title>{{ t('common.settings') }}</v-list-item-title>
+          <v-list-item-title>{{ t("common.settings") }}</v-list-item-title>
         </v-list-item>
 
         <v-divider />
@@ -159,118 +160,115 @@
           <template #prepend>
             <v-icon>mdi-logout</v-icon>
           </template>
-          <v-list-item-title>{{ t('common.logout') }}</v-list-item-title>
+          <v-list-item-title>{{ t("common.logout") }}</v-list-item-title>
         </v-list-item>
       </v-list>
     </v-menu>
 
     <!-- Logout Confirmation Dialog -->
-    <LogoutConfirmDialog
-      v-model="showLogoutDialog"
-      @confirm="performLogout"
-    />
+    <LogoutConfirmDialog v-model="showLogoutDialog" @confirm="performLogout" />
   </v-app-bar>
 </template>
 
 <script setup lang="ts">
-import { ref, computed } from 'vue'
-import { useI18n } from 'vue-i18n'
-import { useRouter, useRoute } from 'vue-router'
-import { generateBreadcrumbs } from '~/utils/routes'
-import { useAuthStore } from '~/stores/auth'
-import SettingsButton from '~/components/theme/SettingsButton.vue'
-import LanguageSwitcher from '~/components/theme/LanguageSwitcher.vue'
-import LogoutConfirmDialog from '~/components/common/LogoutConfirmDialog.vue'
+import { ref, computed } from "vue";
+import { useI18n } from "vue-i18n";
+import { useRouter, useRoute } from "vue-router";
+import { generateBreadcrumbs } from "~/utils/routes";
+import { useAuthStore } from "~/stores/auth";
+import SettingsButton from "~/components/theme/SettingsButton.vue";
+import LanguageSwitcher from "~/components/theme/LanguageSwitcher.vue";
+import LogoutConfirmDialog from "~/components/common/LogoutConfirmDialog.vue";
 
-const { t } = useI18n()
+const { t } = useI18n();
 
 interface Props {
-  mobile?: boolean
+  mobile?: boolean;
 }
 
 const props = withDefaults(defineProps<Props>(), {
-  mobile: false
-})
+  mobile: false,
+});
 
 defineEmits<{
-  'toggle-nav': []
-}>()
+  "toggle-nav": [];
+}>();
 
-const router = useRouter()
-const route = useRoute()
-const authStore = useAuthStore()
+const router = useRouter();
+const route = useRoute();
+const authStore = useAuthStore();
 
 // Reactive data
-const searchQuery = ref('')
-const showLogoutDialog = ref(false)
+const searchQuery = ref("");
+const showLogoutDialog = ref(false);
 
 // Breadcrumbs
 const breadcrumbItems = computed(() => {
-  const breadcrumbs = generateBreadcrumbs(route.path)
+  const breadcrumbs = generateBreadcrumbs(route.path);
   return breadcrumbs.map((crumb, index) => ({
-    title: crumb.title.includes('.') ? t(crumb.title) : crumb.title,
+    title: crumb.title.includes(".") ? t(crumb.title) : crumb.title,
     to: index === breadcrumbs.length - 1 ? undefined : crumb.path,
-    disabled: index === breadcrumbs.length - 1
-  }))
-})
+    disabled: index === breadcrumbs.length - 1,
+  }));
+});
 
 // Mock notifications - in real app, this would come from API
 const notifications = ref([
   {
     id: 1,
-    title: 'New order received',
-    message: 'Order #1234 has been placed',
-    icon: 'mdi-cart',
-    color: 'success',
-    read: false
+    title: "New order received",
+    message: "Order #1234 has been placed",
+    icon: "mdi-cart",
+    color: "success",
+    read: false,
   },
   {
     id: 2,
-    title: 'Payment failed',
-    message: 'Payment for order #1233 failed',
-    icon: 'mdi-credit-card-off',
-    color: 'error',
-    read: false
+    title: "Payment failed",
+    message: "Payment for order #1233 failed",
+    icon: "mdi-credit-card-off",
+    color: "error",
+    read: false,
   },
   {
     id: 3,
-    title: 'New user registered',
-    message: 'John Doe joined your platform',
-    icon: 'mdi-account-plus',
-    color: 'info',
-    read: false
-  }
-])
+    title: "New user registered",
+    message: "John Doe joined your platform",
+    icon: "mdi-account-plus",
+    color: "info",
+    read: false,
+  },
+]);
 
 // Methods
 const markAsRead = (id: number) => {
-  const notification = notifications.value.find(n => n.id === id)
+  const notification = notifications.value.find((n) => n.id === id);
   if (notification) {
-    notification.read = true
+    notification.read = true;
   }
-}
+};
 
 const viewAllNotifications = () => {
-  router.push('/dashboard/notifications')
-}
+  router.push("/dashboard/notifications");
+};
 
 const goToProfile = () => {
-  router.push('/dashboard/profile')
-}
+  router.push("/dashboard/profile");
+};
 
 const goToSettings = () => {
-  router.push('/dashboard/settings')
-}
+  router.push("/dashboard/settings");
+};
 
 const handleLogout = () => {
-  showLogoutDialog.value = true
-}
+  showLogoutDialog.value = true;
+};
 
 const performLogout = async () => {
-  showLogoutDialog.value = false
-  await authStore.logout()
-  await router.push('/auth/login')
-}
+  showLogoutDialog.value = false;
+  await authStore.logout();
+  await router.push("/auth/login");
+};
 </script>
 
 <style scoped>

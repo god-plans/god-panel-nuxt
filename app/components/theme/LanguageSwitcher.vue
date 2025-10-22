@@ -47,20 +47,12 @@ function set(lang) {
     <template v-slot:activator="{ props }">
       <button type="button" class="flex items-center gap-x-2" v-bind="props">
         <div v-if="locale === 'en'" class="flex items-center gap-x-2">
-          <Icon name="circle-flags:us" class="size-6" />
-          <p
-            v-if="showLang"
-            class="text-sm text-black dark:!text-white lg:block hidden"
-          >
+          <p v-if="showLang" class="text-sm dark:!text-white lg:block hidden">
             English (US)
           </p>
         </div>
         <div v-else class="flex items-center gap-x-2">
-          <Icon name="circle-flags:ir" class="size-6" />
-          <p
-            v-if="showLang"
-            class="text-sm text-black dark:!text-white lg:block hidden"
-          >
+          <p v-if="showLang" class="text-sm dark:!text-white lg:block hidden">
             Farsi (IR)
           </p>
         </div>
@@ -72,20 +64,18 @@ function set(lang) {
       </button>
     </template>
     <section
-      class="flex flex-col justify-start items-start gap-2 sm:gap-4 bg-white dark:!bg-gray-900 p-4 rounded-xl mt-3 border-1 border-solid border-neutral-100 dark:!border-neutral-400"
+      class="flex flex-col justify-start items-start gap-2 bg-white dark:!bg-gray-900 p-4 rounded-lg mt-3 border-1 border-solid border-neutral-100 dark:!border-neutral-400"
     >
       <button
         class="flex items-center gap-x-1 text-black dark:!text-white"
         @click="set('en')"
       >
-        <Icon name="circle-flags:us" size="1.25rem" />
         <p>English (US)</p>
       </button>
       <button
         @click="set('fa')"
         class="flex items-center gap-x-1 text-black dark:!text-white"
       >
-        <Icon name="circle-flags:ir" size="1.25rem" />
         <p>Farsi (IR)</p>
       </button>
     </section>

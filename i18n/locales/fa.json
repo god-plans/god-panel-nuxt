@@ -93,7 +93,10 @@
     "logoutConfirmNote": "برای دسترسی به داشبورد خود نیاز به ورود مجدد دارید.",
     "welcomeTitle": "مدیریت کار",
     "welcomeSubtitle": "به طور مؤثرتری با گردش کار بهینه شده.",
-    "loginFailed": "ورود ناموفق بود. لطفاً دوباره امتحان کنید."
+    "loginFailed": "ورود ناموفق بود. لطفاً دوباره امتحان کنید.",
+    "email": "ایمیل",
+    "password": "رمز عبور",
+    "passwordPlaceholder": "6+ کاراکتر"
   },
   "dashboard": {
     "welcome": "به داشبورد خوش آمدید",
@@ -212,31 +215,7 @@
     "orange": "نارنجی",
     "red": "قرمز"
   },
-  "auth": {
-    "or": "یا",
-    "demoCredentials": "استفاده کنید",
-    "demoCredentialsWith": "با رمز عبور",
-    "logoutConfirm": "آیا مطمئن هستید که می‌خواهید خارج شوید؟",
-    "logoutConfirmTitle": "تأیید خروج",
-    "logoutConfirmMessage": "آیا مطمئن هستید که می‌خواهید از حساب خود خارج شوید؟",
-    "logoutConfirmNote": "برای دسترسی به داشبورد خود نیاز به ورود مجدد دارید.",
-    "welcomeBack": "خوش آمدید!",
-    "signInToAccount": "به حساب خود وارد شوید",
-    "signIn": "ورود",
-    "forgotPassword": "رمز عبور را فراموش کرده اید؟",
-    "dontHaveAccount": "حساب کاربری ندارید؟",
-    "signUp": "ثبت نام",
-    "createAccount": "ایجاد حساب",
-    "alreadyHaveAccount": "قبلاً حساب کاربری دارید؟",
-    "signInHere": "اینجا وارد شوید",
-    "resetPassword": "بازنشانی رمز عبور",
-    "enterEmailToReset": "ایمیل خود را برای بازنشانی رمز عبور وارد کنید",
-    "sendResetLink": "ارسال لینک بازنشانی",
-    "backToSignIn": "بازگشت به ورود",
-    "passwordResetSent": "لینک بازنشانی رمز عبور به ایمیل شما ارسال شد",
-    "invalidCredentials": "ایمیل یا رمز عبور نامعتبر",
-    "accountCreated": "حساب کاربری با موفقیت ایجاد شد"
-  },
+
   "pages": {
     "dashboard": {
       "welcomeBack": "خوش آمدید!",

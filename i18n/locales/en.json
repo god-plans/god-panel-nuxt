@@ -103,7 +103,10 @@
     "logoutConfirmNote": "You will need to sign in again to access your dashboard.",
     "welcomeTitle": "Manage the job",
     "welcomeSubtitle": "More effectively with optimized workflows.",
-    "loginFailed": "Login failed. Please try again."
+    "loginFailed": "Login failed. Please try again.",
+    "email": "Email",
+    "password": "Password",
+    "passwordPlaceholder": "6+ characters"
   },
   "dashboard": {
     "welcome": "Welcome to Dashboard",
@@ -222,29 +225,7 @@
     "orange": "Orange",
     "red": "Red"
   },
-  "auth": {
-    "or": "OR",
-    "demoCredentials": "Use",
-    "demoCredentialsWith": "with password",
-    "logoutConfirm": "Are you sure you want to logout?",
-    "logoutConfirmTitle": "Confirm Logout",
-    "logoutConfirmMessage": "Are you sure you want to log out of your account?",
-    "logoutConfirmNote": "You will need to sign in again to access your dashboard.",
-    "welcomeBack": "Welcome Back",
-    "signInToAccount": "Sign in to your account",
-    "signIn": "Sign In",
-    "forgotPassword": "Forgot Password?",
-    "dontHaveAccount": "Don't have an account?",
-    "signUp": "Sign Up",
-    "createAccount": "Create Account",
-    "alreadyHaveAccount": "Already have an account?",
-    "signInHere": "Sign in here",
-    "resetPassword": "Reset Password",
-    "enterEmailToReset": "Enter your email to reset your password",
-    "sendResetLink": "Send Reset Link",
-    "backToSignIn": "Back to Sign In",
-    "passwordResetSent": "Password reset link sent to your email"
-  },
+
   "pages": {
     "dashboard": {
       "welcomeBack": "Welcome back!",
