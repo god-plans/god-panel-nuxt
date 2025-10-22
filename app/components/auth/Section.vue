@@ -37,7 +37,7 @@ withDefaults(defineProps<Props>(), {
 
 <style scoped>
 .auth-section {
-  background: linear-gradient(135deg, rgba(var(--v-theme-background-default, 255, 255, 255), 0.92) 0%, rgba(var(--v-theme-background-default, 255, 255, 255), 0.92) 100%), url('/assets/background/background-3-blur.webp');
+  background-color: rgb(var(--v-theme-background-default, #ffffff));
   background-size: cover;
   background-position: center;
   padding: 16px;

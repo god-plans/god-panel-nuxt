@@ -35,8 +35,7 @@
       </DashboardMain>
     </div>
 
-      <!-- Settings Drawer -->
-      <SettingsDrawer />
+   
     </MotionLazy>
   </div>
 </template>
@@ -47,7 +46,6 @@ import DashboardContent from '~/layouts/dashboard/content.vue'
 import DashboardNav from '~/components/dashboard/DashboardNav.vue'
 import DashboardNavMobile from '~/components/dashboard/DashboardNavMobile.vue'
 import DashboardHeader from '~/components/dashboard/DashboardHeader.vue'
-import SettingsDrawer from '~/components/settings/drawer/SettingsDrawer.vue'
 import ProgressBar from '~/components/common/ProgressBar.vue'
 import MotionLazy from '~/components/common/MotionLazy.vue'
 import { useSettingsStore } from '~/stores/settings'

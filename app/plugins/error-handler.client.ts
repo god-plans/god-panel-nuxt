@@ -84,16 +84,23 @@ class ErrorHandler {
     // Handle Vue warnings in development
     if (process.dev) {
       const originalWarn = console.warn
+      const self = this // Capture the ErrorHandler instance
       console.warn = (...args) => {
         originalWarn.apply(console, args)
 
         // Log Vue warnings as low severity errors
         if (args[0]?.includes?.('[Vue warn]')) {
-          this.logError({
-            id: this.generateId(),
+          self.logError({
+            id: self.generateId(),
             type: ErrorType.RUNTIME,
             severity: ErrorSeverity.LOW,
-            message: args.join(' '),
+            // Safely convert all args to strings before joining
+            message: args.map(arg => {
+              if (typeof arg === 'symbol') {
+                return arg.toString() // Convert Symbol to string
+              }
+              return String(arg) // Convert other types to string
+            }).join(' '),
             timestamp: new Date(),
             context: { source: 'vue-warn' }
           })
@@ -279,9 +286,11 @@ class ErrorHandler {
     if (error.severity === ErrorSeverity.LOW) return
 
     // Show error toast
-    $toast.error(toastMessage, {
-      duration: error.severity === ErrorSeverity.CRITICAL ? 10000 : 5000
-    })
+    if ($toast && typeof ($toast as any).error === 'function') {
+      ($toast as any).error(toastMessage, {
+        duration: error.severity === ErrorSeverity.CRITICAL ? 10000 : 5000
+      })
+    }
   }
 
   // Report error to external service (Sentry, LogRocket, etc.)

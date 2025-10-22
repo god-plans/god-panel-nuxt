@@ -1,13 +1,40 @@
 <template>
+  <!--  "auth": {
+    "welcomeBack": "خوش آمدید",
+    "signInToAccount": "به حساب خود وارد شوید",
+    "signIn": "ورود",
+    "signInLoading": "در حال ورود...",
+    "forgotPassword": "رمز عبور را فراموش کرده اید؟",
+    "dontHaveAccount": "حساب کاربری ندارید؟",
+    "signUp": "ثبت نام",
+    "createAccount": "ایجاد حساب",
+    "alreadyHaveAccount": "قبلاً حساب کاربری دارید؟",
+    "signInHere": "اینجا وارد شوید",
+    "resetPassword": "بازنشانی رمز عبور",
+    "enterEmailToReset": "ایمیل خود را برای بازنشانی رمز عبور وارد کنید",
+    "sendResetLink": "ارسال لینک بازنشانی",
+    "backToSignIn": "بازگشت به ورود",
+    "passwordResetSent": "لینک بازنشانی رمز عبور به ایمیل شما ارسال شد",
+    "invalidCredentials": "ایمیل یا رمز عبور نامعتبر",
+    "accountCreated": "حساب کاربری با موفقیت ایجاد شد",
+    "demoCredentials": "استفاده کنید",
+    "demoCredentialsWith": "با رمز عبور",
+    "logoutConfirm": "آیا مطمئن هستید که می‌خواهید خارج شوید؟",
+    "logoutConfirmTitle": "تأیید خروج",
+    "logoutConfirmMessage": "آیا مطمئن هستید که می‌خواهید از حساب خود خارج شوید؟",
+    "logoutConfirmNote": "برای دسترسی به داشبورد خود نیاز به ورود مجدد دارید.",
+    "welcomeTitle": "مدیریت کار",
+    "welcomeSubtitle": "به طور مؤثرتری با گردش کار بهینه شده.",
+    "log -->
   <div class="login-page">
     <!-- Form Header -->
     <div class="form-header">
-      <h5 class="form-title">Sign in to your account</h5>
+      <h5 class="form-title">{{ t('auth.signInToAccount') }}</h5>
 
       <div class="register-link">
-        <span class="register-text">Don't have an account?</span>
+        <span class="register-text">{{ t('auth.dontHaveAccount') }}</span>
         <NuxtLink to="/auth/register" class="register-link-text">
-          Sign Up
+          {{ t('auth.signUp') }}
         </NuxtLink>
       </div>
     </div>
@@ -19,7 +46,7 @@
       density="comfortable"
       class="info-alert"
     >
-      Use <strong>{{ form.email }}</strong> with password <strong>{{ form.password }}</strong>
+      {{ t('auth.demoCredentialsWith') }} <strong>{{ form.email }}</strong> {{ t('auth.demoCredentials') }} <strong>{{ form.password }}</strong>
     </v-alert>
 
     <!-- Error Alert -->
@@ -49,12 +76,12 @@
         <!-- Password Field -->
         <div class="password-field">
           <NuxtLink to="/auth/forgot-password" class="forgot-link">
-            Forgot Password?
+            {{ t('auth.forgotPassword') }}
           </NuxtLink>
 
           <v-text-field
             v-model="form.password"
-            label="Password"
+            :label="t('auth.password')"
             placeholder="6+ characters"
             :type="passwordVisible ? 'text' : 'password'"
             variant="outlined"
@@ -85,7 +112,7 @@
           :loading="isSubmitting"
           class="signin-btn"
         >
-          {{ isSubmitting ? 'Signing in...' : 'Sign in' }}
+          {{ isSubmitting ? t('auth.signInLoading') : t('auth.signIn') }}
         </v-btn>
       </form>
     </div>
@@ -95,6 +122,8 @@
 <script setup lang="ts">
 import { reactive, ref, onMounted } from 'vue'
 import { loginSchema, type LoginForm } from '~/types/validation'
+import { useI18n } from 'vue-i18n'
+const { t } = useI18n()
 
 const authStore = useAuthStore()
 const router = useRouter()
@@ -157,14 +186,7 @@ definePageMeta({
 
 // SEO
 useHead({
-  title: 'Login - God Panel'
-})
-
-// Redirect if already authenticated
-onMounted(() => {
-  if (authStore.isAuthenticated) {
-    router.push('/dashboard')
-  }
+  title: t('auth.signInToAccount') + ' - God Panel'
 })
 </script>
 

@@ -100,9 +100,7 @@ const getIcon = (iconName: string) => {
   opacity: 0.7;
 }
 
-.base-option__switch {
-  margin-right: -12px;
-}
+
 
 .base-option__bottom {
   display: flex;

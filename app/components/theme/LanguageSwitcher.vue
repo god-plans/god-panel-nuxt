@@ -1,53 +1,95 @@
+<script setup>
+import { useLocale } from "vuetify";
+
+const { t, setLocale, locale } = useI18n();
+const langFromCookie = useCookie("lang");
+const { current } = useLocale();
+
+function changeLocale(locale) {
+  current.value = locale;
+}
+
+const props = defineProps({
+  showLang: {
+    type: Boolean,
+    default: true,
+  },
+});
+
+// watch
+watch(
+  () => locale,
+  (newVal, oldVal) => {
+    // Only update Vuetify locale when i18n locale actually changes
+    if (newVal !== oldVal) {
+      changeLocale(newVal);
+    }
+  },
+  { immediate: false }
+);
+
+function set(lang) {
+  // Prevent unnecessary updates if already set
+  if (locale.value !== lang) {
+    // Clear any reload flags before setting new locale
+    if (typeof window !== "undefined") {
+      sessionStorage.removeItem("locale_reload_triggered");
+    }
+
+    setLocale(lang);
+    langFromCookie.value = lang;
+  }
+}
+</script>
+
 <template>
   <v-menu>
-    <template #activator="{ props }">
-      <v-btn
-        icon
-        variant="text"
-        size="small"
-        v-bind="props"
-      >
-        <v-icon>mdi-translate</v-icon>
-      </v-btn>
+    <template v-slot:activator="{ props }">
+      <button type="button" class="flex items-center gap-x-2" v-bind="props">
+        <div v-if="locale === 'en'" class="flex items-center gap-x-2">
+          <Icon name="circle-flags:us" class="size-6" />
+          <p
+            v-if="showLang"
+            class="text-sm text-black dark:!text-white lg:block hidden"
+          >
+            English (US)
+          </p>
+        </div>
+        <div v-else class="flex items-center gap-x-2">
+          <Icon name="circle-flags:ir" class="size-6" />
+          <p
+            v-if="showLang"
+            class="text-sm text-black dark:!text-white lg:block hidden"
+          >
+            Farsi (IR)
+          </p>
+        </div>
+        <Icon
+          v-if="showLang"
+          name="tabler:chevron-down"
+          class="h-5 w-5 lg:!block !hidden"
+        />
+      </button>
     </template>
-
-    <v-list>
-      <v-list-item
-        v-for="locale in availableLocales"
-        :key="locale.code"
-        @click="switchLocale(locale.code)"
-        :class="{ 'v-list-item--active': locale.code === currentLocale }"
+    <section
+      class="flex flex-col justify-start items-start gap-2 sm:gap-4 bg-white dark:!bg-gray-900 p-4 rounded-xl mt-3 border-1 border-solid border-neutral-100 dark:!border-neutral-400"
+    >
+      <button
+        class="flex items-center gap-x-1 text-black dark:!text-white"
+        @click="set('en')"
       >
-        <v-list-item-title>{{ locale.name }}</v-list-item-title>
-        <v-list-item-action v-if="locale.code === currentLocale">
-          <v-icon>mdi-check</v-icon>
-        </v-list-item-action>
-      </v-list-item>
-    </v-list>
+        <Icon name="circle-flags:us" size="1.25rem" />
+        <p>English (US)</p>
+      </button>
+      <button
+        @click="set('fa')"
+        class="flex items-center gap-x-1 text-black dark:!text-white"
+      >
+        <Icon name="circle-flags:ir" size="1.25rem" />
+        <p>Farsi (IR)</p>
+      </button>
+    </section>
   </v-menu>
 </template>
 
-<script setup lang="ts">
-import { computed } from 'vue'
-import { useI18n } from 'vue-i18n'
-
-const { $i18n } = useNuxtApp()
-const localeCookie = useCookie('locale', { default: () => 'en' })
-
-const currentLocale = computed(() => $i18n.locale.value)
-
-const availableLocales = [
-  { code: 'en', name: 'English' },
-  { code: 'fa', name: 'فارسی' }
-]
-
-const switchLocale = async (locale: string) => {
-  // Update i18n locale
-  $i18n.locale.value = locale
-
-  // Save to cookie for persistence
-  localeCookie.value = locale
-
-  // Direction, lang attributes, and settings are handled automatically by the i18n-direction plugin
-}
-</script>
+<style></style>

@@ -20,6 +20,8 @@
 
       <!-- Toast notification container -->
       <ToastContainer />
+      <!-- Settings Drawer -->
+      <SettingsDrawer />
     </v-app>
   </div>
 </template>
@@ -33,6 +35,8 @@ import { reactive, provide, onMounted, onErrorCaptured, watch } from "vue";
 import { useSettingsStore } from "~/stores/settings";
 import { useDynamicFonts } from "~/composables/useDynamicFonts";
 import ToastContainer from "~/components/common/ToastContainer.vue";
+import SettingsDrawer from '~/components/settings/drawer/SettingsDrawer.vue'
+
 
 // Get settings store for RTL support
 const settingsStore = useSettingsStore();
@@ -75,4 +79,3 @@ onErrorCaptured((error) => {
   snackbar.show = true;
 });
 </script>
-

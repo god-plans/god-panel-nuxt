@@ -3,21 +3,15 @@
     <!-- Top Header -->
     <div class="auth-header">
       <div class="header-content">
-        <div class="help-section">
-          <span class="help-text">Need help?</span>
-          <v-btn icon size="small" rounded="lg">
-            <v-icon size="20">mdi-help-circle-outline</v-icon>
-          </v-btn>
-        </div>
-        <div class="logo-section">
-          <v-img
-            src="/logo-single.svg"
-            width="40"
-            height="40"
-            class="logo"
-          />
-        </div>
+        <!-- Settings Button -->
+        <SettingsButton />
+
+        <!-- Language Switcher -->
+        <LanguageSwitcher />
       </div>
+    </div>
+    <div class="logo-section">
+      <v-img src="/logo-single.svg" width="40" height="40" class="logo" />
     </div>
 
     <!-- Main Content -->
@@ -40,47 +34,22 @@
 
 <script setup lang="ts">
 // import SettingsDrawer from '~/components/settings/drawer/SettingsDrawer.vue'
-import AuthMain from '~/components/auth/Main.vue'
-import AuthSection from '~/components/auth/Section.vue'
-import AuthContent from '~/components/auth/Content.vue'
+import AuthMain from "~/components/auth/Main.vue";
+import AuthSection from "~/components/auth/Section.vue";
+import AuthContent from "~/components/auth/Content.vue";
+import SettingsButton from "~/components/theme/SettingsButton.vue";
+import LanguageSwitcher from "~/components/theme/LanguageSwitcher.vue";
 </script>
 
 <style scoped>
-.auth-layout {
-  min-height: 100vh;
-  background: rgb(var(--v-theme-background-default, #ffffff));
-  position: relative;
-  overflow: hidden;
-  transition: background-color 0.3s ease;
-}
-
 .auth-header {
   position: fixed;
   top: 0;
-  left: 0;
+  
   right: 0;
   z-index: 10;
   padding: 16px 24px;
-}
 
-.header-content {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  max-width: 1200px;
-  margin: 0 auto;
-}
-
-.help-section {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-
-.help-text {
-  color: rgb(var(--v-theme-on-background, #212b36));
-  font-size: 14px;
-  font-weight: 500;
 }
 
 .logo-section {

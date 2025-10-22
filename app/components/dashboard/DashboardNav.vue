@@ -49,7 +49,7 @@
         <v-list-item
           v-if="!item.children"
           :to="item.path"
-          :active="isActive(item.path)"
+          
           class="nav-item"
           :class="{ 'nav-item-active': isActive(item.path) }"
         >
@@ -109,7 +109,7 @@
               v-for="child in item.children"
               :key="child.key"
               :to="child.path"
-              :active="isActive(child.path)"
+             
               class="nav-subitem"
               :class="{ 'nav-subitem-active': isActive(child.path) }"
             >
@@ -136,16 +136,7 @@
     <!-- Footer Section -->
     <template #append>
       <div class="nav-footer">
-        <v-list density="compact">
-          <v-list-item @click="handleLogout" class="nav-item">
-            <template #prepend>
-              <v-icon>mdi-logout</v-icon>
-            </template>
-            <v-list-item-title v-if="!mini || mobile">
-              {{ t('common.logout') }}
-            </v-list-item-title>
-          </v-list-item>
-        </v-list>
+
       </div>
     </template>
   </v-navigation-drawer>
@@ -226,11 +217,7 @@ watchEffect(() => {
   initializeExpandedGroups()
 })
 
-// Handle logout
-const handleLogout = async () => {
-  await authStore.logout()
-  await router.push('/auth/login')
-}
+
 </script>
 
 <style scoped>
@@ -450,44 +437,7 @@ const handleLogout = async () => {
   padding-right: 8px;
 }
 
-/* RTL mode styles */
-.nav-rtl .nav-header {
-  flex-direction: row-reverse;
-}
 
-.nav-rtl .toggle-btn {
-  order: -1;
-  margin-left: 0;
-  margin-right: auto;
-}
-
-.nav-rtl .nav-item {
-  flex-direction: row-reverse;
-  text-align: right;
-}
-
-.nav-rtl .nav-title {
-  text-align: right;
-}
-
-.nav-rtl .mobile-header {
-  flex-direction: row-reverse;
-}
-
-.nav-rtl .mobile-menu-btn {
-  margin-left: 12px;
-  margin-right: 0;
-}
-
-.nav-rtl .nav-sublist {
-  padding-left: 8px;
-  padding-right: 16px;
-}
-
-.nav-rtl .nav-subitem {
-  padding-left: 12px;
-  padding-right: 12px;
-}
 
 /* Mobile styles */
 @media (max-width: 768px) {

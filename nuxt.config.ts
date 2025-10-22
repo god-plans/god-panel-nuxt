@@ -11,7 +11,8 @@ export default defineNuxtConfig({
   modules: [
     '@nuxtjs/tailwindcss',
     '@pinia/nuxt',
-    '@nuxtjs/color-mode'
+    '@nuxtjs/color-mode',
+    "@nuxtjs/i18n",
   ],
 
   // Auto-imports for better DX
@@ -112,10 +113,40 @@ export default defineNuxtConfig({
         { name: 'theme-color', content: '#6366f1' }
       ],
       link: [
-        { rel: 'icon', type: 'image/svg+xml', href: '/logo-gods-projects-professional-icon.svg' },
-        { rel: 'apple-touch-icon', href: '/logo-gods-projects-professional-icon.svg' }
+        { rel: 'icon', type: 'image/svg+xml', href: '/logo.svg' },
+        { rel: 'apple-touch-icon', href: '/logo.svg' }
       ]
     }
   },
+  i18n: {
+    locales: [
+      {
+        code: "fa",
+        language: "fa-IR",
+        dir: "rtl",
+
+        files: [
+          "fa.json",
+
+        ],
+      },
+      {
+        code: "en",
+        language: "en-US",
+        files: [
+          "en.json",
+        ],
+        dir: "ltr",
+      },
+    ],
+    strategy: "no_prefix", // 'prefix_except_default', 'prefix', 'no_prefix', 'prefix_and_default',
+    defaultLocale: "en",
+    detectBrowserLanguage: false,
+
+    langDir: "./locales/",
+
+  },
+
+
 
 })
