@@ -5,16 +5,17 @@
     </div>
 
     <div class="presets-options__grid">
-      <button
+        <button
         v-for="option in options"
-        :key="option.name"
+        :key="option.key || option.name"
         type="button"
         class="preset-option"
-        :class="{ 'preset-option--selected': value === option.name }"
-        :style="{ color: option.value, ...(value === option.name && { backgroundColor: `${option.value}14` }) }"
-        @click="handleClick(option.name)"
+        :class="{ 'preset-option--selected': value === (option.key || option.name) }"
+        :style="{ color: option.value, ...(value === (option.key || option.name) && { backgroundColor: `${option.value}14` }) }"
+        @click="handleClick(option.key || option.name)"
       >
         <v-icon class="preset-option__icon">mdi-view-dashboard-outline</v-icon>
+        <span class="preset-option__label">{{ option.name }}</span>
       </button>
     </div>
   </div>
@@ -29,6 +30,7 @@ const { t } = useI18n()
 interface PresetOption {
   name: string
   value: string
+  key?: string
 }
 
 interface Props {
@@ -82,16 +84,18 @@ const handleClick = (value: string) => {
 }
 
 .preset-option {
-  height: 64px;
-  padding: 0;
+  height: 80px;
+  padding: 8px;
   border-radius: 12px;
   border: none;
   background: transparent;
   transition: all 0.2s ease;
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
   cursor: pointer;
+  gap: 4px;
 }
 
 .preset-option:hover {
@@ -106,5 +110,18 @@ const handleClick = (value: string) => {
 .preset-option__icon {
   width: 28px;
   height: 28px;
+}
+
+.preset-option__label {
+  font-size: 0.75rem;
+  font-weight: 500;
+  margin-top: 4px;
+  color: rgb(var(--v-theme-on-surface));
+  opacity: 0.8;
+}
+
+.preset-option--selected .preset-option__label {
+  opacity: 1;
+  font-weight: 600;
 }
 </style>

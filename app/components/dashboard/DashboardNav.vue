@@ -49,21 +49,34 @@
         <v-list-item
           v-if="!item.children"
           :to="item.path"
-          
+
           class="nav-item"
           :class="{ 'nav-item-active': isActive(item.path) }"
         >
           <template v-if="mini && !mobile" #default>
             <v-icon size="20">{{ item.icon }}</v-icon>
           </template>
+          <template v-else-if="settingsStore.settings.direction === 'rtl'" #append>
+            <v-icon size="20">{{ item.icon }}</v-icon>
+          </template>
           <template v-else #prepend>
             <v-icon size="20">{{ item.icon }}</v-icon>
           </template>
-          <v-list-item-title v-if="!mini || mobile" class="nav-title">
+          <v-list-item-title v-if="!mini || mobile" class="nav-title" :class="{ 'text-right': settingsStore.settings.direction === 'rtl' }">
             {{ t(item.title) }}
           </v-list-item-title>
-          <template #append v-if="item.badge && (!mini || mobile)">
+          <template #prepend>
             <v-chip
+              v-if="settingsStore.settings.direction === 'rtl' && item.badge && (!mini || mobile)"
+              :text="item.badge"
+              size="small"
+              color="primary"
+              variant="flat"
+            />
+          </template>
+          <template #append>
+            <v-chip
+              v-if="settingsStore.settings.direction !== 'rtl' && item.badge && (!mini || mobile)"
               :text="item.badge"
               size="small"
               color="primary"
@@ -82,14 +95,28 @@
             <template v-if="mini && !mobile" #default>
               <v-icon size="20">{{ item.icon }}</v-icon>
             </template>
+            <template v-else-if="settingsStore.settings.direction === 'rtl'" #append>
+              <v-icon size="20">{{ item.icon }}</v-icon>
+            </template>
             <template v-else #prepend>
               <v-icon size="20">{{ item.icon }}</v-icon>
             </template>
-            <v-list-item-title v-if="!mini || mobile" class="nav-title">
+            <v-list-item-title v-if="!mini || mobile" class="nav-title" :class="{ 'text-right': settingsStore.settings.direction === 'rtl' }">
               {{ t(item.title) }}
             </v-list-item-title>
-            <template #append v-if="!mini || mobile">
+            <template #prepend>
               <v-icon
+                v-if="settingsStore.settings.direction === 'rtl' && (!mini || mobile)"
+                size="16"
+                class="expand-icon"
+                :class="{ 'expanded': expandedGroups[item.key] }"
+              >
+                mdi-chevron-down
+              </v-icon>
+            </template>
+            <template #append>
+              <v-icon
+                v-if="settingsStore.settings.direction !== 'rtl' && (!mini || mobile)"
                 size="16"
                 class="expand-icon"
                 :class="{ 'expanded': expandedGroups[item.key] }"
@@ -109,24 +136,33 @@
               v-for="child in item.children"
               :key="child.key"
               :to="child.path"
-             
+
               class="nav-subitem"
               :class="{ 'nav-subitem-active': isActive(child.path) }"
             >
               <template #prepend>
-                <v-icon size="16">{{ child.icon }}</v-icon>
-              </template>
-              <v-list-item-title class="nav-subtitle">
-                {{ t(child.title) }}
-              </v-list-item-title>
-              <template #append v-if="child.badge">
+                <v-icon v-if="settingsStore.settings.direction !== 'rtl'" size="16">{{ child.icon }}</v-icon>
                 <v-chip
+                  v-if="settingsStore.settings.direction === 'rtl' && child.badge"
                   :text="child.badge"
                   size="small"
                   color="primary"
                   variant="flat"
                 />
               </template>
+              <template #append>
+                <v-icon v-if="settingsStore.settings.direction === 'rtl'" size="16">{{ child.icon }}</v-icon>
+                <v-chip
+                  v-if="settingsStore.settings.direction !== 'rtl' && child.badge"
+                  :text="child.badge"
+                  size="small"
+                  color="primary"
+                  variant="flat"
+                />
+              </template>
+              <v-list-item-title class="nav-subtitle" :class="{ 'text-right': settingsStore.settings.direction === 'rtl' }">
+                {{ t(child.title) }}
+              </v-list-item-title>
             </v-list-item>
           </v-list>
         </div>
@@ -275,6 +311,10 @@ watchEffect(() => {
   font-weight: 500;
 }
 
+.nav-title.text-right {
+  text-align: right;
+}
+
 .nav-footer {
   border-top: 1px solid rgb(var(--v-theme-surface-variant));
   padding: 8px 0;
@@ -374,12 +414,26 @@ watchEffect(() => {
   transform: rotate(180deg);
 }
 
+/* RTL specific styles */
+.nav-rtl .expand-icon:not(.expanded) {
+  transform: rotate(90deg);
+}
+
+.nav-rtl .expand-icon.expanded {
+  transform: rotate(-90deg);
+}
+
 /* Sub Navigation */
 .nav-sublist {
   padding-left: 16px;
   padding-right: 8px;
   margin-top: 4px;
   margin-bottom: 8px;
+}
+
+.nav-rtl .nav-sublist {
+  padding-left: 8px;
+  padding-right: 16px;
 }
 
 .nav-subitem {
@@ -413,6 +467,10 @@ watchEffect(() => {
   font-size: 0.85rem;
   font-weight: 500;
   opacity: 0.9;
+}
+
+.nav-subtitle.text-right {
+  text-align: right;
 }
 
 /* Mini mode groups */

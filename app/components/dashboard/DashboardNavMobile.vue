@@ -5,6 +5,9 @@
     temporary
     :location="settingsStore.settings.direction === 'rtl' ? 'right' : 'left'"
     class="mobile-nav"
+    :class="{
+      'nav-rtl': settingsStore.settings.direction === 'rtl'
+    }"
     aria-label="Mobile navigation menu"
     role="navigation"
   >
@@ -41,14 +44,27 @@
           :aria-label="t(item.title)"
           @click="close"
         >
-          <template #prepend>
+          <template v-if="settingsStore.settings.direction === 'rtl'" #append>
             <v-icon size="20">{{ item.icon }}</v-icon>
           </template>
-          <v-list-item-title class="nav-title">
+          <template v-else #prepend>
+            <v-icon size="20">{{ item.icon }}</v-icon>
+          </template>
+          <v-list-item-title class="nav-title" :class="{ 'text-right': settingsStore.settings.direction === 'rtl' }">
             {{ t(item.title) }}
           </v-list-item-title>
-          <template #append v-if="item.badge">
+          <template #prepend>
             <v-chip
+              v-if="settingsStore.settings.direction === 'rtl' && item.badge"
+              :text="item.badge"
+              size="small"
+              color="primary"
+              variant="flat"
+            />
+          </template>
+          <template #append>
+            <v-chip
+              v-if="settingsStore.settings.direction !== 'rtl' && item.badge"
               :text="item.badge"
               size="small"
               color="primary"
@@ -64,14 +80,28 @@
             :class="{ 'nav-group-active': isActive(item.path), 'nav-group-expanded': expandedGroups[item.key] }"
             @click="toggleGroup(item.key)"
           >
-            <template #prepend>
+            <template v-if="settingsStore.settings.direction === 'rtl'" #append>
               <v-icon size="20">{{ item.icon }}</v-icon>
             </template>
-            <v-list-item-title class="nav-title">
+            <template v-else #prepend>
+              <v-icon size="20">{{ item.icon }}</v-icon>
+            </template>
+            <v-list-item-title class="nav-title" :class="{ 'text-right': settingsStore.settings.direction === 'rtl' }">
               {{ t(item.title) }}
             </v-list-item-title>
+            <template #prepend>
+              <v-icon
+                v-if="settingsStore.settings.direction === 'rtl'"
+                size="16"
+                class="expand-icon"
+                :class="{ 'expanded': expandedGroups[item.key] }"
+              >
+                mdi-chevron-down
+              </v-icon>
+            </template>
             <template #append>
               <v-icon
+                v-if="settingsStore.settings.direction !== 'rtl'"
                 size="16"
                 class="expand-icon"
                 :class="{ 'expanded': expandedGroups[item.key] }"
@@ -97,19 +127,28 @@
               @click="close"
             >
               <template #prepend>
-                <v-icon size="16">{{ child.icon }}</v-icon>
-              </template>
-              <v-list-item-title class="nav-subtitle">
-                {{ t(child.title) }}
-              </v-list-item-title>
-              <template #append v-if="child.badge">
+                <v-icon v-if="settingsStore.settings.direction !== 'rtl'" size="16">{{ child.icon }}</v-icon>
                 <v-chip
+                  v-if="settingsStore.settings.direction === 'rtl' && child.badge"
                   :text="child.badge"
                   size="small"
                   color="primary"
                   variant="flat"
                 />
               </template>
+              <template #append>
+                <v-icon v-if="settingsStore.settings.direction === 'rtl'" size="16">{{ child.icon }}</v-icon>
+                <v-chip
+                  v-if="settingsStore.settings.direction !== 'rtl' && child.badge"
+                  :text="child.badge"
+                  size="small"
+                  color="primary"
+                  variant="flat"
+                />
+              </template>
+              <v-list-item-title class="nav-subtitle" :class="{ 'text-right': settingsStore.settings.direction === 'rtl' }">
+                {{ t(child.title) }}
+              </v-list-item-title>
             </v-list-item>
           </v-list>
         </div>
@@ -305,6 +344,10 @@ const performLogout = async () => {
   font-weight: 500;
 }
 
+.nav-title.text-right {
+  text-align: right;
+}
+
 /* Navigation Groups */
 .nav-group {
   position: relative;
@@ -344,12 +387,26 @@ const performLogout = async () => {
   transform: rotate(180deg);
 }
 
+/* RTL specific styles */
+.nav-rtl .expand-icon:not(.expanded) {
+  transform: rotate(90deg);
+}
+
+.nav-rtl .expand-icon.expanded {
+  transform: rotate(-90deg);
+}
+
 /* Sub Navigation */
 .nav-sublist {
   padding-left: 16px;
   padding-right: 8px;
   margin-top: 4px;
   margin-bottom: 8px;
+}
+
+.nav-rtl .nav-sublist {
+  padding-left: 8px;
+  padding-right: 16px;
 }
 
 .nav-subitem {
@@ -383,6 +440,10 @@ const performLogout = async () => {
   font-size: 0.85rem;
   font-weight: 500;
   opacity: 0.9;
+}
+
+.nav-subtitle.text-right {
+  text-align: right;
 }
 
 .nav-footer {

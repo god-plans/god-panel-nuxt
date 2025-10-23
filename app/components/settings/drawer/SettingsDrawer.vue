@@ -117,12 +117,12 @@
           v-if="!hidePresets"
           :value="settingsStore.settings.primaryColor"
           :options="[
-            { name: t('common.default'), value: '#00A76F' },
-            { name: t('common.cyan'), value: '#078DEE' },
-            { name: t('common.purple'), value: '#7635dc' },
-            { name: t('common.blue'), value: '#0C68E9' },
-            { name: t('common.orange'), value: '#fda92d' },
-            { name: t('common.red'), value: '#FF3030' },
+            { name: t('common.default'), value: '#00A76F', key: 'default' },
+            { name: t('common.cyan'), value: '#078DEE', key: 'cyan' },
+            { name: t('common.purple'), value: '#7635dc', key: 'purple' },
+            { name: t('common.blue'), value: '#0C68E9', key: 'blue' },
+            { name: t('common.orange'), value: '#fda92d', key: 'orange' },
+            { name: t('common.red'), value: '#FF3030', key: 'red' },
           ]"
           @click-option="handlePresetClick"
         />
@@ -208,8 +208,8 @@ const handleNavOptionClick = (option: { layout?: string }) => {
   }
 }
 
-const handlePresetClick = (value: string) => {
-  settingsStore.updateField('primaryColor', value as 'default' | 'purple' | 'cyan' | 'blue' | 'orange' | 'red')
+const handlePresetClick = (primaryColorKey: string) => {
+  settingsStore.updateField('primaryColor', primaryColorKey as 'default' | 'purple' | 'cyan' | 'blue' | 'orange' | 'red')
 }
 
 const handleFontClick = (value: string) => {
