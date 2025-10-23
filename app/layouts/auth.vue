@@ -1,5 +1,8 @@
 <template>
   <div class="auth-layout">
+    <div class="logo-section">
+      <Logo size="sm" class="logo" />
+    </div>
     <!-- Top Header -->
     <div class="auth-header">
       <div class="header-content">
@@ -8,9 +11,6 @@
         <!-- Language Switcher -->
         <LanguageSwitcher />
       </div>
-    </div>
-    <div class="logo-section">
-      <Logo :size="'lg'" class="logo" />
     </div>
 
     <!-- Main Content -->
@@ -56,9 +56,19 @@ const { t } = useI18n();
 }
 
 .logo-section {
-  display: flex;
-  align-items: center;
-  gap: 16px;
+  @media (min-width: 960px) {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 10;
+    padding: 16px 24px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+  @media (max-width: 959px) {
+   
+  }
 }
 
 .logo {

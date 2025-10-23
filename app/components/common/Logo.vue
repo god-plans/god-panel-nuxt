@@ -8,6 +8,7 @@
     :class="logoClass"
     :style="logoStyle"
     v-bind="componentProps"
+    @click="navigateTo('/')"
   />
 </template>
 
