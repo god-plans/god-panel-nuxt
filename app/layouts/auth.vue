@@ -10,7 +10,7 @@
       </div>
     </div>
     <div class="logo-section">
-      <v-img src="/logo-single.svg" width="40" height="40" class="logo" />
+      <Logo :size="'lg'" class="logo" />
     </div>
 
     <!-- Main Content -->
@@ -38,6 +38,8 @@ import AuthSection from "~/components/auth/Section.vue";
 import AuthContent from "~/components/auth/Content.vue";
 import SettingsButton from "~/components/theme/SettingsButton.vue";
 import LanguageSwitcher from "~/components/theme/LanguageSwitcher.vue";
+import Logo from "~/components/common/Logo.vue";
+
 import { useI18n } from "vue-i18n";
 
 const { t } = useI18n();

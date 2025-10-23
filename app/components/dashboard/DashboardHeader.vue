@@ -284,7 +284,7 @@ const performLogout = async () => {
 }
 
 .breadcrumb-item {
-  color: rgb(var(--v-theme-on-surface-variant));
+  color: rgb(var(--v-theme-on-surface));
   text-decoration: none;
 }
 
@@ -317,7 +317,7 @@ const performLogout = async () => {
 }
 
 .search-field :deep(.v-field__input::placeholder) {
-  color: rgb(var(--v-theme-on-surface-variant)) !important;
+  color: rgb(var(--v-theme-on-surface)) !important;
 }
 
 .notification-btn,
