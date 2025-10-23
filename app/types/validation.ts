@@ -53,7 +53,6 @@ export const settingsSchema = z.object({
   contrast: z.enum(['default', 'high']),
   primaryColor: z.enum(['default', 'purple', 'cyan', 'blue', 'orange', 'red']),
   navLayout: z.enum(['vertical', 'horizontal', 'mini']),
-  navColor: z.enum(['integrate', 'apparent']),
   compactLayout: z.boolean(),
   fontFamily: z.enum(['Inter', 'Roboto', 'Poppins', 'Barlow', 'DM Sans', 'Nunito Sans'])
 })

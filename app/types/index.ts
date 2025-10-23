@@ -23,7 +23,6 @@ export interface Settings {
   themeStretch: boolean
   themeLayout: 'vertical' | 'horizontal' | 'mini'
   navLayout: 'vertical' | 'horizontal' | 'mini'
-  navColor: 'integrate' | 'apparent'
   compactLayout: boolean
   fontFamily: 'Inter' | 'Roboto' | 'Poppins' | 'Barlow'
 }

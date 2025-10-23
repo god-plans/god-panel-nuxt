@@ -26,18 +26,6 @@
         </div>
       </div>
 
-      <div v-if="!hideNavColor" class="nav-option-section">
-        <span class="nav-option-section__label">{{ t('settingsDrawer.navColor') }}</span>
-        <div class="nav-option-section__options">
-          <ColorOption
-            v-for="color in options.colors"
-            :key="color"
-            :option="color"
-            :selected="value.color === color"
-            @click="handleColorClick(color)"
-          />
-        </div>
-      </div>
     </div>
   </div>
 </template>
@@ -45,18 +33,15 @@
 <script setup lang="ts">
 import { useI18n } from 'vue-i18n'
 import LayoutOption from './LayoutOption.vue'
-import ColorOption from './ColorOption.vue'
 
 const { t } = useI18n()
 
 interface Props {
   value: {
     layout: string
-    color: string
   }
   options: {
     layouts: string[]
-    colors: string[]
   }
   hideNavLayout?: boolean
   hideNavColor?: boolean
@@ -70,15 +55,11 @@ const props = withDefaults(defineProps<Props>(), {
 })
 
 const emit = defineEmits<{
-  'click-option': [option: { layout?: string; color?: string }]
+  'click-option': [option: { layout?: string }]
 }>()
 
 const handleLayoutClick = (layout: string) => {
   emit('click-option', { layout })
-}
-
-const handleColorClick = (color: string) => {
-  emit('click-option', { color })
 }
 </script>
 

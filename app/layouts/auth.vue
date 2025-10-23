@@ -68,18 +68,17 @@ const { t } = useI18n();
   --layout-header-desktop-height: 64px;
   --layout-auth-content-width: 420px;
 }
-
+.header-content {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+}
 /* Responsive adjustments */
 @media (max-width: 959px) {
   .auth-header {
     padding: 12px 16px;
-  }
-
-  .header-content {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    gap: 12px;
   }
 
   .logo-section {

@@ -53,7 +53,6 @@ export default defineNuxtPlugin((nuxtApp) => {
     contrast: 'default',
     primaryColor: 'default',
     navLayout: 'vertical',
-    navColor: 'integrate',
     compactLayout: false,
     fontFamily: 'Inter'
   }

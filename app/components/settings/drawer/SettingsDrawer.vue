@@ -102,14 +102,12 @@
         <NavOptions
           v-if="!(hideNavLayout && hideNavColor)"
           :value="{
-            color: settingsStore.settings.navColor,
             layout: settingsStore.settings.navLayout
           }"
           :options="{
-            colors: ['integrate', 'apparent'],
             layouts: ['vertical', 'horizontal', 'mini']
           }"
-          :hide-nav-color="hideNavColor"
+          :hide-nav-color="true"
           :hide-nav-layout="hideNavLayout"
           @click-option="handleNavOptionClick"
         />
@@ -204,10 +202,7 @@ const toggleCompactLayout = () => {
   settingsStore.updateField('compactLayout', !settingsStore.settings.compactLayout)
 }
 
-const handleNavOptionClick = (option: { color?: string; layout?: string }) => {
-  if (option.color) {
-    settingsStore.updateField('navColor', option.color as 'integrate' | 'apparent')
-  }
+const handleNavOptionClick = (option: { layout?: string }) => {
   if (option.layout) {
     settingsStore.updateField('navLayout', option.layout as 'vertical' | 'horizontal' | 'mini')
   }

@@ -32,9 +32,16 @@ const componentType = computed(() => {
 
 const logoSrc = computed(() => {
   switch (props.variant) {
-
+    case 'full':
+      return '/god-pure-min.png'
+    case 'compact':
+      return '/god-pure-min.png'
+    case 'mono':
+      return '/god-pure-min.png'
+    case 'icon':
+      return '/god-pure-min.png'
     default:
-      return '/logo.svg'
+      return '/god-pure-min.png'
   }
 })
 

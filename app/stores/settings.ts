@@ -8,7 +8,6 @@ const defaultSettings: Settings = {
   contrast: 'high',
   primaryColor: 'default',
   navLayout: 'vertical',
-  navColor: 'integrate',
   compactLayout: true,
   fontFamily: 'Inter'
 }
