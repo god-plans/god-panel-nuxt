@@ -38,7 +38,8 @@
         @click="$emit('toggle-mini')"
         class="toggle-btn"
       >
-        <v-icon>mdi-chevron-left</v-icon>
+        <v-icon v-if="!mini">mdi-chevron-left</v-icon>
+        <v-icon v-else>mdi-chevron-right</v-icon>
       </v-btn>
     </div>
 
@@ -53,6 +54,7 @@
           class="nav-item"
           :class="{ 'nav-item-active': isActive(item.path) }"
         >
+        
           <template v-if="mini && !mobile" #default>
             <v-icon size="20">{{ item.icon }}</v-icon>
           </template>
@@ -92,8 +94,9 @@
             :class="{ 'nav-group-active': isActive(item.path), 'nav-group-expanded': expandedGroups[item.key] }"
             @click="toggleGroup(item.key)"
           >
+          
             <template v-if="mini && !mobile" #default>
-              <v-icon size="20">{{ item.icon }}</v-icon>
+              <v-icon size="20">{{ item.icon }} </v-icon>
             </template>
             <template v-else-if="settingsStore.settings.direction === 'rtl'" #append>
               <v-icon size="20">{{ item.icon }}</v-icon>
@@ -326,7 +329,10 @@ watchEffect(() => {
 }
 
 .nav-mini .toggle-btn {
-  display: none;
+  margin-left: 0;
+  position: absolute;
+  right: -16px;
+
 }
 
 .nav-mini .nav-item {

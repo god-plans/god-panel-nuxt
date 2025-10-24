@@ -113,8 +113,8 @@ export default defineNuxtConfig({
         { name: 'theme-color', content: '#6366f1' }
       ],
       link: [
-        { rel: 'icon', type: 'image/png', href: '/logo.png' },
-        { rel: 'apple-touch-icon', href: '/logo.png' }
+        { rel: 'icon', type: 'image/png', href: '/god-pure-dark.png' },
+        { rel: 'apple-touch-icon', href: '/god-pure-dark.png' }
       ]
     }
   },

@@ -1,7 +1,7 @@
 <template>
   <v-app-bar
     :color="`rgb(var(--v-theme-surface))`"
-    elevation="1"
+    elevation="0"
     class="dashboard-header"
     :style="{
       borderBottom: `1px solid rgb(var(--v-theme-surface-variant))`,
@@ -42,17 +42,18 @@
     <v-spacer />
 
     <!-- Search -->
-    <v-text-field
+    <!-- <v-text-field
       v-model="searchQuery"
       :placeholder="t('settings.search')"
-      variant="solo"
+      variant="outlined"
       density="comfortable"
       class="search-field"
       hide-details
       single-line
       prepend-inner-icon="mdi-magnify"
+      
     >
-    </v-text-field>
+    </v-text-field> -->
 
     <!-- Language Switcher -->
     <LanguageSwitcher />
@@ -298,7 +299,7 @@ const performLogout = async () => {
 }
 
 .search-field :deep(.v-field) {
-  background-color: rgb(var(--v-theme-surface-variant)) !important;
+  background-color: rgb(var(--v-theme-surface)) !important;
   color: rgb(var(--v-theme-on-surface)) !important;
   border-color: rgb(var(--v-theme-outline)) !important;
 }
@@ -309,7 +310,7 @@ const performLogout = async () => {
 
 .search-field :deep(.v-field--focused) {
   border-color: rgb(var(--v-theme-primary)) !important;
-  box-shadow: 0 0 0 2px rgba(var(--v-theme-primary-rgb), 0.2) !important;
+
 }
 
 .search-field :deep(.v-field__input) {
