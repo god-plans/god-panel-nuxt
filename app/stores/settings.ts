@@ -30,6 +30,7 @@ export const useSettingsStore = defineStore('settings', () => {
   const isMiniLayout = computed(() => settings.value.navLayout === 'mini')
   const isHorizontalLayout = computed(() => settings.value.navLayout === 'horizontal')
   const isVerticalLayout = computed(() => settings.value.navLayout === 'vertical')
+  const isDarkMode = computed(() => settings.value.colorScheme === 'dark')
   const canReset = computed(() => {
     return JSON.stringify(settings.value) !== JSON.stringify(defaultSettings)
   })
@@ -103,6 +104,7 @@ export const useSettingsStore = defineStore('settings', () => {
     isHorizontalLayout,
     isVerticalLayout,
     canReset,
+    isDarkMode,
     // Actions
     initialize,
     updateSettings,

@@ -14,6 +14,11 @@
 
 <script setup lang="ts">
 import { computed } from "vue";
+import { useSettingsStore } from '~/stores/settings';
+
+
+const settingsStore = useSettingsStore();
+
 
 interface Props {
   variant?: "full" | "compact" | "mono" | "icon";
@@ -32,17 +37,19 @@ const componentType = computed(() => {
 });
 
 const logoSrc = computed(() => {
+  const isDarkMode = settingsStore.isDarkMode
+  console.log(isDarkMode);
   switch (props.variant) {
     case "full":
-      return "/full-logo.png";
+      return isDarkMode ? "/god-pure-dark-full.png" : "/full-logo.png";
     case "compact":
-      return "/full-logo.png";
+      return isDarkMode ? "/god-pure-dark-full.png" : "/full-logo.png";
     case "mono":
-      return "/full-logo.png";
+      return isDarkMode ? "/god-pure-dark.png" : "/full-logo.png";
     case "icon":
-      return "/logo.png";
+      return isDarkMode ? "/god-pure-dark.png" : "/logo.png";
     default:
-      return "/logo.png";
+      return isDarkMode ? "/god-pure-dark.png" : "/logo.png";
   }
 });
 

@@ -33,7 +33,7 @@
           <v-card-text class="pa-4">
             <div class="d-flex align-center">
               <v-avatar size="48" color="success" class="me-3">
-                <v-icon color="white">mdi-shopping-cart</v-icon>
+                <v-icon color="white">mdi-cart-plus</v-icon>
               </v-avatar>
               <div>
                 <div class="text-h6 font-weight-bold">156</div>
@@ -109,7 +109,7 @@
               <v-list-item>
                 <template #prepend>
                   <v-avatar size="32" color="success">
-                    <v-icon size="16" color="white">mdi-shopping-cart</v-icon>
+                    <v-icon size="16" color="white">mdi-cart-plus</v-icon>
                   </v-avatar>
                 </template>
                 <v-list-item-title class="text-body-2">{{ t('pages.dashboard.orderCompleted') }}</v-list-item-title>

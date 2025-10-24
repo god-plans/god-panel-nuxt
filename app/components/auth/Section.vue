@@ -37,7 +37,7 @@ withDefaults(defineProps<Props>(), {
 
 <style scoped>
 .auth-section {
-  background-color: rgb(var(--v-theme-background-default, #ffffff));
+  background-color: rgb(var(--v-theme-surface));
   background-size: cover;
   background-position: center;
   padding: 16px;
@@ -66,7 +66,7 @@ withDefaults(defineProps<Props>(), {
 }
 
 .section-subtitle {
-  color: rgb(var(--v-theme-on-surface-variant));
+  color: rgb(var(--v-theme-on-surface));
   font-size: 16px;
   margin-top: 8px;
 }
