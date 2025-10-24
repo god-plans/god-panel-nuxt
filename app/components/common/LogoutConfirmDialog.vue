@@ -1,0 +1,91 @@
+<template>
+  <v-dialog
+    v-model="showDialog"
+    max-width="400"
+    persistent
+  >
+    <v-card class="logout-dialog">
+      <v-card-title class="text-center">
+        <v-icon size="48" color="warning" class="mb-2">mdi-logout</v-icon>
+        <div class="text-h6 font-weight-bold">{{ t('auth.logoutConfirmTitle') }}</div>
+      </v-card-title>
+
+      <v-card-text class="text-center">
+        <p class="text-body-1 mb-4">
+          {{ t('auth.logoutConfirmMessage') }}
+        </p>
+        <p class="text-body-2 text-medium-emphasis">
+          {{ t('auth.logoutConfirmNote') }}
+        </p>
+      </v-card-text>
+
+      <v-card-actions class="justify-center gap-2 pa-4">
+        <v-btn
+          variant="outlined"
+          size="large"
+          @click="cancel"
+        >
+          {{ t('common.cancel') }}
+        </v-btn>
+        <v-btn
+          color="error"
+          variant="flat"
+          size="large"
+          @click="confirm"
+          :loading="loading"
+        >
+          {{ t('common.logout') }}
+        </v-btn>
+      </v-card-actions>
+    </v-card>
+  </v-dialog>
+</template>
+
+<script setup lang="ts">
+import { ref } from 'vue'
+import { useI18n } from 'vue-i18n'
+
+const { t } = useI18n()
+
+interface Props {
+  modelValue: boolean
+}
+
+interface Emits {
+  'update:modelValue': [value: boolean]
+  'confirm': []
+}
+
+const props = defineProps<Props>()
+const emit = defineEmits<Emits>()
+
+const loading = ref(false)
+
+// Computed property for v-model
+const showDialog = computed({
+  get: () => props.modelValue,
+  set: (value: boolean) => emit('update:modelValue', value)
+})
+
+const cancel = () => {
+  showDialog.value = false
+}
+
+const confirm = () => {
+  emit('confirm')
+}
+</script>
+
+<style scoped>
+.logout-dialog {
+  border-radius: 16px;
+}
+
+.text-center {
+  text-align: center !important;
+}
+
+.gap-2 {
+  gap: 8px;
+}
+</style>
