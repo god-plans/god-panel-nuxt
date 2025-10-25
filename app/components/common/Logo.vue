@@ -112,10 +112,10 @@ const componentProps = computed(() => {
 
 <style scoped>
 .gods-logo {
-  transition: all 0.2s ease;
+  @apply transition-all duration-200;
 }
 
 .gods-logo:hover {
-  transform: scale(1.02);
+  @apply scale-[1.02];
 }
 </style>

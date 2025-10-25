@@ -8,14 +8,14 @@
     <v-img
       src="/logo-full.svg"
       width="120"
-      class="logo"
+      class="cursor-pointer"
       contain
     />
 
     <v-spacer />
 
     <!-- Navigation Links -->
-    <div class="nav-links d-none d-md-flex">
+    <div class="hidden md:flex gap-2">
       <v-btn
         v-for="link in navLinks"
         :key="link.key"
@@ -43,7 +43,7 @@
         <v-btn
           icon
           v-bind="props"
-          class="mobile-menu d-md-none"
+          class="md:hidden ml-2"
         >
           <v-icon>mdi-menu</v-icon>
         </v-btn>
@@ -116,33 +116,18 @@ const toggleTheme = () => {
 
 <style scoped>
 .main-app-bar {
-  border-bottom: 1px solid rgb(var(--v-theme-surface-variant));
-  background: rgb(var(--v-theme-surface));
-}
-
-.logo {
-  cursor: pointer;
-}
-
-.nav-links {
-  gap: 8px;
+  @apply border-b border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900;
 }
 
 .nav-link {
-  text-transform: none;
-  font-weight: 500;
+  @apply normal-case font-medium;
 }
 
 .nav-link-active {
-  background: rgb(var(--v-theme-primary));
-  color: rgb(var(--v-theme-on-primary));
+  @apply bg-blue-600 text-white;
 }
 
 .theme-toggle {
-  margin-left: 8px;
-}
-
-.mobile-menu {
-  margin-left: 8px;
+  @apply ml-2;
 }
 </style>

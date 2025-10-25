@@ -269,79 +269,60 @@ const performLogout = async () => {
 </script>
 
 <style scoped>
-.mobile-nav {
-  background: rgb(var(--v-theme-surface));
-}
+/* .mobile-nav {
+  @apply bg-surface;
+} */
 
 .nav-header {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 16px;
-  border-bottom: 1px solid rgb(var(--v-theme-surface-variant));
-  min-height: 80px;
+  @apply flex items-center justify-center px-4 py-4 border-b border-outline min-h-20;
 }
 
 .user-info {
-  display: flex;
-  align-items: center;
-  padding: 16px;
-  border-bottom: 1px solid rgb(var(--v-theme-surface-variant));
+  @apply flex items-center px-4 py-4 border-b border-outline;
 }
 
 .user-avatar {
-  margin-right: 12px;
+  @apply mr-3;
 }
 
 .user-details {
-  flex: 1;
+  @apply flex-1;
 }
 
 .user-name {
-  font-size: 1rem;
-  font-weight: 600;
-  color: rgb(var(--v-theme-on-surface));
-  margin-bottom: 2px;
+  @apply text-base font-semibold text-on-surface mb-0.5;
 }
 
 .user-role {
-  font-size: 0.75rem;
-  color: rgb(var(--v-theme-on-surface-variant));
-  text-transform: capitalize;
+  @apply text-xs text-on-surface-variant capitalize;
 }
 
 .nav-list {
-  padding: 8px 0;
-  flex: 1;
+  @apply py-2 px-0 flex-1;
 }
 
 .nav-item {
-  margin: 2px 8px;
-  border-radius: 8px;
-  transition: all 0.2s ease;
+  @apply mx-2 my-0.5 rounded-lg transition-all duration-200;
 }
 
 .nav-item:hover {
-  background: rgba(var(--v-theme-on-surface-rgb), 0.08);
+  @apply bg-gray-100 dark:bg-gray-800;
 }
 
 .nav-item-active {
-  background: rgba(var(--v-theme-primary-rgb), 0.12);
-  color: rgb(var(--v-theme-primary));
-  box-shadow: var(--v-custom-shadows-z1);
+  @apply bg-blue-50 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400 shadow-sm;
 }
 
 .nav-item-active:hover {
-  background: rgba(var(--v-theme-primary-rgb), 0.16);
+  @apply bg-blue-100 dark:bg-blue-900/30;
 }
 
 .nav-item-active .v-icon {
-  color: rgb(var(--v-theme-primary)) !important;
+  @apply text-blue-600 dark:text-blue-400;
 }
 
 .nav-title {
-  font-size: 0.875rem;
-  font-weight: 500;
+  @apply text-sm font-medium;
 }
 
 .nav-title.text-right {
@@ -350,96 +331,77 @@ const performLogout = async () => {
 
 /* Navigation Groups */
 .nav-group {
-  position: relative;
+  @apply relative;
 }
 
 .nav-group-header {
-  margin: 2px 8px;
-  border-radius: 8px;
-  transition: all 0.2s ease;
-  cursor: pointer;
+  @apply mx-2 my-0.5 rounded-lg transition-all duration-200 cursor-pointer;
 }
 
 .nav-group-header:hover {
-  background: rgba(var(--v-theme-on-surface-rgb), 0.08);
+  @apply bg-gray-100 dark:bg-gray-800;
 }
 
 .nav-group-active {
-  background: rgba(var(--v-theme-primary-rgb), 0.12);
-  color: rgb(var(--v-theme-primary));
-  box-shadow: var(--v-custom-shadows-z1);
+  @apply bg-blue-50 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400 shadow-sm;
 }
 
 .nav-group-active:hover {
-  background: rgba(var(--v-theme-primary-rgb), 0.16);
+  @apply bg-blue-100 dark:bg-blue-900/30;
 }
 
 .nav-group-expanded {
-  background: rgba(var(--v-theme-on-surface-rgb), 0.04);
+  @apply bg-gray-50 dark:bg-gray-800/50;
 }
 
 .expand-icon {
-  transition: transform 0.2s ease;
-  opacity: 0.6;
+  @apply transition-transform duration-200 opacity-60;
 }
 
 .expand-icon.expanded {
-  transform: rotate(180deg);
+  @apply rotate-180;
 }
 
 /* RTL specific styles */
 .nav-rtl .expand-icon:not(.expanded) {
-  transform: rotate(90deg);
+  @apply rotate-90;
 }
 
 .nav-rtl .expand-icon.expanded {
-  transform: rotate(-90deg);
+  @apply -rotate-90;
 }
 
 /* Sub Navigation */
 .nav-sublist {
-  padding-left: 16px;
-  padding-right: 8px;
-  margin-top: 4px;
-  margin-bottom: 8px;
+  @apply pl-4 pr-2 mt-1 mb-2;
 }
 
 .nav-rtl .nav-sublist {
-  padding-left: 8px;
-  padding-right: 16px;
+  @apply pl-2 pr-4;
 }
 
 .nav-subitem {
-  margin: 1px 0;
-  border-radius: 6px;
-  min-height: 40px;
-  padding-left: 12px;
-  padding-right: 12px;
-  transition: all 0.2s ease;
+  @apply mx-0 my-px rounded-md min-h-10 px-3 py-0 transition-all duration-200;
 }
 
 .nav-subitem:hover {
-  background: rgba(var(--v-theme-on-surface-rgb), 0.06);
+  @apply bg-gray-100 dark:bg-gray-800;
 }
 
 .nav-subitem-active {
-  background: rgba(var(--v-theme-primary-rgb), 0.10);
-  color: rgb(var(--v-theme-primary));
-  box-shadow: var(--v-custom-shadows-z1);
+  @apply bg-blue-50 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400 shadow-sm;
 }
 
 .nav-subitem-active:hover {
-  background: rgba(var(--v-theme-primary-rgb), 0.14);
+  @apply bg-blue-100 dark:bg-blue-900/30;
 }
 
 .nav-subitem-active .v-icon {
-  color: rgb(var(--v-theme-primary)) !important;
+  @apply text-blue-600 dark:text-blue-400;
 }
 
 .nav-subtitle {
-  font-size: 0.85rem;
-  font-weight: 500;
-  opacity: 0.9;
+  @apply text-[0.85rem] font-medium opacity-90;
 }
 
 .nav-subtitle.text-right {
@@ -447,7 +409,6 @@ const performLogout = async () => {
 }
 
 .nav-footer {
-  border-top: 1px solid rgb(var(--v-theme-surface-variant));
-  padding: 8px 0;
+  @apply border-t border-gray-200 dark:border-gray-700 py-2 px-0;
 }
 </style>

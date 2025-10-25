@@ -1,10 +1,12 @@
 <template>
   <div
     v-if="isLoading"
-    class="progress-bar"
-    :style="{ '--progress-width': `${progress}%` }"
+    class="fixed top-0 left-0 right-0 h-0.5 z-[9999] bg-white dark:bg-gray-900"
   >
-    <div class="progress-bar__fill" />
+    <div
+      class="h-full bg-gradient-to-r from-blue-600 to-purple-600 transition-all duration-300 ease-out shadow-lg"
+      :style="{ width: `${progress}%` }"
+    />
   </div>
 </template>
 
@@ -19,26 +21,6 @@ const props = withDefaults(defineProps<Props>(), {
   progress: 0
 })
 </script>
-
-<style scoped>
-.progress-bar {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 3px;
-  z-index: 9999;
-  background-color: rgb(var(--v-theme-surface));
-}
-
-.progress-bar__fill {
-  height: 100%;
-  background: linear-gradient(90deg, rgb(var(--v-theme-primary)) 0%, rgb(var(--v-theme-secondary)) 100%);
-  width: var(--progress-width);
-  transition: width 0.3s ease;
-  box-shadow: 0 0 10px rgba(var(--v-theme-primary), 0.5);
-}
-</style>
 
 
 

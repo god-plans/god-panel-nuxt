@@ -117,6 +117,24 @@ export default {
           800: '#1e293b',
           900: '#0f172a',
           950: '#020617',
+        },
+        // Vuetify theme colors for better integration
+        surface: {
+          DEFAULT: '#ffffff',
+          variant: '#f5f5f5',
+        },
+        'on-surface': {
+          DEFAULT: '#1c1b1f',
+          variant: '#49454f',
+        },
+        'surface-container': {
+          DEFAULT: '#f3f4f6',
+          low: '#f7f2fa',
+          high: '#e6e0e9',
+        },
+        outline: {
+          DEFAULT: '#cac4d0',
+          variant: '#ded8e1',
         }
       },
       fontFamily: {
@@ -168,7 +186,7 @@ export default {
   // Safelist for dynamic classes
   safelist: [
     {
-      pattern: /^(bg-|text-|border-)(primary|secondary|success|warning|error|info|god-primary|god-secondary)-(50|100|200|300|400|500|600|700|800|900|950)$/,
+      pattern: /^(bg-|text-|border-)(primary|secondary|success|warning|error|info|god-primary|god-secondary|surface|on-surface|surface-container|outline)-(50|100|200|300|400|500|600|700|800|900|950|DEFAULT|variant|low|high)$/,
       variants: ['hover', 'focus', 'active', 'disabled'],
     },
     {

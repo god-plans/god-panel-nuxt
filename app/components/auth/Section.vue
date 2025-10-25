@@ -1,14 +1,14 @@
 <template>
-  <div class="auth-section ">
-    <div class="section-content">
-      <h3 class="section-title">{{ title }}</h3>
+  <div class="hidden md:flex flex-col items-center justify-center gap-8 p-4 w-full max-w-md min-h-screen rounded-lg bg-white dark:bg-gray-900">
+    <div class="text-center">
+      <h3 class="text-2xl font-semibold text-gray-900 dark:text-gray-100 mb-4">{{ title }}</h3>
 
-      <p v-if="subtitle" class="section-subtitle">
+      <p v-if="subtitle" class="text-base text-gray-900 dark:text-gray-100 mt-2">
         {{ subtitle }}
       </p>
     </div>
 
-    <div class="section-image">
+    <div class="w-full">
       <v-img
         :src="imgUrl"
         alt="Auth illustration"
@@ -34,51 +34,3 @@ withDefaults(defineProps<Props>(), {
   layoutQuery: 'md'
 })
 </script>
-
-<style scoped>
-.auth-section {
-  background-color: rgb(var(--v-theme-surface));
-  background-size: cover;
-  background-position: center;
-  padding: 16px;
-  width: 100%;
-  max-width: 480px;
-  position: relative;
-  display: none;
-  border-radius: 8px;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 32px;
-  padding-top: var(--layout-header-desktop-height);
-  min-height: 100vh;
-}
-
-.section-content {
-  text-align: center;
-}
-
-.section-title {
-  font-size: 28px;
-  font-weight: 600;
-  color: rgb(var(--v-theme-on-surface));
-  margin-bottom: 16px;
-}
-
-.section-subtitle {
-  color: rgb(var(--v-theme-on-surface));
-  font-size: 16px;
-  margin-top: 8px;
-}
-
-.section-image {
-  width: 100%;
-}
-
-/* Responsive adjustments */
-@media (min-width: 960px) {
-  .auth-section {
-    display: flex;
-  }
-}
-</style>

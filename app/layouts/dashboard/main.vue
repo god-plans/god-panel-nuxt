@@ -1,8 +1,5 @@
 <template>
-  <v-main
-    class="dashboard-main"
-    :style="mainStyles"
-  >
+  <v-main class="flex flex-col flex-1">
     <slot />
   </v-main>
 </template>
@@ -15,21 +12,4 @@ interface Props {
 const props = withDefaults(defineProps<Props>(), {
   isNavHorizontal: false
 })
-
-const mainStyles = computed(() => ({
-  display: 'flex',
-  flex: '1 1 auto',
-  flexDirection: 'column',
-  ...(props.isNavHorizontal && {
-    '--layout-dashboard-content-pt': '40px'
-  })
-}))
 </script>
-
-<style scoped>
-.dashboard-main {
-  display: flex;
-  flex: 1 1 auto;
-  flex-direction: column;
-}
-</style>

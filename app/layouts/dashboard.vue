@@ -12,12 +12,22 @@
     />
 
     <!-- Layout Section -->
-    <div class="dashboard-layout" :class="{ 'compact-mode': settingsStore.settings.compactLayout, 'rtl-mode': settingsStore.settings.direction === 'rtl' }" :style="layoutVars">
+    <div class="flex min-h-screen transition-all duration-[120ms] ease-linear" :class="{
+      'lg:pl-[var(--layout-nav-width)]': !isHorizontalLayout && !mobile && !isMiniLayout,
+      'lg:pl-[88px]': !isHorizontalLayout && !mobile && isMiniLayout,
+      'lg:pr-[var(--layout-nav-width)] lg:pl-0': settingsStore.settings.direction === 'rtl' && !isHorizontalLayout && !mobile && !isMiniLayout,
+      'lg:pr-[88px] lg:pl-0': settingsStore.settings.direction === 'rtl' && !isHorizontalLayout && !mobile && isMiniLayout,
+      'px-4': mobile
+    }" :style="layoutVars">
     <!-- Navigation Sidebar -->
     <DashboardNav
       v-if="!isHorizontalLayout && !mobile"
       :mini="isMiniLayout"
-      class="lg:block "
+      class="hidden lg:block fixed top-0 h-screen z-20"
+      :class="{
+        'left-0': settingsStore.settings.direction !== 'rtl',
+        'right-0': settingsStore.settings.direction === 'rtl'
+      }"
 
       @toggle-mini="toggleNav"
       @open-mobile="openMobileNav"
@@ -76,14 +86,8 @@ const isHorizontalLayout = computed(() => settingsStore.settings.navLayout === '
 const isMiniLayout = computed(() => settingsStore.settings.navLayout === 'mini')
 
 const layoutVars = computed(() => ({
-  '--layout-transition-easing': 'linear',
-  '--layout-transition-duration': '120ms',
-  '--layout-nav-mini-width': '88px',
-  // '--layout-nav-vertical-width': settingsStore.settings.compactLayout ? '260px' : '300px',
-  '--layout-nav-horizontal-height': settingsStore.settings.compactLayout ? '56px' : '64px',
-  '--layout-dashboard-content-pt': settingsStore.settings.compactLayout ? '4px' : '8px',
-  '--layout-dashboard-content-pb': settingsStore.settings.compactLayout ? '32px' : '64px',
-  '--layout-dashboard-content-px': settingsStore.settings.compactLayout ? '24px' : '40px'
+  '--layout-nav-width': settingsStore.settings.compactLayout ? '260px' : '300px',
+  '--layout-transition-duration': '120ms'
 }))
 
 const toggleNav = () => {
@@ -136,91 +140,8 @@ onMounted(() => {
 </script>
 
 <style scoped>
-.dashboard-layout {
-  display: flex;
-  min-height: 100vh;
-  transition: all var(--layout-transition-duration) var(--layout-transition-easing);
-}
-
-.dashboard-layout:has(.dashboard-nav:not(.nav-mini)) {
-  padding-left: var(--layout-nav-vertical-width);
-}
-
-.dashboard-layout:has(.dashboard-nav.nav-mini) {
-  padding-left: var(--layout-nav-mini-width);
-}
-
-/* RTL mode adjustments */
-.rtl-mode.dashboard-layout:has(.dashboard-nav:not(.nav-mini)) {
-  padding-left: 0;
-  padding-right: var(--layout-nav-vertical-width);
-}
-
-.rtl-mode.dashboard-layout:has(.dashboard-nav.nav-mini) {
-  padding-left: 0;
-  padding-right: var(--layout-nav-mini-width);
-}
-
-/* Compact mode adjustments */
-.compact-mode {
-  --layout-spacing-reduced: 0.75;
-}
-
-.compact-mode .dashboard-layout:has(.dashboard-nav:not(.nav-mini)) {
-  padding-left: var(--layout-nav-vertical-width);
-}
-
-.compact-mode .dashboard-layout:has(.dashboard-nav.nav-mini) {
-  padding-left: var(--layout-nav-mini-width);
-}
-
-/* Compact + RTL mode adjustments */
-.compact-mode.rtl-mode.dashboard-layout:has(.dashboard-nav:not(.nav-mini)) {
-  padding-left: 0;
-  padding-right: var(--layout-nav-vertical-width);
-}
-
-.compact-mode.rtl-mode.dashboard-layout:has(.dashboard-nav.nav-mini) {
-  padding-left: 0;
-  padding-right: var(--layout-nav-mini-width);
-}
-
-@media (max-width: 959px) {
-  .dashboard-layout {
-    padding-left: 16px !important;
-    padding-right: 16px !important;
-  }
-
-  .rtl-mode.dashboard-layout {
-    padding-left: 16px !important;
-    padding-right: 16px !important;
-  }
-
-  /* Mobile navigation adjustments */
-  .dashboard-layout:has(.dashboard-nav:not(.nav-mini)) {
-    padding-left: 16px !important;
-    padding-right: 16px !important;
-  }
-
-  .rtl-mode.dashboard-layout:has(.dashboard-nav:not(.nav-mini)) {
-    padding-left: 16px !important;
-    padding-right: 16px !important;
-  }
-
-  .dashboard-layout:has(.dashboard-nav.nav-mini) {
-    padding-left: 16px !important;
-    padding-right: 16px !important;
-  }
-
-  .rtl-mode.dashboard-layout:has(.dashboard-nav.nav-mini) {
-    padding-left: 16px !important;
-    padding-right: 16px !important;
-  }
-
-  /* Ensure proper spacing on mobile for all layout items */
-  .dashboard-layout > * {
-    margin-left: 0 !important;
-    margin-right: 0 !important;
-  }
+/* RTL Support */
+[dir="rtl"] {
+  direction: rtl;
 }
 </style>

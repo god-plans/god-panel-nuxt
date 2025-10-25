@@ -36,6 +36,7 @@
       <v-btn
         icon
         @click="$emit('toggle-mini')"
+        :size="mini ? 'small' : 'large'"
         class="toggle-btn"
       >
         <v-icon v-if="!mini">mdi-chevron-left</v-icon>
@@ -261,57 +262,47 @@ watchEffect(() => {
 
 <style scoped>
 .dashboard-nav {
-  border-right: 1px solid rgb(var(--v-theme-surface-variant));
-  background: rgb(var(--v-theme-surface));
+  @apply border-r border-outline 
 }
 
 .nav-header {
-  display: flex;
-  align-items: center;
-  padding: 16px;
-  border-bottom: 1px solid rgb(var(--v-theme-surface-variant));
-  min-height: 64px;
+  @apply flex items-center px-4 py-4 border-b border-outline min-h-16;
 }
 
 .logo {
-  transition: all 0.3s ease;
+  @apply transition-all duration-300;
 }
 
 .toggle-btn {
-  margin-left: 8px;
+  @apply ml-2;
 }
 
 .nav-list {
-  padding: 8px 0;
+  @apply py-2 px-0;
 }
 
 .nav-item {
-  margin: 2px 8px;
-  border-radius: 8px;
-  transition: all 0.2s ease;
+  @apply mx-2 my-0.5 rounded-lg transition-all duration-200;
 }
 
 .nav-item:hover {
-  background: rgba(var(--v-theme-on-surface-rgb), 0.08);
+  @apply bg-gray-100 dark:bg-gray-800;
 }
 
 .nav-item-active {
-  background: rgba(var(--v-theme-primary-rgb), 0.12);
-  color: rgb(var(--v-theme-primary));
-  box-shadow: var(--v-custom-shadows-z1);
+  @apply bg-blue-50 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400 shadow-sm;
 }
 
 .nav-item-active:hover {
-  background: rgba(var(--v-theme-primary-rgb), 0.16);
+  @apply bg-blue-100 dark:bg-blue-900/30;
 }
 
 .nav-item-active .v-icon {
-  color: rgb(var(--v-theme-primary)) !important;
+  @apply text-blue-600 dark:text-blue-400;
 }
 
 .nav-title {
-  font-size: 0.875rem;
-  font-weight: 500;
+  @apply text-sm font-medium;
 }
 
 .nav-title.text-right {
@@ -319,160 +310,129 @@ watchEffect(() => {
 }
 
 .nav-footer {
-  border-top: 1px solid rgb(var(--v-theme-surface-variant));
-  padding: 8px 0;
+  @apply border-t border-gray-200 dark:border-gray-700 py-2 px-0;
 }
 
 /* Mini mode styles */
 .nav-mini .nav-header {
-  justify-content: center;
+  @apply justify-center;
 }
 
 .nav-mini .toggle-btn {
-  margin-left: 0;
-  position: absolute;
-  right: -16px;
-
+  @apply ml-0 absolute right-[-16px];
 }
 
 .nav-mini .nav-item {
-  margin: 2px 4px;
-  justify-content: center;
-  padding: 12px;
+  @apply mx-1 my-0.5 justify-center px-3 py-3;
 }
 
 .nav-mini .nav-title {
-  display: none;
+  @apply hidden;
 }
 
 /* Mobile header styles */
 .mobile-header {
-  display: flex;
-  align-items: center;
-  padding: 16px;
-  border-bottom: 1px solid rgb(var(--v-theme-surface-variant));
+  @apply flex items-center px-4 py-4 border-b border-outline;
 }
 
 .mobile-menu-btn {
-  margin-right: 12px;
+  @apply mr-3;
 }
 
 .mobile-title {
-  font-weight: 600;
-  color: rgb(var(--v-theme-on-surface));
+  @apply font-semibold text-on-surface;
 }
 
 /* Compact mode styles */
 .nav-compact .nav-header {
-  padding: 12px 16px;
+  @apply px-4 py-3;
 }
 
 .nav-compact .nav-item {
-  margin: 2px 8px;
-  padding: 8px 12px;
-  min-height: 44px;
+  @apply mx-2 my-0.5 px-3 py-2 min-h-11;
 }
 
 .nav-compact .nav-title {
-  font-size: 0.8rem;
+  @apply text-xs;
 }
 
 .nav-compact .logo {
-  width: 100px !important;
+  @apply w-24;
 }
 
 /* Navigation Groups */
 .nav-group {
-  position: relative;
+  @apply relative;
 }
 
 .nav-group-header {
-  margin: 2px 8px;
-  border-radius: 8px;
-  transition: all 0.2s ease;
-  cursor: pointer;
+  @apply mx-2 my-0.5 rounded-lg transition-all duration-200 cursor-pointer;
 }
 
 .nav-group-header:hover {
-  background: rgba(var(--v-theme-on-surface-rgb), 0.08);
+  @apply bg-gray-100 dark:bg-gray-800;
 }
 
 .nav-group-active {
-  background: rgba(var(--v-theme-primary-rgb), 0.12);
-  color: rgb(var(--v-theme-primary));
-  box-shadow: var(--v-custom-shadows-z1);
+  @apply bg-blue-50 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400 shadow-sm;
 }
 
 .nav-group-active:hover {
-  background: rgba(var(--v-theme-primary-rgb), 0.16);
+  @apply bg-blue-100 dark:bg-blue-900/30;
 }
 
 .nav-group-expanded {
-  background: rgba(var(--v-theme-on-surface-rgb), 0.04);
+  @apply bg-gray-50 dark:bg-gray-800/50;
 }
 
 .expand-icon {
-  transition: transform 0.2s ease;
-  opacity: 0.6;
+  @apply transition-transform duration-200 opacity-60;
 }
 
 .expand-icon.expanded {
-  transform: rotate(180deg);
+  @apply rotate-180;
 }
 
 /* RTL specific styles */
 .nav-rtl .expand-icon:not(.expanded) {
-  transform: rotate(90deg);
+  @apply rotate-90;
 }
 
 .nav-rtl .expand-icon.expanded {
-  transform: rotate(-90deg);
+  @apply -rotate-90;
 }
 
 /* Sub Navigation */
 .nav-sublist {
-  padding-left: 16px;
-  padding-right: 8px;
-  margin-top: 4px;
-  margin-bottom: 8px;
+  @apply pl-4 pr-2 mt-1 mb-2;
 }
 
 .nav-rtl .nav-sublist {
-  padding-left: 8px;
-  padding-right: 16px;
+  @apply pl-2 pr-4;
 }
 
 .nav-subitem {
-  margin: 1px 0;
-  border-radius: 6px;
-  min-height: 36px;
-  padding-left: 12px;
-  padding-right: 12px;
-  transition: all 0.2s ease;
+  @apply mx-0 my-px rounded-md min-h-9 px-3 py-0 transition-all duration-200;
 }
 
 .nav-subitem:hover {
-  background: rgba(var(--v-theme-on-surface-rgb), 0.06);
+  @apply bg-gray-100 dark:bg-gray-800;
 }
 
 .nav-subitem-active {
-  background: rgba(var(--v-theme-primary-rgb), 0.10);
-  color: rgb(var(--v-theme-primary));
-  box-shadow: var(--v-custom-shadows-z1);
+  @apply bg-blue-50 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400 shadow-sm;
 }
 
 .nav-subitem-active:hover {
-  background: rgba(var(--v-theme-primary-rgb), 0.14);
+  @apply bg-blue-100 dark:bg-blue-900/30;
 }
 
 .nav-subitem-active .v-icon {
-  color: rgb(var(--v-theme-primary)) !important;
+  @apply text-blue-600 dark:text-blue-400;
 }
 
 .nav-subtitle {
-  font-size: 0.85rem;
-  font-weight: 500;
-  opacity: 0.9;
+  @apply text-[0.85rem] font-medium opacity-90;
 }
 
 .nav-subtitle.text-right {
@@ -481,33 +441,26 @@ watchEffect(() => {
 
 /* Mini mode groups */
 .nav-mini .nav-group-header {
-  margin: 2px 4px;
-  justify-content: center;
-  padding: 12px;
+  @apply mx-1 my-0.5 justify-center px-3 py-3;
 }
 
 .nav-mini .nav-sublist {
-  display: none;
+  @apply hidden;
 }
 
 /* Compact mode groups */
 .nav-compact .nav-sublist {
-  padding-left: 12px;
+  @apply pl-3;
 }
 
 .nav-compact .nav-subitem {
-  min-height: 32px;
-  padding-left: 8px;
-  padding-right: 8px;
+  @apply min-h-8 px-2;
 }
-
-
 
 /* Mobile styles */
 @media (max-width: 959px) {
   .dashboard-nav {
-    position: absolute;
-    z-index: 1000;
+    @apply absolute z-[1000];
   }
 }
 </style>

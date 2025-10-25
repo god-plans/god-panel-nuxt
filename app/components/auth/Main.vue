@@ -1,5 +1,5 @@
 <template>
-  <main class="auth-main">
+  <main class="flex flex-col flex-1 md:flex-row">
     <slot />
   </main>
 </template>
@@ -13,17 +13,3 @@ withDefaults(defineProps<Props>(), {
   layoutQuery: 'md'
 })
 </script>
-
-<style scoped>
-.auth-main {
-  display: flex;
-  flex: 1 1 auto;
-  flex-direction: column;
-}
-
-@media (min-width: 960px) {
-  .auth-main {
-    flex-direction: row;
-  }
-}
-</style>

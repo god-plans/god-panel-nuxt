@@ -26,14 +26,14 @@
     "welcomeTitle": "مدیریت کار",
     "welcomeSubtitle": "به طور مؤثرتری با گردش کار بهینه شده.",
     "log -->
-  <div class="login-page">
+  <div class="min-h-screen flex items-center justify-center p-6">
     <!-- Form Header -->
-    <div class="form-header">
-      <h5 class="form-title">{{ t('auth.signInToAccount') }}</h5>
+    <div class="mb-8 w-full max-w-md">
+      <h5 class="text-xl font-semibold text-on-surface mb-4 text-left">{{ t('auth.signInToAccount') }}</h5>
 
-      <div class="register-link">
-        <span class="register-text">{{ t('auth.dontHaveAccount') }}</span>
-        <NuxtLink to="/auth/register" class="register-link-text">
+      <div class="flex items-center gap-1 mb-6">
+        <span class="text-sm text-on-surface-variant">{{ t('auth.dontHaveAccount') }}</span>
+        <NuxtLink to="/auth/register" class="text-sm text-primary no-underline font-medium hover:underline">
           {{ t('auth.signUp') }}
         </NuxtLink>
       </div>
@@ -44,7 +44,7 @@
       type="info"
       variant="tonal"
       density="comfortable"
-      class="info-alert"
+      class="mb-6 w-full max-w-md"
     >
       {{ t('auth.demoCredentialsWith') }} <strong>{{ form.email }}</strong> {{ t('auth.demoCredentials') }} <strong>{{ form.password }}</strong>
     </v-alert>
@@ -55,14 +55,14 @@
       type="error"
       variant="tonal"
       density="comfortable"
-      class="error-alert"
+      class="mb-6 w-full max-w-md"
     >
       {{ errorMsg }}
     </v-alert>
 
     <!-- Login Form -->
-    <div class="login-form">
-      <form @submit.prevent="handleSubmit">
+    <div class="w-full max-w-md">
+      <form @submit.prevent="handleSubmit" class="flex flex-col gap-6">
         <!-- Email Field -->
         <v-text-field
           v-model="form.email"
@@ -74,10 +74,12 @@
         />
 
         <!-- Password Field -->
-        <div class="password-field">
-          <NuxtLink to="/auth/forgot-password" class="forgot-link">
-            {{ t('auth.forgotPassword') }}
-          </NuxtLink>
+        <div class="mb-6">
+          <div class="flex justify-end mb-2">
+            <NuxtLink to="/auth/forgot-password" class="text-sm text-primary no-underline hover:underline">
+              {{ t('auth.forgotPassword') }}
+            </NuxtLink>
+          </div>
 
           <v-text-field
             v-model="form.password"
@@ -110,7 +112,7 @@
           block
           color="primary"
           :loading="isSubmitting"
-          class="signin-btn"
+          class="h-11 mt-2"
         >
           {{ isSubmitting ? t('auth.signInLoading') : t('auth.signIn') }}
         </v-btn>
@@ -190,92 +192,3 @@ useHead({
 })
 </script>
 
-<style scoped>
-.login-page {
-  width: 100%;
-  margin: 0 auto;
-}
-
-/* Form Header */
-.form-header {
-  margin-bottom: 32px;
-}
-
-.form-title {
-  font-size: 24px;
-  font-weight: 600;
-  color: rgb(var(--v-theme-on-surface));
-  margin-bottom: 16px;
-  text-align: left;
-}
-
-.register-link {
-  display: flex;
-  align-items: center;
-  gap: 4px;
-}
-
-.register-text {
-  font-size: 14px;
-  color: rgb(var(--v-theme-on-surface-variant));
-}
-
-.register-link-text {
-  font-size: 14px;
-  color: rgb(var(--v-theme-primary));
-  text-decoration: none;
-  font-weight: 500;
-}
-
-/* Alerts */
-.info-alert {
-  margin-bottom: 24px;
-}
-
-.error-alert {
-  margin-bottom: 24px;
-}
-
-/* Login Form */
-.login-form {
-  display: flex;
-  flex-direction: column;
-  gap: 24px;
-}
-
-/* Password Field */
-.password-field {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
-
-.forgot-link {
-  font-size: 14px;
-  color: rgb(var(--v-theme-primary));
-  text-decoration: none;
-  align-self: flex-end;
-}
-
-.forgot-link:hover {
-  text-decoration: underline;
-}
-
-/* Form inputs */
-.login-form :deep(.v-text-field) {
-  margin-bottom: 0;
-}
-
-/* Sign In Button */
-.signin-btn {
-  height: 44px;
-  margin-top: 8px;
-}
-
-/* Mobile Styles */
-@media (max-width: 480px) {
-  .form-title {
-    font-size: 20px;
-  }
-}
-</style>

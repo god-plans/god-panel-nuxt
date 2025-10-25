@@ -1,11 +1,11 @@
 <template>
-  <div class="auth-layout">
-    <div class="logo-section">
-      <Logo size="sm" class="logo" />
+  <div class="min-h-screen">
+    <div class="hidden md:fixed md:top-0 md:left-0 md:z-10 md:p-4 md:flex items-center gap-4">
+      <Logo size="sm" />
     </div>
     <!-- Top Header -->
-    <div class="auth-header">
-      <div class="header-content">
+    <div class="fixed top-0 right-0 z-10 p-4 md:p-6">
+      <div class="flex items-center justify-between gap-3">
         <!-- Settings Button -->
         <SettingsButton />
         <!-- Language Switcher -->
@@ -14,14 +14,13 @@
     </div>
 
     <!-- Main Content -->
-    <AuthMain layout-query="md">
+    <AuthMain>
       <AuthSection
         :title="t('auth.welcomeTitle')"
         :subtitle="t('auth.welcomeSubtitle')"
         img-url="/assets/images/login.webp"
-        layout-query="md"
       />
-      <AuthContent layout-query="md">
+      <AuthContent>
         <slot />
       </AuthContent>
     </AuthMain>
@@ -45,74 +44,3 @@ import { useI18n } from "vue-i18n";
 const { t } = useI18n();
 </script>
 
-<style scoped>
-.auth-header {
-  position: fixed;
-  top: 0;
-
-  right: 0;
-  z-index: 10;
-  padding: 16px 24px;
-}
-
-.logo-section {
-  @media (min-width: 960px) {
-    position: fixed;
-    top: 0;
-    left: 0;
-    z-index: 10;
-    padding: 16px 24px;
-    display: flex;
-    align-items: center;
-    gap: 16px;
-  }
-  @media (max-width: 959px) {
-   
-  }
-}
-
-.logo {
-  filter: none;
-}
-
-/* CSS Variables for layout */
-.auth-layout {
-  --layout-header-desktop-height: 64px;
-  --layout-auth-content-width: 420px;
-}
-.header-content {
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  align-items: center;
-  gap: 12px;
-}
-/* Responsive adjustments */
-@media (max-width: 959px) {
-  .auth-header {
-    padding: 12px 16px;
-  }
-
-  .logo-section {
-    order: -1;
-  }
-}
-
-/* RTL support */
-[dir="rtl"] .header-content {
-  direction: rtl;
-  display: flex;
-  justify-content: flex-end;
-  align-items: center;
-}
-
-[dir="rtl"] .help-section {
-  margin-left: auto;
-  margin-right: 0;
-}
-
-[dir="rtl"] .logo-section {
-  margin-right: auto;
-  margin-left: 0;
-}
-</style>

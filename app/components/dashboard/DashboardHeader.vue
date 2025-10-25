@@ -1,17 +1,13 @@
 <template>
   <v-app-bar
-    :color="`rgb(var(--v-theme-surface))`"
+    color="surface"
     elevation="0"
-    class="dashboard-header"
-    :style="{
-      borderBottom: `1px solid rgb(var(--v-theme-surface-variant))`,
-    }"
+    class="dashboard-header border-b border-outline"
   > 
     <!-- Mobile menu button -->
     <v-app-bar-nav-icon
-
       @click="$emit('toggle-nav')"
-      class="d-lg-none"
+      class="lg:hidden"
     />
 
     <!-- Logo for mobile -->
@@ -20,12 +16,12 @@
       src="/logo-single.png"
       width="32"
       height="32"
-      class="mr-3 d-lg-none"
+      class="mr-3 lg:hidden"
       contain
     />
 
     <!-- Breadcrumbs for desktop -->
-    <div v-if="!mobile" class="breadcrumbs">
+    <div v-if="!mobile" class="ml-4">
       <v-breadcrumbs :items="breadcrumbItems">
         <template #item="{ item }">
           <v-breadcrumbs-item
@@ -63,7 +59,7 @@
     <!-- Notifications -->
     <v-menu offset-y>
       <template #activator="{ props }">
-        <v-btn icon v-bind="props" class="notification-btn">
+        <v-btn icon v-bind="props" class="ml-2 text-on-surface hover:bg-on-surface/8">
           <v-badge
             :content="notifications.length"
             :value="notifications.length > 0"
@@ -75,7 +71,7 @@
         </v-btn>
       </template>
 
-      <v-list class="notification-list">
+      <v-list class="bg-surface border border-outline rounded-lg">
         <v-list-item v-if="notifications.length === 0">
           <v-list-item-title>{{
             t("settings.noNewNotifications")
@@ -105,7 +101,7 @@
           v-if="notifications.length > 0"
           @click="viewAllNotifications"
         >
-          <v-list-item-title class="text-primary">{{
+          <v-list-item-title class="text-blue-600 dark:text-blue-400">{{
             t("settings.viewAllNotifications")
           }}</v-list-item-title>
         </v-list-item>
@@ -115,7 +111,7 @@
     <!-- User menu -->
     <v-menu offset-y>
       <template #activator="{ props }">
-        <v-btn icon v-bind="props" class="user-btn">
+        <v-btn icon v-bind="props" class="ml-2 text-on-surface hover:bg-on-surface/8">
           <v-avatar size="32">
             <img
               :src="authStore.user?.photoURL || '/assets/images/avatar.webp'"
@@ -125,7 +121,7 @@
         </v-btn>
       </template>
 
-      <v-list class="user-menu">
+      <v-list class="bg-surface border border-outline rounded-lg">
         <v-list-item>
           <template #prepend>
             <v-avatar size="40">
@@ -276,77 +272,49 @@ const performLogout = async () => {
 
 <style scoped>
 .dashboard-header {
-  background-color: rgb(var(--v-theme-surface)) !important;
-  color: rgb(var(--v-theme-on-surface));
-}
-
-.breadcrumbs {
-  margin-left: 16px;
+  @apply bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100;
 }
 
 .breadcrumb-item {
-  color: rgb(var(--v-theme-on-surface));
-  text-decoration: none;
+  @apply text-gray-900 dark:text-gray-100 no-underline;
 }
 
 .breadcrumb-item:hover {
-  color: rgb(var(--v-theme-on-surface));
+  @apply text-gray-900 dark:text-gray-100;
 }
 
 .search-field {
-  max-width: 300px;
-  margin-right: 16px;
+  @apply max-w-sm mr-4;
 }
 
 .search-field :deep(.v-field) {
-  background-color: rgb(var(--v-theme-surface)) !important;
-  color: rgb(var(--v-theme-on-surface)) !important;
-  border-color: rgb(var(--v-theme-outline)) !important;
+  @apply bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 border-gray-300 dark:border-gray-600;
 }
 
 .search-field :deep(.v-field:hover) {
-  border-color: rgb(var(--v-theme-outline-variant)) !important;
+  @apply border-gray-400 dark:border-gray-500;
 }
 
 .search-field :deep(.v-field--focused) {
-  border-color: rgb(var(--v-theme-primary)) !important;
-
+  @apply border-blue-600 dark:border-blue-400;
 }
 
 .search-field :deep(.v-field__input) {
-  color: rgb(var(--v-theme-on-surface)) !important;
+  @apply text-gray-900 dark:text-gray-100;
 }
 
 .search-field :deep(.v-field__input::placeholder) {
-  color: rgb(var(--v-theme-on-surface)) !important;
-}
-
-.notification-btn,
-.user-btn {
-  margin-left: 8px;
-  color: rgb(var(--v-theme-on-surface));
-}
-
-.notification-btn:hover,
-.user-btn:hover {
-  background-color: rgba(var(--v-theme-on-surface-rgb), 0.08);
-}
-
-.notification-list,
-.user-menu {
-  background-color: rgb(var(--v-theme-surface));
-  border: 1px solid rgb(var(--v-theme-surface-variant));
-  border-radius: 8px;
+  @apply text-gray-500 dark:text-gray-400;
 }
 
 .notification-list :deep(.v-list-item),
 .user-menu :deep(.v-list-item) {
-  color: rgb(var(--v-theme-on-surface));
+  @apply text-gray-900 dark:text-gray-100;
 }
 
 .notification-list :deep(.v-list-item:hover),
 .user-menu :deep(.v-list-item:hover) {
-  background-color: rgba(var(--v-theme-on-surface-rgb), 0.08);
+  @apply bg-gray-100 dark:bg-gray-800;
 }
 
 /* RTL Support */
@@ -355,23 +323,16 @@ const performLogout = async () => {
 }
 
 [dir="rtl"] .dashboard-header .v-app-bar {
-  flex-direction: row-reverse;
+  @apply flex-row-reverse;
 }
 
 [dir="rtl"] .search-field {
-  margin-left: 16px;
-  margin-right: 0;
-}
-
-[dir="rtl"] .notification-btn,
-[dir="rtl"] .user-btn {
-  margin-right: 8px;
-  margin-left: 0;
+  @apply ml-4 mr-0;
 }
 
 @media (max-width: 959px) {
   .search-field {
-    display: none;
+    @apply hidden;
   }
 }
 </style>

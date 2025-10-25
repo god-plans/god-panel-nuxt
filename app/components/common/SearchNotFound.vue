@@ -1,30 +1,30 @@
 <template>
-  <div class="search-not-found">
-    <div class="search-not-found__content">
+  <div class="flex items-center justify-center min-h-[400px] sm:min-h-[300px] p-6 sm:p-4">
+    <div class="flex flex-col items-center gap-6 sm:gap-5 max-w-md text-center">
       <!-- Illustration/Icon -->
-      <div class="search-not-found__illustration">
+      <div class="opacity-60 animate-bounce">
         <v-icon
           :icon="icon"
           size="120"
           :color="iconColor"
-          class="search-not-found__icon"
+          class="drop-shadow-lg"
         />
       </div>
 
       <!-- Title and Description -->
-      <div class="search-not-found__text">
-        <h2 class="search-not-found__title">{{ title }}</h2>
-        <p class="search-not-found__description">{{ description }}</p>
+      <div class="flex flex-col gap-2">
+        <h2 class="text-xl sm:text-lg font-semibold text-on-surface m-0">{{ title }}</h2>
+        <p class="text-base sm:text-sm text-on-surface-variant m-0 leading-relaxed">{{ description }}</p>
       </div>
 
       <!-- Actions -->
-      <div v-if="showAction" class="search-not-found__actions">
+      <div v-if="showAction" class="flex gap-3 flex-wrap justify-center sm:flex-col sm:items-stretch sm:gap-2">
         <v-btn
           v-if="actionText && actionHandler"
           :color="actionColor"
           :variant="actionVariant"
           @click="actionHandler"
-          class="search-not-found__action-btn"
+          class="min-w-[120px] sm:w-full"
         >
           {{ actionText }}
         </v-btn>
@@ -34,14 +34,14 @@
           :color="secondaryActionColor"
           :variant="secondaryActionVariant"
           @click="secondaryActionHandler"
-          class="search-not-found__action-btn"
+          class="min-w-[120px] sm:w-full"
         >
           {{ secondaryActionText }}
         </v-btn>
       </div>
 
       <!-- Additional Content Slot -->
-      <div v-if="$slots.additional" class="search-not-found__additional">
+      <div v-if="$slots.additional" class="w-full">
         <slot name="additional" />
       </div>
     </div>
@@ -81,103 +81,3 @@ const props = withDefaults(defineProps<Props>(), {
 })
 </script>
 
-<style scoped>
-.search-not-found {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  min-height: 400px;
-  padding: 24px;
-}
-
-.search-not-found__content {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 24px;
-  max-width: 480px;
-  text-align: center;
-}
-
-.search-not-found__illustration {
-  opacity: 0.6;
-  animation: float 3s ease-in-out infinite;
-}
-
-@keyframes float {
-  0%, 100% {
-    transform: translateY(0);
-  }
-  50% {
-    transform: translateY(-10px);
-  }
-}
-
-.search-not-found__icon {
-  filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.1));
-}
-
-.search-not-found__text {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
-
-.search-not-found__title {
-  font-size: 1.5rem;
-  font-weight: 600;
-  color: rgb(var(--v-theme-on-surface));
-  margin: 0;
-}
-
-.search-not-found__description {
-  font-size: 1rem;
-  color: rgb(var(--v-theme-on-surface-variant));
-  margin: 0;
-  line-height: 1.5;
-}
-
-.search-not-found__actions {
-  display: flex;
-  gap: 12px;
-  flex-wrap: wrap;
-  justify-content: center;
-}
-
-.search-not-found__action-btn {
-  min-width: 120px;
-}
-
-.search-not-found__additional {
-  width: 100%;
-}
-
-/* Responsive */
-@media (max-width: 600px) {
-  .search-not-found {
-    min-height: 300px;
-    padding: 16px;
-  }
-
-  .search-not-found__content {
-    gap: 20px;
-  }
-
-  .search-not-found__title {
-    font-size: 1.25rem;
-  }
-
-  .search-not-found__description {
-    font-size: 0.875rem;
-  }
-
-  .search-not-found__actions {
-    flex-direction: column;
-    align-items: stretch;
-  }
-
-  .search-not-found__action-btn {
-    width: 100%;
-  }
-}
-</style>

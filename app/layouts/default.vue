@@ -1,6 +1,6 @@
 <template>
-  <div class="default-layout">
-    <header class="bg-blue-600 text-white p-4">
+  <div class="min-h-screen flex flex-col">
+    <header class="bg-primary text-on-primary p-4">
       <div class="container mx-auto">
         <h1 class="text-2xl font-bold">{{ $config.public.appName }}</h1>
       </div>
@@ -10,7 +10,7 @@
       <slot />
     </main>
 
-    <footer class="bg-gray-800 text-white p-4 text-center">
+    <footer class="bg-surface text-on-surface p-4 text-center">
       <p>&copy; {{ new Date().getFullYear() }} {{ $config.public.appName }}</p>
     </footer>
   </div>
@@ -19,11 +19,3 @@
 <script setup lang="ts">
 // Simple layout without complex components for testing
 </script>
-
-<style scoped>
-.default-layout {
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-}
-</style>

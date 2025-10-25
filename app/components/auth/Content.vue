@@ -1,6 +1,6 @@
 <template>
-  <div class="auth-content">
-    <div class="auth-content-inner">
+  <div class="flex flex-col items-center justify-center flex-1 px-4 py-4 md:px-6 md:py-0 md:pt-6 bg-gray-50 dark:bg-gray-900">
+    <div class="w-full max-w-[420px] flex flex-col">
       <slot />
     </div>
   </div>
@@ -15,28 +15,3 @@ withDefaults(defineProps<Props>(), {
   layoutQuery: 'md'
 })
 </script>
-
-<style scoped>
-.auth-content {
-  padding: 16px 24px;
-  display: flex;
-  flex: 1 1 auto;
-  align-items: center;
-  flex-direction: column;
-  justify-content: center;
-}
-
-.auth-content-inner {
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  max-width: var(--layout-auth-content-width, 420px);
-}
-
-@media (min-width: 960px) {
-  .auth-content {
-    padding: 0;
-    padding-top: calc(var(--layout-header-desktop-height, 64px) + 24px);
-  }
-}
-</style>
