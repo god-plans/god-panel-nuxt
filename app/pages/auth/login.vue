@@ -206,6 +206,15 @@ useHead({
   font-weight: 600;
   color: rgb(var(--v-theme-on-surface));
   margin-bottom: 16px;
+  /* Remove hardcoded text-align: left */
+  text-align: inherit; /* Use inherited direction */
+}
+
+[dir="rtl"] .form-title {
+  text-align: right;
+}
+
+[dir="ltr"] .form-title {
   text-align: left;
 }
 
@@ -254,6 +263,15 @@ useHead({
   font-size: 14px;
   color: rgb(var(--v-theme-primary));
   text-decoration: none;
+  /* Remove hardcoded align-self: flex-end */
+  align-self: flex-start;
+}
+
+[dir="rtl"] .forgot-link {
+  align-self: flex-start;
+}
+
+[dir="ltr"] .forgot-link {
   align-self: flex-end;
 }
 
@@ -270,6 +288,15 @@ useHead({
 .signin-btn {
   height: 44px;
   margin-top: 8px;
+}
+
+/* RTL-specific form adjustments */
+[dir="rtl"] .login-form {
+  direction: rtl;
+}
+
+[dir="rtl"] .register-link {
+  flex-direction: row-reverse;
 }
 
 /* Mobile Styles */

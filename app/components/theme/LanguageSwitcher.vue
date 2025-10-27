@@ -2,8 +2,8 @@
 import { useLocale } from "vuetify";
 
 const { t, setLocale, locale } = useI18n();
-const langFromCookie = useCookie("lang");
 const { current } = useLocale();
+const settingsStore = useSettingsStore();
 
 function changeLocale(locale) {
   current.value = locale;
@@ -23,6 +23,15 @@ watch(
     // Only update Vuetify locale when i18n locale actually changes
     if (newVal !== oldVal) {
       changeLocale(newVal);
+      // Update direction in settings store and document attributes
+      const direction = newVal === 'fa' ? 'rtl' : 'ltr';
+      settingsStore.updateField('direction', direction);
+
+      // Update document direction attribute
+      if (process.client) {
+        document.documentElement.setAttribute('dir', direction);
+        document.documentElement.setAttribute('lang', newVal);
+      }
     }
   },
   { immediate: false }
@@ -37,7 +46,16 @@ function set(lang) {
     }
 
     setLocale(lang);
-    langFromCookie.value = lang;
+
+    // Update direction immediately and document attributes
+    const direction = lang === 'fa' ? 'rtl' : 'ltr';
+    settingsStore.updateField('direction', direction);
+
+    // Update document direction attribute
+    if (process.client) {
+      document.documentElement.setAttribute('dir', direction);
+      document.documentElement.setAttribute('lang', lang);
+    }
   }
 }
 </script>

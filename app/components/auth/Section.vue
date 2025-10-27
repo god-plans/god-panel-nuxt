@@ -58,6 +58,10 @@ withDefaults(defineProps<Props>(), {
   text-align: center;
 }
 
+[dir="rtl"] .section-content {
+  text-align: center; /* Keep center alignment for RTL */
+}
+
 .section-title {
   font-size: 28px;
   font-weight: 600;
@@ -65,10 +69,18 @@ withDefaults(defineProps<Props>(), {
   margin-bottom: 16px;
 }
 
+[dir="rtl"] .section-title {
+  text-align: center; /* Keep center alignment for RTL */
+}
+
 .section-subtitle {
   color: rgb(var(--v-theme-on-surface));
   font-size: 16px;
   margin-top: 8px;
+}
+
+[dir="rtl"] .section-subtitle {
+  text-align: center; /* Keep center alignment for RTL */
 }
 
 .section-image {
