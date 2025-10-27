@@ -74,19 +74,19 @@
               }"
               @click="toggleGroup(item.key)"
             >
-              <div v-if="mini" class="d-flex align-center gap-2 mx-auto">
+              <div v-if="mini" class="nav-group-header-icon">
                 <v-icon size="20">{{ item.icon }}</v-icon>
                 <v-icon
-                      size="16"
-                      class="expand-icon"
-                      :class="{ expanded: expandedGroups[item.key] }"
-                    >
-                      {{
-                        expandedGroups[item.key]
-                          ? "mdi-chevron-up"
-                          : "mdi-chevron-down"
-                      }}
-                    </v-icon>
+                  size="16"
+                  class="expand-icon"
+                  :class="{ expanded: expandedGroups[item.key] }"
+                >
+                  {{
+                    expandedGroups[item.key]
+                      ? "mdi-chevron-up"
+                      : "mdi-chevron-down"
+                  }}
+                </v-icon>
               </div>
 
               <v-list-item-title
@@ -147,8 +147,6 @@
               </v-list-item>
             </v-list>
           </div>
-
-
         </template>
       </template>
     </v-list>
@@ -233,6 +231,11 @@ watchEffect(initializeExpandedGroups);
   border-radius: 8px;
   transition: all 0.2s ease;
 }
+[dir="rtl"] .nav-item,
+[dir="rtl"] .nav-group-header {
+  direction: rtl;
+  margin: 2px 0;
+}
 .nav-item:hover,
 .nav-group-header:hover {
   background: rgba(var(--v-theme-on-surface-rgb), 0.08);
@@ -273,6 +276,9 @@ watchEffect(initializeExpandedGroups);
 .nav-subtitle {
   font-size: 0.85rem;
   font-weight: 500;
+}
+[dir="rtl"] .nav-subtitle {
+  direction: rtl;
 }
 
 /* MINI MODE */
@@ -345,4 +351,5 @@ watchEffect(initializeExpandedGroups);
     z-index: 1000;
   }
 }
+
 </style>
