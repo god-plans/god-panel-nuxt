@@ -56,8 +56,13 @@
     "compact": "فشرده",
     "settingsTitle": "تنظیمات",
     "one": "یک",
-    "two": "دو"
-
+    "two": "دو",
+    "default": "پیش فرض",
+    "cyan": "فیروزه ای",
+    "purple": "بنفش",
+    "blue": "آبی",
+    "orange": "نارنجی",
+    "red": "قرمز"
   },
   "nav": {
     "analytics": "تحلیل ها",

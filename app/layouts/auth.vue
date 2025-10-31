@@ -111,7 +111,7 @@ const { t } = useI18n();
 }
 
 [dir="rtl"] .form-title {
-  text-align: right;
+  text-align: start;
 }
 
 [dir="rtl"] .register-link {

@@ -210,23 +210,22 @@ useHead({
   text-align: inherit; /* Use inherited direction */
 }
 
-[dir="rtl"] .form-title {
+.form-title {
   text-align: right;
 }
 
-[dir="ltr"] .form-title {
-  text-align: left;
-}
 
 .register-link {
+ 
   display: flex;
   align-items: center;
+  justify-content: flex-end;
   gap: 4px;
 }
 
 .register-text {
   font-size: 14px;
-  color: rgb(var(--v-theme-on-surface-variant));
+  color: rgb(var(--v-theme-on-surface));
 }
 
 .register-link-text {
@@ -234,6 +233,7 @@ useHead({
   color: rgb(var(--v-theme-primary));
   text-decoration: none;
   font-weight: 500;
+  text-align: right;
 }
 
 /* Alerts */
