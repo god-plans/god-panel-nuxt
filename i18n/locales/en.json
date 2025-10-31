@@ -67,7 +67,19 @@
     "red": "Red",
     "settingsTitle": "Settings",
     "one": "One",
-    "two": "Two"
+    "two": "Two",
+    "discard": "Discard",
+    "saveChanges": "Save Changes",
+    "unsavedChanges": "Unsaved Changes",
+    "unsavedChangesDesc": "You have unsaved changes. Save them before leaving.",
+    "export": "Export",
+    "import": "Import",
+    "comingSoon": "Coming Soon",
+    "account": "Account",
+    "system": "System",
+    "title": "Title",
+    "subtitle": "Subtitle",
+    "description": "Description"
   },
   "nav": {
     "analytics": "Analytics",
@@ -117,8 +129,139 @@
   },
   "settings": {
     "general": "General",
-    "appearance": "Appearance",
-    "notifications": "Notifications",
+    "appearance": {
+      "title": "Appearance",
+      "subtitle": "Customize the look and feel of your dashboard",
+      "themePreview": "Theme Preview",
+      "selectLabel": "Select option"
+    },
+    "account": {
+      "title": "Account",
+      "subtitle": "Manage your account settings and preferences",
+      "profileInfo": "Profile Information",
+      "firstName": "First Name",
+      "lastName": "Last Name",
+      "email": "Email Address",
+      "phone": "Phone Number",
+      "bio": "Bio",
+      "bioPlaceholder": "Tell us about yourself...",
+      "changeAvatar": "Change Avatar",
+      "security": "Security Settings",
+      "changePassword": "Change Password",
+      "changePasswordDesc": "Update your account password for better security",
+      "twoFactor": "Two-Factor Authentication",
+      "twoFactorDesc": "Add an extra layer of security to your account",
+      "loginAlerts": "Login Alerts",
+      "loginAlertsDesc": "Get notified when someone logs into your account",
+      "stats": "Account Statistics",
+      "memberSince": "Member since",
+      "lastLogin": "Last login",
+      "securityScore": "Security Score"
+    },
+    "notifications": {
+      "title": "Notifications",
+      "subtitle": "Choose how you want to be notified",
+      "email": {
+        "title": "Email Notifications",
+        "account": "Account Activity",
+        "securityAlerts": "Security Alerts",
+        "securityAlertsDesc": "Important security notifications",
+        "passwordChanges": "Password Changes",
+        "passwordChangesDesc": "When your password is changed",
+        "accountUpdates": "Account Updates",
+        "accountUpdatesDesc": "Updates about your account",
+        "system": "System Updates",
+        "systemUpdates": "System Updates",
+        "systemUpdatesDesc": "New features and updates",
+        "maintenance": "Maintenance Notices",
+        "maintenanceDesc": "Scheduled maintenance windows",
+        "newsletter": "Newsletter",
+        "newsletterDesc": "Product updates and tips"
+      },
+      "push": {
+        "title": "Push Notifications",
+        "activity": "Activity Notifications",
+        "newMessages": "New Messages",
+        "newMessagesDesc": "When you receive new messages",
+        "mentions": "Mentions",
+        "mentionsDesc": "When someone mentions you",
+        "taskUpdates": "Task Updates",
+        "taskUpdatesDesc": "Updates on your assigned tasks"
+      },
+      "summary": "Notification Summary",
+      "active": "Active",
+      "total": "Total",
+      "enabled": "enabled",
+      "channels": "Notification Channels",
+      "quickActions": "Quick Actions",
+      "enableAll": "Enable All",
+      "disableAll": "Disable All",
+      "resetDefaults": "Reset to Defaults"
+    },
+    "system": {
+      "title": "System",
+      "subtitle": "Advanced system settings and preferences",
+      "performance": {
+        "title": "Performance",
+        "animations": "Animations",
+        "animationsDesc": "Enable smooth animations and transitions",
+        "autoSave": "Auto Save",
+        "autoSaveDesc": "Automatically save your work",
+        "preload": "Preload Content",
+        "preloadDesc": "Load content in advance for faster navigation"
+      },
+      "privacy": {
+        "title": "Privacy & Security",
+        "analytics": "Usage Analytics",
+        "analyticsDesc": "Help improve the app by sharing usage data",
+        "crashReports": "Crash Reports",
+        "crashReportsDesc": "Automatically send crash reports",
+        "dataCollection": "Data Collection",
+        "minimal": "Minimal",
+        "standard": "Standard",
+        "extensive": "Extensive"
+      },
+      "storage": {
+        "title": "Storage Management",
+        "used": "Used",
+        "available": "Available",
+        "total": "Total",
+        "clearCache": "Clear Cache",
+        "clearData": "Clear All Data"
+      },
+      "advanced": {
+        "title": "Advanced Settings",
+        "debugMode": "Debug Mode",
+        "debugModeDesc": "Enable detailed logging for troubleshooting",
+        "developerTools": "Developer Tools",
+        "developerToolsDesc": "Access developer features",
+        "experimental": "Experimental Features",
+        "experimentalDesc": "Try new features before they're released",
+        "experimentalWarning": "Experimental features may be unstable and could cause issues."
+      },
+      "info": {
+        "title": "System Information",
+        "version": "Version",
+        "build": "Build",
+        "os": "Operating System",
+        "browser": "Browser",
+        "lastUpdate": "Last Updated"
+      },
+      "actions": {
+        "title": "System Actions",
+        "checkUpdates": "Check for Updates",
+        "exportLogs": "Export Logs",
+        "resetSettings": "Reset Settings",
+        "factoryReset": "Factory Reset"
+      },
+      "metrics": {
+        "title": "Performance Metrics",
+        "cpu": "CPU Usage",
+        "memory": "Memory Usage",
+        "storage": "Storage Usage",
+        "network": "Network Latency"
+      }
+    },
     "security": "Security",
     "language": "Language",
     "theme": "Theme",
@@ -163,10 +306,17 @@
   },
   "theme": {
     "themeMode": "Theme Mode",
+    "themeModeDesc": "Choose between light and dark themes",
     "direction": "Direction",
+    "directionDesc": "Set text direction for your interface",
     "primaryColor": "Primary Color",
+    "primaryColorDesc": "Select your preferred accent color",
     "layout": "Layout",
-    "fontFamily": "Font Family"
+    "layoutDesc": "Choose how the dashboard is organized",
+    "fontFamily": "Font Family",
+    "fontFamilyDesc": "Select the typography style",
+    "contrast": "High Contrast",
+    "contrastDesc": "Increase contrast for better accessibility"
   },
   "settingsDrawer": {
     "presets": "Presets",

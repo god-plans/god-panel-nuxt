@@ -62,7 +62,19 @@
     "purple": "بنفش",
     "blue": "آبی",
     "orange": "نارنجی",
-    "red": "قرمز"
+    "red": "قرمز",
+    "discard": "لغو",
+    "saveChanges": "ذخیره تغییرات",
+    "unsavedChanges": "تغییرات ذخیره نشده",
+    "unsavedChangesDesc": "تغییرات ذخیره نشده دارید. قبل از خروج آنها را ذخیره کنید.",
+    "export": "صادرات",
+    "import": "واردات",
+    "comingSoon": "به زودی",
+    "account": "حساب کاربری",
+    "system": "سیستم",
+    "title": "عنوان",
+    "subtitle": "زیرعنوان",
+    "description": "توضیحات"
   },
   "nav": {
     "analytics": "تحلیل ها",
@@ -112,8 +124,139 @@
   },
   "settings": {
     "general": "عمومی",
-    "appearance": "ظاهر",
-    "notifications": "اعلان ها",
+    "appearance": {
+      "title": "ظاهر",
+      "subtitle": "ظاهر و احساس داشبورد خود را شخصی سازی کنید",
+      "themePreview": "پیش نمایش تم",
+      "selectLabel": "گزینه را انتخاب کنید"
+    },
+    "account": {
+      "title": "حساب کاربری",
+      "subtitle": "تنظیمات و ترجیحات حساب خود را مدیریت کنید",
+      "profileInfo": "اطلاعات پروفایل",
+      "firstName": "نام",
+      "lastName": "نام خانوادگی",
+      "email": "آدرس ایمیل",
+      "phone": "شماره تلفن",
+      "bio": "بیوگرافی",
+      "bioPlaceholder": "درباره خود بگویید...",
+      "changeAvatar": "تغییر آواتار",
+      "security": "تنظیمات امنیتی",
+      "changePassword": "تغییر رمز عبور",
+      "changePasswordDesc": "رمز عبور حساب خود را برای امنیت بهتر به روز کنید",
+      "twoFactor": "احراز هویت دو مرحله ای",
+      "twoFactorDesc": "یک لایه امنیتی اضافی به حساب خود اضافه کنید",
+      "loginAlerts": "هشدارهای ورود",
+      "loginAlertsDesc": "زمانی که کسی وارد حساب شما شود مطلع شوید",
+      "stats": "آمار حساب",
+      "memberSince": "عضو از",
+      "lastLogin": "آخرین ورود",
+      "securityScore": "امتیاز امنیتی"
+    },
+    "notifications": {
+      "title": "اعلان ها",
+      "subtitle": "انتخاب کنید چگونه می خواهید مطلع شوید",
+      "email": {
+        "title": "اعلان های ایمیل",
+        "account": "فعالیت حساب",
+        "securityAlerts": "هشدارهای امنیتی",
+        "securityAlertsDesc": "اعلان های امنیتی مهم",
+        "passwordChanges": "تغییرات رمز عبور",
+        "passwordChangesDesc": "زمانی که رمز عبور شما تغییر کند",
+        "accountUpdates": "به روز رسانی حساب",
+        "accountUpdatesDesc": "به روز رسانی درباره حساب شما",
+        "system": "به روز رسانی سیستم",
+        "systemUpdates": "به روز رسانی سیستم",
+        "systemUpdatesDesc": "ویژگی ها و به روز رسانی های جدید",
+        "maintenance": "اعلان های تعمیر و نگهداری",
+        "maintenanceDesc": "پنجره های تعمیر و نگهداری برنامه ریزی شده",
+        "newsletter": "خبرنامه",
+        "newsletterDesc": "به روز رسانی محصول و نکات"
+      },
+      "push": {
+        "title": "اعلان های فوری",
+        "activity": "اعلان های فعالیت",
+        "newMessages": "پیام های جدید",
+        "newMessagesDesc": "زمانی که پیام جدیدی دریافت کنید",
+        "mentions": "اشاره ها",
+        "mentionsDesc": "زمانی که کسی به شما اشاره کند",
+        "taskUpdates": "به روز رسانی وظایف",
+        "taskUpdatesDesc": "به روز رسانی در وظایف محول شده شما"
+      },
+      "summary": "خلاصه اعلان ها",
+      "active": "فعال",
+      "total": "کل",
+      "enabled": "فعال شده",
+      "channels": "کانال های اعلان",
+      "quickActions": "اقدامات سریع",
+      "enableAll": "فعال کردن همه",
+      "disableAll": "غیرفعال کردن همه",
+      "resetDefaults": "بازنشانی به پیش فرض"
+    },
+    "system": {
+      "title": "سیستم",
+      "subtitle": "تنظیمات و ترجیحات سیستم پیشرفته",
+      "performance": {
+        "title": "کارایی",
+        "animations": "انیمیشن ها",
+        "animationsDesc": "انیمیشن ها و انتقال های روان را فعال کنید",
+        "autoSave": "ذخیره خودکار",
+        "autoSaveDesc": "کار شما را به طور خودکار ذخیره کنید",
+        "preload": "پیش بارگذاری محتوا",
+        "preloadDesc": "محتوا را برای ناوبری سریعتر از قبل بارگذاری کنید"
+      },
+      "privacy": {
+        "title": "حریم خصوصی و امنیت",
+        "analytics": "تجزیه و تحلیل استفاده",
+        "analyticsDesc": "با اشتراک گذاری داده های استفاده به بهبود برنامه کمک کنید",
+        "crashReports": "گزارش های خرابی",
+        "crashReportsDesc": "گزارش های خرابی را به طور خودکار ارسال کنید",
+        "dataCollection": "جمع آوری داده",
+        "minimal": "حداقل",
+        "standard": "استاندارد",
+        "extensive": "گسترده"
+      },
+      "storage": {
+        "title": "مدیریت ذخیره سازی",
+        "used": "استفاده شده",
+        "available": "موجود",
+        "total": "کل",
+        "clearCache": "پاک کردن کش",
+        "clearData": "پاک کردن همه داده ها"
+      },
+      "advanced": {
+        "title": "تنظیمات پیشرفته",
+        "debugMode": "حالت اشکال زدایی",
+        "debugModeDesc": "لاگ گیری دقیق برای عیب یابی را فعال کنید",
+        "developerTools": "ابزارهای توسعه دهنده",
+        "developerToolsDesc": "دسترسی به ویژگی های توسعه دهنده",
+        "experimental": "ویژگی های آزمایشی",
+        "experimentalDesc": "ویژگی های جدید را قبل از انتشار امتحان کنید",
+        "experimentalWarning": "ویژگی های آزمایشی ممکن است ناپایدار باشند و باعث مشکلات شوند."
+      },
+      "info": {
+        "title": "اطلاعات سیستم",
+        "version": "نسخه",
+        "build": "ساخت",
+        "os": "سیستم عامل",
+        "browser": "مرورگر",
+        "lastUpdate": "آخرین به روز رسانی"
+      },
+      "actions": {
+        "title": "اقدامات سیستم",
+        "checkUpdates": "بررسی به روز رسانی ها",
+        "exportLogs": "صادرات لاگ ها",
+        "resetSettings": "بازنشانی تنظیمات",
+        "factoryReset": "بازنشانی کارخانه"
+      },
+      "metrics": {
+        "title": "متریک های کارایی",
+        "cpu": "استفاده از CPU",
+        "memory": "استفاده از حافظه",
+        "storage": "استفاده از ذخیره سازی",
+        "network": "تأخیر شبکه"
+      }
+    },
     "security": "امنیت",
     "language": "زبان",
     "theme": "تم",
@@ -158,10 +301,17 @@
   },
   "theme": {
     "themeMode": "حالت تم",
+    "themeModeDesc": "بین تم های روشن و تاریک انتخاب کنید",
     "direction": "جهت",
+    "directionDesc": "جهت متن را برای رابط کاربری خود تنظیم کنید",
     "primaryColor": "رنگ اصلی",
+    "primaryColorDesc": "رنگ مورد علاقه خود را برای تأکید انتخاب کنید",
     "layout": "چیدمان",
-    "fontFamily": "خانواده فونت"
+    "layoutDesc": "انتخاب کنید داشبورد چگونه سازماندهی شود",
+    "fontFamily": "خانواده فونت",
+    "fontFamilyDesc": "سبک تایپوگرافی را انتخاب کنید",
+    "contrast": "کنتراست بالا",
+    "contrastDesc": "کنتراست را برای دسترسی بهتر افزایش دهید"
   },
   "settingsDrawer": {
     "presets": "پیش فرض ها",
