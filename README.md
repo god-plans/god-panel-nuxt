@@ -88,6 +88,62 @@ npm run preview
 npm run generate
 ```
 
+## 🌐 Deployment
+
+### Netlify Deployment (Recommended)
+
+God Panel is configured for easy deployment to Netlify with optimized settings.
+
+#### Quick Deploy
+
+1. **Connect to Netlify:**
+   - Go to [Netlify Dashboard](https://app.netlify.com/)
+   - Click "Add new site" → "Import an existing project"
+   - Connect your GitHub repository
+
+2. **Configure Build Settings:**
+   ```
+   Build command: npm run build
+   Publish directory: .output/public
+   Node version: 20
+   ```
+
+3. **Environment Variables (Optional):**
+   ```
+   NUXT_PUBLIC_SITE_URL=https://your-site-name.netlify.app
+   NUXT_PUBLIC_API_URL=https://your-api-endpoint.com
+   ENABLE_MOCK_DATA=true  # For demo purposes
+   ```
+
+4. **Deploy:** Click "Deploy site"
+
+#### Manual CLI Deployment
+
+```bash
+# Install Netlify CLI
+npm install -g netlify-cli
+
+# Login to Netlify
+netlify login
+
+# Use the provided deployment script
+./deploy-netlify.sh
+
+# Or deploy manually
+npm run build
+netlify deploy --dir=.output/public --prod
+```
+
+### Other Deployment Options
+
+- **Vercel:** Configure build command as `npm run build` and output directory as `.output/public`
+- **Railway:** Use Nixpacks or custom build command
+- **Docker:** The build output in `.output/public` can be served by any static file server
+
+### 📚 Deployment Documentation
+
+For detailed deployment instructions, see [DEPLOYMENT.md](./DEPLOYMENT.md)
+
 ## 📁 Project Structure
 
 ```
