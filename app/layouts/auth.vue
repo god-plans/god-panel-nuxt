@@ -98,12 +98,28 @@ const { t } = useI18n();
   }
 }
 
-/* RTL support */
+/* Enhanced RTL support */
+[dir="rtl"] .auth-layout {
+  direction: rtl;
+}
+
 [dir="rtl"] .header-content {
   direction: rtl;
   display: flex;
   justify-content: flex-end;
   align-items: center;
+}
+
+[dir="rtl"] .form-title {
+  text-align: start;
+}
+
+[dir="rtl"] .register-link {
+  flex-direction: row-reverse;
+}
+
+[dir="rtl"] .forgot-link {
+  align-self: flex-start;
 }
 
 [dir="rtl"] .help-section {
@@ -114,5 +130,16 @@ const { t } = useI18n();
 [dir="rtl"] .logo-section {
   margin-right: auto;
   margin-left: 0;
+}
+
+/* Mobile RTL adjustments */
+@media (max-width: 959px) {
+  [dir="rtl"] .logo-section {
+    order: 1; /* Reverse order on mobile for RTL */
+  }
+
+  [dir="rtl"] .auth-header {
+    text-align: right;
+  }
 }
 </style>

@@ -206,18 +206,26 @@ useHead({
   font-weight: 600;
   color: rgb(var(--v-theme-on-surface));
   margin-bottom: 16px;
-  text-align: left;
+  /* Remove hardcoded text-align: left */
+  text-align: inherit; /* Use inherited direction */
 }
 
+.form-title {
+  text-align: right;
+}
+
+
 .register-link {
+ 
   display: flex;
   align-items: center;
+  justify-content: flex-end;
   gap: 4px;
 }
 
 .register-text {
   font-size: 14px;
-  color: rgb(var(--v-theme-on-surface-variant));
+  color: rgb(var(--v-theme-on-surface));
 }
 
 .register-link-text {
@@ -225,6 +233,7 @@ useHead({
   color: rgb(var(--v-theme-primary));
   text-decoration: none;
   font-weight: 500;
+  text-align: right;
 }
 
 /* Alerts */
@@ -254,6 +263,15 @@ useHead({
   font-size: 14px;
   color: rgb(var(--v-theme-primary));
   text-decoration: none;
+  /* Remove hardcoded align-self: flex-end */
+  align-self: flex-start;
+}
+
+[dir="rtl"] .forgot-link {
+  align-self: flex-start;
+}
+
+[dir="ltr"] .forgot-link {
   align-self: flex-end;
 }
 
@@ -270,6 +288,15 @@ useHead({
 .signin-btn {
   height: 44px;
   margin-top: 8px;
+}
+
+/* RTL-specific form adjustments */
+[dir="rtl"] .login-form {
+  direction: rtl;
+}
+
+[dir="rtl"] .register-link {
+  flex-direction: row-reverse;
 }
 
 /* Mobile Styles */

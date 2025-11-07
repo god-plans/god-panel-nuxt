@@ -12,7 +12,7 @@
         <v-btn-toggle
           v-model="localSettings.colorScheme"
           mandatory
-          class="theme-toggle"
+          
         >
           <v-btn value="light" variant="outlined" size="small">
             <v-icon class="me-1">mdi-weather-sunny</v-icon>
@@ -31,7 +31,8 @@
         <v-btn-toggle
           v-model="localSettings.direction"
           mandatory
-          class="direction-toggle"
+          class=""
+          
         >
           <v-btn value="ltr" variant="outlined" size="small">
             LTR
@@ -210,14 +211,6 @@ watch(() => settingsStore.settings, (newSettings) => {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
   gap: 8px;
-}
-
-.color-btn {
-  position: relative;
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  min-height: 32px;
 }
 
 .color-swatch {

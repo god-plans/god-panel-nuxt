@@ -158,6 +158,10 @@
     <!-- Footer Actions -->
     <template #append>
       <div class="nav-footer">
+        <!-- Info Box for Mobile -->
+        <DashboardNavInfo :mini="false" :mobile="true" />
+
+        <!-- Action Buttons -->
         <v-list density="compact">
           <v-list-item @click="handleSettings" class="nav-item">
             <template #prepend>
@@ -192,6 +196,7 @@ import { useAuthStore } from '../../stores/auth'
 import LogoutConfirmDialog from '../common/LogoutConfirmDialog.vue'
 import Logo from '../common/Logo.vue'
 import { useSettingsStore } from '../../stores/settings'
+import DashboardNavInfo from './DashboardNavInfo.vue'
 
 const { t } = useI18n()
 const settingsStore = useSettingsStore()
