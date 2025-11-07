@@ -67,7 +67,11 @@
     "red": "Red",
     "settingsTitle": "Settings",
     "one": "One",
-    "two": "Two"
+    "two": "Two",
+    "help": "Help",
+    "github": "GitHub",
+    "documentation": "Documentation",
+    "support": "Support",
   },
   "nav": {
     "analytics": "Analytics",
@@ -207,6 +211,7 @@
     "menu": "Menu",
     "logout": "Logout",
     "settingsTitle": "Settings",
+
     "darkMode": "Dark mode",
     "highContrast": "High contrast",
     "rtl": "RTL",

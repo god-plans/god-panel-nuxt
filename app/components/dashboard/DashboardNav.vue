@@ -153,7 +153,7 @@
 
     <!-- Footer -->
     <template #append>
-      <div class="nav-footer" />
+      <DashboardNavInfo :mini="mini" :mobile="mobile" />
     </template>
   </v-navigation-drawer>
 </template>
@@ -165,6 +165,7 @@ import { useRoute } from "vue-router";
 import { dashboardNavItems, isActiveRoute } from "../../utils/routes";
 import { useSettingsStore } from "../../stores/settings";
 import Logo from "../common/Logo.vue";
+import DashboardNavInfo from "./DashboardNavInfo.vue";
 
 const { t } = useI18n();
 const props = defineProps<{ mini?: boolean; mobile?: boolean }>();
