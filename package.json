@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "God Panel - Modern Admin Dashboard built with Nuxt.js, Vuetify, and Tailwind CSS",
   "author": "God Plan Team",
-  "license": "MIT",
+  "license": "GNU AFFERO GENERAL PUBLIC LICENSE",
   "type": "module",
   "private": true,
   "scripts": {
