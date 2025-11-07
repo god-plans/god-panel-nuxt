@@ -1,0 +1,66 @@
+[build]
+  # Build command for Nuxt 4 static site generation
+  command = "npm run generate"
+
+  # Directory to publish (Nuxt outputs static files to .output/public)
+  publish = ".output/public"
+
+[build.environment]
+  # Node.js version (latest LTS)
+  NODE_VERSION = "20"
+
+  # Build settings
+  NPM_FLAGS = "--production=false"
+
+  # Environment variables for the build
+  NUXT_PUBLIC_SITE_URL = "https://god-panel.netlify.app"
+
+# Redirect rules for SPA fallback
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
+
+# API routes fallback (if using serverless functions)
+[[redirects]]
+  from = "/api/*"
+  to = "/.netlify/functions/:splat"
+  status = 200
+
+# Security headers
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Frame-Options = "DENY"
+    X-XSS-Protection = "1; mode=block"
+    X-Content-Type-Options = "nosniff"
+    Referrer-Policy = "strict-origin-when-cross-origin"
+    Content-Security-Policy = "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://*.netlify.app https://*.netlify.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self' https://*.netlify.app https://*.netlify.com;"
+
+# Cache static assets aggressively
+[[headers]]
+  for = "/_nuxt/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+# Cache images and fonts
+[[headers]]
+  for = "/assets/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+[[headers]]
+  for = "/fonts/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+# Cache favicon and other static files
+[[headers]]
+  for = "/favicon.ico"
+  [headers.values]
+    Cache-Control = "public, max-age=86400"
+
+[[headers]]
+  for = "/robots.txt"
+  [headers.values]
+    Cache-Control = "public, max-age=86400"

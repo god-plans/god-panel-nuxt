@@ -103,7 +103,7 @@ God Panel is configured for easy deployment to Netlify with optimized settings.
 
 2. **Configure Build Settings:**
    ```
-   Build command: npm run build
+   Build command: npm run generate
    Publish directory: .output/public
    Node version: 20
    ```
@@ -130,7 +130,7 @@ netlify login
 ./deploy-netlify.sh
 
 # Or deploy manually
-npm run build
+npm run generate
 netlify deploy --dir=.output/public --prod
 ```
 
