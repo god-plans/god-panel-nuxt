@@ -1,6 +1,6 @@
 [build]
   # Build command for Nuxt 4 static site generation
-  command = "npm run generate"
+  command = "npm ci && npx nuxt prepare && npm run generate"
 
   # Directory to publish (Nuxt outputs static files to .output/public)
   publish = ".output/public"

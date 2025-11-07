@@ -25,6 +25,10 @@ fi
 echo "📦 Installing dependencies..."
 npm ci
 
+# Prepare Nuxt
+echo "⚙️ Preparing Nuxt..."
+npx nuxt prepare
+
 # Build the application (static generation for Netlify)
 echo "🔨 Building Nuxt application..."
 npm run generate

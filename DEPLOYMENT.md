@@ -20,7 +20,7 @@ This guide covers deploying your God Panel Nuxt application to Netlify.
 
 #### Step 2: Configure Build Settings
 ```
-Build command: npm run generate
+Build command: npm ci && npx nuxt prepare && npm run generate
 Publish directory: .output/public
 Node version: 20
 ```
