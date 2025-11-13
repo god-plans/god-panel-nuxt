@@ -44,8 +44,8 @@ const langFromCookie = useCookie("lang");
 if (langFromCookie.value && langFromCookie.value !== locale.value) {
   setLocale(langFromCookie.value);
 } else if (!langFromCookie.value) {
-  setLocale("fa");
-  langFromCookie.value = "fa";
+  setLocale("en");
+  langFromCookie.value = "en";
 }
 
 // Get settings store for RTL support

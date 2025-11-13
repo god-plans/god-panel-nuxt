@@ -6,13 +6,9 @@
     :style="{
       borderBottom: `1px solid rgb(var(--v-theme-surface-variant))`,
     }"
-  > 
+  >
     <!-- Mobile menu button -->
-    <v-app-bar-nav-icon
-
-      @click="$emit('toggle-nav')"
-      class="d-lg-none"
-    />
+    <v-app-bar-nav-icon @click="$emit('toggle-nav')" class="d-md-none" />
 
     <!-- Logo for mobile -->
     <v-img
@@ -25,7 +21,7 @@
     />
 
     <!-- Breadcrumbs for desktop -->
-    <div v-if="!mobile" class="breadcrumbs">
+    <div  class="breadcrumbs lg:!block !hidden">
       <v-breadcrumbs :items="breadcrumbItems">
         <template #item="{ item }">
           <v-breadcrumbs-item
@@ -56,14 +52,18 @@
     </v-text-field> -->
 
     <!-- Language Switcher -->
-    <LanguageSwitcher />
+    
+      <LanguageSwitcher />
+    
     <!-- Settings Button -->
-    <SettingsButton />
+    
+      <SettingsButton />
+    
 
     <!-- Notifications -->
     <v-menu offset-y>
       <template #activator="{ props }">
-        <v-btn icon v-bind="props" class="notification-btn">
+        <v-btn icon v-bind="props" class="notification-btn ">
           <v-badge
             :content="notifications.length"
             :value="notifications.length > 0"
@@ -135,8 +135,12 @@
               />
             </v-avatar>
           </template>
-          <v-list-item-title>{{ authStore.displayName || 'Demo User' }}</v-list-item-title>
-          <v-list-item-subtitle>{{ authStore.userEmail || 'demo@example.com' }}</v-list-item-subtitle>
+          <v-list-item-title>{{
+            authStore.displayName || "Demo User"
+          }}</v-list-item-title>
+          <v-list-item-subtitle>{{
+            authStore.userEmail || "demo@example.com"
+          }}</v-list-item-subtitle>
         </v-list-item>
 
         <v-divider />
@@ -278,6 +282,7 @@ const performLogout = async () => {
 .dashboard-header {
   background-color: rgb(var(--v-theme-surface)) !important;
   color: rgb(var(--v-theme-on-surface));
+  display: flex;
 }
 
 .breadcrumbs {
@@ -310,7 +315,6 @@ const performLogout = async () => {
 
 .search-field :deep(.v-field--focused) {
   border-color: rgb(var(--v-theme-primary)) !important;
-
 }
 
 .search-field :deep(.v-field__input) {
@@ -323,7 +327,12 @@ const performLogout = async () => {
 
 .notification-btn,
 .user-btn {
-  margin-left: 8px;
+  @media (max-width: 959px) {
+    margin-left: 0px;
+  }
+  @media (min-width: 960px) {
+    margin-left: 8px;
+  }
   color: rgb(var(--v-theme-on-surface));
 }
 
@@ -365,7 +374,12 @@ const performLogout = async () => {
 
 [dir="rtl"] .notification-btn,
 [dir="rtl"] .user-btn {
-  margin-right: 8px;
+  @media (max-width: 959px) {
+    margin-right: 0px;
+  }
+  @media (min-width: 960px) {
+    margin-right: 8px;
+  }
   margin-left: 0;
 }
 
