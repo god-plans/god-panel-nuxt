@@ -2,12 +2,7 @@ import type { ApiResponse } from '~/types'
 
 export const apiEndpoints = {
   auth: {
-    me: '/auth/me',
     login: '/auth/login',
-    register: '/auth/register',
-    logout: '/auth/logout',
-    refresh: '/auth/refresh',
-    profile: '/auth/profile'
   },
   users: {
     list: '/users',
