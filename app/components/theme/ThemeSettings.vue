@@ -103,10 +103,11 @@
 </template>
 
 <script setup lang="ts">
-import { reactive, watch, computed } from 'vue'
+import { reactive, watch, computed, onUnmounted } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { GkButton, GkCheckbox, GkField, GkSelect } from 'god-kit/vue'
 import { useSettingsStore } from '~/stores/settings'
+import { applyGkPrimaryPreset } from '~/utils/gk-primary-presets'
 import AppIcon from '~/components/ui/AppIcon.vue'
 
 const { t } = useI18n()
@@ -175,11 +176,29 @@ const resetToDefaults = () => {
 watch(() => settingsStore.settings, (newSettings) => {
   Object.assign(localSettings, newSettings)
 }, { deep: true })
+
+/** Live preview: sidebar / buttons use --gk-color-primary before Save */
+watch(
+  () => localSettings.primaryColor,
+  (preset) => {
+    if (import.meta.client) {
+      applyGkPrimaryPreset(document.documentElement, preset)
+    }
+  },
+  { immediate: true }
+)
+
+onUnmounted(() => {
+  if (import.meta.client) {
+    applyGkPrimaryPreset(document.documentElement, settingsStore.settings.primaryColor)
+  }
+})
 </script>
 
 <style scoped>
 .theme-settings {
-  max-width: 400px;
+  width: 100%;
+  max-width: none;
 }
 
 .setting-group {

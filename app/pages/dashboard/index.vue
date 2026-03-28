@@ -11,16 +11,16 @@
         :key="stat.label"
         class="stat-card rounded-xl border border-[var(--gk-color-border)] bg-[var(--gk-color-surface)] p-4 shadow-sm"
       >
-        <div class="flex items-center gap-3">
+        <div class="flex min-h-[3rem] items-center gap-3">
           <div
             class="flex h-12 w-12 shrink-0 items-center justify-center rounded-full text-white"
             :class="stat.avatarClass"
           >
             <AppIcon :name="stat.icon" :size="22" class="text-white" />
           </div>
-          <div>
-            <div class="text-h6 font-bold">{{ stat.value }}</div>
-            <div class="text-caption opacity-70">{{ t(stat.label) }}</div>
+          <div class="flex min-w-0 flex-col justify-center gap-0.5 leading-none">
+            <div class="text-h6 font-bold leading-tight">{{ stat.value }}</div>
+            <div class="text-caption leading-tight opacity-70">{{ t(stat.label) }}</div>
           </div>
         </div>
       </div>
@@ -37,17 +37,17 @@
 
       <div class="lg:col-span-4 rounded-xl border border-[var(--gk-color-border)] bg-[var(--gk-color-surface)] p-4 shadow-sm">
         <h2 class="text-lg font-semibold mb-4">{{ t('pages.dashboard.recentActivity') }}</h2>
-        <ul class="space-y-4 list-none p-0 m-0">
-          <li v-for="(item, i) in items" :key="i" class="flex gap-3 items-start">
+        <ul class="m-0 list-none space-y-4 p-0">
+          <li v-for="(item, i) in items" :key="i" class="flex items-center gap-3">
             <div
               class="flex h-8 w-8 shrink-0 items-center justify-center rounded-full text-white"
               :class="item.avatarClass"
             >
               <AppIcon :name="item.icon" :size="16" class="text-white" />
             </div>
-            <div>
-              <div class="text-body-2">{{ t(item.title) }}</div>
-              <div class="text-caption opacity-70">{{ item.time }}</div>
+            <div class="flex min-w-0 flex-col justify-center gap-0.5 leading-none">
+              <div class="text-body-2 leading-tight">{{ t(item.title) }}</div>
+              <div class="text-caption leading-tight opacity-70">{{ item.time }}</div>
             </div>
           </li>
         </ul>
@@ -92,14 +92,17 @@ useHead({
 }
 .text-h6 {
   font-size: 1.125rem;
+  line-height: 1.25;
 }
 .text-body-1 {
   font-size: 1rem;
 }
 .text-body-2 {
   font-size: 0.875rem;
+  line-height: 1.35;
 }
 .text-caption {
   font-size: 0.75rem;
+  line-height: 1.25;
 }
 </style>

@@ -6,7 +6,7 @@
     :rail-width="88"
     :location="isRTL ? 'end' : 'start'"
     :dir="isRTL ? 'rtl' : 'ltr'"
-    class="dashboard-nav"
+    class="dashboard-nav min-w-0"
     :class="{
       'nav-mini': mini && !mobile,
       'nav-compact': settingsStore.settings.compactLayout,
@@ -38,12 +38,12 @@
       </GkButton>
     </div>
 
-    <ul class="nav-list list-none p-0 m-0 flex flex-col flex-1 min-h-0">
+    <ul class="nav-list list-none p-0 m-0 flex min-h-0 min-w-0 flex-1 flex-col overflow-x-hidden">
       <template v-for="item in navItems" :key="item.key">
         <li v-if="!item.children">
           <NuxtLink
             :to="item.path"
-            class="nav-item flex items-center gap-2 px-3 py-2 mx-2 rounded-lg transition-colors"
+            class="nav-item flex min-w-0 items-center gap-2 px-3 py-2 mx-2 rounded-lg transition-colors"
             :class="{
               'nav-item-active': isActive(item.path),
               'justify-center': mini && !mobile,
@@ -52,7 +52,7 @@
             <AppIcon :name="item.icon.replace('mdi-', '')" :size="20" />
             <span
               v-if="!mini || mobile"
-              class="nav-title"
+              class="nav-title min-w-0 flex-1 truncate leading-snug"
               :class="{ 'text-right': isRTL }"
             >
               {{ t(item.title) }}
@@ -63,7 +63,7 @@
         <li v-else class="nav-group">
           <button
             type="button"
-            class="nav-group-header w-full flex items-center gap-2 px-3 py-2 mx-2 rounded-lg text-left border-0 bg-transparent cursor-pointer"
+            class="nav-group-header flex w-full min-w-0 items-center gap-2 px-3 py-2 mx-2 rounded-lg border-0 bg-transparent text-left cursor-pointer"
             :class="{
               'nav-group-active': isActive(item.path),
               'nav-group-expanded': expandedGroups[item.key],
@@ -81,9 +81,9 @@
               />
             </div>
             <template v-else>
-              <span class="nav-title flex-1 flex items-center gap-2" :class="{ 'text-right': isRTL }">
-                <AppIcon :name="item.icon.replace('mdi-', '')" :size="16" />
-                <span>{{ t(item.title) }}</span>
+              <span class="nav-title flex min-w-0 flex-1 items-center gap-2" :class="{ 'text-right': isRTL }">
+                <AppIcon class="shrink-0" :name="item.icon.replace('mdi-', '')" :size="16" />
+                <span class="min-w-0 truncate">{{ t(item.title) }}</span>
               </span>
               <AppIcon
                 :name="expandedGroups[item.key] ? 'chevron-up' : 'chevron-down'"
@@ -101,7 +101,7 @@
             <li v-for="child in item.children" :key="child.key">
               <NuxtLink
                 :to="child.path"
-                class="nav-subitem flex items-center gap-2 px-3 py-2 mx-2 rounded-md"
+                class="nav-subitem flex min-w-0 items-center gap-2 px-3 py-2 mx-2 rounded-md"
                 :class="{
                   'nav-subitem-active': isActive(child.path),
                   'justify-center': mini && !mobile,
@@ -110,7 +110,7 @@
                 <AppIcon :name="child.icon.replace('mdi-', '')" :size="16" />
                 <span
                   v-if="!mini || mobile"
-                  class="nav-subtitle"
+                  class="nav-subtitle min-w-0 flex-1 truncate leading-snug"
                   :class="{
                     'text-right': isRTL,
                   }"
@@ -183,6 +183,16 @@ watchEffect(initializeExpandedGroups);
   background: var(--gk-color-surface);
 }
 
+.dashboard-nav :deep(.gk-navigation-drawer__surface) {
+  min-width: 0;
+  overflow-x: hidden;
+}
+
+.dashboard-nav :deep(.gk-navigation-drawer__content) {
+  min-width: 0;
+  overflow-x: hidden;
+}
+
 .nav-header {
   display: flex;
   align-items: center;
@@ -204,6 +214,8 @@ watchEffect(initializeExpandedGroups);
   transition: all 0.2s ease;
   color: var(--gk-color-on-surface);
   text-decoration: none;
+  min-height: 2.5rem;
+  box-sizing: border-box;
 }
 [dir="rtl"] .nav-item,
 [dir="rtl"] .nav-group-header {
@@ -231,7 +243,8 @@ watchEffect(initializeExpandedGroups);
 }
 .nav-subitem {
   border-radius: 6px;
-  min-height: 36px;
+  min-height: 2.25rem;
+  box-sizing: border-box;
   transition: all 0.2s ease;
   color: var(--gk-color-on-surface);
   text-decoration: none;
@@ -257,8 +270,12 @@ watchEffect(initializeExpandedGroups);
 .nav-mini .nav-item,
 .nav-mini .nav-group-header {
   justify-content: center;
+  min-height: unset;
   padding: 12px;
-  width: 100% !important;
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
 }
 .nav-mini .nav-title {
   display: none;

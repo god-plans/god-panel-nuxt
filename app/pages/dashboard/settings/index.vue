@@ -1,5 +1,5 @@
 <template>
-  <div class="settings-page max-w-screen-lg mx-auto w-full">
+  <div class="settings-page w-full">
       <div class="page-header">
         <h1 class="text-h4 mb-2">{{ t('pages.settings.title') }}</h1>
         <p class="text-body-1 opacity-80">
@@ -7,7 +7,7 @@
         </p>
       </div>
 
-      <div class="settings-content grid grid-cols-1 md:grid-cols-2 gap-8">
+      <div class="settings-content grid w-full grid-cols-1 gap-8 md:grid-cols-2 md:items-start">
         <ThemeSettings />
 
         <div class="rounded-xl border border-[var(--gk-color-border)] bg-[var(--gk-color-surface)] p-6">
