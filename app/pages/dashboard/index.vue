@@ -1,15 +1,15 @@
 <template>
   <div class="dashboard-overview w-full max-w-[1600px] mx-auto px-2">
     <div class="mb-8">
-      <h1 class="text-h4 font-bold mb-2">{{ t('pages.dashboard.welcomeBack') }}</h1>
-      <p class="text-body-1 opacity-80">{{ t('pages.dashboard.welcomeSubtitle') }}</p>
+      <h1 class="panel-section-title mb-2">{{ t('pages.dashboard.welcomeBack') }}</h1>
+      <p class="panel-section-subtitle">{{ t('pages.dashboard.welcomeSubtitle') }}</p>
     </div>
 
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
       <div
         v-for="stat in stats"
         :key="stat.label"
-        class="stat-card rounded-xl border border-[var(--gk-color-border)] bg-[var(--gk-color-surface)] p-4 shadow-sm"
+        class="stat-card panel-card panel-card--interactive p-4 motion-safe:hover:-translate-y-0.5 transition-transform"
       >
         <div class="flex min-h-[3rem] items-center gap-3">
           <div
@@ -27,7 +27,7 @@
     </div>
 
     <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
-      <div class="lg:col-span-8 rounded-xl border border-[var(--gk-color-border)] bg-[var(--gk-color-surface)] p-4 shadow-sm">
+      <div class="lg:col-span-8 panel-card p-4">
         <h2 class="text-lg font-semibold mb-4">{{ t('pages.dashboard.analyticsOverview') }}</h2>
         <div class="chart-placeholder flex flex-col items-center justify-center py-12 text-center">
           <AppIcon name="chart-line" :size="64" class="opacity-30" />
@@ -35,7 +35,7 @@
         </div>
       </div>
 
-      <div class="lg:col-span-4 rounded-xl border border-[var(--gk-color-border)] bg-[var(--gk-color-surface)] p-4 shadow-sm">
+      <div class="lg:col-span-4 panel-card p-4">
         <h2 class="text-lg font-semibold mb-4">{{ t('pages.dashboard.recentActivity') }}</h2>
         <ul class="m-0 list-none space-y-4 p-0">
           <li v-for="(item, i) in items" :key="i" class="flex items-center gap-3">

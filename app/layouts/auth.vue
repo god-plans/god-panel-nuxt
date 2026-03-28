@@ -1,5 +1,5 @@
 <template>
-  <div class="auth-layout">
+  <div class="auth-layout panel-page">
     <div class="logo-section">
       <Logo size="sm" class="logo" />
     </div>
@@ -78,7 +78,9 @@ const { t } = useI18n();
 /* CSS Variables for layout */
 .auth-layout {
   --layout-header-desktop-height: 64px;
-  --layout-auth-content-width: 420px;
+  --layout-auth-content-width: 520px;
+  min-height: 100vh;
+  min-height: 100dvh;
 }
 .header-content {
   display: flex;

@@ -59,6 +59,7 @@ export default defineNuxtConfig({
     '~/assets/css/main.css',
     // After main/Tailwind so `.dn-*` nav rules are reliably bundled (avoid @import in main.css)
     '~/assets/css/dashboard-nav.css',
+    '~/assets/css/panel-shell.css',
     '@mdi/font/css/materialdesignicons.min.css',
   ],
 

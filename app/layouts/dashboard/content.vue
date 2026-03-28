@@ -61,7 +61,7 @@ const contentStyles = computed(() => ({
   flex: 1 1 auto;
   min-height: 0;
   width: 100%;
-  background: var(--gk-color-bg);
+  background: transparent;
 }
 
 .dashboard-content__inner {

@@ -1,8 +1,8 @@
 <template>
   <div class="settings-page w-full">
       <div class="page-header">
-        <h1 class="text-h4 mb-2">{{ t('pages.settings.title') }}</h1>
-        <p class="text-body-1 opacity-80">
+        <h1 class="panel-section-title mb-2">{{ t('pages.settings.title') }}</h1>
+        <p class="panel-section-subtitle">
           {{ t('pages.settings.subtitle') }}
         </p>
       </div>
@@ -10,7 +10,7 @@
       <div class="settings-content grid w-full grid-cols-1 gap-8 md:grid-cols-2 md:items-start">
         <ThemeSettings />
 
-        <div class="rounded-xl border border-[var(--gk-color-border)] bg-[var(--gk-color-surface)] p-6">
+        <div class="panel-card p-6">
           <h2 class="text-h6 mb-4 flex items-center gap-2 font-semibold">
             <AppIcon name="information" :size="22" />
             {{ t('pages.settings.aboutThemeSystem') }}

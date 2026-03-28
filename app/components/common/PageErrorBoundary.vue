@@ -6,7 +6,7 @@
     </div>
 
     <div v-else-if="hasError" class="page-error-boundary__error">
-      <div class="page-error-boundary__container">
+      <div class="page-error-boundary__container panel-card p-8 md:p-10 max-w-xl w-full">
         <div class="page-error-boundary__illustration opacity-60">
           <AppIcon name="file-question" :size="120" class="text-[var(--gk-color-on-surface-muted)]" />
         </div>

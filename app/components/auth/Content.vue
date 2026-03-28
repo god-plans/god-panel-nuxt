@@ -30,13 +30,24 @@ withDefaults(defineProps<Props>(), {
   width: 100%;
   display: flex;
   flex-direction: column;
-  max-width: var(--layout-auth-content-width, 420px);
+  max-width: var(--layout-auth-content-width, 520px);
+  
+  box-sizing: border-box;
+  margin: 0 auto;
 }
 
 @media (min-width: 960px) {
   .auth-content {
     padding: 0;
-    padding-top: calc(var(--layout-header-desktop-height, 64px) + 24px);
+    padding-top: 0;
+    align-items: stretch;
+    justify-content: center;
+    flex: 1 1 auto;
+  }
+
+  .auth-content-inner {
+    padding: 2.25rem 2rem;
+    max-width: min(var(--layout-auth-content-width, 520px), 100%);
   }
 }
 </style>

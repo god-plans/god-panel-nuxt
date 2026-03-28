@@ -156,10 +156,10 @@ useHead({
   font-weight: 600;
   color: var(--gk-color-on-surface);
   margin-bottom: 16px;
-  text-align: inherit;
+  text-align: right;
 }
 
-.form-title {
+[dir='rtl'] .form-title {
   text-align: right;
 }
 

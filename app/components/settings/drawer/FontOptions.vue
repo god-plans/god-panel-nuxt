@@ -1,5 +1,5 @@
 <template>
-  <div class="font-options">
+  <div class="font-options panel-card">
     <div class="font-options__header">
       <span class="font-options__title">{{ t('settingsDrawer.font') }}</span>
     </div>
@@ -62,8 +62,6 @@ const getFontFamily = (font: string) => {
 <style scoped>
 .font-options {
   padding: 32px 16px 16px 16px;
-  border: 1px solid color-mix(in srgb, var(--gk-color-on-surface) 12%, transparent);
-  border-radius: 16px;
   position: relative;
 }
 
@@ -74,13 +72,16 @@ const getFontFamily = (font: string) => {
 }
 
 .font-options__title {
-  font-size: 13px;
+  font-size: 0.6875rem;
   font-weight: 600;
-  line-height: 22px;
-  color: var(--gk-color-bg);
-  background: var(--gk-color-on-surface);
-  padding: 0 10px;
-  border-radius: 22px;
+  line-height: 1.2;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--gk-color-on-surface-muted);
+  background: color-mix(in srgb, var(--gk-color-primary) 8%, var(--gk-color-surface));
+  padding: 0.35rem 0.65rem;
+  border-radius: 999px;
+  border: 1px solid var(--panel-hairline);
   display: inline-flex;
   align-items: center;
 }
@@ -113,8 +114,11 @@ const getFontFamily = (font: string) => {
 
 .font-option--selected {
   color: var(--gk-color-on-surface);
-  border-color: color-mix(in srgb, var(--gk-color-on-surface) 8%, transparent);
-  box-shadow: -8px 8px 20px -4px color-mix(in srgb, var(--gk-color-on-surface) 12%, transparent);
+  border-color: color-mix(in srgb, var(--gk-color-primary) 28%, var(--gk-color-border));
+  background: color-mix(in srgb, var(--gk-color-primary) 9%, transparent);
+  box-shadow:
+    inset 0 0 0 1px color-mix(in srgb, var(--gk-color-primary) 18%, transparent),
+    var(--panel-shadow-card);
 }
 
 .font-option__icon {

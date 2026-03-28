@@ -1,10 +1,6 @@
 <template>
   <header
-    class="dashboard-header flex w-full min-h-[64px] shrink-0 items-center border-b border-[var(--gk-color-border)] px-2 md:px-4"
-    :style="{
-      background: 'var(--gk-color-surface)',
-      color: 'var(--gk-color-on-surface)',
-    }"
+    class="dashboard-header panel-header-bar flex w-full min-h-[64px] shrink-0 items-center px-2 md:px-4 z-[1] text-[var(--gk-color-on-surface)]"
   >
     <GkButton
       variant="ghost"
@@ -75,12 +71,12 @@
       </template>
 
       <ul
-        class="notification-list min-w-[280px] list-none p-0 m-0"
+        class="notification-list panel-menu-surface min-w-[280px] list-none p-1 m-0 overflow-hidden"
         role="menu"
       >
         <li
           v-if="notifications.length === 0"
-          class="px-3 py-2 text-sm"
+          class="px-3 py-3 text-sm text-[var(--gk-color-on-surface-muted)]"
           role="menuitem"
         >
           {{ t("settings.noNewNotifications") }}
@@ -88,12 +84,12 @@
         <li
           v-for="notification in notifications.slice(0, 5)"
           :key="notification.id"
-          class="flex gap-3 px-3 py-2 cursor-pointer hover:bg-[var(--gk-color-surface-muted)] rounded-md"
+          class="flex gap-3 px-2 py-2 cursor-pointer rounded-[var(--panel-radius-sm)] hover:bg-[color-mix(in_srgb,var(--gk-color-primary)_8%,transparent)]"
           role="menuitem"
           @click="markAsRead(notification.id)"
         >
           <span
-            class="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-[var(--gk-color-surface-muted)] text-[var(--gk-color-primary)]"
+            class="flex h-8 w-8 shrink-0 items-center justify-center rounded-[var(--panel-radius-sm)] bg-[color-mix(in_srgb,var(--gk-color-primary)_12%,transparent)] text-[var(--gk-color-primary)] shadow-[inset_0_0_0_1px_color-mix(in_srgb,var(--gk-color-primary)_22%,transparent)]"
           >
             <AppIcon :name="notification.icon.replace('mdi-', '')" :size="20" />
           </span>
@@ -102,12 +98,12 @@
             <div class="text-xs opacity-80 truncate">{{ notification.message }}</div>
           </div>
         </li>
-        <li v-if="notifications.length > 0" class="px-0 py-1">
-          <GkDivider />
+        <li v-if="notifications.length > 0" class="px-1 py-0">
+          <div class="panel-divider my-1" role="separator" />
         </li>
         <li
           v-if="notifications.length > 0"
-          class="px-3 py-2 text-sm text-[var(--gk-color-primary)] cursor-pointer"
+          class="px-2 py-2 text-sm font-medium text-[var(--gk-color-primary)] cursor-pointer rounded-[var(--panel-radius-sm)] hover:bg-[color-mix(in_srgb,var(--gk-color-primary)_8%,transparent)]"
           role="menuitem"
           @click="viewAllNotifications"
         >
@@ -133,23 +129,23 @@
         </GkButton>
       </template>
 
-      <div class="user-menu text-start min-w-[240px]">
-        <div class="flex gap-3 px-3 py-2 items-center">
+      <div class="user-menu panel-menu-surface text-start min-w-[240px] overflow-hidden p-1">
+        <div class="flex gap-3 px-2 py-2 items-center rounded-[var(--panel-radius-sm)]">
           <img
             :src="authStore.user?.photoURL || '/assets/images/avatar.webp'"
             :alt="authStore.displayName || ''"
-            class="h-10 w-10 rounded-full object-cover"
+            class="h-10 w-10 rounded-full object-cover ring-2 ring-[color-mix(in_srgb,var(--gk-color-primary)_25%,transparent)]"
           />
           <div class="min-w-0">
-            <div class="text-sm font-medium truncate">
+            <div class="text-sm font-semibold truncate">
               {{ authStore.displayName || "Demo User" }}
             </div>
-            <div class="text-xs opacity-80 truncate">
+            <div class="text-xs text-[var(--gk-color-on-surface-muted)] truncate">
               {{ authStore.userEmail || "demo@example.com" }}
             </div>
           </div>
         </div>
-        <GkDivider />
+        <div class="panel-divider my-1" role="separator" />
         <ul class="list-none p-0 m-0">
           <li>
             <GkButton
@@ -174,11 +170,11 @@
             </GkButton>
           </li>
         </ul>
-        <GkDivider />
+        <div class="panel-divider my-1" role="separator" />
         <GkButton
           variant="ghost"
           block
-          class="justify-start !rounded-none"
+          class="justify-start !rounded-[var(--panel-radius-sm)] text-[var(--gk-color-danger)] hover:bg-[color-mix(in_srgb,var(--gk-color-danger)_8%,transparent)]"
           @click="handleLogout"
         >
           <AppIcon name="logout" class="me-2" />
@@ -195,7 +191,7 @@
 import { ref, computed } from "vue";
 import { useI18n } from "vue-i18n";
 import { useRouter, useRoute } from "vue-router";
-import { GkButton, GkDivider, GkMenu } from "god-kit/vue";
+import { GkButton, GkMenu } from "god-kit/vue";
 import { generateBreadcrumbs } from "~/utils/routes";
 import { useAuthStore } from "~/stores/auth";
 import SettingsButton from "~/components/theme/SettingsButton.vue";
@@ -299,6 +295,11 @@ const performLogout = async () => {
 </script>
 
 <style scoped>
+.dashboard-header {
+  /* Ensure content sits above gradient hairline */
+  isolation: isolate;
+}
+
 /* god-kit GkButton defaults to centered inner; menus should align to start */
 .user-menu :deep(.gk-btn) {
   justify-content: flex-start;

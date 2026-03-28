@@ -1,5 +1,5 @@
 <template>
-  <div class="theme-settings rounded-xl border border-[var(--gk-color-border)] bg-[var(--gk-color-surface)] p-6">
+  <div class="theme-settings panel-card p-6">
     <h2 class="text-h6 mb-4 flex items-center gap-2 font-semibold">
       <AppIcon name="palette" :size="22" />
       {{ t('settings.general') }}

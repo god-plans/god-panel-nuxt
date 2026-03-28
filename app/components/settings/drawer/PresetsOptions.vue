@@ -1,5 +1,5 @@
 <template>
-  <div class="presets-options">
+  <div class="presets-options panel-card">
     <div class="presets-options__header">
       <span class="presets-options__title">{{ t('settingsDrawer.presets') }}</span>
     </div>
@@ -54,8 +54,6 @@ const handleClick = (value: string) => {
 <style scoped>
 .presets-options {
   padding: 32px 16px 16px 16px;
-  border: 1px solid color-mix(in srgb, var(--gk-color-on-surface) 12%, transparent);
-  border-radius: 16px;
   position: relative;
 }
 
@@ -66,13 +64,16 @@ const handleClick = (value: string) => {
 }
 
 .presets-options__title {
-  font-size: 13px;
+  font-size: 0.6875rem;
   font-weight: 600;
-  line-height: 22px;
-  color: var(--gk-color-bg);
-  background: var(--gk-color-on-surface);
-  padding: 0 10px;
-  border-radius: 22px;
+  line-height: 1.2;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--gk-color-on-surface-muted);
+  background: color-mix(in srgb, var(--gk-color-primary) 8%, var(--gk-color-surface));
+  padding: 0.35rem 0.65rem;
+  border-radius: 999px;
+  border: 1px solid var(--panel-hairline);
   display: inline-flex;
   align-items: center;
 }

@@ -1,5 +1,5 @@
 <template>
-  <div class="nav-options">
+  <div class="nav-options panel-card">
     <div class="nav-options__header">
       <span class="nav-options__title">{{ t('settingsDrawer.nav') }}</span>
       <GkTooltip v-if="tooltip" :text="tooltip" placement="end">
@@ -69,8 +69,6 @@ const handleLayoutClick = (layout: NavLayout) => {
 <style scoped>
 .nav-options {
   padding: 32px 16px 16px 16px;
-  border: 1px solid color-mix(in srgb, var(--gk-color-on-surface) 12%, transparent);
-  border-radius: 16px;
   position: relative;
   --item-radius: 12px;
   --item-bg: color-mix(in srgb, var(--gk-color-on-surface) 20%, transparent);
@@ -87,24 +85,28 @@ const handleLayoutClick = (layout: NavLayout) => {
 }
 
 .nav-options__title {
-  font-size: 13px;
+  font-size: 0.6875rem;
   font-weight: 600;
-  line-height: 22px;
-  color: var(--gk-color-bg);
-  background: var(--gk-color-on-surface);
-  padding: 0 10px;
-  border-radius: 22px;
+  line-height: 1.2;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--gk-color-on-surface-muted);
+  background: color-mix(in srgb, var(--gk-color-primary) 8%, var(--gk-color-surface));
+  padding: 0.35rem 0.65rem;
+  border-radius: 999px;
+  border: 1px solid var(--panel-hairline);
   display: inline-flex;
   align-items: center;
 }
 
 .nav-options__info {
-  opacity: 0.48;
+  opacity: 0.65;
   cursor: pointer;
-  color: var(--gk-color-bg);
-  background: var(--gk-color-on-surface);
+  color: var(--gk-color-on-surface-muted);
+  background: color-mix(in srgb, var(--gk-color-on-surface) 6%, transparent);
   border-radius: 50%;
   padding: 4px;
+  border: 1px solid var(--panel-hairline);
 }
 
 .nav-options__content {

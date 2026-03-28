@@ -6,7 +6,9 @@
     @click="handleClick"
   >
     <div class="base-option__top">
-      <AppIcon class="base-option__icon" :name="getIcon(icon)" :size="24" />
+      <span class="base-option__icon-wrap" aria-hidden="true">
+        <AppIcon class="base-option__icon" :name="getIcon(icon)" :size="24" />
+      </span>
       <GkCheckbox
         :model-value="selected"
         readonly
@@ -66,23 +68,32 @@ const getIcon = (iconName: string) => {
 .base-option {
   width: 100%;
   padding: 16px;
-  border-radius: 16px;
-  border: 1px solid color-mix(in srgb, var(--gk-color-on-surface) 12%, transparent);
-  background: transparent;
-  transition: all 0.2s ease;
+  border-radius: var(--panel-radius-lg);
+  border: 1px solid var(--panel-hairline);
+  background: var(--panel-surface-elevated);
+  box-shadow: var(--panel-shadow-card);
+  transition:
+    border-color 0.18s ease,
+    box-shadow 0.18s ease,
+    background 0.18s ease;
   cursor: pointer;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  gap: 24px;
+  gap: 20px;
 }
 
 .base-option:hover {
-  background: color-mix(in srgb, var(--gk-color-on-surface) 8%, transparent);
+  border-color: color-mix(in srgb, var(--gk-color-primary) 22%, var(--gk-color-border));
+  box-shadow: var(--panel-shadow-card-hover);
 }
 
 .base-option--selected {
-  background: color-mix(in srgb, var(--gk-color-on-surface) 8%, transparent);
+  background: color-mix(in srgb, var(--gk-color-primary) 11%, var(--gk-color-surface));
+  border-color: color-mix(in srgb, var(--gk-color-primary) 28%, var(--gk-color-border));
+  box-shadow:
+    inset 0 0 0 1px color-mix(in srgb, var(--gk-color-primary) 22%, transparent),
+    var(--panel-shadow-card);
 }
 
 .base-option__top {
@@ -92,8 +103,34 @@ const getIcon = (iconName: string) => {
   width: 100%;
 }
 
+.base-option__icon-wrap {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: var(--panel-radius-sm);
+  color: var(--gk-color-on-surface-muted);
+  background: color-mix(in srgb, var(--gk-color-on-surface) 6%, transparent);
+  transition:
+    color 0.18s ease,
+    background 0.18s ease,
+    box-shadow 0.18s ease;
+}
+
+.base-option:hover .base-option__icon-wrap {
+  color: var(--gk-color-on-surface);
+  background: color-mix(in srgb, var(--gk-color-on-surface) 8%, transparent);
+}
+
+.base-option--selected .base-option__icon-wrap {
+  color: var(--gk-color-primary);
+  background: color-mix(in srgb, var(--gk-color-primary) 14%, transparent);
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--gk-color-primary) 22%, transparent);
+}
+
 .base-option__icon {
-  opacity: 0.7;
+  opacity: 1;
 }
 
 .base-option__bottom {

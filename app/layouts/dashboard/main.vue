@@ -35,6 +35,14 @@ const mainStyles = computed((): CSSProperties => ({
   flex-direction: column;
   min-height: 0;
   width: 100%;
-  background: var(--gk-color-bg);
+  background: transparent;
+  padding: 20px 
+  
+ 
+}
+@media (max-width: 960px) {
+  .dashboard-main {
+    padding: 16px;
+  }
 }
 </style>

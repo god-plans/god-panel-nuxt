@@ -1,5 +1,5 @@
 <template>
-  <div class="error-page">
+  <div class="error-page panel-page">
     <PageErrorBoundary
       :error="error"
       :loading="false"
@@ -40,10 +40,11 @@ useHead({
 <style scoped lang="scss">
 .error-page {
   min-height: 100vh;
+  min-height: 100dvh;
   display: flex;
   align-items: center;
   justify-content: center;
-  background: var(--gk-color-bg);
+  padding: 1.5rem;
 }
 </style>
 

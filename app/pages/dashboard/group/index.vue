@@ -1,5 +1,5 @@
 <template>
-  <BlankView :title="$t('pages.groups.management')" />
+  <Blank :title="$t('pages.groups.management')" />
 </template>
 
 <script setup lang="ts">

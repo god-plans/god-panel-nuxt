@@ -55,7 +55,11 @@ const handleClick = () => {
 }
 
 .layout-option--selected {
-  box-shadow: -8px 8px 20px -4px color-mix(in srgb, var(--gk-color-on-surface) 12%, transparent);
+  border-color: color-mix(in srgb, var(--gk-color-primary) 35%, var(--gk-color-border));
+  background: color-mix(in srgb, var(--gk-color-primary) 7%, transparent);
+  box-shadow:
+    inset 0 0 0 1px color-mix(in srgb, var(--gk-color-primary) 20%, transparent),
+    var(--panel-shadow-card);
 }
 
 .layout-option__nav {

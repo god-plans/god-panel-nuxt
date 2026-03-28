@@ -9,7 +9,7 @@
 
     <div class="toast-demo__content">
       <!-- Basic Toast Types -->
-      <section class="toast-demo__section">
+      <section class="toast-demo__section panel-card">
         <h2 class="toast-demo__section-title">Basic Toast Types</h2>
         <div class="toast-demo__buttons">
           <button
@@ -46,7 +46,7 @@
       </section>
 
       <!-- Toast with Title -->
-      <section class="toast-demo__section">
+      <section class="toast-demo__section panel-card">
         <h2 class="toast-demo__section-title">Toast with Title</h2>
         <div class="toast-demo__buttons">
           <button
@@ -65,7 +65,7 @@
       </section>
 
       <!-- Toast with Action -->
-      <section class="toast-demo__section">
+      <section class="toast-demo__section panel-card">
         <h2 class="toast-demo__section-title">Toast with Action Button</h2>
         <div class="toast-demo__buttons">
           <button
@@ -84,7 +84,7 @@
       </section>
 
       <!-- Persistent Toast -->
-      <section class="toast-demo__section">
+      <section class="toast-demo__section panel-card">
         <h2 class="toast-demo__section-title">Persistent Toast</h2>
         <div class="toast-demo__buttons">
           <button
@@ -97,7 +97,7 @@
       </section>
 
       <!-- Promise Toast -->
-      <section class="toast-demo__section">
+      <section class="toast-demo__section panel-card">
         <h2 class="toast-demo__section-title">Promise Toast</h2>
         <div class="toast-demo__buttons">
           <button
@@ -116,7 +116,7 @@
       </section>
 
       <!-- Position Demo -->
-      <section class="toast-demo__section">
+      <section class="toast-demo__section panel-card">
         <h2 class="toast-demo__section-title">Toast Positions</h2>
         <div class="toast-demo__buttons">
           <button
@@ -159,7 +159,7 @@
       </section>
 
       <!-- Multiple Toasts -->
-      <section class="toast-demo__section">
+      <section class="toast-demo__section panel-card">
         <h2 class="toast-demo__section-title">Multiple Toasts</h2>
         <div class="toast-demo__buttons">
           <button
@@ -178,7 +178,7 @@
       </section>
 
       <!-- Configuration -->
-      <section class="toast-demo__section">
+      <section class="toast-demo__section panel-card">
         <h2 class="toast-demo__section-title">Configuration</h2>
         <div class="toast-demo__config">
           <div class="toast-demo__config-item">
@@ -406,7 +406,7 @@ const simulateApiError = (): Promise<never> => {
 <style scoped>
 .toast-demo {
   @apply max-w-4xl mx-auto p-6;
-  background: var(--gk-color-bg);
+  background: transparent;
   min-height: 100%;
 }
 
@@ -416,6 +416,7 @@ const simulateApiError = (): Promise<never> => {
 
 .toast-demo__title {
   @apply text-3xl font-bold mb-2;
+  letter-spacing: -0.02em;
   color: var(--gk-color-text);
 }
 
@@ -429,9 +430,7 @@ const simulateApiError = (): Promise<never> => {
 }
 
 .toast-demo__section {
-  @apply rounded-lg p-6 shadow-sm;
-  background: var(--gk-color-surface);
-  border: 1px solid var(--gk-color-border);
+  @apply p-6;
 }
 
 .toast-demo__section-title {

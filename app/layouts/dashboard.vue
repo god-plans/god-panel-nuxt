@@ -22,7 +22,7 @@
     />
 
     <!-- Header spans the full width above main content (beside sidebar), not between nav and content columns -->
-    <div class="dashboard-main-area">
+    <div class="dashboard-main-area panel-page">
       <DashboardHeader
         :is-horizontal="isHorizontalLayout"
         :is-mobile="mobile"
@@ -150,7 +150,6 @@ onMounted(() => {
   min-width: 0;
   min-height: 100vh;
   min-height: 100dvh;
-  background: var(--gk-color-bg);
 }
 
 .dashboard-layout:has(.dashboard-nav:not(.nav-mini)) {
