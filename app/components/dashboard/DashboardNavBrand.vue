@@ -12,7 +12,7 @@
       class="dn-brand__logo"
     />
     <template v-if="showToggle">
-      <div class="dn-brand__spacer" />
+      <div class="dn-brand__spacer" aria-hidden="true" />
       <GkButton
         variant="ghost"
         slim
@@ -57,19 +57,52 @@ defineEmits<{
   display: flex;
   align-items: center;
   min-height: 64px;
-  padding: 16px;
-  border-bottom: 1px solid var(--gk-color-border);
+  padding: 0.875rem 1rem;
   box-sizing: border-box;
+  position: relative;
+  background: linear-gradient(
+    180deg,
+    color-mix(in srgb, var(--gk-color-primary) 5%, var(--gk-color-surface)) 0%,
+    var(--gk-color-surface) 48%
+  );
+}
+
+.dn-brand::after {
+  content: '';
+  position: absolute;
+  inset-inline: 1rem;
+  bottom: 0;
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    color-mix(in srgb, var(--gk-color-primary) 35%, transparent) 20%,
+    color-mix(in srgb, var(--gk-color-primary) 20%, transparent) 80%,
+    transparent
+  );
+  pointer-events: none;
+  opacity: 0.9;
 }
 
 .dn-brand__spacer {
   flex: 1 1 auto;
 }
 
+.dn-brand__toggle {
+  border-radius: 999px !important;
+  color: var(--gk-color-on-surface-muted) !important;
+}
+
+.dn-brand__toggle:hover {
+  color: var(--gk-color-primary) !important;
+  background: color-mix(in srgb, var(--gk-color-primary) 10%, transparent) !important;
+}
+
 .dn-brand--mini {
   justify-content: flex-start;
-  padding-inline: 12px;
-  gap: 8px;
+  padding-inline: 0.75rem;
+  gap: 0.35rem;
+  min-height: 60px;
 }
 
 .dn-brand--mini .dn-brand__spacer {
@@ -78,5 +111,10 @@ defineEmits<{
 
 .dn-brand--logo-only {
   justify-content: center;
+  background: var(--gk-color-surface);
+}
+
+.dn-brand--logo-only::after {
+  opacity: 0.65;
 }
 </style>

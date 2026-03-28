@@ -75,8 +75,14 @@ const fullNavWidth = computed(() => {
 
 <style scoped>
 .dashboard-nav {
-  border-right: 1px solid var(--gk-color-border);
-  background: var(--gk-color-surface);
+  border-inline-end: 1px solid color-mix(in srgb, var(--gk-color-border) 92%, transparent);
+  background: linear-gradient(
+    165deg,
+    color-mix(in srgb, var(--gk-color-surface) 97%, var(--gk-color-primary)) 0%,
+    var(--gk-color-surface) 28%,
+    var(--gk-color-surface) 100%
+  );
+  box-shadow: 4px 0 24px color-mix(in srgb, var(--gk-color-on-surface) 4%, transparent);
 }
 
 .dashboard-nav :deep(.gk-navigation-drawer__surface) {
@@ -85,6 +91,7 @@ const fullNavWidth = computed(() => {
   min-height: 100vh;
   min-height: 100dvh;
   height: auto;
+  background: transparent;
 }
 
 .dashboard-nav :deep(.gk-navigation-drawer__content) {

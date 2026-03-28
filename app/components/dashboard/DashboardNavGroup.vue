@@ -9,7 +9,9 @@
     >
       <template v-if="mini">
         <div class="dn-nav-group__trigger-inner--rail">
-          <AppIcon :name="navIconName(item.icon)" :size="20" />
+          <span class="dn-nav-item__icon" aria-hidden="true">
+            <AppIcon :name="navIconName(item.icon)" :size="20" />
+          </span>
           <AppIcon
             :name="expanded ? 'chevron-up' : 'chevron-down'"
             :size="14"
@@ -23,7 +25,9 @@
           class="dn-nav-group__title flex min-w-0 flex-1 items-center gap-2"
           :class="{ 'text-end': isRTL }"
         >
-          <AppIcon class="shrink-0" :name="navIconName(item.icon)" :size="16" />
+          <span class="dn-nav-item__icon dn-nav-item__icon--sm" aria-hidden="true">
+            <AppIcon :name="navIconName(item.icon)" :size="20" />
+          </span>
           <span class="min-w-0 truncate">{{ t(item.title) }}</span>
         </span>
         <AppIcon
@@ -47,7 +51,9 @@
           :aria-current="isItemActive(child.path) ? 'page' : undefined"
           @click="$emit('navigate')"
         >
-          <AppIcon :name="navIconName(child.icon)" :size="16" class="shrink-0" />
+          <span class="dn-nav-item__icon dn-nav-item__icon--sm" aria-hidden="true">
+            <AppIcon :name="navIconName(child.icon)" :size="18" />
+          </span>
           <span
             v-if="showLabels"
             class="min-w-0 flex-1 truncate leading-snug"

@@ -7,7 +7,9 @@
     :aria-current="active ? 'page' : undefined"
     @click="$emit('navigate')"
   >
-    <AppIcon :name="navIconName(item.icon)" :size="iconSize" class="shrink-0" />
+    <span class="dn-nav-item__icon" aria-hidden="true">
+      <AppIcon :name="navIconName(item.icon)" :size="iconSize" />
+    </span>
     <span
       v-if="showLabels"
       class="dn-nav-item__title"

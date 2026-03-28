@@ -62,20 +62,24 @@
           <li>
             <button
               type="button"
-              class="dn-nav-item w-full border-0 bg-transparent cursor-pointer text-start"
+              class="dn-nav-item mobile-nav__action w-full border-0 bg-transparent cursor-pointer text-start"
               @click="handleSettings"
             >
-              <AppIcon name="cog" :size="20" class="shrink-0" />
+              <span class="dn-nav-item__icon" aria-hidden="true">
+                <AppIcon name="cog" :size="20" />
+              </span>
               <span class="dn-nav-item__title">{{ t('common.settings') }}</span>
             </button>
           </li>
           <li>
             <button
               type="button"
-              class="dn-nav-item w-full border-0 bg-transparent cursor-pointer text-start"
+              class="dn-nav-item mobile-nav__action mobile-nav__action--danger w-full border-0 bg-transparent cursor-pointer text-start"
               @click="handleLogout"
             >
-              <AppIcon name="logout" :size="20" class="shrink-0" />
+              <span class="dn-nav-item__icon" aria-hidden="true">
+                <AppIcon name="logout" :size="20" />
+              </span>
               <span class="dn-nav-item__title">{{ t('common.logout') }}</span>
             </button>
           </li>
@@ -145,44 +149,83 @@ const performLogout = async () => {
 
 <style scoped>
 .mobile-nav {
-  background: var(--gk-color-surface);
+  background: linear-gradient(
+    180deg,
+    color-mix(in srgb, var(--gk-color-primary) 4%, var(--gk-color-surface)),
+    var(--gk-color-surface) 22%
+  );
 }
 
 .mobile-nav :deep(.gk-navigation-drawer__surface) {
   min-height: 100vh;
   min-height: 100dvh;
+  background: transparent;
 }
 
 .mobile-nav__user {
   display: flex;
   align-items: center;
-  padding: 16px;
-  border-bottom: 1px solid var(--gk-color-border);
+  gap: 0.875rem;
+  margin: 0 0.75rem 0.5rem;
+  padding: 1rem 1rem 1rem 0.85rem;
+  border-radius: 14px;
+  border: 1px solid color-mix(in srgb, var(--gk-color-border) 70%, transparent);
+  background: color-mix(in srgb, var(--gk-color-surface) 88%, var(--gk-color-primary));
+  box-shadow:
+    0 1px 0 color-mix(in srgb, var(--gk-color-on-surface) 6%, transparent) inset,
+    0 8px 28px color-mix(in srgb, var(--gk-color-on-surface) 6%, transparent);
 }
 
 .mobile-nav__avatar {
-  margin-inline-end: 12px;
+  margin-inline-end: 0;
+  box-shadow:
+    0 0 0 2px var(--gk-color-surface),
+    0 0 0 4px color-mix(in srgb, var(--gk-color-primary) 28%, transparent);
+}
+
+.mobile-nav__user-text {
+  min-width: 0;
 }
 
 .mobile-nav__name {
-  font-size: 1rem;
+  font-size: 1.02rem;
   font-weight: 600;
+  letter-spacing: -0.02em;
   color: var(--gk-color-on-surface);
-  margin-bottom: 2px;
+  margin-bottom: 3px;
+  line-height: 1.25;
 }
 
 .mobile-nav__role {
   font-size: 0.75rem;
+  font-weight: 500;
   color: var(--gk-color-on-surface-muted);
   text-transform: capitalize;
+  letter-spacing: 0.02em;
 }
 
 .mobile-nav__footer {
-  border-top: 1px solid var(--gk-color-border);
-  padding: 8px 0;
+  border-top: 1px solid color-mix(in srgb, var(--gk-color-border) 85%, transparent);
+  padding: 0.5rem 0 0.35rem;
+  background: color-mix(in srgb, var(--gk-color-border) 22%, transparent);
+}
+
+.mobile-nav__actions {
+  padding: 0 0.35rem 0.35rem;
 }
 
 .mobile-nav__actions .dn-nav-item {
-  margin: 2px 8px;
+  margin: 4px 0.35rem;
+}
+
+.mobile-nav__action--danger:hover .dn-nav-item__icon {
+  color: var(--gk-color-danger) !important;
+  background: color-mix(in srgb, var(--gk-color-danger) 12%, transparent) !important;
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--gk-color-danger) 22%, transparent);
+}
+
+.mobile-nav__action--danger:hover {
+  color: var(--gk-color-danger) !important;
+  background: color-mix(in srgb, var(--gk-color-danger) 7%, transparent) !important;
 }
 </style>

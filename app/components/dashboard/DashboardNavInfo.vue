@@ -61,31 +61,35 @@ defineProps<{
 
 <style scoped>
 .nav-info-box {
-  padding: 16px;
-  border-top: 1px solid var(--gk-color-border);
-  background: color-mix(in srgb, var(--gk-color-border) 35%, transparent);
+  padding: 1rem 0.875rem 1.1rem;
+  border-top: 1px solid color-mix(in srgb, var(--gk-color-border) 88%, transparent);
+  background: linear-gradient(
+    180deg,
+    color-mix(in srgb, var(--gk-color-border) 18%, transparent),
+    color-mix(in srgb, var(--gk-color-primary) 3%, var(--gk-color-surface)) 100%
+  );
 }
 
 .info-header {
   display: flex;
   align-items: center;
-  gap: 8px;
-  margin-bottom: 12px;
-  padding-bottom: 8px;
-  border-bottom: 1px solid color-mix(in srgb, var(--gk-color-on-surface) 10%, transparent);
+  gap: 0.45rem;
+  margin-bottom: 0.65rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid color-mix(in srgb, var(--gk-color-on-surface) 8%, transparent);
 }
 
 .info-icon {
   color: var(--gk-color-primary);
-  opacity: 0.8;
+  opacity: 0.85;
 }
 
 .info-title {
-  font-size: 0.875rem;
+  font-size: 0.6875rem;
   font-weight: 600;
-  color: var(--gk-color-on-surface);
+  color: var(--gk-color-on-surface-muted);
+  letter-spacing: 0.08em;
   text-transform: uppercase;
-  letter-spacing: 0.5px;
 }
 
 .info-links {
@@ -97,18 +101,21 @@ defineProps<{
 .info-link {
   display: flex;
   align-items: center;
-  gap: 12px;
-  padding: 8px 12px;
-  border-radius: 8px;
+  gap: 0.65rem;
+  padding: 0.5rem 0.65rem;
+  border-radius: 10px;
   text-decoration: none;
   color: var(--gk-color-on-surface);
-  transition: all 0.2s ease;
-  font-size: 0.875rem;
+  transition:
+    background 0.18s ease,
+    color 0.18s ease,
+    transform 0.18s ease;
+  font-size: 0.8125rem;
   font-weight: 500;
 }
 
 .info-link:hover {
-  background: color-mix(in srgb, var(--gk-color-on-surface) 8%, transparent);
+  background: color-mix(in srgb, var(--gk-color-primary) 9%, transparent);
   color: var(--gk-color-primary);
   transform: translateX(2px);
 }
