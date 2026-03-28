@@ -4,7 +4,7 @@
     :rail="mini && !mobile"
     :width="fullNavWidth"
     :rail-width="88"
-    :location="isRTL ? 'end' : 'start'"
+    location="start"
     :dir="isRTL ? 'rtl' : 'ltr'"
     class="dashboard-nav min-w-0"
     :class="{
@@ -46,7 +46,6 @@
             class="nav-item flex min-w-0 items-center gap-2 px-3 py-2 mx-2 rounded-lg transition-colors"
             :class="{
               'nav-item-active': isActive(item.path),
-              'justify-center': mini && !mobile,
             }"
           >
             <AppIcon :name="item.icon.replace('mdi-', '')" :size="20" />
@@ -67,11 +66,10 @@
             :class="{
               'nav-group-active': isActive(item.path),
               'nav-group-expanded': expandedGroups[item.key],
-              'justify-center': mini && !mobile,
             }"
             @click="toggleGroup(item.key)"
           >
-            <div v-if="mini && !mobile" class="nav-group-header-icon flex flex-col items-center gap-1">
+            <div v-if="mini && !mobile" class="nav-group-header-icon flex flex-col items-start gap-1">
               <AppIcon :name="item.icon.replace('mdi-', '')" :size="20" />
               <AppIcon
                 :name="expandedGroups[item.key] ? 'chevron-up' : 'chevron-down'"
@@ -104,7 +102,6 @@
                 class="nav-subitem flex min-w-0 items-center gap-2 px-3 py-2 mx-2 rounded-md"
                 :class="{
                   'nav-subitem-active': isActive(child.path),
-                  'justify-center': mini && !mobile,
                 }"
               >
                 <AppIcon :name="child.icon.replace('mdi-', '')" :size="16" />
@@ -265,13 +262,16 @@ watchEffect(initializeExpandedGroups);
 }
 
 .nav-mini .nav-header {
-  justify-content: center;
+  justify-content: start;
+  padding-inline: 12px;
+  gap: 8px;
 }
+
 .nav-mini .nav-item,
 .nav-mini .nav-group-header {
-  justify-content: center;
+  justify-content: start;
   min-height: unset;
-  padding: 12px;
+  padding: 10px 12px;
   width: 100%;
   max-width: 100%;
   min-width: 0;

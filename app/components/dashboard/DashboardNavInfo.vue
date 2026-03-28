@@ -134,17 +134,17 @@ defineProps<{
 }
 
 .nav-info-box.mini-mode .info-header {
-  justify-content: center;
+  justify-content: flex-start;
   margin-bottom: 8px;
 }
 
 .nav-info-box.mini-mode .info-links {
-  align-items: center;
+  align-items: stretch;
 }
 
 .nav-info-box.mini-mode .info-link {
-  justify-content: center;
-  padding: 8px;
+  justify-content: flex-start;
+  padding: 8px 10px;
   gap: 0;
 }
 

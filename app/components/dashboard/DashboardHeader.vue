@@ -134,7 +134,7 @@
         </GkButton>
       </template>
 
-      <div class="user-menu min-w-[240px]">
+      <div class="user-menu text-start min-w-[240px]">
         <div class="flex gap-3 px-3 py-2 items-center">
           <img
             :src="authStore.user?.photoURL || '/assets/images/avatar.webp'"
@@ -300,6 +300,15 @@ const performLogout = async () => {
 </script>
 
 <style scoped>
+/* god-kit GkButton defaults to centered inner; menus should align to start */
+.user-menu :deep(.gk-btn) {
+  justify-content: flex-start;
+}
+
+.user-menu :deep(.gk-btn__inner) {
+  justify-content: flex-start;
+}
+
 .notification-btn,
 .user-btn {
   @media (max-width: 959px) {

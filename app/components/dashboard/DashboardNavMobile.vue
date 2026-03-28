@@ -2,7 +2,7 @@
   <GkNavigationDrawer
     v-model="open"
     temporary
-    :location="settingsStore.settings.direction === 'rtl' ? 'end' : 'start'"
+    location="start"
     :dir="settingsStore.settings.direction === 'rtl' ? 'rtl' : 'ltr'"
     class="mobile-nav"
     :class="{
