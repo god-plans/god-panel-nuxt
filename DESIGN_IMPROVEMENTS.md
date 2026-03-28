@@ -66,10 +66,10 @@
 
 ### 🎯 **Design Elements**
 
-**Title Badges:**
+**Title Badges (god-kit tokens):**
 ```css
-- Background: rgb(var(--v-theme-on-surface))
-- Text Color: rgb(var(--v-theme-background))
+- Background: var(--gk-color-on-surface) or var(--gk-color-text) (pill on light surfaces)
+- Text Color: var(--gk-color-surface) or var(--gk-color-bg)
 - Border Radius: 22px
 - Padding: 0 10px
 - Line Height: 22px
@@ -79,28 +79,28 @@
 
 **Box Shadows:**
 ```css
--8px 8px 20px -4px rgba(var(--v-theme-on-surface), 0.12)
+-8px 8px 20px -4px color-mix(in srgb, var(--gk-color-text) 12%, transparent)
 ```
 
 **Border Radius:**
 ```css
 - Main containers: 16px
 - Badges: 22px
-- Items: 12px (var(--item-radius))
+- Items: 12px (var(--gk-radius-md) / var(--gk-radius-lg))
 - Small elements: 8px
 ```
 
 **Colors:**
 ```css
-- Borders: rgba(var(--v-theme-on-surface), 0.12)
-- Backgrounds: rgba(var(--v-theme-on-surface), 0.08)
-- Item BG: rgba(var(--v-theme-on-surface), 0.2)
-- Hover: rgba(var(--v-theme-on-surface), 0.04)
+- Borders: color-mix(in srgb, var(--gk-color-on-surface) 12%, transparent)
+- Backgrounds: color-mix(in srgb, var(--gk-color-on-surface) 8%, transparent)
+- Item BG: color-mix(in srgb, var(--gk-color-on-surface) 20%, transparent)
+- Hover: color-mix(in srgb, var(--gk-color-on-surface) 4%, transparent)
 ```
 
 **Gradients:**
 ```css
-linear-gradient(135deg, rgb(var(--v-theme-primary)) 0%, rgb(var(--v-theme-primary)) 100%)
+linear-gradient(135deg, var(--gk-color-primary) 0%, var(--gk-color-primary-hover) 100%)
 ```
 
 ### 📊 **Component Comparison**

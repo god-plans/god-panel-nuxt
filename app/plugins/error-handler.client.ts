@@ -1,4 +1,5 @@
 import type { NuxtError } from '#app'
+import { pushGkSnackbar } from 'god-kit/vue'
 import { logger } from '~/services/logger.service'
 
 // Error types for better categorization
@@ -273,39 +274,25 @@ class ErrorHandler {
     }
   }
 
-  // Show error toast notification
+  // Show error snackbar (GkSnackbarHost in app.vue)
   private showErrorToast(error: AppError) {
-    // Use toast service instead of legacy snackbar
-    const { $toast } = useNuxtApp()
-    if (!$toast) return
-
-    // Customize message based on error type
-    let toastMessage = error.message
-
-    // Don't show toast for low severity errors
     if (error.severity === ErrorSeverity.LOW) return
 
-    // Show error toast
-    if ($toast && typeof ($toast as any).error === 'function') {
-      ($toast as any).error(toastMessage, {
-        duration: error.severity === ErrorSeverity.CRITICAL ? 10000 : 5000
-      })
-    }
+    const toastMessage = error.message
+    const timeout = error.severity === ErrorSeverity.CRITICAL ? 10000 : 5000
+
+    pushGkSnackbar({
+      message: toastMessage,
+      variant: 'danger',
+      timeout,
+    })
   }
 
-  // Report error to external service (Sentry, LogRocket, etc.)
+  // Report error to external service (optional Sentry when NUXT_PUBLIC_SENTRY_DSN is set)
   private reportError(error: AppError) {
-    // Only report high severity errors in production
     if (process.dev || error.severity === ErrorSeverity.LOW) return
-
-    // TODO: Integrate with error reporting service
-    // Example: Sentry, LogRocket, Bugsnag, etc.
-    /*
-    if (process.env.ERROR_REPORTING_ENABLED) {
-      // Send to error reporting service
-      errorReportingService.captureException(error)
-    }
-    */
+    if (!import.meta.env.NUXT_PUBLIC_SENTRY_DSN) return
+    // Future: init @sentry/nuxt in a plugin, then captureException(error.error ?? new Error(error.message))
   }
 
   // Get all errors (for debugging)

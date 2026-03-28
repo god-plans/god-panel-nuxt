@@ -22,8 +22,14 @@
       </NuxtLink>
     </nav>
 
-    <GkButton variant="ghost" slim class="theme-toggle" @click="toggleTheme">
-      <AppIcon :name="isDark ? 'weather-sunny' : 'weather-night'" :size="22" />
+    <GkButton
+      variant="ghost"
+      slim
+      class="theme-toggle"
+      :aria-label="isDark ? 'Switch to light mode' : 'Switch to dark mode'"
+      @click="toggleTheme"
+    >
+      <AppIcon :name="isDark ? 'weather-sunny' : 'weather-night'" :size="22" aria-hidden="true" />
     </GkButton>
 
     <GkMenu v-model="mobileOpen" placement="bottom-end" class="md:hidden">
@@ -53,9 +59,10 @@ import { useRoute } from 'vue-router'
 import { GkButton, GkMenu } from 'god-kit/vue'
 import AppIcon from '~/components/ui/AppIcon.vue'
 import Logo from '~/components/common/Logo.vue'
+import { useSettingsStore } from '~/stores/settings'
 
 const route = useRoute()
-const colorMode = useColorMode()
+const settingsStore = useSettingsStore()
 const mobileOpen = ref(false)
 
 interface NavLink {
@@ -73,10 +80,13 @@ const navLinks = ref<NavLink[]>([
 
 const isActive = (path: string) => route.path === path
 
-const isDark = computed(() => colorMode.preference === 'dark')
+const isDark = computed(() => settingsStore.settings.colorScheme === 'dark')
 
 const toggleTheme = () => {
-  colorMode.preference = isDark.value ? 'light' : 'dark'
+  settingsStore.updateField(
+    'colorScheme',
+    isDark.value ? 'light' : 'dark'
+  )
 }
 </script>
 

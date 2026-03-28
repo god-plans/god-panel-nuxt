@@ -43,7 +43,7 @@ useHead({
   display: flex;
   align-items: center;
   justify-content: center;
-  background: rgb(var(--v-theme-background));
+  background: var(--gk-color-bg);
 }
 </style>
 

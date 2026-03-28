@@ -55,7 +55,7 @@
 
 <script setup lang="ts">
 import { ref, computed, onErrorCaptured } from 'vue'
-import { GkButton } from 'god-kit/vue'
+import { GkButton, pushGkSnackbar } from 'god-kit/vue'
 import AppIcon from '~/components/ui/AppIcon.vue'
 import type { AppError } from '~/plugins/error-handler.client'
 import { ErrorType, ErrorSeverity } from '~/plugins/error-handler.client'
@@ -169,9 +169,11 @@ const handleReport = () => {
 
   if (process.client && navigator.clipboard) {
     void navigator.clipboard.writeText(JSON.stringify(reportData, null, 2)).then(() => {
-      const { $toast } = useNuxtApp()
-      const toast = $toast as { success?: (msg: string) => void } | undefined
-      toast?.success?.('Error details copied to clipboard')
+      pushGkSnackbar({
+        message: 'Error details copied to clipboard',
+        variant: 'success',
+        timeout: 4000,
+      })
     }).catch(() => {
       const reportWindow = window.open('', '_blank')
       if (reportWindow) {

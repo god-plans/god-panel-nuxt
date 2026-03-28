@@ -28,15 +28,19 @@ const props = withDefaults(defineProps<Props>(), {
   right: 0;
   height: 3px;
   z-index: 9999;
-  background-color: rgb(var(--v-theme-surface));
+  background-color: var(--gk-color-surface);
 }
 
 .progress-bar__fill {
   height: 100%;
-  background: linear-gradient(90deg, rgb(var(--v-theme-primary)) 0%, rgb(var(--v-theme-secondary)) 100%);
+  background: linear-gradient(
+    90deg,
+    var(--gk-color-primary) 0%,
+    var(--gk-color-primary-hover) 100%
+  );
   width: var(--progress-width);
   transition: width 0.3s ease;
-  box-shadow: 0 0 10px rgba(var(--v-theme-primary), 0.5);
+  box-shadow: 0 0 10px var(--gk-color-focus-ring);
 }
 </style>
 

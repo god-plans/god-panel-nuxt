@@ -34,7 +34,7 @@ useHead({
 .back-link {
   display: inline-block;
   margin-top: 1rem;
-  color: rgb(var(--v-theme-primary));
+  color: var(--gk-color-primary);
   text-decoration: none;
 }
 

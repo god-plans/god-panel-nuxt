@@ -77,33 +77,36 @@
 
 1. **`app/plugins/god-kit.client.ts`**
    - `createGkKit` from `god-kit/vue/config` with `app/config/gk.config.ts`
-   - `useGkTheme()` synced with Pinia `settings.colorScheme` (light/dark)
+   - **Single source of truth:** Pinia `settings.colorScheme` drives both `useGkTheme()` and `useColorMode().preference` (no divergent toggles; marketing `AppBar` updates the store, not color-mode alone).
    - Optional `GkVueI18nAdapter` so `useGkLocale` tracks `@nuxtjs/i18n`
 
-2. **`app/stores/settings.ts`**
+2. **`app/plugins/ssr-primary-preset.server.ts`**
+   - SSR: injects `--gk-color-primary*` from the saved preset via `getGkPrimaryPresetCssText()` so first paint matches non-default primaries.
+
+3. **`app/utils/gk-primary-presets.ts`**
+   - Client: `applyGkPrimaryPreset(document.documentElement, preset)`; shared: `getGkPrimaryPresetCssText(preset)` for SSR head styles.
+
+4. **`app/stores/settings.ts`**
    - Pinia store for settings state management
    - LocalStorage persistence
    - Settings validation with Zod
    - Actions for updating individual fields
 
-3. **`app/app.vue`**
-   - Global theme application
-   - RTL direction binding
-   - Font family initialization
-   - Comprehensive CSS for theme colors and RTL
+5. **`app/app.vue`**
+   - **`GkSnackbarHost`** for global notifications; RTL on `#app`; font bootstrap via `useDynamicFonts`
 
-4. **`app/components/settings/drawer/SettingsDrawer.vue`**
+6. **`app/components/settings/drawer/SettingsDrawer.vue`**
    - Main settings interface
    - All setting options in one drawer
    - Reset functionality with change detection
 
-5. **`app/theme/create-theme.js`**
+7. **`app/theme/create-theme.js`**
    - Theme generation based on settings
    - Color scheme mapping
    - Component defaults
    - Typography configuration
 
-6. **`app/composables/useDynamicFonts.ts`**
+8. **`app/composables/useDynamicFonts.ts`**
    - Dynamic Google Fonts loading
    - Font application to document
    - SSR-safe implementation

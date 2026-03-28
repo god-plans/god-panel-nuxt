@@ -7,7 +7,7 @@
 /* Custom global styles */
 @layer base {
   html {
-    font-family: 'Inter', sans-serif;
+    font-family: var(--app-font-family, 'Inter'), ui-sans-serif, system-ui, sans-serif;
   }
 
   body {
@@ -29,6 +29,26 @@
     @apply shadow-lg hover:shadow-xl transition-shadow duration-300;
   }
 
+  /**
+   * Dashboard / settings surfaces — god-kit tokens, lighter borders in light mode.
+   */
+  .gk-card,
+  .gk-panel {
+    background: var(--gk-color-surface);
+    border: 1px solid var(--gk-color-border);
+    border-radius: var(--gk-radius-lg);
+    box-shadow: 0 1px 2px rgba(15, 23, 42, 0.04);
+  }
+
+  html[data-gk-theme='dark'] .gk-card,
+  html[data-gk-theme='dark'] .gk-panel {
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+  }
+
+  .gk-card--padded {
+    @apply p-4 sm:p-5;
+  }
+
   /* App typography helpers (replaces legacy Vuetify heading classes) */
   .text-h1,
   .text-h2,
@@ -36,7 +56,44 @@
   .text-h4,
   .text-h5,
   .text-h6 {
-    @apply text-gray-900 dark:text-gray-100;
+    color: var(--gk-color-text);
+    letter-spacing: -0.02em;
+  }
+
+  .text-h1 {
+    font-size: clamp(1.75rem, 2vw + 1rem, 2.25rem);
+    font-weight: 700;
+    line-height: 1.2;
+  }
+
+  .text-h2 {
+    font-size: clamp(1.5rem, 1.5vw + 0.875rem, 1.875rem);
+    font-weight: 600;
+    line-height: 1.25;
+  }
+
+  .text-h3 {
+    font-size: 1.25rem;
+    font-weight: 600;
+    line-height: 1.3;
+  }
+
+  .text-h4 {
+    font-size: 1.125rem;
+    font-weight: 600;
+    line-height: 1.35;
+  }
+
+  .text-body-1 {
+    font-size: 1rem;
+    line-height: 1.6;
+    color: var(--gk-color-on-surface-muted);
+  }
+
+  .text-body-2 {
+    font-size: 0.875rem;
+    line-height: 1.5;
+    color: var(--gk-color-on-surface-muted);
   }
 }
 

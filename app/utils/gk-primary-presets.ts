@@ -70,6 +70,22 @@ function focusRingFromMain(main: string): string {
 /**
  * Apply or clear primary palette on the given element (usually `document.documentElement`).
  */
+/**
+ * Inline CSS custom properties for the active primary preset (for SSR `useHead` / first paint).
+ * Returns empty string when `default`.
+ */
+export function getGkPrimaryPresetCssText(preset: Preset): string {
+  if (preset === 'default') return ''
+  const p = PALETTES[preset]
+  return [
+    `--gk-color-primary: ${p.main}`,
+    `--gk-color-primary-hover: ${p.dark}`,
+    `--gk-color-primary-active: ${p.darker}`,
+    `--gk-color-focus-ring: ${focusRingFromMain(p.main)}`,
+    `--gk-color-text-on-primary: ${p.contrastText}`,
+  ].join('; ')
+}
+
 export function applyGkPrimaryPreset(el: HTMLElement | null, preset: Preset): void {
   if (!el) return
 

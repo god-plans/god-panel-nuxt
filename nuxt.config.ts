@@ -27,6 +27,8 @@ export default defineNuxtConfig({
       appName: 'God Panel',
       version: '1.0.0',
       siteUrl: process.env.NUXT_PUBLIC_SITE_URL,
+      /** When set, error-handler can forward to Sentry (wire in `error-handler.client.ts`) */
+      sentryDsn: process.env.NUXT_PUBLIC_SENTRY_DSN || '',
       enableMockData: process.env.ENABLE_MOCK_DATA === 'true',
     },
     private: {
@@ -49,6 +51,8 @@ export default defineNuxtConfig({
 
 
   // CSS — god-kit tokens + component styles before app Tailwind layers
+  // MDI webfont: large payload (~400KB+ woff2). Future path: tree-shake with @mdi/js + inline SVG
+  // or a small sprite for icons used in AppIcon; measure LCP before/after.
   css: [
     'god-kit/tokens.css',
     'god-kit/vue.css',

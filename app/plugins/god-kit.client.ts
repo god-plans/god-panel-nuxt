@@ -9,10 +9,16 @@ export default defineNuxtPlugin((nuxtApp) => {
 
   const settings = useSettingsStore()
   const theme = useGkTheme()
+  const colorMode = useColorMode()
 
+  /**
+   * Pinia `settings.colorScheme` is the single source of truth.
+   * Keep `@nuxtjs/color-mode` and god-kit `useGkTheme()` aligned with it.
+   */
   const applyScheme = () => {
     const cs = settings.settings.colorScheme
     theme.change(cs === 'dark' ? 'dark' : 'light')
+    colorMode.preference = cs
   }
 
   const applyPrimary = () => {

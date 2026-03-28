@@ -1,51 +1,33 @@
-// import { createI18n } from 'vue-i18n'
-// import { watch } from 'vue'
-// import en from '../../locales/en.json'
-// import fa from '../../locales/fa.json'
+import { watch } from 'vue'
+import type { Composer } from 'vue-i18n'
 
-// export default defineNuxtPlugin((nuxtApp) => {
-//   // Get current locale from cookie or default to 'en'
-//   const locale = useCookie('locale', { default: () => 'en' }).value
+/**
+ * Keeps `document.documentElement` `dir` / `lang` in sync with the settings store
+ * and i18n locale (SEO, native controls). `#app` already mirrors `dir` in app.vue.
+ *
+ * `useI18n()` is only valid inside component setup — use `nuxtApp.$i18n` here.
+ */
+export default defineNuxtPlugin({
+  name: 'i18n-direction',
+  enforce: 'post',
+  dependsOn: ['i18n:plugin'],
+  setup(nuxtApp) {
+    const i18n = nuxtApp.$i18n as Composer
+    const locale = i18n.locale
+    const settingsStore = useSettingsStore()
 
-//   // Create i18n instance
-//   const i18n = createI18n({
-//     legacy: false,
-//     locale: locale as 'en' | 'fa',
-//     messages: {
-//       en,
-//       fa
-//     }
-//   })
+    const syncRoot = () => {
+      const root = document.documentElement
+      root.setAttribute('dir', settingsStore.settings.direction)
+      root.setAttribute('lang', locale.value)
+    }
 
-//   // Provide i18n to the app
-//   nuxtApp.vueApp.use(i18n)
+    syncRoot()
 
-//   // Set initial direction and language on client side
-//   const setDirection = (currentLocale: string) => {
-//     if (process.client) {
-//       const html = document.documentElement
-//       html.setAttribute('dir', currentLocale === 'fa' ? 'rtl' : 'ltr')
-//       html.setAttribute('lang', currentLocale)
-
-//       // Also update settings store direction
-//       const settingsStore = useSettingsStore()
-//       const direction = currentLocale === 'fa' ? 'rtl' : 'ltr'
-//       settingsStore.updateField('direction', direction)
-//     }
-//   }
-
-//   // Set initial direction
-//   setDirection(locale)
-
-//   // Watch for locale changes using Vue's watch
-//   watch(i18n.global.locale, (newLocale) => {
-//     setDirection(newLocale)
-//   })
-
-//   // Make i18n available globally
-//   return {
-//     provide: {
-//       i18n: i18n.global
-//     }
-//   }
-// })
+    watch(
+      () => [settingsStore.settings.direction, locale.value] as const,
+      () => syncRoot(),
+      { flush: 'post' }
+    )
+  },
+})

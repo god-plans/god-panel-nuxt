@@ -9,7 +9,7 @@
       <div
         v-for="m in metrics"
         :key="m.label"
-        class="metric-card rounded-xl border border-[var(--gk-color-border)] bg-[var(--gk-color-surface)] p-4 shadow-sm h-full transition-transform hover:-translate-y-0.5"
+        class="metric-card gk-card gk-card--padded h-full transition-transform motion-safe:hover:-translate-y-0.5"
       >
         <div class="metric-header flex items-center mb-3">
           <AppIcon :name="m.icon" :size="24" :class="m.iconColor" />
@@ -24,16 +24,20 @@
     </div>
 
     <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 mb-6">
-      <div class="lg:col-span-8 rounded-xl border border-[var(--gk-color-border)] bg-[var(--gk-color-surface)] p-4">
-        <h2 class="text-lg font-semibold mb-4">Traffic Overview</h2>
-        <div class="chart-container h-[300px] flex flex-col items-center justify-center text-center opacity-80">
-          <AppIcon name="chart-areaspline" :size="80" class="opacity-40" />
-          <p class="text-h6 mt-4">Traffic Chart</p>
-          <p class="text-body-2">Interactive chart would be displayed here</p>
+      <div class="lg:col-span-8 gk-card gk-card--padded">
+        <h2 class="text-lg font-semibold mb-4 text-[var(--gk-color-text)]">Traffic Overview</h2>
+        <div
+          class="chart-placeholder h-[300px] flex flex-col items-center justify-center text-center rounded-[var(--gk-radius-md)] border border-dashed border-[var(--gk-color-border)] bg-[var(--gk-color-bg)] px-6"
+        >
+          <AppIcon name="chart-areaspline" :size="64" class="text-[var(--gk-color-text-muted)] opacity-70" />
+          <p class="text-h6 mt-4 text-[var(--gk-color-text)]">Charts coming soon</p>
+          <p class="text-body-2 mt-1 max-w-sm">
+            Real traffic visualizations will load here when analytics is connected. Heavy chart libraries can be code-split via dynamic import.
+          </p>
         </div>
       </div>
 
-      <div class="lg:col-span-4 rounded-xl border border-[var(--gk-color-border)] bg-[var(--gk-color-surface)] p-4">
+      <div class="lg:col-span-4 gk-card gk-card--padded">
         <h2 class="text-lg font-semibold mb-4">Top Pages</h2>
         <ul class="space-y-3 list-none p-0 m-0">
           <li v-for="p in topPages" :key="p.path" class="flex flex-col border-b border-[var(--gk-color-border)] pb-2 last:border-0">
@@ -45,8 +49,8 @@
     </div>
 
     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-      <div class="rounded-xl border border-[var(--gk-color-border)] bg-[var(--gk-color-surface)] p-4">
-        <h2 class="text-lg font-semibold mb-4">Device Breakdown</h2>
+      <div class="gk-card gk-card--padded">
+        <h2 class="text-lg font-semibold mb-4 text-[var(--gk-color-text)]">Device Breakdown</h2>
         <div class="device-stats flex flex-col gap-4">
           <div v-for="d in devices" :key="d.name">
             <div class="flex justify-between items-center mb-1">
@@ -67,8 +71,8 @@
         </div>
       </div>
 
-      <div class="rounded-xl border border-[var(--gk-color-border)] bg-[var(--gk-color-surface)] p-4">
-        <h2 class="text-lg font-semibold mb-4">Geographic Data</h2>
+      <div class="gk-card gk-card--padded">
+        <h2 class="text-lg font-semibold mb-4 text-[var(--gk-color-text)]">Geographic Data</h2>
         <div class="flex flex-col gap-3">
           <div
             v-for="g in geo"
@@ -168,8 +172,5 @@ useHead({
 }
 .text-h6 {
   font-size: 1.125rem;
-}
-.text-body-2 {
-  font-size: 0.875rem;
 }
 </style>

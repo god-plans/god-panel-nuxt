@@ -7,7 +7,6 @@
 
     <GkSnackbarHost />
 
-    <ToastContainer />
     <SettingsDrawer />
   </div>
 </template>
@@ -20,7 +19,6 @@
 import { onErrorCaptured, onMounted, watch } from "vue";
 import { useSettingsStore } from "~/stores/settings";
 import { useDynamicFonts } from "~/composables/useDynamicFonts";
-import ToastContainer from "~/components/common/ToastContainer.vue";
 import SettingsDrawer from "~/components/settings/drawer/SettingsDrawer.vue";
 import { useI18n } from "vue-i18n";
 import { GkSnackbarHost, pushGkSnackbar } from "god-kit/vue";

@@ -100,4 +100,14 @@ onUnmounted(() => {
   opacity: 1;
   transform: translateY(0);
 }
+
+@media (prefers-reduced-motion: reduce) {
+  .motion-lazy-enter-active,
+  .motion-lazy-enter-from,
+  .motion-lazy-enter-to {
+    transition: none !important;
+    transform: none !important;
+    opacity: 1 !important;
+  }
+}
 </style>

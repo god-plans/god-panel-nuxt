@@ -149,7 +149,7 @@ For detailed deployment instructions, see [DEPLOYMENT.md](./DEPLOYMENT.md)
 ```
 god-panel-nuxt/
 ├── app/
-│   └── app.vue                 # Root component
+│   └── app.vue                 # Root: GkSnackbarHost, settings drawer, RTL
 ├── assets/
 │   └── css/
 │       └── main.css           # Global styles
@@ -187,6 +187,15 @@ The application supports multiple theme configurations:
 - Light/Dark mode
 - Custom color schemes
 - RTL/LTR direction support
+
+**Source of truth:** Pinia `settings` (`colorScheme`, `primaryColor`, `direction`, …) drives the UI. **`app/plugins/god-kit.client.ts`** syncs **`useGkTheme()`** and **`@nuxtjs/color-mode`** with `settings.colorScheme`. **`app/plugins/ssr-primary-preset.server.ts`** injects primary CSS variables on SSR for correct first paint.
+
+**Notifications:** Use **`GkSnackbarHost`** in `app.vue` and **`pushGkSnackbar`** from `god-kit/vue` (or **`useToast()`**, which delegates to the same queue). Legacy `ToastContainer` has been removed.
+
+**Optional observability:** Set `NUXT_PUBLIC_SENTRY_DSN` when wiring `@sentry/nuxt`; see `app/plugins/error-handler.client.ts`.
+
+### Release QA (manual)
+Before shipping, verify: **LTR + RTL** (e.g. Persian), **mini rail** and **compact** layout, **mobile drawer**, **settings save** (including primary preset and **dark mode**), and **dynamic fonts** (`useDynamicFonts`).
 
 ### Layouts
 Choose from different dashboard layouts:
