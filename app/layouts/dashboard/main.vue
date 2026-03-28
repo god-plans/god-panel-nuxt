@@ -33,5 +33,8 @@ const mainStyles = computed((): CSSProperties => ({
   display: flex;
   flex: 1 1 auto;
   flex-direction: column;
+  min-height: 0;
+  width: 100%;
+  background: var(--gk-color-bg);
 }
 </style>

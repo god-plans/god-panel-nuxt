@@ -97,6 +97,12 @@
   }
 }
 
+/* god-kit snackbar: bottom bar should stay compact, not full-bleed */
+.gk-snackbar-anchor .gk-snackbar {
+  width: min(100%, var(--gk-snackbar-max-width, 28rem));
+  max-width: min(100%, var(--gk-snackbar-max-width, 28rem));
+}
+
 /* RTL Support for Farsi */
 [dir='rtl'] {
   direction: rtl;

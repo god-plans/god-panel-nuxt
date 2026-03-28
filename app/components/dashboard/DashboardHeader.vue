@@ -1,15 +1,14 @@
 <template>
   <header
-    class="dashboard-header flex w-full min-h-14 shrink-0 items-center border-b px-2 md:px-4"
+    class="dashboard-header flex w-full min-h-[64px] shrink-0 items-center border-b border-[var(--gk-color-border)] px-2 md:px-4"
     :style="{
-      borderColor: 'var(--gk-color-border)',
       background: 'var(--gk-color-surface)',
       color: 'var(--gk-color-on-surface)',
     }"
   >
     <GkButton
       variant="ghost"
-      class="md:hidden shrink-0"
+      class="nav-hamburger shrink-0"
       slim
       :aria-label="t('common.menu')"
       @click="$emit('toggle-nav')"
@@ -330,6 +329,17 @@ const performLogout = async () => {
 @media (max-width: 959px) {
   .breadcrumbs {
     display: none;
+  }
+}
+
+/* Align with dashboard layout: mobile = max-width 959px (same as DashboardNav / dashboard.vue) */
+.nav-hamburger {
+  display: none;
+}
+
+@media (max-width: 959px) {
+  .nav-hamburger {
+    display: inline-flex;
   }
 }
 </style>

@@ -406,6 +406,8 @@ const simulateApiError = (): Promise<never> => {
 <style scoped>
 .toast-demo {
   @apply max-w-4xl mx-auto p-6;
+  background: var(--gk-color-bg);
+  min-height: 100%;
 }
 
 .toast-demo__header {
@@ -413,11 +415,13 @@ const simulateApiError = (): Promise<never> => {
 }
 
 .toast-demo__title {
-  @apply text-3xl font-bold text-gray-900 dark:text-gray-100 mb-2;
+  @apply text-3xl font-bold mb-2;
+  color: var(--gk-color-text);
 }
 
 .toast-demo__description {
-  @apply text-gray-600 dark:text-gray-400 text-lg;
+  @apply text-lg;
+  color: var(--gk-color-on-surface-muted);
 }
 
 .toast-demo__content {
@@ -425,11 +429,14 @@ const simulateApiError = (): Promise<never> => {
 }
 
 .toast-demo__section {
-  @apply bg-white dark:bg-gray-800 rounded-lg p-6 shadow-sm border border-gray-200 dark:border-gray-700;
+  @apply rounded-lg p-6 shadow-sm;
+  background: var(--gk-color-surface);
+  border: 1px solid var(--gk-color-border);
 }
 
 .toast-demo__section-title {
-  @apply text-xl font-semibold text-gray-900 dark:text-gray-100 mb-4;
+  @apply text-xl font-semibold mb-4;
+  color: var(--gk-color-text);
 }
 
 .toast-demo__buttons {
@@ -472,15 +479,17 @@ const simulateApiError = (): Promise<never> => {
 }
 
 .toast-demo__label {
-  @apply text-sm font-medium text-gray-700 dark:text-gray-300 min-w-24;
+  @apply text-sm font-medium min-w-24;
+  color: var(--gk-color-on-surface);
 }
 
 .toast-demo__input,
 .toast-demo__select {
-  @apply px-3 py-2 border border-gray-300 dark:border-gray-600;
-  @apply rounded-md bg-white dark:bg-gray-700;
-  @apply text-gray-900 dark:text-gray-100;
-  @apply focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent;
+  @apply px-3 py-2 rounded-md;
+  @apply focus:outline-none focus:ring-2 focus:ring-[var(--gk-color-primary)] focus:border-transparent;
+  border: 1px solid var(--gk-color-border);
+  background: var(--gk-color-surface);
+  color: var(--gk-color-text);
 }
 
 .toast-demo__input {

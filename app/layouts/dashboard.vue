@@ -151,6 +151,8 @@ onMounted(() => {
   flex-direction: column;
   min-width: 0;
   min-height: 100vh;
+  min-height: 100dvh;
+  background: var(--gk-color-bg);
 }
 
 .dashboard-layout:has(.dashboard-nav:not(.nav-mini)) {
@@ -197,7 +199,7 @@ onMounted(() => {
 }
 
 @media (max-width: 959px) {
-  .dashboard-layout {
+  /* .dashboard-layout {
     padding-left: 16px !important;
     padding-right: 16px !important;
   }
@@ -205,7 +207,7 @@ onMounted(() => {
   .rtl-mode.dashboard-layout {
     padding-left: 16px !important;
     padding-right: 16px !important;
-  }
+  } */
 
   /* Mobile navigation adjustments */
   .dashboard-layout:has(.dashboard-nav:not(.nav-mini)) {

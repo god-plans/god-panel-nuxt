@@ -69,12 +69,15 @@
             }"
             @click="toggleGroup(item.key)"
           >
-            <div v-if="mini && !mobile" class="nav-group-header-icon flex flex-col items-start gap-1">
+            <div
+              v-if="mini && !mobile"
+              class="nav-group-header-mini flex w-full min-w-0 items-center justify-center gap-0.5"
+            >
               <AppIcon :name="item.icon.replace('mdi-', '')" :size="20" />
               <AppIcon
                 :name="expandedGroups[item.key] ? 'chevron-up' : 'chevron-down'"
-                :size="16"
-                class="expand-icon"
+                :size="14"
+                class="expand-icon shrink-0 opacity-80"
                 :class="{ expanded: expandedGroups[item.key] }"
               />
             </div>
@@ -183,11 +186,23 @@ watchEffect(initializeExpandedGroups);
 .dashboard-nav :deep(.gk-navigation-drawer__surface) {
   min-width: 0;
   overflow-x: hidden;
+  min-height: 100vh;
+  min-height: 100dvh;
+  height: auto;
 }
 
 .dashboard-nav :deep(.gk-navigation-drawer__content) {
   min-width: 0;
   overflow-x: hidden;
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 auto;
+  min-height: 0;
+}
+
+.dashboard-nav :deep(.gk-navigation-drawer__append) {
+  flex-shrink: 0;
+  margin-top: auto;
 }
 
 .nav-header {
@@ -203,6 +218,10 @@ watchEffect(initializeExpandedGroups);
 
 .nav-list {
   padding: 8px 0;
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow-y: auto;
+  overflow-x: hidden;
 }
 .nav-item,
 .nav-group-header {
@@ -269,13 +288,17 @@ watchEffect(initializeExpandedGroups);
 
 .nav-mini .nav-item,
 .nav-mini .nav-group-header {
-  justify-content: start;
+  justify-content: center;
   min-height: unset;
-  padding: 10px 12px;
+  padding: 10px 8px;
   width: 100%;
   max-width: 100%;
   min-width: 0;
   box-sizing: border-box;
+}
+
+.nav-mini .nav-group-header-mini {
+  max-width: 100%;
 }
 .nav-mini .nav-title {
   display: none;

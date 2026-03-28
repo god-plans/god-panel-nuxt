@@ -1,5 +1,5 @@
 <template>
-  <div class="w-full max-w-[1600px] mx-auto px-2">
+  <div class="analytics-page w-full max-w-[1600px] mx-auto px-2 pb-8 min-h-full">
     <div class="page-header mb-6">
       <h1 class="text-h4 font-bold">{{ t('dashboard.analytics') }}</h1>
       <p class="text-body-1 opacity-80 mt-2">{{ t('dashboard.analyticsDescription') }}</p>
@@ -167,6 +167,10 @@ useHead({
 </script>
 
 <style scoped>
+.analytics-page {
+  background: var(--gk-color-bg);
+}
+
 .text-h4 {
   font-size: 1.5rem;
 }
