@@ -1,0 +1,172 @@
+/**
+ * Shared dashboard navigation (desktop rail + mobile drawer).
+ * Loaded via nuxt.config `css` (after main.css) so it is not dropped by the Tailwind pipeline.
+ */
+
+.dn-nav-list {
+  list-style: none;
+  padding: 8px 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+.dn-nav-item,
+.dn-nav-group__trigger {
+  margin: 2px 8px;
+  border-radius: 8px;
+  transition: background 0.2s ease, color 0.2s ease;
+  color: var(--gk-color-on-surface);
+  text-decoration: none;
+  min-height: 2.5rem;
+  box-sizing: border-box;
+}
+
+.dn-nav-item {
+  display: flex;
+  min-width: 0;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 0.75rem;
+}
+
+.dn-nav-group__trigger {
+  display: flex;
+  width: 100%;
+  min-width: 0;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 0.75rem;
+  border: 0;
+  background: transparent;
+  cursor: pointer;
+  text-align: inherit;
+}
+
+[dir='rtl'] .dn-nav-item,
+[dir='rtl'] .dn-nav-group__trigger {
+  direction: rtl;
+}
+
+.dn-nav-item:hover,
+.dn-nav-group__trigger:hover {
+  background: color-mix(in srgb, var(--gk-color-on-surface) 8%, transparent);
+}
+
+.dn-nav-item--active,
+.dn-nav-group__trigger--active {
+  background: color-mix(in srgb, var(--gk-color-primary) 15%, transparent);
+  color: var(--gk-color-primary);
+}
+
+.dn-nav-item--active:hover,
+.dn-nav-group__trigger--active:hover {
+  background: color-mix(in srgb, var(--gk-color-primary) 20%, transparent);
+}
+
+.dn-nav-item__title,
+.dn-nav-group__title {
+  min-width: 0;
+  flex: 1 1 auto;
+  font-size: 0.875rem;
+  font-weight: 500;
+  line-height: 1.25rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.dn-nav-item__badge {
+  display: inline-flex;
+  align-items: center;
+  border-radius: 4px;
+  padding: 2px 8px;
+  font-size: 0.75rem;
+  font-weight: 500;
+  background: color-mix(in srgb, var(--gk-color-primary) 15%, transparent);
+  color: var(--gk-color-primary);
+}
+
+.dn-nav-sublist {
+  list-style: none;
+  padding: 0;
+  margin: 4px 0 0;
+  padding-inline-start: 16px;
+}
+
+[dir='rtl'] .dn-nav-sublist {
+  padding-inline-start: 16px;
+  padding-inline-end: 8px;
+}
+
+.dn-nav-subitem {
+  display: flex;
+  min-width: 0;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 0.75rem;
+  margin: 2px 8px;
+  border-radius: 6px;
+  min-height: 2.25rem;
+  box-sizing: border-box;
+  transition: background 0.2s ease, color 0.2s ease;
+  color: var(--gk-color-on-surface);
+  text-decoration: none;
+  font-size: 0.85rem;
+  font-weight: 500;
+}
+
+.dn-nav-subitem:hover {
+  background: color-mix(in srgb, var(--gk-color-on-surface) 6%, transparent);
+}
+
+.dn-nav-subitem--active {
+  background: color-mix(in srgb, var(--gk-color-primary) 12%, transparent);
+  color: var(--gk-color-primary);
+}
+
+.dn-nav-group__chevron {
+  flex-shrink: 0;
+  opacity: 0.75;
+  transition: transform 0.2s ease;
+}
+
+.dn-nav-group__chevron--expanded {
+  transform: rotate(180deg);
+}
+
+[dir='rtl'] .dn-nav-group__chevron:not(.dn-nav-group__chevron--expanded) {
+  transform: rotate(0deg);
+}
+
+/* Mini rail: icon row centered */
+.dn-nav--mini .dn-nav-item,
+.dn-nav--mini .dn-nav-group__trigger {
+  justify-content: center;
+  padding: 10px 8px;
+  min-height: unset;
+  width: 100%;
+  max-width: 100%;
+}
+
+.dn-nav--mini .dn-nav-item__title,
+.dn-nav--mini .dn-nav-group__title {
+  display: none;
+}
+
+.dn-nav--mini .dn-nav-group__trigger-inner--rail {
+  display: flex;
+  width: 100%;
+  min-width: 0;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+}
+
+.dn-nav--mini .dn-nav-sublist {
+  padding-inline-start: 8px;
+}

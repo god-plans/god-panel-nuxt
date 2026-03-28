@@ -18,9 +18,7 @@
       v-if="!isHorizontalLayout && !mobile"
       :mini="isMiniLayout"
       class="lg:block "
-
       @toggle-mini="toggleNav"
-      @open-mobile="openMobileNav"
     />
 
     <!-- Header spans the full width above main content (beside sidebar), not between nav and content columns -->
