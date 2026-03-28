@@ -1,5 +1,5 @@
 <template>
-  <div class="presets-options">
+  <div class="presets-options panel-card">
     <div class="presets-options__header">
       <span class="presets-options__title">{{ t('settingsDrawer.presets') }}</span>
     </div>
@@ -14,7 +14,7 @@
         :style="{ color: option.value, ...(value === (option.key || option.name) && { backgroundColor: `${option.value}14` }) }"
         @click="handleClick(option.key || option.name)"
       >
-        <v-icon class="preset-option__icon">mdi-view-dashboard-outline</v-icon>
+        <AppIcon class="preset-option__icon" name="view-dashboard-outline" :size="28" />
         <span class="preset-option__label">{{ option.name }}</span>
       </button>
     </div>
@@ -22,8 +22,8 @@
 </template>
 
 <script setup lang="ts">
-import { computed } from 'vue'
 import { useI18n } from 'vue-i18n'
+import AppIcon from '~/components/ui/AppIcon.vue'
 
 const { t } = useI18n()
 
@@ -54,8 +54,6 @@ const handleClick = (value: string) => {
 <style scoped>
 .presets-options {
   padding: 32px 16px 16px 16px;
-  border: 1px solid rgba(var(--v-theme-on-surface), 0.12);
-  border-radius: 16px;
   position: relative;
 }
 
@@ -66,13 +64,16 @@ const handleClick = (value: string) => {
 }
 
 .presets-options__title {
-  font-size: 13px;
+  font-size: 0.6875rem;
   font-weight: 600;
-  line-height: 22px;
-  color: rgb(var(--v-theme-background));
-  background: rgb(var(--v-theme-on-surface));
-  padding: 0 10px;
-  border-radius: 22px;
+  line-height: 1.2;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--gk-color-on-surface-muted);
+  background: color-mix(in srgb, var(--gk-color-primary) 8%, var(--gk-color-surface));
+  padding: 0.35rem 0.65rem;
+  border-radius: 999px;
+  border: 1px solid var(--panel-hairline);
   display: inline-flex;
   align-items: center;
 }
@@ -116,7 +117,7 @@ const handleClick = (value: string) => {
   font-size: 0.75rem;
   font-weight: 500;
   margin-top: 4px;
-  color: rgb(var(--v-theme-on-surface));
+  color: var(--gk-color-on-surface);
   opacity: 0.8;
 }
 

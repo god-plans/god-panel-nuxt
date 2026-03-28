@@ -1,13 +1,15 @@
 <template>
-  <v-main
+  <main
     class="dashboard-main"
     :style="mainStyles"
   >
     <slot />
-  </v-main>
+  </main>
 </template>
 
 <script setup lang="ts">
+import type { CSSProperties } from 'vue'
+
 interface Props {
   isNavHorizontal?: boolean
 }
@@ -16,7 +18,7 @@ const props = withDefaults(defineProps<Props>(), {
   isNavHorizontal: false
 })
 
-const mainStyles = computed(() => ({
+const mainStyles = computed((): CSSProperties => ({
   display: 'flex',
   flex: '1 1 auto',
   flexDirection: 'column',
@@ -31,5 +33,16 @@ const mainStyles = computed(() => ({
   display: flex;
   flex: 1 1 auto;
   flex-direction: column;
+  min-height: 0;
+  width: 100%;
+  background: transparent;
+  padding: 20px 
+  
+ 
+}
+@media (max-width: 960px) {
+  .dashboard-main {
+    padding: 16px;
+  }
 }
 </style>

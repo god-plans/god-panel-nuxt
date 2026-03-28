@@ -1,24 +1,16 @@
 <template>
   <div class="page-error-boundary">
-    <!-- Loading State -->
     <div v-if="loading" class="page-error-boundary__loading">
-      <v-progress-circular
-        indeterminate
-        color="primary"
-        size="40"
-      />
-      <p class="mt-4 text-grey-600">Loading...</p>
+      <GkSpinner size="md" />
+      <p class="mt-4 opacity-70">Loading...</p>
     </div>
 
-    <!-- Error State -->
     <div v-else-if="hasError" class="page-error-boundary__error">
-      <div class="page-error-boundary__container">
-        <!-- Error Illustration -->
-        <div class="page-error-boundary__illustration">
-          <v-icon size="120" color="grey-lighten-1">mdi-file-question</v-icon>
+      <div class="page-error-boundary__container panel-card p-8 md:p-10 max-w-xl w-full">
+        <div class="page-error-boundary__illustration opacity-60">
+          <AppIcon name="file-question" :size="120" class="text-[var(--gk-color-on-surface-muted)]" />
         </div>
 
-        <!-- Error Content -->
         <div class="page-error-boundary__content">
           <h1 class="page-error-boundary__title">
             {{ error?.statusCode === 404 ? 'Page Not Found' : 'Something went wrong' }}
@@ -28,76 +20,48 @@
             {{ errorMessage }}
           </p>
 
-          <!-- Error Actions -->
           <div class="page-error-boundary__actions">
-            <v-btn
-              color="primary"
-              variant="elevated"
-              size="large"
-              @click="handleRetry"
-              :loading="retrying"
-            >
-              <v-icon left>mdi-refresh</v-icon>
+            <GkButton variant="primary" size="md" :loading="retrying" @click="handleRetry">
+              <AppIcon name="refresh" class="me-2" :size="18" />
               Try Again
-            </v-btn>
+            </GkButton>
 
-            <v-btn
-              color="secondary"
-              variant="outlined"
-              size="large"
-              @click="handleGoBack"
-            >
-              <v-icon left>mdi-arrow-left</v-icon>
+            <GkButton variant="secondary" size="md" @click="handleGoBack">
+              <AppIcon name="arrow-left" class="me-2" :size="18" />
               Go Back
-            </v-btn>
+            </GkButton>
 
-            <v-btn
-              color="grey-darken-1"
-              variant="text"
-              size="large"
-              @click="handleGoHome"
-            >
-              <v-icon left>mdi-home</v-icon>
+            <GkButton variant="ghost" size="md" @click="handleGoHome">
+              <AppIcon name="home" class="me-2" :size="18" />
               Home
-            </v-btn>
+            </GkButton>
           </div>
 
-          <!-- Error Details for Development -->
-          <div v-if="isDev && error" class="page-error-boundary__debug">
-            <v-expansion-panels variant="accordion">
-              <v-expansion-panel>
-                <v-expansion-panel-title>
-                  <v-icon left>mdi-bug</v-icon>
-                  Debug Information
-                </v-expansion-panel-title>
-                <v-expansion-panel-text>
-                  <div class="debug-info">
-                    <div class="debug-item">
-                      <strong>Status Code:</strong> {{ error.statusCode }}
-                    </div>
-                    <div class="debug-item">
-                      <strong>Path:</strong> {{ error.path || $route.path }}
-                    </div>
-                    <div class="debug-item">
-                      <strong>Timestamp:</strong> {{ new Date().toISOString() }}
-                    </div>
-                    <div v-if="error.message" class="debug-item">
-                      <strong>Message:</strong> {{ error.message }}
-                    </div>
-                    <div v-if="error.stack" class="debug-item">
-                      <strong>Stack:</strong>
-                      <pre>{{ error.stack }}</pre>
-                    </div>
-                  </div>
-                </v-expansion-panel-text>
-              </v-expansion-panel>
-            </v-expansion-panels>
-          </div>
+          <details v-if="isDev && error" class="page-error-boundary__debug text-left mt-8">
+            <summary class="cursor-pointer text-[var(--gk-color-primary)] font-medium mb-2">
+              <AppIcon name="bug" class="me-1 inline" :size="16" />
+              Debug Information
+            </summary>
+            <div class="debug-info font-mono text-sm">
+              <div class="debug-item mb-2">
+                <strong>Status Code:</strong> {{ error.statusCode }}
+              </div>
+              <div class="debug-item mb-2">
+                <strong>Path:</strong> {{ error.path || route.path }}
+              </div>
+              <div class="debug-item mb-2">
+                <strong>Timestamp:</strong> {{ new Date().toISOString() }}
+              </div>
+              <div v-if="error.message" class="debug-item mb-2">
+                <strong>Message:</strong> {{ error.message }}
+              </div>
+              <pre v-if="error.stack" class="bg-[var(--gk-color-border)] p-4 rounded-lg overflow-x-auto text-xs mt-2">{{ error.stack }}</pre>
+            </div>
+          </details>
         </div>
       </div>
     </div>
 
-    <!-- Success State -->
     <div v-else>
       <slot />
     </div>
@@ -105,49 +69,45 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, onMounted, onErrorCaptured } from 'vue'
+import { ref, computed, onMounted, onErrorCaptured, watch } from 'vue'
+import { GkButton, GkSpinner } from 'god-kit/vue'
+import AppIcon from '~/components/ui/AppIcon.vue'
 import { ErrorType, ErrorSeverity } from '~/plugins/error-handler.client'
 
-// Props
 interface Props {
   loading?: boolean
-  error?: any
+  error?: Record<string, unknown> | null
 }
 
 const props = withDefaults(defineProps<Props>(), {
   loading: false
 })
 
-// Composables
 const route = useRoute()
 const router = useRouter()
 
-// Reactive state
 const hasError = ref(false)
-const capturedError = ref<any>(null)
+const capturedError = ref<unknown>(null)
 const retrying = ref(false)
 
-// Computed properties
 const errorMessage = computed(() => {
   if (props.error) {
-    return props.error.message || 'An unexpected error occurred.'
+    return (props.error as { message?: string }).message || 'An unexpected error occurred.'
   }
-
-  if (capturedError.value) {
+  if (capturedError.value && capturedError.value instanceof Error) {
     return capturedError.value.message || 'An unexpected error occurred.'
   }
-
   return 'The page could not be loaded. Please try again.'
 })
 
 const isDev = computed(() => process.dev)
 
-// Error capture handler
+const error = computed(() => (props.error ?? capturedError.value) as { statusCode?: number; path?: string; message?: string; stack?: string } | null)
+
 onErrorCaptured((err, instance, info) => {
   hasError.value = true
   capturedError.value = err
 
-  // Log error using global error handler
   const { $errorHandler } = useNuxtApp()
   if ($errorHandler) {
     $errorHandler.handleError(err, {
@@ -162,17 +122,14 @@ onErrorCaptured((err, instance, info) => {
     })
   }
 
-  // Prevent error from propagating
   return false
 })
 
-// Watch for prop error changes
 watch(() => props.error, (newError) => {
   hasError.value = !!newError
   capturedError.value = newError
 })
 
-// Methods
 const handleRetry = async () => {
   if (retrying.value) return
 
@@ -181,13 +138,11 @@ const handleRetry = async () => {
   capturedError.value = null
 
   try {
-    // Reload the page
     await router.go(0)
   } catch (err) {
     retrying.value = false
     hasError.value = true
 
-    // Log retry error
     const { $errorHandler } = useNuxtApp()
     if ($errorHandler) {
       $errorHandler.handleError(err, {
@@ -200,7 +155,7 @@ const handleRetry = async () => {
 }
 
 const handleGoBack = () => {
-  if (window.history.length > 1) {
+  if (import.meta.client && window.history.length > 1) {
     router.back()
   } else {
     router.push('/')
@@ -211,7 +166,6 @@ const handleGoHome = () => {
   router.push('/')
 }
 
-// Initialize
 onMounted(() => {
   if (props.error) {
     hasError.value = true
@@ -220,7 +174,7 @@ onMounted(() => {
 })
 </script>
 
-<style scoped lang="scss">
+<style scoped>
 .page-error-boundary {
   width: 100%;
   min-height: 60vh;
@@ -240,30 +194,16 @@ onMounted(() => {
   text-align: center;
 }
 
-.page-error-boundary__illustration {
-  margin-bottom: 2rem;
-  opacity: 0.6;
-}
-
-.page-error-boundary__content {
-  max-width: 500px;
-  margin: 0 auto;
-}
-
 .page-error-boundary__title {
   font-size: 2.5rem;
   font-weight: 700;
-  color: rgb(var(--v-theme-on-surface));
+  color: var(--gk-color-on-surface);
   margin-bottom: 1rem;
-
-  @media (max-width: 600px) {
-    font-size: 2rem;
-  }
 }
 
 .page-error-boundary__message {
   font-size: 1.125rem;
-  color: rgb(var(--v-theme-on-surface-variant));
+  color: var(--gk-color-on-surface-muted);
   margin-bottom: 2rem;
   line-height: 1.6;
 }
@@ -274,62 +214,20 @@ onMounted(() => {
   justify-content: center;
   margin-bottom: 2rem;
   flex-wrap: wrap;
-
-  @media (max-width: 600px) {
-    flex-direction: column;
-    align-items: center;
-  }
 }
 
-.page-error-boundary__debug {
-  margin-top: 2rem;
-  text-align: left;
+.debug-item strong {
+  color: var(--gk-color-primary);
 }
 
-.debug-info {
-  font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
-  font-size: 0.875rem;
-}
-
-.debug-item {
-  margin-bottom: 0.5rem;
-
-  strong {
-    color: rgb(var(--v-theme-primary));
-  }
-
-  pre {
-    background: rgb(var(--v-theme-surface-variant));
-    color: rgb(var(--v-theme-on-surface-variant));
-    padding: 1rem;
-    border-radius: 8px;
-    margin-top: 0.5rem;
-    overflow-x: auto;
-    white-space: pre-wrap;
-    word-break: break-all;
-    font-size: 0.75rem;
-  }
-}
-
-// Dark theme adjustments
-.v-theme--dark {
-  .page-error-boundary__illustration .v-icon {
-    color: rgba(255, 255, 255, 0.3) !important;
-  }
-}
-
-// Responsive design
 @media (max-width: 600px) {
-  .page-error-boundary__container {
-    padding: 1rem;
-  }
-
   .page-error-boundary__title {
     font-size: 1.75rem;
   }
 
-  .page-error-boundary__message {
-    font-size: 1rem;
+  .page-error-boundary__actions {
+    flex-direction: column;
+    align-items: center;
   }
 }
 </style>

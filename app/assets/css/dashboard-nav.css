@@ -1,0 +1,335 @@
+/**
+ * Dashboard navigation — desktop rail + mobile drawer.
+ * Uses --gk-* tokens; scoped to .dn-nav for predictable overrides.
+ */
+
+.dn-nav {
+  --dn-rail: 3px;
+  --dn-radius: 11px;
+  --dn-radius-sm: 9px;
+  --dn-pad-x: 0.65rem;
+  --dn-item-min-h: 2.625rem;
+  --dn-sub-offset: 0.75rem;
+  --dn-icon-bg-hover: color-mix(in srgb, var(--gk-color-on-surface) 6%, transparent);
+  --dn-icon-bg-active: color-mix(in srgb, var(--gk-color-primary) 14%, transparent);
+  --dn-surface-active: color-mix(in srgb, var(--gk-color-primary) 11%, transparent);
+  --dn-surface-hover: color-mix(in srgb, var(--gk-color-on-surface) 5.5%, transparent);
+}
+
+/* ---- List ---- */
+.dn-nav-list {
+  list-style: none;
+  padding: 0.5rem 0.625rem 1rem;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow-y: auto;
+  overflow-x: hidden;
+  scrollbar-gutter: stable;
+  scrollbar-width: thin;
+  scrollbar-color: color-mix(in srgb, var(--gk-color-on-surface-muted) 35%, transparent)
+    transparent;
+}
+
+.dn-nav-list::-webkit-scrollbar {
+  width: 6px;
+}
+
+.dn-nav-list::-webkit-scrollbar-thumb {
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--gk-color-on-surface-muted) 40%, transparent);
+}
+
+/* ---- Icon shell ---- */
+.dn-nav-item__icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 2.25rem;
+  height: 2.25rem;
+  border-radius: 9px;
+  color: var(--gk-color-on-surface-muted);
+  transition:
+    color 0.18s ease,
+    background 0.18s ease,
+    box-shadow 0.18s ease;
+}
+
+.dn-nav-item__icon--sm {
+  width: 2rem;
+  height: 2rem;
+  border-radius: 8px;
+}
+
+.dn-nav-item:hover .dn-nav-item__icon,
+.dn-nav-group__trigger:hover .dn-nav-item__icon {
+  color: var(--gk-color-on-surface);
+  background: var(--dn-icon-bg-hover);
+}
+
+.dn-nav-item--active .dn-nav-item__icon,
+.dn-nav-group__trigger--active .dn-nav-item__icon {
+  color: var(--gk-color-primary);
+  background: var(--dn-icon-bg-active);
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--gk-color-primary) 22%, transparent);
+}
+
+.dn-nav-subitem:hover .dn-nav-item__icon {
+  color: var(--gk-color-on-surface);
+  background: var(--dn-icon-bg-hover);
+}
+
+.dn-nav-subitem--active .dn-nav-item__icon {
+  color: var(--gk-color-primary);
+  background: var(--dn-icon-bg-active);
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--gk-color-primary) 20%, transparent);
+}
+
+/* ---- Row targets ---- */
+.dn-nav-item,
+.dn-nav-group__trigger {
+  position: relative;
+  margin: 3px 0;
+  border-radius: var(--dn-radius);
+  border: 0;
+  background: transparent;
+  color: var(--gk-color-on-surface);
+  text-decoration: none;
+  min-height: var(--dn-item-min-h);
+  box-sizing: border-box;
+  transition:
+    background 0.18s ease,
+    color 0.18s ease,
+    box-shadow 0.18s ease;
+}
+
+.dn-nav-item {
+  display: flex;
+  min-width: 0;
+  align-items: center;
+  gap: 0.625rem;
+  padding: 0.35rem var(--dn-pad-x) 0.35rem 0.5rem;
+}
+
+.dn-nav-group__trigger {
+  display: flex;
+  width: 100%;
+  min-width: 0;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.35rem var(--dn-pad-x) 0.35rem 0.5rem;
+  cursor: pointer;
+  text-align: inherit;
+}
+
+[dir='rtl'] .dn-nav-item,
+[dir='rtl'] .dn-nav-group__trigger {
+  direction: rtl;
+  padding: 0.35rem 0.5rem 0.35rem var(--dn-pad-x);
+}
+
+.dn-nav-item:hover,
+.dn-nav-group__trigger:hover {
+  background: var(--dn-surface-hover);
+}
+
+.dn-nav-item:focus-visible,
+.dn-nav-group__trigger:focus-visible,
+.dn-nav-subitem:focus-visible {
+  outline: 2px solid var(--gk-color-focus-ring);
+  outline-offset: 1px;
+}
+
+/* Active: pill + start rail */
+.dn-nav-item--active,
+.dn-nav-group__trigger--active {
+  background: var(--dn-surface-active);
+  color: var(--gk-color-primary);
+  font-weight: 600;
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--gk-color-primary) 18%, transparent);
+}
+
+.dn-nav-item--active::before,
+.dn-nav-group__trigger--active::before {
+  content: '';
+  position: absolute;
+  inset-inline-start: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  width: var(--dn-rail);
+  height: 1.35rem;
+  border-radius: 999px;
+  background: linear-gradient(
+    180deg,
+    var(--gk-color-primary),
+    color-mix(in srgb, var(--gk-color-primary) 65%, white)
+  );
+  opacity: 0.95;
+}
+
+.dn-nav-item--active:hover,
+.dn-nav-group__trigger--active:hover {
+  background: color-mix(in srgb, var(--gk-color-primary) 14%, transparent);
+}
+
+.dn-nav-item__title,
+.dn-nav-group__title {
+  min-width: 0;
+  flex: 1 1 auto;
+  font-size: 0.8125rem;
+  font-weight: 500;
+  letter-spacing: 0.01em;
+  line-height: 1.35;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.dn-nav-item--active .dn-nav-item__title,
+.dn-nav-group__trigger--active .dn-nav-group__title {
+  font-weight: 600;
+}
+
+.dn-nav-item__badge {
+  display: inline-flex;
+  align-items: center;
+  border-radius: 6px;
+  padding: 2px 7px;
+  font-size: 0.6875rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  background: color-mix(in srgb, var(--gk-color-primary) 16%, transparent);
+  color: var(--gk-color-primary);
+  border: 1px solid color-mix(in srgb, var(--gk-color-primary) 25%, transparent);
+}
+
+/* ---- Sub navigation ---- */
+.dn-nav-sublist {
+  list-style: none;
+  padding: 0;
+  margin: 0.15rem 0 0.35rem;
+  padding-inline-start: var(--dn-sub-offset);
+  border-inline-start: 1px solid color-mix(in srgb, var(--gk-color-border) 85%, transparent);
+  margin-inline-start: calc(1.125rem + 0.5rem);
+}
+
+[dir='rtl'] .dn-nav-sublist {
+  padding-inline-start: var(--dn-sub-offset);
+  padding-inline-end: 0;
+}
+
+.dn-nav-subitem {
+  display: flex;
+  min-width: 0;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.32rem 0.55rem 0.32rem 0.45rem;
+  margin: 2px 0;
+  border-radius: var(--dn-radius-sm);
+  min-height: 2.35rem;
+  box-sizing: border-box;
+  transition:
+    background 0.18s ease,
+    color 0.18s ease;
+  color: var(--gk-color-on-surface-muted);
+  text-decoration: none;
+  font-size: 0.8125rem;
+  font-weight: 500;
+}
+
+[dir='rtl'] .dn-nav-subitem {
+  padding: 0.32rem 0.45rem 0.32rem 0.55rem;
+}
+
+.dn-nav-subitem:hover {
+  background: var(--dn-surface-hover);
+  color: var(--gk-color-on-surface);
+}
+
+.dn-nav-subitem--active {
+  background: var(--dn-surface-active);
+  color: var(--gk-color-primary);
+  font-weight: 600;
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--gk-color-primary) 15%, transparent);
+}
+
+.dn-nav-subitem--active::before {
+  display: none;
+}
+
+.dn-nav-group__chevron {
+  flex-shrink: 0;
+  opacity: 0.55;
+  color: var(--gk-color-on-surface-muted);
+  transition:
+    transform 0.22s cubic-bezier(0.4, 0, 0.2, 1),
+    opacity 0.18s ease;
+}
+
+.dn-nav-group__trigger:hover .dn-nav-group__chevron,
+.dn-nav-group__trigger--active .dn-nav-group__chevron {
+  opacity: 0.9;
+  color: var(--gk-color-on-surface);
+}
+
+.dn-nav-group__trigger--active .dn-nav-group__chevron {
+  color: var(--gk-color-primary);
+}
+
+.dn-nav-group__chevron--expanded {
+  transform: rotate(180deg);
+}
+
+[dir='rtl'] .dn-nav-group__chevron:not(.dn-nav-group__chevron--expanded) {
+  transform: rotate(0deg);
+}
+
+/* ---- Mini rail ---- */
+.dn-nav--mini .dn-nav-item,
+.dn-nav--mini .dn-nav-group__trigger {
+  justify-content: center;
+  padding: 0.5rem 0.35rem;
+  min-height: unset;
+  width: 100%;
+  max-width: 100%;
+}
+
+.dn-nav--mini .dn-nav-item--active::before,
+.dn-nav--mini .dn-nav-group__trigger--active::before {
+  height: 1.75rem;
+}
+
+.dn-nav--mini .dn-nav-item__title,
+.dn-nav--mini .dn-nav-group__title {
+  display: none;
+}
+
+.dn-nav--mini .dn-nav-item__icon {
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 11px;
+}
+
+.dn-nav--mini .dn-nav-group__trigger-inner--rail {
+  display: flex;
+  width: 100%;
+  min-width: 0;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  flex-direction: column;
+  padding: 2px 0;
+}
+
+.dn-nav--mini .dn-nav-group__trigger-inner--rail .dn-nav-group__chevron {
+  margin-top: -2px;
+}
+
+.dn-nav--mini .dn-nav-sublist {
+  margin-inline-start: 0.5rem;
+  padding-inline-start: 0.5rem;
+  border-inline-start-width: 1px;
+}

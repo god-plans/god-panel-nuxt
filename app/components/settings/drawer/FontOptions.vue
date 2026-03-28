@@ -1,5 +1,5 @@
 <template>
-  <div class="font-options">
+  <div class="font-options panel-card">
     <div class="font-options__header">
       <span class="font-options__title">{{ t('settingsDrawer.font') }}</span>
     </div>
@@ -14,12 +14,12 @@
         :style="{ fontFamily: getFontFamily(font) }"
         @click="handleClick(font)"
       >
-        <v-icon
+        <AppIcon
           class="font-option__icon"
           :class="{ 'font-option__icon--active': value === font }"
-        >
-          mdi-format-font
-        </v-icon>
+          name="format-font"
+          :size="28"
+        />
         <span class="font-option__name">{{ font }}</span>
       </button>
     </div>
@@ -28,6 +28,7 @@
 
 <script setup lang="ts">
 import { useI18n } from 'vue-i18n'
+import AppIcon from '~/components/ui/AppIcon.vue'
 
 const { t } = useI18n()
 interface Props {
@@ -35,7 +36,7 @@ interface Props {
   options: string[]
 }
 
-const props = defineProps<Props>()
+defineProps<Props>()
 
 const emit = defineEmits<{
   'click-option': [value: string]
@@ -61,8 +62,6 @@ const getFontFamily = (font: string) => {
 <style scoped>
 .font-options {
   padding: 32px 16px 16px 16px;
-  border: 1px solid rgba(var(--v-theme-on-surface), 0.12);
-  border-radius: 16px;
   position: relative;
 }
 
@@ -73,13 +72,16 @@ const getFontFamily = (font: string) => {
 }
 
 .font-options__title {
-  font-size: 13px;
+  font-size: 0.6875rem;
   font-weight: 600;
-  line-height: 22px;
-  color: rgb(var(--v-theme-background));
-  background: rgb(var(--v-theme-on-surface));
-  padding: 0 10px;
-  border-radius: 22px;
+  line-height: 1.2;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--gk-color-on-surface-muted);
+  background: color-mix(in srgb, var(--gk-color-primary) 8%, var(--gk-color-surface));
+  padding: 0.35rem 0.65rem;
+  border-radius: 999px;
+  border: 1px solid var(--panel-hairline);
   display: inline-flex;
   align-items: center;
 }
@@ -103,28 +105,29 @@ const getFontFamily = (font: string) => {
   cursor: pointer;
   font-weight: 500;
   font-size: 12px;
-  color: rgba(var(--v-theme-on-surface), 0.6);
+  color: color-mix(in srgb, var(--gk-color-on-surface) 60%, transparent);
 }
 
 .font-option:hover {
-  border-color: rgba(var(--v-theme-on-surface), 0.08);
+  border-color: color-mix(in srgb, var(--gk-color-on-surface) 8%, transparent);
 }
 
 .font-option--selected {
-  color: rgb(var(--v-theme-on-surface));
-  border-color: rgba(var(--v-theme-on-surface), 0.08);
-  box-shadow: -8px 8px 20px -4px rgba(var(--v-theme-on-surface), 0.12);
+  color: var(--gk-color-on-surface);
+  border-color: color-mix(in srgb, var(--gk-color-primary) 28%, var(--gk-color-border));
+  background: color-mix(in srgb, var(--gk-color-primary) 9%, transparent);
+  box-shadow:
+    inset 0 0 0 1px color-mix(in srgb, var(--gk-color-primary) 18%, transparent),
+    var(--panel-shadow-card);
 }
 
 .font-option__icon {
-  width: 28px;
-  height: 28px;
   opacity: 0.6;
 }
 
 .font-option__icon--active {
   opacity: 1;
-  color: rgb(var(--v-theme-primary));
+  color: var(--gk-color-primary);
 }
 
 .font-option__name {

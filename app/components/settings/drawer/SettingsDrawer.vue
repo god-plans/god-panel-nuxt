@@ -1,65 +1,53 @@
 <template>
-  <v-navigation-drawer
+  <GkNavigationDrawer
     v-model="settingsStore.openDrawer"
     :location="settingsStore.settings.direction === 'rtl' ? 'left' : 'right'"
-    width="360"
+    :width="360"
     class="settings-drawer"
     temporary
     aria-label="Settings panel"
-    role="dialog"
-    aria-modal="true"
   >
-    <!-- Header -->
     <div class="settings-drawer__header">
       <div class="header-title">
-        <v-icon class="me-2">mdi-cog</v-icon>
+        <AppIcon name="cog" :size="22" class="me-2" />
         {{ t('common.settingsTitle') }}
       </div>
 
       <div class="header-actions">
         <FullscreenButton />
 
-        <v-tooltip :text="t('common.reset')">
-          <template #activator="{ props }">
-            <v-btn
-              v-bind="props"
-              icon
-              size="small"
-              variant="text"
-              :color="settingsStore.canReset ? 'error' : 'default'"
+        <GkTooltip :text="t('common.reset')">
+          <template #activator="{ props: tip }">
+            <GkButton
+              v-bind="tip"
+              variant="ghost"
+              slim
+              :class="settingsStore.canReset ? 'text-[var(--gk-color-danger)]' : ''"
               @click="handleReset"
             >
-              <v-icon>mdi-restart</v-icon>
-              <v-badge
-                v-if="settingsStore.canReset"
-                color="error"
-                dot
-                location="top end"
-              />
-            </v-btn>
+              <span class="relative inline-flex">
+                <AppIcon name="restart" :size="20" />
+                <span
+                  v-if="settingsStore.canReset"
+                  class="absolute -top-0.5 -end-0.5 h-2 w-2 rounded-full bg-[var(--gk-color-danger)]"
+                />
+              </span>
+            </GkButton>
           </template>
-        </v-tooltip>
+        </GkTooltip>
 
-        <v-tooltip :text="t('common.close')">
-          <template #activator="{ props }">
-            <v-btn
-              v-bind="props"
-              icon
-              size="small"
-              variant="text"
-              @click="settingsStore.onCloseDrawer"
-            >
-              <v-icon>mdi-close</v-icon>
-            </v-btn>
+        <GkTooltip :text="t('common.close')">
+          <template #activator="{ props: tip }">
+            <GkButton v-bind="tip" variant="ghost" slim @click="settingsStore.onCloseDrawer">
+              <AppIcon name="close" :size="20" />
+            </GkButton>
           </template>
-        </v-tooltip>
+        </GkTooltip>
       </div>
     </div>
 
-    <!-- Content -->
     <div class="settings-drawer__scrollable">
       <div class="settings-drawer__content">
-        <!-- Base Options Grid -->
         <div class="settings-drawer__grid">
           <BaseOption
             v-if="!hideColorScheme"
@@ -98,7 +86,6 @@
           />
         </div>
 
-        <!-- Navigation Options -->
         <NavOptions
           v-if="!(hideNavLayout && hideNavColor)"
           :value="{
@@ -112,7 +99,6 @@
           @click-option="handleNavOptionClick"
         />
 
-        <!-- Presets -->
         <PresetsOptions
           v-if="!hidePresets"
           :value="settingsStore.settings.primaryColor"
@@ -127,7 +113,6 @@
           @click-option="handlePresetClick"
         />
 
-        <!-- Font Options -->
         <FontOptions
           v-if="!hideFont"
           :value="settingsStore.settings.fontFamily"
@@ -136,12 +121,14 @@
         />
       </div>
     </div>
-  </v-navigation-drawer>
+  </GkNavigationDrawer>
 </template>
 
 <script setup lang="ts">
 import { useI18n } from 'vue-i18n'
+import { GkButton, GkNavigationDrawer, GkTooltip } from 'god-kit/vue'
 import { useSettingsStore } from '~/stores/settings'
+import AppIcon from '~/components/ui/AppIcon.vue'
 import BaseOption from './BaseOption.vue'
 import FullscreenButton from './FullscreenButton.vue'
 import NavOptions from './NavOptions.vue'
@@ -222,26 +209,57 @@ const handleReset = () => {
 </script>
 
 <style scoped>
-.settings-drawer {
-  background: rgba(var(--v-theme-background), 0.9);
-  backdrop-filter: blur(20px);
+.settings-drawer :deep(.gk-navigation-drawer__surface) {
+  background: linear-gradient(
+    195deg,
+    color-mix(in srgb, var(--gk-color-surface) 92%, var(--gk-color-primary)) 0%,
+    var(--gk-color-surface) 35%,
+    var(--gk-color-surface) 100%
+  );
+  border-inline-start: 1px solid var(--panel-hairline);
+  box-shadow: var(--panel-shadow-soft);
 }
 
 .settings-drawer__header {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 16px 8px 16px 20px;
+  padding: 0.875rem 0.5rem 0.875rem 1.1rem;
   min-height: 64px;
+  position: relative;
+  background: linear-gradient(
+    180deg,
+    color-mix(in srgb, var(--gk-color-primary) 5%, var(--gk-color-surface)) 0%,
+    var(--gk-color-surface) 55%
+  );
+  border-bottom: 1px solid var(--panel-hairline);
+}
+
+.settings-drawer__header::after {
+  content: '';
+  position: absolute;
+  inset-inline: 1rem;
+  bottom: 0;
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    color-mix(in srgb, var(--gk-color-primary) 30%, transparent) 18%,
+    color-mix(in srgb, var(--gk-color-primary) 15%, transparent) 82%,
+    transparent
+  );
+  pointer-events: none;
+  opacity: 0.85;
 }
 
 .header-title {
   display: flex;
   align-items: center;
-  font-size: 18px;
+  font-size: 1.0625rem;
   font-weight: 600;
   flex-grow: 1;
-  color: rgb(var(--v-theme-on-surface));
+  color: var(--gk-color-on-surface);
+  letter-spacing: -0.02em;
 }
 
 .header-actions {
@@ -265,19 +283,15 @@ const handleReset = () => {
 }
 
 .settings-drawer__scrollable::-webkit-scrollbar-thumb {
-  background: rgba(var(--v-theme-on-surface), 0.2);
+  background: color-mix(in srgb, var(--gk-color-on-surface) 20%, transparent);
   border-radius: 3px;
 }
 
-.settings-drawer__scrollable::-webkit-scrollbar-thumb:hover {
-  background: rgba(var(--v-theme-on-surface), 0.3);
-}
-
 .settings-drawer__content {
-  padding: 20px;
+  padding: 1.25rem 1.1rem 2rem;
   display: flex;
   flex-direction: column;
-  gap: 48px;
+  gap: 2.5rem;
 }
 
 .settings-drawer__grid {

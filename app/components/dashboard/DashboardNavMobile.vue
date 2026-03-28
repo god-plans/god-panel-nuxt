@@ -1,257 +1,131 @@
 <template>
-  <v-navigation-drawer
-    :model-value="open"
-    @update:model-value="$emit('update:open', $event)"
+  <GkNavigationDrawer
+    v-model="open"
     temporary
-    :location="settingsStore.settings.direction === 'rtl' ? 'right' : 'left'"
-    class="mobile-nav"
-    :class="{
-      'nav-rtl': settingsStore.settings.direction === 'rtl'
-    }"
+    location="start"
+    :dir="isRTL ? 'rtl' : 'ltr'"
+    class="mobile-nav dn-nav"
+    :class="{ 'nav-rtl': isRTL }"
+    width="300"
     aria-label="Mobile navigation menu"
-    role="navigation"
   >
-    <!-- Header -->
-    <div class="nav-header">
-      <Logo
-        variant="compact"
-        size="md"
-        class="logo"
+    <DashboardNavBrand :mini="false" :show-toggle="false" />
+
+    <div class="mobile-nav__user">
+      <img
+        :src="authStore.user?.photoURL || '/assets/images/avatar.webp'"
+        :alt="authStore.displayName || ''"
+        class="mobile-nav__avatar h-12 w-12 rounded-full object-cover shrink-0"
       />
-    </div>
-
-    <!-- User Info -->
-    <div class="user-info">
-      <v-avatar size="48" class="user-avatar">
-        <img :src="authStore.user?.photoURL || '/assets/images/avatar.webp'" :alt="authStore.displayName" />
-      </v-avatar>
-      <div class="user-details">
-        <div class="user-name">{{ authStore.displayName || 'Demo User' }}</div>
-        <div class="user-role">{{ authStore.userRole || 'User' }}</div>
-      </div>
-    </div>
-
-    <!-- Navigation Items -->
-    <v-list class="nav-list" density="compact">
-      <div v-for="item in navItems" :key="item.key">
-        <!-- Main Navigation Item -->
-        <v-list-item
-          v-if="!item.children"
-          :to="item.path"
-          :active="isActive(item.path)"
-          class="nav-item"
-          :class="{ 'nav-item-active': isActive(item.path) }"
-          :aria-label="t(item.title)"
-          @click="close"
-        >
-          <template v-if="settingsStore.settings.direction === 'rtl'" #append>
-            <v-icon size="20">{{ item.icon }}</v-icon>
-          </template>
-          <template v-else #prepend>
-            <v-icon size="20">{{ item.icon }}</v-icon>
-          </template>
-          <v-list-item-title class="nav-title" :class="{ 'text-right': settingsStore.settings.direction === 'rtl' }">
-            {{ t(item.title) }}
-          </v-list-item-title>
-          <template #prepend>
-            <v-chip
-              v-if="settingsStore.settings.direction === 'rtl' && item.badge"
-              :text="item.badge"
-              size="small"
-              color="primary"
-              variant="flat"
-            />
-          </template>
-          <template #append>
-            <v-chip
-              v-if="settingsStore.settings.direction !== 'rtl' && item.badge"
-              :text="item.badge"
-              size="small"
-              color="primary"
-              variant="flat"
-            />
-          </template>
-        </v-list-item>
-
-        <!-- Collapsible Navigation Group -->
-        <div v-else class="nav-group">
-          <v-list-item
-            class="nav-group-header"
-            :class="{ 'nav-group-active': isActive(item.path), 'nav-group-expanded': expandedGroups[item.key] }"
-            @click="toggleGroup(item.key)"
-          >
-            <template v-if="settingsStore.settings.direction === 'rtl'" #append>
-              <v-icon size="20">{{ item.icon }}</v-icon>
-            </template>
-            <template v-else #prepend>
-              <v-icon size="20">{{ item.icon }}</v-icon>
-            </template>
-            <v-list-item-title class="nav-title" :class="{ 'text-right': settingsStore.settings.direction === 'rtl' }">
-              {{ t(item.title) }}
-            </v-list-item-title>
-            <template #prepend>
-              <v-icon
-                v-if="settingsStore.settings.direction === 'rtl'"
-                size="16"
-                class="expand-icon"
-                :class="{ 'expanded': expandedGroups[item.key] }"
-              >
-                mdi-chevron-down
-              </v-icon>
-            </template>
-            <template #append>
-              <v-icon
-                v-if="settingsStore.settings.direction !== 'rtl'"
-                size="16"
-                class="expand-icon"
-                :class="{ 'expanded': expandedGroups[item.key] }"
-              >
-                mdi-chevron-down
-              </v-icon>
-            </template>
-          </v-list-item>
-
-          <!-- Sub Navigation Items -->
-          <v-list
-            v-if="expandedGroups[item.key]"
-            class="nav-sublist"
-            density="compact"
-          >
-            <v-list-item
-              v-for="child in item.children"
-              :key="child.key"
-              :to="child.path"
-              :active="isActive(child.path)"
-              class="nav-subitem"
-              :class="{ 'nav-subitem-active': isActive(child.path) }"
-              @click="close"
-            >
-              <template #prepend>
-                <v-icon v-if="settingsStore.settings.direction !== 'rtl'" size="16">{{ child.icon }}</v-icon>
-                <v-chip
-                  v-if="settingsStore.settings.direction === 'rtl' && child.badge"
-                  :text="child.badge"
-                  size="small"
-                  color="primary"
-                  variant="flat"
-                />
-              </template>
-              <template #append>
-                <v-icon v-if="settingsStore.settings.direction === 'rtl'" size="16">{{ child.icon }}</v-icon>
-                <v-chip
-                  v-if="settingsStore.settings.direction !== 'rtl' && child.badge"
-                  :text="child.badge"
-                  size="small"
-                  color="primary"
-                  variant="flat"
-                />
-              </template>
-              <v-list-item-title class="nav-subtitle" :class="{ 'text-right': settingsStore.settings.direction === 'rtl' }">
-                {{ t(child.title) }}
-              </v-list-item-title>
-            </v-list-item>
-          </v-list>
+      <div class="mobile-nav__user-text min-w-0">
+        <div class="mobile-nav__name">
+          {{ authStore.displayName || 'Demo User' }}
+        </div>
+        <div class="mobile-nav__role">
+          {{ authStore.userRole || 'User' }}
         </div>
       </div>
-    </v-list>
+    </div>
 
-    <!-- Footer Actions -->
+    <ul
+      class="dn-nav-list list-none p-0 m-0 flex min-h-0 min-w-0 flex-col overflow-x-hidden"
+    >
+      <template v-for="item in navItems" :key="item.key">
+        <DashboardNavItemLink
+          v-if="!item.children"
+          :item="item"
+          :active="isItemActive(item.path)"
+          :show-labels="true"
+          :is-r-t-l="isRTL"
+          @navigate="close"
+        />
+        <DashboardNavGroup
+          v-else
+          :item="item"
+          :mini="false"
+          :show-labels="true"
+          :expanded="!!expandedGroups[item.key]"
+          :group-active="isItemActive(item.path)"
+          :is-r-t-l="isRTL"
+          :is-item-active="isItemActive"
+          @toggle="() => toggleGroup(item.key)"
+          @navigate="close"
+        />
+      </template>
+    </ul>
+
     <template #append>
-      <div class="nav-footer">
-        <!-- Info Box for Mobile -->
+      <div class="mobile-nav__footer">
         <DashboardNavInfo :mini="false" :mobile="true" />
 
-        <!-- Action Buttons -->
-        <v-list density="compact">
-          <v-list-item @click="handleSettings" class="nav-item">
-            <template #prepend>
-              <v-icon>mdi-cog</v-icon>
-            </template>
-            <v-list-item-title>{{ t('common.settings') }}</v-list-item-title>
-          </v-list-item>
-          <v-list-item @click="handleLogout" class="nav-item">
-            <template #prepend>
-              <v-icon>mdi-logout</v-icon>
-            </template>
-            <v-list-item-title>{{ t('common.logout') }}</v-list-item-title>
-          </v-list-item>
-        </v-list>
+        <ul class="mobile-nav__actions list-none p-0 m-0">
+          <li>
+            <button
+              type="button"
+              class="dn-nav-item mobile-nav__action w-full border-0 bg-transparent cursor-pointer text-start"
+              @click="handleSettings"
+            >
+              <span class="dn-nav-item__icon" aria-hidden="true">
+                <AppIcon name="cog" :size="20" />
+              </span>
+              <span class="dn-nav-item__title">{{ t('common.settings') }}</span>
+            </button>
+          </li>
+          <li>
+            <button
+              type="button"
+              class="dn-nav-item mobile-nav__action mobile-nav__action--danger w-full border-0 bg-transparent cursor-pointer text-start"
+              @click="handleLogout"
+            >
+              <span class="dn-nav-item__icon" aria-hidden="true">
+                <AppIcon name="logout" :size="20" />
+              </span>
+              <span class="dn-nav-item__title">{{ t('common.logout') }}</span>
+            </button>
+          </li>
+        </ul>
       </div>
     </template>
 
-    <!-- Logout Confirmation Dialog -->
     <LogoutConfirmDialog
       v-model="showLogoutDialog"
       @confirm="performLogout"
     />
-  </v-navigation-drawer>
+  </GkNavigationDrawer>
 </template>
 
 <script setup lang="ts">
-import { ref, computed, watchEffect } from 'vue'
+import { computed, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
-import { useRoute, useRouter } from 'vue-router'
-import { dashboardNavItems, isActiveRoute, type NavItem } from '../../utils/routes'
-import { useAuthStore } from '../../stores/auth'
-import LogoutConfirmDialog from '../common/LogoutConfirmDialog.vue'
-import Logo from '../common/Logo.vue'
-import { useSettingsStore } from '../../stores/settings'
-import DashboardNavInfo from './DashboardNavInfo.vue'
+import { useRouter } from 'vue-router'
+import { GkNavigationDrawer } from 'god-kit/vue'
+import { useAuthStore } from '~/stores/auth'
+import { useSettingsStore } from '~/stores/settings'
+import { useDashboardNavMenu } from '~/composables/useDashboardNavMenu'
+import DashboardNavBrand from '~/components/dashboard/DashboardNavBrand.vue'
+import DashboardNavItemLink from '~/components/dashboard/DashboardNavItemLink.vue'
+import DashboardNavGroup from '~/components/dashboard/DashboardNavGroup.vue'
+import DashboardNavInfo from '~/components/dashboard/DashboardNavInfo.vue'
+import LogoutConfirmDialog from '~/components/common/LogoutConfirmDialog.vue'
+import AppIcon from '~/components/ui/AppIcon.vue'
 
 const { t } = useI18n()
-const settingsStore = useSettingsStore()
-
-interface Props {
-  open: boolean
-}
-
-const props = defineProps<Props>()
-
-const emit = defineEmits<{
-  'update:open': [value: boolean]
-  'close': []
-}>()
-
-const route = useRoute()
 const router = useRouter()
 const authStore = useAuthStore()
+const settingsStore = useSettingsStore()
 
-// Navigation items from centralized config
-const navItems = ref(dashboardNavItems)
+const open = defineModel<boolean>('open', { required: true })
 
-// Expanded groups state
-const expandedGroups = ref<Record<string, boolean>>({})
+const emit = defineEmits<{
+  close: []
+}>()
 
-// Initialize expanded groups based on active route
-const initializeExpandedGroups = () => {
-  navItems.value.forEach(item => {
-    if (item.children) {
-      // Expand group if any child is active
-      const hasActiveChild = item.children.some(child => isActiveRoute(route.path, child.path))
-      expandedGroups.value[item.key] = hasActiveChild
-    }
-  })
-}
+const { navItems, expandedGroups, toggleGroup, isItemActive } =
+  useDashboardNavMenu()
 
-// Toggle group expansion
-const toggleGroup = (key: string) => {
-  expandedGroups.value[key] = !expandedGroups.value[key]
-}
-
-// Logout dialog state
+const isRTL = computed(() => settingsStore.settings.direction === 'rtl')
 const showLogoutDialog = ref(false)
 
-// Computed properties
-const isActive = computed(() => (path: string) => {
-  return isActiveRoute(route.path, path)
-})
-
-// Watch for route changes to auto-expand relevant groups
-watchEffect(() => {
-  initializeExpandedGroups()
-})
-
-// Methods
 const close = () => {
   emit('close')
 }
@@ -275,184 +149,83 @@ const performLogout = async () => {
 
 <style scoped>
 .mobile-nav {
-  background: rgb(var(--v-theme-surface));
+  background: linear-gradient(
+    180deg,
+    color-mix(in srgb, var(--gk-color-primary) 4%, var(--gk-color-surface)),
+    var(--gk-color-surface) 22%
+  );
 }
 
-.nav-header {
+.mobile-nav :deep(.gk-navigation-drawer__surface) {
+  min-height: 100vh;
+  min-height: 100dvh;
+  background: transparent;
+}
+
+.mobile-nav__user {
   display: flex;
   align-items: center;
-  justify-content: center;
-  padding: 16px;
-  border-bottom: 1px solid rgb(var(--v-theme-surface-variant));
-  min-height: 80px;
+  gap: 0.875rem;
+  margin: 0 0.75rem 0.5rem;
+  padding: 1rem 1rem 1rem 0.85rem;
+  border-radius: 14px;
+  border: 1px solid color-mix(in srgb, var(--gk-color-border) 70%, transparent);
+  background: color-mix(in srgb, var(--gk-color-surface) 88%, var(--gk-color-primary));
+  box-shadow:
+    0 1px 0 color-mix(in srgb, var(--gk-color-on-surface) 6%, transparent) inset,
+    0 8px 28px color-mix(in srgb, var(--gk-color-on-surface) 6%, transparent);
 }
 
-.user-info {
-  display: flex;
-  align-items: center;
-  padding: 16px;
-  border-bottom: 1px solid rgb(var(--v-theme-surface-variant));
+.mobile-nav__avatar {
+  margin-inline-end: 0;
+  box-shadow:
+    0 0 0 2px var(--gk-color-surface),
+    0 0 0 4px color-mix(in srgb, var(--gk-color-primary) 28%, transparent);
 }
 
-.user-avatar {
-  margin-right: 12px;
+.mobile-nav__user-text {
+  min-width: 0;
 }
 
-.user-details {
-  flex: 1;
-}
-
-.user-name {
-  font-size: 1rem;
+.mobile-nav__name {
+  font-size: 1.02rem;
   font-weight: 600;
-  color: rgb(var(--v-theme-on-surface));
-  margin-bottom: 2px;
+  letter-spacing: -0.02em;
+  color: var(--gk-color-on-surface);
+  margin-bottom: 3px;
+  line-height: 1.25;
 }
 
-.user-role {
+.mobile-nav__role {
   font-size: 0.75rem;
-  color: rgb(var(--v-theme-on-surface-variant));
+  font-weight: 500;
+  color: var(--gk-color-on-surface-muted);
   text-transform: capitalize;
+  letter-spacing: 0.02em;
 }
 
-.nav-list {
-  padding: 8px 0;
-  flex: 1;
+.mobile-nav__footer {
+  border-top: 1px solid color-mix(in srgb, var(--gk-color-border) 85%, transparent);
+  padding: 0.5rem 0 0.35rem;
+  background: color-mix(in srgb, var(--gk-color-border) 22%, transparent);
 }
 
-.nav-item {
-  margin: 2px 8px;
-  border-radius: 8px;
-  transition: all 0.2s ease;
+.mobile-nav__actions {
+  padding: 0 0.35rem 0.35rem;
 }
 
-.nav-item:hover {
-  background: rgba(var(--v-theme-on-surface-rgb), 0.08);
+.mobile-nav__actions .dn-nav-item {
+  margin: 4px 0.35rem;
 }
 
-.nav-item-active {
-  background: rgba(var(--v-theme-primary-rgb), 0.12);
-  color: rgb(var(--v-theme-primary));
-  box-shadow: var(--v-custom-shadows-z1);
+.mobile-nav__action--danger:hover .dn-nav-item__icon {
+  color: var(--gk-color-danger) !important;
+  background: color-mix(in srgb, var(--gk-color-danger) 12%, transparent) !important;
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--gk-color-danger) 22%, transparent);
 }
 
-.nav-item-active:hover {
-  background: rgba(var(--v-theme-primary-rgb), 0.16);
-}
-
-.nav-item-active .v-icon {
-  color: rgb(var(--v-theme-primary)) !important;
-}
-
-.nav-title {
-  font-size: 0.875rem;
-  font-weight: 500;
-}
-
-.nav-title.text-right {
-  text-align: right;
-}
-
-/* Navigation Groups */
-.nav-group {
-  position: relative;
-}
-
-.nav-group-header {
-  margin: 2px 8px;
-  border-radius: 8px;
-  transition: all 0.2s ease;
-  cursor: pointer;
-}
-
-.nav-group-header:hover {
-  background: rgba(var(--v-theme-on-surface-rgb), 0.08);
-}
-
-.nav-group-active {
-  background: rgba(var(--v-theme-primary-rgb), 0.12);
-  color: rgb(var(--v-theme-primary));
-  box-shadow: var(--v-custom-shadows-z1);
-}
-
-.nav-group-active:hover {
-  background: rgba(var(--v-theme-primary-rgb), 0.16);
-}
-
-.nav-group-expanded {
-  background: rgba(var(--v-theme-on-surface-rgb), 0.04);
-}
-
-.expand-icon {
-  transition: transform 0.2s ease;
-  opacity: 0.6;
-}
-
-.expand-icon.expanded {
-  transform: rotate(180deg);
-}
-
-/* RTL specific styles */
-.nav-rtl .expand-icon:not(.expanded) {
-  transform: rotate(90deg);
-}
-
-.nav-rtl .expand-icon.expanded {
-  transform: rotate(-90deg);
-}
-
-/* Sub Navigation */
-.nav-sublist {
-  padding-left: 16px;
-  padding-right: 8px;
-  margin-top: 4px;
-  margin-bottom: 8px;
-}
-
-.nav-rtl .nav-sublist {
-  padding-left: 8px;
-  padding-right: 16px;
-}
-
-.nav-subitem {
-  margin: 1px 0;
-  border-radius: 6px;
-  min-height: 40px;
-  padding-left: 12px;
-  padding-right: 12px;
-  transition: all 0.2s ease;
-}
-
-.nav-subitem:hover {
-  background: rgba(var(--v-theme-on-surface-rgb), 0.06);
-}
-
-.nav-subitem-active {
-  background: rgba(var(--v-theme-primary-rgb), 0.10);
-  color: rgb(var(--v-theme-primary));
-  box-shadow: var(--v-custom-shadows-z1);
-}
-
-.nav-subitem-active:hover {
-  background: rgba(var(--v-theme-primary-rgb), 0.14);
-}
-
-.nav-subitem-active .v-icon {
-  color: rgb(var(--v-theme-primary)) !important;
-}
-
-.nav-subtitle {
-  font-size: 0.85rem;
-  font-weight: 500;
-  opacity: 0.9;
-}
-
-.nav-subtitle.text-right {
-  text-align: right;
-}
-
-.nav-footer {
-  border-top: 1px solid rgb(var(--v-theme-surface-variant));
-  padding: 8px 0;
+.mobile-nav__action--danger:hover {
+  color: var(--gk-color-danger) !important;
+  background: color-mix(in srgb, var(--gk-color-danger) 7%, transparent) !important;
 }
 </style>

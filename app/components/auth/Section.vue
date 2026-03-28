@@ -1,5 +1,5 @@
 <template>
-  <div class="auth-section ">
+  <div class="auth-section">
     <div class="section-content">
       <h3 class="section-title">{{ title }}</h3>
 
@@ -9,11 +9,10 @@
     </div>
 
     <div class="section-image">
-      <v-img
+      <img
         :src="imgUrl"
         alt="Auth illustration"
-        aspect-ratio="4/3"
-        cover
+        class="section-image-img w-full  object-cover"
       />
     </div>
   </div>
@@ -36,61 +35,54 @@ withDefaults(defineProps<Props>(), {
 </script>
 
 <style scoped>
+/* Hero column: no card chrome — sits on .panel-page like the form column */
 .auth-section {
-  background-color: rgb(var(--v-theme-surface));
-  background-size: cover;
-  background-position: center;
-  padding: 16px;
+  background: transparent;
+  padding: 0 1rem;
   width: 100%;
   max-width: 480px;
   position: relative;
   display: none;
-  border-radius: 8px;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 32px;
-  padding-top: var(--layout-header-desktop-height);
-  min-height: 100vh;
+  gap: 1.75rem;
+  min-height: 0;
+  flex: 1 1 auto;
 }
 
 .section-content {
   text-align: center;
 }
 
-[dir="rtl"] .section-content {
-  text-align: center; /* Keep center alignment for RTL */
-}
-
 .section-title {
-  font-size: 28px;
+  font-size: 1.65rem;
   font-weight: 600;
-  color: rgb(var(--v-theme-on-surface));
-  margin-bottom: 16px;
-}
-
-[dir="rtl"] .section-title {
-  text-align: center; /* Keep center alignment for RTL */
+  letter-spacing: -0.02em;
+  line-height: 1.25;
+  color: var(--gk-color-on-surface);
+  margin-bottom: 0.75rem;
 }
 
 .section-subtitle {
-  color: rgb(var(--v-theme-on-surface));
-  font-size: 16px;
-  margin-top: 8px;
-}
-
-[dir="rtl"] .section-subtitle {
-  text-align: center; /* Keep center alignment for RTL */
+  color: var(--gk-color-on-surface-muted);
+  font-size: 1rem;
+  line-height: 1.5;
+  margin-top: 0;
 }
 
 .section-image {
   width: 100%;
 }
 
-/* Responsive adjustments */
+.section-image-img {
+  border-radius: var(--panel-radius-md);
+}
+
 @media (min-width: 960px) {
   .auth-section {
     display: flex;
+    min-height: min(640px, calc(100dvh - var(--layout-header-desktop-height, 64px) - 4rem));
   }
 }
 </style>

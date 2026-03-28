@@ -39,11 +39,12 @@ export const userSchema = z.object({
   id: z.string().min(1, 'User ID is required'),
   displayName: z.string().min(1, 'Display name is required'),
   email: z.string().email('Invalid email address'),
-  photoURL: z.string().url('Invalid photo URL').optional().or(z.literal('')),
+  photoURL: z.string().optional(),
   phoneNumber: z.string().optional(),
   role: z.enum(['admin', 'user', 'manager']),
   createdAt: z.string().datetime().optional(),
-  updatedAt: z.string().datetime().optional()
+  updatedAt: z.string().datetime().optional(),
+  accessToken: z.string().optional()
 })
 
 // Settings Schema

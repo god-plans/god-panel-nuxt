@@ -1,11 +1,11 @@
 # God Panel - Modern Admin Dashboard
 
-A modern, feature-rich admin dashboard built with **Nuxt.js 4.1.2**, **Vuetify 3**, and **TypeScript**. This project provides a complete admin panel solution with authentication, theming, RTL support, and a responsive design.
+A modern, feature-rich admin dashboard built with **Nuxt.js 4**, **[god-kit](https://www.npmjs.com/package/god-kit)** (Vue UI primitives and design tokens), **Tailwind CSS**, and **TypeScript**. This project provides a complete admin panel solution with authentication, theming, RTL support, and a responsive design.
 
 ## ✨ Features
 
-- 🚀 **Nuxt.js 4.1.2** - Latest version with SSR and SSG support
-- 🎨 **Vuetify 3** - Material Design components with custom theming
+- 🚀 **Nuxt.js 4** - Latest version with SSR and SSG support
+- 🎨 **god-kit** - Accessible `Gk*` components and `--gk-*` design tokens
 - 💨 **CSS Variables** - Dynamic theming with CSS custom properties
 - 🔒 **TypeScript** - Full type safety with Zod validation
 - ✅ **Zod Validation** - Comprehensive runtime type validation
@@ -25,9 +25,9 @@ A modern, feature-rich admin dashboard built with **Nuxt.js 4.1.2**, **Vuetify 3
 
 ## 🛠️ Tech Stack
 
-- **Framework:** Nuxt.js 4.1.2
-- **UI Library:** Vuetify 3
-- **Styling:** CSS Variables + Vuetify Theme System
+- **Framework:** Nuxt.js 4
+- **UI Library:** god-kit (`createGkKit`, `Gk*` components)
+- **Styling:** Tailwind CSS + god-kit tokens (`--gk-*`) and `app/assets/css/main.css`
 - **Language:** TypeScript
 - **State Management:** Pinia
 - **Validation:** Zod
@@ -149,7 +149,7 @@ For detailed deployment instructions, see [DEPLOYMENT.md](./DEPLOYMENT.md)
 ```
 god-panel-nuxt/
 ├── app/
-│   └── app.vue                 # Root component
+│   └── app.vue                 # Root: GkSnackbarHost, settings drawer, RTL
 ├── assets/
 │   └── css/
 │       └── main.css           # Global styles
@@ -168,7 +168,7 @@ god-panel-nuxt/
 │   └── auth/
 │       └── login.vue
 ├── plugins/                    # Nuxt plugins
-│   └── vuetify.ts
+│   └── god-kit.client.ts       # createGkKit + i18n + theme sync
 ├── public/                     # Static assets
 ├── stores/                     # Pinia stores
 │   ├── auth.ts
@@ -188,6 +188,15 @@ The application supports multiple theme configurations:
 - Custom color schemes
 - RTL/LTR direction support
 
+**Source of truth:** Pinia `settings` (`colorScheme`, `primaryColor`, `direction`, …) drives the UI. **`app/plugins/god-kit.client.ts`** syncs **`useGkTheme()`** and **`@nuxtjs/color-mode`** with `settings.colorScheme`. **`app/plugins/ssr-primary-preset.server.ts`** injects primary CSS variables on SSR for correct first paint.
+
+**Notifications:** Use **`GkSnackbarHost`** in `app.vue` and **`pushGkSnackbar`** from `god-kit/vue` (or **`useToast()`**, which delegates to the same queue). Legacy `ToastContainer` has been removed.
+
+**Optional observability:** Set `NUXT_PUBLIC_SENTRY_DSN` when wiring `@sentry/nuxt`; see `app/plugins/error-handler.client.ts`.
+
+### Release QA (manual)
+Before shipping, verify: **LTR + RTL** (e.g. Persian), **mini rail** and **compact** layout, **mobile drawer**, **settings save** (including primary preset and **dark mode**), and **dynamic fonts** (`useDynamicFonts`).
+
 ### Layouts
 Choose from different dashboard layouts:
 - Vertical sidebar
@@ -203,13 +212,12 @@ Key configuration options in `nuxt.config.ts`:
 export default defineNuxtConfig({
   modules: [
     '@nuxtjs/tailwindcss',
-    '@nuxtjs/axios',
     '@pinia/nuxt',
     '@nuxtjs/color-mode',
     '@nuxtjs/i18n'
   ],
 
-  // Vuetify, Axios, i18n, and other configurations
+  // god-kit CSS order: tokens.css → vue.css → app CSS (see nuxt.config.ts)
 })
 ```
 
@@ -260,6 +268,6 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 ## 🙏 Acknowledgments
 
 - [Nuxt.js](https://nuxt.com/) - The framework
-- [Vuetify](https://vuetifyjs.com/) - UI components
+- [god-kit](https://www.npmjs.com/package/god-kit) - UI primitives and theming
 - [Tailwind CSS](https://tailwindcss.com/) - Styling
 - [Minimals](https://minimals.cc/) - Original design inspiration

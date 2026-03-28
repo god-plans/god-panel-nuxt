@@ -95,6 +95,7 @@ export interface ToastOptions {
   dismissible?: boolean
   pauseOnHover?: boolean
   showProgress?: boolean
+  paused?: boolean
   action?: {
     label: string
     handler: () => void

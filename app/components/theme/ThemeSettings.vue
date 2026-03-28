@@ -1,139 +1,121 @@
 <template>
-  <v-card class="theme-settings" >
-    <v-card-title class="text-h6 mb-4">
-      <v-icon class="me-2">mdi-palette</v-icon>
+  <div class="theme-settings panel-card p-6">
+    <h2 class="text-h6 mb-4 flex items-center gap-2 font-semibold">
+      <AppIcon name="palette" :size="22" />
       {{ t('settings.general') }}
-    </v-card-title>
+    </h2>
 
-    <v-card-text>
-      <!-- Theme Mode -->
+    <div class="space-y-6">
       <div class="setting-group">
         <label class="setting-label">{{ t('theme.themeMode') }}</label>
-        <v-btn-toggle
-          v-model="localSettings.colorScheme"
-          mandatory
-          
-        >
-          <v-btn value="light" variant="outlined" size="small">
-            <v-icon class="me-1">mdi-weather-sunny</v-icon>
-            {{ t('settings.light') }}
-          </v-btn>
-          <v-btn value="dark" variant="outlined" size="small">
-            <v-icon class="me-1">mdi-weather-night</v-icon>
-            {{ t('settings.dark') }}
-          </v-btn>
-        </v-btn-toggle>
-      </div>
-
-      <!-- Direction -->
-      <div class="setting-group">
-        <label class="setting-label">{{ t('theme.direction') }}</label>
-        <v-btn-toggle
-          v-model="localSettings.direction"
-          mandatory
-          class=""
-          
-        >
-          <v-btn value="ltr" variant="outlined" size="small">
-            LTR
-          </v-btn>
-          <v-btn value="rtl" variant="outlined" size="small">
-            RTL
-          </v-btn>
-        </v-btn-toggle>
-      </div>
-
-      <!-- Primary Color -->
-      <div class="setting-group">
-        <label class="setting-label">{{ t('theme.primaryColor') }}</label>
-        <div class="color-options">
-          <v-btn
-            v-for="(color, key) in primaryColors"
-            :key="key"
-            :value="key"
-            variant="outlined"
-            size="small"
-            class="color-btn"
-            :class="{ active: localSettings.primaryColor === key }"
-            @click="localSettings.primaryColor = key"
+        <div class="flex flex-wrap gap-2">
+          <GkButton
+            :variant="localSettings.colorScheme === 'light' ? 'primary' : 'secondary'"
+            size="sm"
+            @click="localSettings.colorScheme = 'light'"
           >
-            <div
-              class="color-swatch"
-              :style="{ backgroundColor: `rgb(var(--v-theme-${key === 'default' ? 'primary' : key}))` }"
-            ></div>
-            {{ key.charAt(0).toUpperCase() + key.slice(1) }}
-          </v-btn>
+            <AppIcon name="weather-sunny" :size="16" class="me-1" />
+            {{ t('settings.light') }}
+          </GkButton>
+          <GkButton
+            :variant="localSettings.colorScheme === 'dark' ? 'primary' : 'secondary'"
+            size="sm"
+            @click="localSettings.colorScheme = 'dark'"
+          >
+            <AppIcon name="weather-night" :size="16" class="me-1" />
+            {{ t('settings.dark') }}
+          </GkButton>
         </div>
       </div>
 
-      <!-- Layout Options -->
       <div class="setting-group">
-        <label class="setting-label">{{ t('theme.layout') }}</label>
-        <v-select
+        <label class="setting-label">{{ t('theme.direction') }}</label>
+        <div class="flex flex-wrap gap-2">
+          <GkButton
+            :variant="localSettings.direction === 'ltr' ? 'primary' : 'secondary'"
+            size="sm"
+            @click="localSettings.direction = 'ltr'"
+          >
+            LTR
+          </GkButton>
+          <GkButton
+            :variant="localSettings.direction === 'rtl' ? 'primary' : 'secondary'"
+            size="sm"
+            @click="localSettings.direction = 'rtl'"
+          >
+            RTL
+          </GkButton>
+        </div>
+      </div>
+
+      <div class="setting-group">
+        <label class="setting-label">{{ t('theme.primaryColor') }}</label>
+        <div class="color-options">
+          <GkButton
+            v-for="(label, key) in primaryColors"
+            :key="key"
+            variant="secondary"
+            size="sm"
+            class="color-btn"
+            :class="{ active: localSettings.primaryColor === key }"
+            @click="onPrimaryColor(key as 'default' | 'purple' | 'cyan' | 'blue' | 'orange' | 'red')"
+          >
+            <span
+              class="color-swatch inline-block rounded-full border-2 border-[var(--gk-color-border)]"
+              :style="{ backgroundColor: swatchColor(key as string) }"
+            />
+            {{ label }}
+          </GkButton>
+        </div>
+      </div>
+
+      <GkField :label="t('theme.layout')">
+        <GkSelect
           v-model="localSettings.navLayout"
-          :items="layoutOptions"
-          variant="outlined"
-          density="compact"
-          hide-details
+          :options="layoutSelectOptions"
         />
-      </div>
+      </GkField>
 
-      <!-- Font Family -->
-      <div class="setting-group">
-        <label class="setting-label">{{ t('theme.fontFamily') }}</label>
-        <v-select
+      <GkField :label="t('theme.fontFamily')">
+        <GkSelect
           v-model="localSettings.fontFamily"
-          :items="fontOptions"
-          variant="outlined"
-          density="compact"
-          hide-details
+          :options="fontSelectOptions"
         />
-      </div>
+      </GkField>
 
-      <!-- Contrast Toggle -->
       <div class="setting-group">
-        <v-switch
-          v-model="isHighContrast"
-          :label="t('settingsDrawer.highContrast')"
-          color="primary"
-          density="compact"
-          hide-details
-        />
+        <label class="flex items-center gap-2 cursor-pointer">
+          <GkCheckbox v-model="isHighContrast" :aria-label="t('settingsDrawer.highContrast')" />
+          <span>{{ t('settingsDrawer.highContrast') }}</span>
+        </label>
       </div>
 
-      <!-- Actions -->
-      <div class="actions mt-6">
-        <v-btn
-          variant="outlined"
-          @click="resetToDefaults"
-          class="me-2"
-        >
+      <div class="actions mt-6 flex flex-wrap justify-end gap-2">
+        <GkButton variant="secondary" @click="resetToDefaults">
           {{ t('common.reset') }}
-        </v-btn>
-        <v-btn
-          color="primary"
-          @click="applySettings"
-        >
+        </GkButton>
+        <GkButton variant="primary" @click="applySettings">
           {{ t('common.save') }}
-        </v-btn>
+        </GkButton>
       </div>
-    </v-card-text>
-  </v-card>
+    </div>
+  </div>
 </template>
 
 <script setup lang="ts">
-import { ref, reactive, watch, computed } from 'vue'
+import { reactive, watch, computed, onUnmounted } from 'vue'
 import { useI18n } from 'vue-i18n'
+import { GkButton, GkCheckbox, GkField, GkSelect } from 'god-kit/vue'
 import { useSettingsStore } from '~/stores/settings'
+import { applyGkPrimaryPreset } from '~/utils/gk-primary-presets'
+import AppIcon from '~/components/ui/AppIcon.vue'
 
 const { t } = useI18n()
 
 const settingsStore = useSettingsStore()
 
-// Local settings for preview
 const localSettings = reactive({ ...settingsStore.settings })
 
-// Primary color options
 const primaryColors = computed(() => ({
   default: t('common.default'),
   cyan: t('common.cyan'),
@@ -143,7 +125,23 @@ const primaryColors = computed(() => ({
   red: t('common.red'),
 }))
 
-// High contrast computed property
+const swatchColors: Record<string, string> = {
+  default: 'var(--gk-color-primary)',
+  cyan: '#06b6d4',
+  purple: '#7635dc',
+  blue: '#0C68E9',
+  orange: '#fda92d',
+  red: '#FF3030',
+}
+
+function swatchColor(key: string) {
+  return swatchColors[key] ?? 'var(--gk-color-primary)'
+}
+
+function onPrimaryColor(key: 'default' | 'purple' | 'cyan' | 'blue' | 'orange' | 'red') {
+  localSettings.primaryColor = key
+}
+
 const isHighContrast = computed({
   get: () => localSettings.contrast === 'high',
   set: (value: boolean) => {
@@ -151,43 +149,56 @@ const isHighContrast = computed({
   }
 })
 
-// Layout options
-const layoutOptions = ref([
-  { title: 'Vertical', value: 'vertical' },
-  { title: 'Horizontal', value: 'horizontal' },
-  { title: 'Mini', value: 'mini' },
-])
+const layoutSelectOptions = [
+  { value: 'vertical', label: 'Vertical' },
+  { value: 'horizontal', label: 'Horizontal' },
+  { value: 'mini', label: 'Mini' },
+]
 
-// Font options
-const fontOptions = ref([
-  { title: 'Inter', value: 'Inter' },
-  { title: 'Roboto', value: 'Roboto' },
-  { title: 'Poppins', value: 'Poppins' },
-  { title: 'Barlow', value: 'Barlow' },
-  { title: 'DM Sans', value: 'DM Sans' },
-  { title: 'Nunito Sans', value: 'Nunito Sans' },
-])
+const fontSelectOptions = [
+  { value: 'Inter', label: 'Inter' },
+  { value: 'Roboto', label: 'Roboto' },
+  { value: 'Poppins', label: 'Poppins' },
+  { value: 'Barlow', label: 'Barlow' },
+  { value: 'DM Sans', label: 'DM Sans' },
+  { value: 'Nunito Sans', label: 'Nunito Sans' },
+]
 
-// Apply settings
 const applySettings = () => {
   settingsStore.updateSettings(localSettings)
 }
 
-// Reset to defaults
 const resetToDefaults = () => {
   settingsStore.resetSettings()
   Object.assign(localSettings, settingsStore.settings)
 }
 
-// Watch for external changes and sync
 watch(() => settingsStore.settings, (newSettings) => {
   Object.assign(localSettings, newSettings)
 }, { deep: true })
+
+/** Live preview: sidebar / buttons use --gk-color-primary before Save */
+watch(
+  () => localSettings.primaryColor,
+  (preset) => {
+    if (import.meta.client) {
+      applyGkPrimaryPreset(document.documentElement, preset)
+    }
+  },
+  { immediate: true }
+)
+
+onUnmounted(() => {
+  if (import.meta.client) {
+    applyGkPrimaryPreset(document.documentElement, settingsStore.settings.primaryColor)
+  }
+})
 </script>
 
 <style scoped>
 .theme-settings {
-  max-width: 400px;
+  width: 100%;
+  max-width: none;
 }
 
 .setting-group {
@@ -197,14 +208,9 @@ watch(() => settingsStore.settings, (newSettings) => {
 .setting-label {
   display: block;
   font-weight: 600;
-  color: rgb(var(--v-theme-on-surface));
+  color: var(--gk-color-on-surface);
   margin-bottom: 8px;
   font-size: 14px;
-}
-
-.theme-toggle,
-.direction-toggle {
-  width: 100%;
 }
 
 .color-options {
@@ -216,22 +222,12 @@ watch(() => settingsStore.settings, (newSettings) => {
 .color-swatch {
   width: 16px;
   height: 16px;
-  border-radius: 50%;
-  border: 2px solid rgb(var(--v-theme-surface-variant));
 }
 
 .color-btn.active {
-  border-color: rgb(var(--v-theme-primary));
-  background-color: rgba(var(--v-theme-primary-rgb), 0.08);
+  outline: 2px solid var(--gk-color-primary);
 }
 
-.actions {
-  display: flex;
-  justify-content: flex-end;
-  gap: 8px;
-}
-
-/* Responsive */
 @media (max-width: 480px) {
   .theme-settings {
     max-width: 100%;

@@ -1,70 +1,47 @@
-<script setup>
-import { useLocale } from "vuetify";
+<script setup lang="ts">
+import { ref } from "vue";
+import { GkButton, GkMenu } from "god-kit/vue";
 
-// Import SVG icons
 const usFlagIcon = "/assets/icons/us-flag.svg";
 const iranFlagIcon = "/assets/icons/iran-flag.svg";
 
-const { t, setLocale, locale } = useI18n();
+const { setLocale, locale } = useI18n();
 const langFromCookie = useCookie("lang");
-const { current } = useLocale();
 
-function changeLocale(locale) {
-  current.value = locale;
-}
+const menuOpen = ref(false);
 
-// watch
-watch(
-  () => locale,
-  (newVal, oldVal) => {
-    // Only update Vuetify locale when i18n locale actually changes
-    if (newVal !== oldVal) {
-      changeLocale(newVal);
-    }
-  },
-  { immediate: false }
-);
-
-function set(lang) {
-  // Prevent unnecessary updates if already set
+function set(lang: "en" | "fa") {
   if (locale.value !== lang) {
     setLocale(lang);
     langFromCookie.value = lang;
   }
+  menuOpen.value = false;
 }
 </script>
 
 <template>
-  <v-menu>
-    <template v-slot:activator="{ props }">
-      <v-btn
-        type="button"
-        icon
-        class="flex items-center justify-center"
-        v-bind="props"
-      >
+  <GkMenu v-model="menuOpen" placement="bottom-end">
+    <template #activator="{ props: act }">
+      <GkButton v-bind="act" variant="ghost" slim class="flex items-center justify-center">
         <div v-if="locale === 'en'" class="flex items-center gap-x-2">
           <img :src="usFlagIcon" alt="US Flag" class="w-5 h-5" />
         </div>
         <div v-else class="flex items-center gap-x-2">
           <img :src="iranFlagIcon" alt="Iran Flag" class="w-5 h-5" />
         </div>
-
-      </v-btn>
+      </GkButton>
     </template>
     <section
-      class="flex flex-col justify-start items-start gap-2 sm:gap-4 bg-white dark:!bg-gray-900 p-4 rounded-xl mt-3 border-1 border-solid border-neutral-100 dark:!border-neutral-400"
+      class="flex flex-col justify-start items-start gap-2 sm:gap-4 bg-[var(--gk-color-surface)] p-4 rounded-xl border border-[var(--gk-color-border)] text-[var(--gk-color-on-surface)]"
     >
-      <button class="flex items-center gap-x-1" @click="set('en')">
+      <button type="button" class="flex items-center gap-x-1 w-full text-left" @click="set('en')">
         <img :src="usFlagIcon" alt="US Flag" class="w-5 h-5" />
-        <p>English (US)</p>
+        <span>English (US)</span>
       </button>
-      <button @click="set('fa')" class="flex items-center gap-x-1">
+      <button type="button" class="flex items-center gap-x-1 w-full text-left" @click="set('fa')">
         <img :src="iranFlagIcon" alt="Iran Flag" class="w-5 h-5" />
-        <p>Farsi (IR)</p>
+        <span>Farsi (IR)</span>
       </button>
     </section>
-  </v-menu>
+  </GkMenu>
 </template>
-
-<style></style>

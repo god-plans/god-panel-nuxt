@@ -1,9 +1,8 @@
-import { useToast } from './useToast'
+import { pushGkSnackbar } from 'god-kit/vue'
 import type { AppError } from '~/plugins/error-handler.client'
 
 // Error handler composable for components
 export function useErrorHandler() {
-  const { error: showErrorToast } = useToast()
   const { $errorHandler } = useNuxtApp()
 
   // Handle error with toast and logging
@@ -24,9 +23,12 @@ export function useErrorHandler() {
       context: options.context
     })
 
-    // Show custom toast message if provided
     if (options.showToast !== false && options.toastMessage) {
-      showErrorToast(options.toastMessage)
+      pushGkSnackbar({
+        message: options.toastMessage,
+        variant: 'danger',
+        timeout: 5000,
+      })
     }
 
     return appError

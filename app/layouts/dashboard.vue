@@ -7,35 +7,34 @@
     <MotionLazy>
     <!-- Mobile Navigation -->
     <DashboardNavMobile
-      v-model="mobileNavOpen"
+      v-model:open="mobileNavOpen"
       @close="closeMobileNav"
     />
 
     <!-- Layout Section -->
     <div class="dashboard-layout" :class="{ 'compact-mode': settingsStore.settings.compactLayout, 'rtl-mode': settingsStore.settings.direction === 'rtl' }" :style="layoutVars">
-    <!-- Navigation Sidebar -->
+    <!-- Navigation Sidebar (drawer is fixed; padding on layout reserves space) -->
     <DashboardNav
       v-if="!isHorizontalLayout && !mobile"
       :mini="isMiniLayout"
       class="lg:block "
-
       @toggle-mini="toggleNav"
-      @open-mobile="openMobileNav"
     />
 
-    <!-- Top Navigation for Horizontal Layout and Mobile -->
-    <DashboardHeader
-      :is-horizontal="isHorizontalLayout"
-      :is-mobile="mobile"
-      @toggle-nav="openMobileNav"
-    />
+    <!-- Header spans the full width above main content (beside sidebar), not between nav and content columns -->
+    <div class="dashboard-main-area panel-page">
+      <DashboardHeader
+        :is-horizontal="isHorizontalLayout"
+        :is-mobile="mobile"
+        @toggle-nav="openMobileNav"
+      />
 
-      <!-- Main Content -->
       <DashboardMain :is-nav-horizontal="isHorizontalLayout">
         <DashboardContent max-width="xl">
           <slot />
         </DashboardContent>
       </DashboardMain>
+    </div>
     </div>
 
    
@@ -79,7 +78,7 @@ const layoutVars = computed(() => ({
   '--layout-transition-easing': 'linear',
   '--layout-transition-duration': '120ms',
   '--layout-nav-mini-width': '88px',
-  // '--layout-nav-vertical-width': settingsStore.settings.compactLayout ? '260px' : '300px',
+  '--layout-nav-vertical-width': settingsStore.settings.compactLayout ? '260px' : '300px',
   '--layout-nav-horizontal-height': settingsStore.settings.compactLayout ? '56px' : '64px',
   '--layout-dashboard-content-pt': settingsStore.settings.compactLayout ? '4px' : '8px',
   '--layout-dashboard-content-pb': settingsStore.settings.compactLayout ? '32px' : '64px',
@@ -138,8 +137,19 @@ onMounted(() => {
 <style scoped>
 .dashboard-layout {
   display: flex;
+  flex-direction: row;
   min-height: 100vh;
   transition: all var(--layout-transition-duration) var(--layout-transition-easing);
+}
+
+/* Column: top bar + scrollable main (sidebar is position:fixed and does not consume flex width) */
+.dashboard-main-area {
+  display: flex;
+  flex: 1 1 auto;
+  flex-direction: column;
+  min-width: 0;
+  min-height: 100vh;
+  min-height: 100dvh;
 }
 
 .dashboard-layout:has(.dashboard-nav:not(.nav-mini)) {
@@ -186,7 +196,7 @@ onMounted(() => {
 }
 
 @media (max-width: 959px) {
-  .dashboard-layout {
+  /* .dashboard-layout {
     padding-left: 16px !important;
     padding-right: 16px !important;
   }
@@ -194,7 +204,7 @@ onMounted(() => {
   .rtl-mode.dashboard-layout {
     padding-left: 16px !important;
     padding-right: 16px !important;
-  }
+  } */
 
   /* Mobile navigation adjustments */
   .dashboard-layout:has(.dashboard-nav:not(.nav-mini)) {

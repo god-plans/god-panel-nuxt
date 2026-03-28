@@ -1,4 +1,5 @@
-import { ref, reactive } from 'vue'
+import { reactive, readonly, ref } from 'vue'
+import { clearGkSnackbars, pushGkSnackbar } from 'god-kit/vue'
 
 export interface ToastOptions {
   title?: string
@@ -26,58 +27,97 @@ export interface Toast {
   timestamp: number
 }
 
-const toasts = ref<Toast[]>([])
+const POSITION_TO_LOCATION: Record<NonNullable<ToastOptions['position']>, string> = {
+  'bottom-right': 'bottom end',
+  'bottom-left': 'bottom start',
+  'bottom-center': 'bottom center',
+  'top-right': 'top end',
+  'top-left': 'top start',
+  'top-center': 'top center',
+}
+
 const config = reactive({
   position: 'bottom-right' as ToastOptions['position'],
   duration: 5000,
-  maxToasts: 5
+  maxToasts: 5,
 })
 
 let toastIdCounter = 0
-
 const generateId = () => `toast-${++toastIdCounter}`
+
+/** Kept for API compatibility; snackbars are rendered by `GkSnackbarHost`. */
+const toasts = ref<Toast[]>([])
+
+const dismissById = new Map<string, () => void>()
+
+function mapVariant(
+  type: Toast['type']
+): 'neutral' | 'info' | 'success' | 'warning' | 'danger' {
+  switch (type) {
+    case 'success':
+      return 'success'
+    case 'error':
+      return 'danger'
+    case 'warning':
+      return 'warning'
+    case 'info':
+      return 'info'
+    case 'loading':
+    default:
+      return 'neutral'
+  }
+}
+
+function buildText(message: string, options: ToastOptions): string {
+  const parts: string[] = []
+  if (options.action?.label) {
+    parts.push(`[${options.action.label}]`)
+  }
+  parts.push(options.description ?? message)
+  return parts.join(' ')
+}
 
 const addToast = (type: Toast['type'], message: string, options: ToastOptions = {}) => {
   const id = generateId()
-  const toast: Toast = {
+  const position: NonNullable<ToastOptions['position']> =
+    options.position ?? config.position ?? 'bottom-right'
+  const location = POSITION_TO_LOCATION[position] ?? 'bottom end'
+  const duration = options.persistent ? -1 : options.duration ?? config.duration
+  const title = options.title
+  const text = buildText(message, options)
+
+  const { dismiss } = pushGkSnackbar({
     id,
-    type,
-    title: options.title,
-    description: message,
-    duration: options.duration || config.duration,
-    position: options.position || config.position,
-    closable: options.closable !== false,
-    persistent: options.persistent || false,
-    action: options.action,
-    timestamp: Date.now()
-  }
+    title,
+    text,
+    message: text,
+    variant: mapVariant(type),
+    timeout: type === 'loading' ? -1 : duration,
+    loading: type === 'loading',
+    location,
+  })
 
-  toasts.value.push(toast)
+  dismissById.set(id, dismiss)
 
-  // Remove toast after duration (unless persistent)
-  if (!toast.persistent && toast.duration > 0) {
-    setTimeout(() => {
-      removeToast(id)
-    }, toast.duration)
-  }
-
-  // Limit number of toasts
-  if (toasts.value.length > config.maxToasts) {
-    toasts.value.shift()
+  if (dismissById.size > config.maxToasts) {
+    const first = dismissById.keys().next().value as string | undefined
+    if (first) removeToast(first)
   }
 
   return id
 }
 
 const removeToast = (id: string) => {
-  const index = toasts.value.findIndex(toast => toast.id === id)
-  if (index > -1) {
-    toasts.value.splice(index, 1)
+  const dismiss = dismissById.get(id)
+  if (dismiss) {
+    dismiss()
+    dismissById.delete(id)
   }
 }
 
 const clearAll = () => {
-  toasts.value = []
+  clearGkSnackbars()
+  dismissById.clear()
 }
 
 const success = (message: string, options?: ToastOptions) => {
@@ -97,11 +137,11 @@ const info = (message: string, options?: ToastOptions) => {
 }
 
 const loading = (message: string, options?: ToastOptions) => {
-  return addToast('loading', message, { ...options, persistent: true })
+  return addToast('loading', message, options)
 }
 
 const promise = async <T>(
-  promise: Promise<T>,
+  promiseArg: Promise<T>,
   messages: {
     loading: string
     success: string
@@ -110,9 +150,9 @@ const promise = async <T>(
   options?: ToastOptions
 ): Promise<T> => {
   const loadingId = loading(messages.loading, options)
-  
+
   try {
-    const result = await promise
+    const result = await promiseArg
     removeToast(loadingId)
     success(messages.success, options)
     return result
@@ -125,25 +165,18 @@ const promise = async <T>(
 
 export const useToast = () => {
   return {
-    // Toast methods
     success,
     error,
     warning,
     info,
     loading,
     promise,
-    
-    // Management methods
     removeToast,
     clearAll,
-    
-    // State
     toasts: readonly(toasts),
     config: readonly(config),
-    
-    // Update config
     updateConfig: (newConfig: Partial<typeof config>) => {
       Object.assign(config, newConfig)
-    }
+    },
   }
 }

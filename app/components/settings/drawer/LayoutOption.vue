@@ -51,11 +51,15 @@ const handleClick = () => {
 }
 
 .layout-option:hover {
-  background: rgba(var(--v-theme-on-surface), 0.04);
+  background: color-mix(in srgb, var(--gk-color-on-surface) 4%, transparent);
 }
 
 .layout-option--selected {
-  box-shadow: -8px 8px 20px -4px rgba(var(--v-theme-on-surface), 0.12);
+  border-color: color-mix(in srgb, var(--gk-color-primary) 35%, var(--gk-color-border));
+  background: color-mix(in srgb, var(--gk-color-primary) 7%, transparent);
+  box-shadow:
+    inset 0 0 0 1px color-mix(in srgb, var(--gk-color-primary) 20%, transparent),
+    var(--panel-shadow-card);
 }
 
 .layout-option__nav {
@@ -97,7 +101,7 @@ const handleClick = () => {
 
 .layout-option--selected .layout-option__circle {
   opacity: 1;
-  background: linear-gradient(135deg, rgb(var(--v-theme-primary)) 0%, rgb(var(--v-theme-primary)) 100%);
+  background: linear-gradient(135deg, var(--gk-color-primary) 0%, var(--gk-color-primary) 100%);
 }
 
 .layout-option__primary-item {
@@ -116,7 +120,7 @@ const handleClick = () => {
 }
 
 .layout-option--selected .layout-option__primary-item {
-  background: linear-gradient(135deg, rgb(var(--v-theme-primary)) 0%, rgb(var(--v-theme-primary)) 100%);
+  background: linear-gradient(135deg, var(--gk-color-primary) 0%, var(--gk-color-primary) 100%);
 }
 
 .layout-option__secondary-item {
@@ -135,7 +139,7 @@ const handleClick = () => {
 }
 
 .layout-option--selected .layout-option__secondary-item {
-  background: linear-gradient(135deg, rgb(var(--v-theme-primary)) 0%, rgb(var(--v-theme-primary)) 100%);
+  background: linear-gradient(135deg, var(--gk-color-primary) 0%, var(--gk-color-primary) 100%);
 }
 
 .layout-option__content {
@@ -157,6 +161,6 @@ const handleClick = () => {
 }
 
 .layout-option--selected .layout-option__content::before {
-  background: linear-gradient(135deg, rgb(var(--v-theme-primary)) 0%, rgb(var(--v-theme-primary)) 100%);
+  background: linear-gradient(135deg, var(--gk-color-primary) 0%, var(--gk-color-primary) 100%);
 }
 </style>

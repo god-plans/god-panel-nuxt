@@ -1,8 +1,8 @@
 // ----------------------------------------------------------------------
 
 export const stylesMode = {
-  light: '[data-vuetify-theme="light"] &',
-  dark: '[data-vuetify-theme="dark"] &',
+  light: '[data-gk-theme="light"] &',
+  dark: 'html.gk-theme-dark &',
 };
 
 export const mediaQueries = {

@@ -1,4 +1,4 @@
-import { ref, watch } from 'vue'
+import { readonly, ref, watch } from 'vue'
 
 export interface FontDefinition {
   name: string
@@ -107,13 +107,10 @@ export function useDynamicFonts() {
     if (process.client) {
       // Apply to document root
       document.documentElement.style.setProperty('--font-family', fontDef.family)
+      document.documentElement.style.setProperty('--app-font-family', fontDef.family)
 
       // Apply to body
       document.body.style.fontFamily = fontDef.family
-
-      // Update CSS custom property for components
-      const root = document.documentElement
-      root.style.setProperty('--v-theme-font-family', fontDef.family)
     }
   }
 

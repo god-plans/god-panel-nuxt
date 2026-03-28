@@ -27,6 +27,8 @@ export default defineNuxtConfig({
       appName: 'God Panel',
       version: '1.0.0',
       siteUrl: process.env.NUXT_PUBLIC_SITE_URL,
+      /** When set, error-handler can forward to Sentry (wire in `error-handler.client.ts`) */
+      sentryDsn: process.env.NUXT_PUBLIC_SENTRY_DSN || '',
       enableMockData: process.env.ENABLE_MOCK_DATA === 'true',
     },
     private: {
@@ -48,18 +50,19 @@ export default defineNuxtConfig({
   },
 
 
-  // CSS
+  // CSS — god-kit tokens + component styles before app Tailwind layers
+  // MDI webfont: large payload (~400KB+ woff2). Future path: tree-shake with @mdi/js + inline SVG
+  // or a small sprite for icons used in AppIcon; measure LCP before/after.
   css: [
+    'god-kit/tokens.css',
+    'god-kit/vue.css',
     '~/assets/css/main.css',
-    // Load MDI font for icons
-    'vuetify/lib/styles/main.sass',
-    '@mdi/font/css/materialdesignicons.min.css'
+    // After main/Tailwind so `.dn-*` nav rules are reliably bundled (avoid @import in main.css)
+    '~/assets/css/dashboard-nav.css',
+    '~/assets/css/panel-shell.css',
+    '@mdi/font/css/materialdesignicons.min.css',
   ],
 
-  // Build configuration
-  build: {
-    transpile: ['vuetify']
-  },
 
   // SSR
   ssr: true,
@@ -83,8 +86,8 @@ export default defineNuxtConfig({
         output: {
           manualChunks: {
             vendor: ['vue', 'vue-router'],
-            ui: ['vuetify', '@mdi/js'],
-            utils: ['axios', 'zod', 'clsx']
+            ui: ['@mdi/js'],
+            utils: ['axios', 'clsx']
           }
         }
       }

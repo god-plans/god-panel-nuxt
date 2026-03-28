@@ -58,24 +58,20 @@ const result = await handleAsync(
 </template>
 ```
 
-### Toast Notifications
+### Notifications (god-kit snackbar)
+
+`useToast()` wraps **`pushGkSnackbar`** from `god-kit/vue`. Mount **`GkSnackbarHost`** once in `app.vue`.
 
 ```typescript
 import { useToast } from '~/composables/useToast'
 
-const { success, error, warning, info, loading } = useToast()
+const { success, error, warning, info, loading, promise } = useToast()
 
-// Show different types of toasts
 success('Operation completed successfully!')
-error('Something went wrong')
-warning('Please check your input')
-info('New feature available')
-
-// Loading toast with promise
-const result = await loading('Saving...', {
-  promise: saveData(),
+await promise(saveData(), {
+  loading: 'Saving...',
   success: 'Data saved successfully!',
-  error: 'Failed to save data'
+  error: 'Failed to save data',
 })
 ```
 
@@ -104,8 +100,8 @@ Full-page error handling for route-level errors.
 - `loading` - Loading state
 - `showDetails` - Show debug info
 
-### ToastContainer.vue & ToastItem.vue
-Toast notification system with multiple positions and types.
+### GkSnackbarHost + `pushGkSnackbar`
+Transient messages are rendered by god-kit; there is no separate toast container component.
 
 ## 🔧 Configuration
 

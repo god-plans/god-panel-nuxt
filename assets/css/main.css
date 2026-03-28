@@ -1,6 +1,3 @@
-/* Vuetify CSS */
-@import 'vuetify/styles';
-
 /* Tailwind CSS */
 @tailwind base;
 @tailwind components;
@@ -9,11 +6,15 @@
 /* Custom global styles */
 @layer base {
   html {
-    font-family: 'Inter', sans-serif;
+    font-family: var(--app-font-family, 'Inter'), ui-sans-serif, system-ui, sans-serif;
   }
 
   body {
     @apply bg-gray-50 text-gray-900 dark:bg-gray-900 dark:text-gray-100;
+  }
+
+  html[data-gk-theme='dark'] body {
+    @apply bg-gray-900 text-gray-100;
   }
 }
 
@@ -27,139 +28,107 @@
     @apply shadow-lg hover:shadow-xl transition-shadow duration-300;
   }
 
-  /* Vuetify component overrides */
-  .v-application {
-    color: rgb(var(--v-theme-on-background)) !important;
+  /**
+   * Dashboard / settings surfaces — god-kit tokens, lighter borders in light mode.
+   */
+  .gk-card,
+  .gk-panel {
+    background: var(--gk-color-surface);
+    border: 1px solid var(--gk-color-border);
+    border-radius: var(--gk-radius-lg);
+    box-shadow: 0 1px 2px rgba(15, 23, 42, 0.04);
   }
 
-  .v-card {
-    background-color: rgb(var(--v-theme-surface)) !important;
-    color: rgb(var(--v-theme-on-surface)) !important;
+  html[data-gk-theme='dark'] .gk-card,
+  html[data-gk-theme='dark'] .gk-panel {
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
   }
 
-  .v-card-title,
-  .v-card-subtitle,
-  .v-card-text {
-    color: inherit !important;
+  .gk-card--padded {
+    @apply p-4 sm:p-5;
   }
 
-  .v-list-item-title,
-  .v-list-item-subtitle {
-    color: rgb(var(--v-theme-on-surface)) !important;
-  }
-
-  .v-btn {
-    color: inherit;
-  }
-
-  .v-icon {
-    color: inherit;
-  }
-
+  /* App typography helpers (replaces legacy Vuetify heading classes) */
   .text-h1,
   .text-h2,
   .text-h3,
   .text-h4,
   .text-h5,
   .text-h6 {
-    color: rgb(var(--v-theme-on-surface)) !important;
+    color: var(--gk-color-text);
+    letter-spacing: -0.02em;
+  }
+
+  .text-h1 {
+    font-size: clamp(1.75rem, 2vw + 1rem, 2.25rem);
+    font-weight: 700;
+    line-height: 1.2;
+  }
+
+  .text-h2 {
+    font-size: clamp(1.5rem, 1.5vw + 0.875rem, 1.875rem);
+    font-weight: 600;
+    line-height: 1.25;
+  }
+
+  .text-h3 {
+    font-size: 1.25rem;
+    font-weight: 600;
+    line-height: 1.3;
+  }
+
+  .text-h4 {
+    font-size: 1.125rem;
+    font-weight: 600;
+    line-height: 1.35;
+  }
+
+  .text-body-1 {
+    font-size: 1rem;
+    line-height: 1.6;
+    color: var(--gk-color-on-surface-muted);
+  }
+
+  .text-body-2 {
+    font-size: 0.875rem;
+    line-height: 1.5;
+    color: var(--gk-color-on-surface-muted);
   }
 }
 
+/* god-kit snackbar: bottom bar should stay compact, not full-bleed */
+.gk-snackbar-anchor .gk-snackbar {
+  width: min(100%, var(--gk-snackbar-max-width, 28rem));
+  max-width: min(100%, var(--gk-snackbar-max-width, 28rem));
+}
+
 /* RTL Support for Farsi */
-[dir="rtl"] {
+[dir='rtl'] {
   direction: rtl;
 }
 
-[dir="rtl"] * {
+[dir='rtl'] * {
   text-align: right;
 }
 
-[dir="rtl"] .v-text-field input,
-[dir="rtl"] .v-text-field textarea,
-[dir="rtl"] .v-select input,
-[dir="rtl"] .v-autocomplete input {
+[dir='rtl'] input,
+[dir='rtl'] textarea,
+[dir='rtl'] select {
   text-align: right;
   direction: rtl;
 }
 
-/* Adjust margins and paddings for RTL */
-[dir="rtl"] .v-text-field .v-field__prepend-inner,
-[dir="rtl"] .v-text-field .v-field__append-inner {
+[dir='rtl'] .flex-row-reverse-safe {
   flex-direction: row-reverse;
-}
-
-[dir="rtl"] .v-btn {
-  flex-direction: row-reverse;
-}
-
-[dir="rtl"] .v-app-bar-nav-icon {
-  margin-left: auto;
-  margin-right: 0;
-}
-
-[dir="rtl"] .v-navigation-drawer {
-  transform: translateX(100%);
-}
-
-[dir="rtl"] .v-navigation-drawer.v-navigation-drawer--open {
-  transform: translateX(0);
-}
-
-[dir="rtl"] .v-list-item__prepend {
-  margin-right: 16px;
-  margin-left: 0;
-}
-
-[dir="rtl"] .v-list-item__append {
-  margin-left: 16px;
-  margin-right: 0;
-}
-
-[dir="rtl"] .v-chip {
-  flex-direction: row-reverse;
-}
-
-[dir="rtl"] .v-menu {
-  transform-origin: top right;
-}
-
-[dir="rtl"] .v-card-actions {
-  flex-direction: row-reverse;
-}
-
-[dir="rtl"] .v-alert .v-alert__prepend {
-  margin-right: 12px;
-  margin-left: 0;
-}
-
-/* RTL adjustments for navigation */
-[dir="rtl"] .v-app-bar-nav-icon {
-  order: 1;
-}
-
-[dir="rtl"] .v-app-bar-title {
-  order: 2;
-  margin-right: auto;
-  margin-left: 0;
 }
 
 /* RTL table adjustments */
-[dir="rtl"] table {
+[dir='rtl'] table {
   direction: rtl;
 }
 
-[dir="rtl"] th,
-[dir="rtl"] td {
-  text-align: right;
-}
-
-/* RTL form adjustments */
-[dir="rtl"] .v-form .v-row {
-  flex-direction: row-reverse;
-}
-
-[dir="rtl"] .v-col {
+[dir='rtl'] th,
+[dir='rtl'] td {
   text-align: right;
 }
 

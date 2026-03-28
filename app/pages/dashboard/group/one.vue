@@ -1,30 +1,15 @@
 <template>
-  <v-container class="v-card my-4 rounded-lg">
-    <v-row>
-      <v-col cols="12">
-        <CommonBlank :title="$t('pages.groups.one')" />
-      </v-col>
-    </v-row>
-  </v-container>
+  <div class="max-w-4xl mx-auto my-4 panel-card p-6">
+    <div class="grid grid-cols-1 gap-4">
+      <h1 class="text-xl font-semibold">Group One</h1>
+      <p class="opacity-80">Dashboard group page placeholder.</p>
+    </div>
+  </div>
 </template>
 
 <script setup lang="ts">
-import { useI18n } from "vue-i18n";
-
-const { t } = useI18n();
-
-// Page meta
 definePageMeta({
-  layout: "dashboard",
-  middleware: "auth",
-});
-
-// SEO
-useHead({
-  title: "Group One - God Panel",
-});
+  layout: 'dashboard',
+  middleware: 'auth'
+})
 </script>
-
-<style scoped>
-
-</style>
