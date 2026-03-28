@@ -1,6 +1,6 @@
 <template>
   <header
-    class="dashboard-header flex min-h-14 items-center border-b px-2 md:px-4"
+    class="dashboard-header flex w-full min-h-14 shrink-0 items-center border-b px-2 md:px-4"
     :style="{
       borderColor: 'var(--gk-color-border)',
       background: 'var(--gk-color-surface)',
