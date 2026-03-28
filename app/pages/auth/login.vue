@@ -1,33 +1,5 @@
 <template>
-  <!--  "auth": {
-    "welcomeBack": "خوش آمدید",
-    "signInToAccount": "به حساب خود وارد شوید",
-    "signIn": "ورود",
-    "signInLoading": "در حال ورود...",
-    "forgotPassword": "رمز عبور را فراموش کرده اید؟",
-    "dontHaveAccount": "حساب کاربری ندارید؟",
-    "signUp": "ثبت نام",
-    "createAccount": "ایجاد حساب",
-    "alreadyHaveAccount": "قبلاً حساب کاربری دارید؟",
-    "signInHere": "اینجا وارد شوید",
-    "resetPassword": "بازنشانی رمز عبور",
-    "enterEmailToReset": "ایمیل خود را برای بازنشانی رمز عبور وارد کنید",
-    "sendResetLink": "ارسال لینک بازنشانی",
-    "backToSignIn": "بازگشت به ورود",
-    "passwordResetSent": "لینک بازنشانی رمز عبور به ایمیل شما ارسال شد",
-    "invalidCredentials": "ایمیل یا رمز عبور نامعتبر",
-    "accountCreated": "حساب کاربری با موفقیت ایجاد شد",
-    "demoCredentials": "استفاده کنید",
-    "demoCredentialsWith": "با رمز عبور",
-    "logoutConfirm": "آیا مطمئن هستید که می‌خواهید خارج شوید؟",
-    "logoutConfirmTitle": "تأیید خروج",
-    "logoutConfirmMessage": "آیا مطمئن هستید که می‌خواهید از حساب خود خارج شوید؟",
-    "logoutConfirmNote": "برای دسترسی به داشبورد خود نیاز به ورود مجدد دارید.",
-    "welcomeTitle": "مدیریت کار",
-    "welcomeSubtitle": "به طور مؤثرتری با گردش کار بهینه شده.",
-    "log -->
   <div class="login-page">
-    <!-- Form Header -->
     <div class="form-header">
       <h5 class="form-title">{{ t('auth.signInToAccount') }}</h5>
 
@@ -39,102 +11,83 @@
       </div>
     </div>
 
-    <!-- Info Alert -->
-    <v-alert
-      type="info"
-      variant="tonal"
-      density="comfortable"
-      class="info-alert"
-    >
+    <GkAlert type="info" variant="info" class="info-alert mb-6">
       {{ t('auth.demoCredentialsWith') }} <strong>{{ form.email }}</strong> {{ t('auth.demoCredentials') }} <strong>{{ form.password }}</strong>
-    </v-alert>
+    </GkAlert>
 
-    <!-- Error Alert -->
-    <v-alert
-      v-if="errorMsg"
-      type="error"
-      variant="tonal"
-      density="comfortable"
-      class="error-alert"
-    >
+    <GkAlert v-if="errorMsg" type="error" variant="danger" class="error-alert mb-6" role="alert">
       {{ errorMsg }}
-    </v-alert>
+    </GkAlert>
 
-    <!-- Login Form -->
     <div class="login-form">
-      <form @submit.prevent="handleSubmit">
-        <!-- Email Field -->
-        <v-text-field
-          v-model="form.email"
-          :label="t('auth.email')"
-          placeholder="godpanel"
-          variant="outlined"
-          density="comfortable"
-          :error-messages="errors.email"
-        />
+      <form @submit.prevent="handleSubmit" class="flex flex-col gap-6">
+        <GkField :label="t('auth.email')" :error="errors.email?.[0]">
+          <GkInput
+            v-model="form.email"
+            type="email"
+            name="email"
+            autocomplete="username"
+            placeholder="godpanel"
+          />
+        </GkField>
 
-        <!-- Password Field -->
-        <div class="password-field">
+        <div class="password-field flex flex-col gap-2">
           <NuxtLink to="/auth/forgot-password" class="forgot-link">
             {{ t('auth.forgotPassword') }}
           </NuxtLink>
 
-          <v-text-field
-            v-model="form.password"
-            :label="t('auth.password')"
-            :placeholder="t('auth.passwordPlaceholder')"
-            :type="passwordVisible ? 'text' : 'password'"
-            variant="outlined"
-            density="comfortable"
-            :error-messages="errors.password"
-          >
-            <template #append-inner>
-              <v-btn
-                icon
-                variant="text"
-                size="small"
+          <GkField :label="t('auth.password')" :error="errors.password?.[0]">
+            <div class="flex gap-2 items-start">
+              <GkInput
+                v-model="form.password"
+                :type="passwordVisible ? 'text' : 'password'"
+                name="password"
+                autocomplete="current-password"
+                :placeholder="t('auth.passwordPlaceholder')"
+                class="flex-1"
+              />
+              <GkButton
+                type="button"
+                variant="ghost"
+                slim
+                :aria-label="passwordVisible ? 'Hide password' : 'Show password'"
                 @click="passwordVisible = !passwordVisible"
               >
-                <v-icon size="20">
-                  {{ passwordVisible ? 'mdi-eye-off' : 'mdi-eye' }}
-                </v-icon>
-              </v-btn>
-            </template>
-          </v-text-field>
+                <AppIcon :name="passwordVisible ? 'eye-off' : 'eye'" :size="20" />
+              </GkButton>
+            </div>
+          </GkField>
         </div>
 
-        <!-- Sign In Button -->
-        <v-btn
+        <GkButton
           type="submit"
-          size="large"
           block
-          color="primary"
           :loading="isSubmitting"
           class="signin-btn"
         >
           {{ isSubmitting ? t('auth.signInLoading') : t('auth.signIn') }}
-        </v-btn>
+        </GkButton>
       </form>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { reactive, ref, onMounted } from 'vue'
+import { reactive, ref } from 'vue'
+import { ZodError } from 'zod'
 import { loginSchema, type LoginForm } from '~/types/validation'
 import { useI18n } from 'vue-i18n'
+import { GkAlert, GkButton, GkField, GkInput } from 'god-kit/vue'
+import AppIcon from '~/components/ui/AppIcon.vue'
+
 const { t } = useI18n()
 
 const authStore = useAuthStore()
 const router = useRouter()
 
-// Password visibility toggle
 const passwordVisible = ref(false)
-
-// Error state
 const errorMsg = ref('')
 
-// Form state
 const form = reactive<LoginForm>({
   email: 'godpanel@test.com',
   password: 'god123'
@@ -143,19 +96,19 @@ const form = reactive<LoginForm>({
 const errors = ref<Record<string, string[]>>({})
 const isSubmitting = ref(false)
 
-// Form validation
 const validateForm = () => {
   try {
     loginSchema.parse(form)
     errors.value = {}
     return true
-  } catch (error: any) {
-    errors.value = error.flatten().fieldErrors
+  } catch (error: unknown) {
+    if (error instanceof ZodError) {
+      errors.value = error.flatten().fieldErrors as Record<string, string[]>
+    }
     return false
   }
 }
 
-// Submit handler
 const handleSubmit = async () => {
   if (!validateForm()) return
 
@@ -170,7 +123,7 @@ const handleSubmit = async () => {
     } else {
       errorMsg.value = result?.error || 'Login failed. Please try again.'
     }
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error('Login error:', error)
     errorMsg.value = error instanceof Error ? error.message : 'Login failed. Please try again.'
   } finally {
@@ -178,13 +131,11 @@ const handleSubmit = async () => {
   }
 }
 
-// Page meta
 definePageMeta({
   layout: 'auth',
   middleware: 'guest'
 })
 
-// SEO
 useHead({
   title: t('auth.signInToAccount') + ' - God Panel'
 })
@@ -196,7 +147,6 @@ useHead({
   margin: 0 auto;
 }
 
-/* Form Header */
 .form-header {
   margin-bottom: 32px;
 }
@@ -204,19 +154,16 @@ useHead({
 .form-title {
   font-size: 24px;
   font-weight: 600;
-  color: rgb(var(--v-theme-on-surface));
+  color: var(--gk-color-on-surface);
   margin-bottom: 16px;
-  /* Remove hardcoded text-align: left */
-  text-align: inherit; /* Use inherited direction */
+  text-align: inherit;
 }
 
 .form-title {
   text-align: right;
 }
 
-
 .register-link {
- 
   display: flex;
   align-items: center;
   justify-content: flex-end;
@@ -225,49 +172,21 @@ useHead({
 
 .register-text {
   font-size: 14px;
-  color: rgb(var(--v-theme-on-surface));
+  color: var(--gk-color-on-surface);
 }
 
 .register-link-text {
   font-size: 14px;
-  color: rgb(var(--v-theme-primary));
+  color: var(--gk-color-primary);
   text-decoration: none;
   font-weight: 500;
   text-align: right;
 }
 
-/* Alerts */
-.info-alert {
-  margin-bottom: 24px;
-}
-
-.error-alert {
-  margin-bottom: 24px;
-}
-
-/* Login Form */
-.login-form {
-  display: flex;
-  flex-direction: column;
-  gap: 24px;
-}
-
-/* Password Field */
-.password-field {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
-
 .forgot-link {
   font-size: 14px;
-  color: rgb(var(--v-theme-primary));
+  color: var(--gk-color-primary);
   text-decoration: none;
-  /* Remove hardcoded align-self: flex-end */
-  align-self: flex-start;
-}
-
-[dir="rtl"] .forgot-link {
   align-self: flex-start;
 }
 
@@ -279,18 +198,11 @@ useHead({
   text-decoration: underline;
 }
 
-/* Form inputs */
-.login-form :deep(.v-text-field) {
-  margin-bottom: 0;
-}
-
-/* Sign In Button */
 .signin-btn {
   height: 44px;
   margin-top: 8px;
 }
 
-/* RTL-specific form adjustments */
 [dir="rtl"] .login-form {
   direction: rtl;
 }
@@ -299,7 +211,6 @@ useHead({
   flex-direction: row-reverse;
 }
 
-/* Mobile Styles */
 @media (max-width: 480px) {
   .form-title {
     font-size: 20px;

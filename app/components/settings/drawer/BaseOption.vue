@@ -6,35 +6,32 @@
     @click="handleClick"
   >
     <div class="base-option__top">
-      <v-icon class="base-option__icon">
-        {{ getIcon(icon) }}
-      </v-icon>
-      <v-switch
+      <AppIcon class="base-option__icon" :name="getIcon(icon)" :size="24" />
+      <GkCheckbox
         :model-value="selected"
         readonly
-        hide-details
-        density="compact"
-        color="default"
         class="base-option__switch"
-        
+        :aria-label="label"
       />
     </div>
 
     <div class="base-option__bottom">
       <span class="base-option__label">{{ label }}</span>
-      <v-tooltip v-if="tooltip" location="top">
-        <template #activator="{ props }">
-          <v-icon v-bind="props" size="16" class="base-option__info">
-            mdi-information-outline
-          </v-icon>
+      <GkTooltip v-if="tooltip" :text="tooltip" placement="top">
+        <template #activator="{ props: tip }">
+          <span v-bind="tip" class="base-option__info inline-flex">
+            <AppIcon name="information-outline" :size="16" />
+          </span>
         </template>
-        {{ tooltip }}
-      </v-tooltip>
+      </GkTooltip>
     </div>
   </button>
 </template>
 
 <script setup lang="ts">
+import { GkCheckbox, GkTooltip } from "god-kit/vue";
+import AppIcon from "~/components/ui/AppIcon.vue";
+
 interface Props {
   icon: string
   label: string
@@ -56,12 +53,12 @@ const handleClick = () => {
 
 const getIcon = (iconName: string) => {
   const iconMap: Record<string, string> = {
-    moon: 'mdi-weather-night',
-    contrast: 'mdi-contrast-circle',
-    'align-right': 'mdi-format-align-right',
-    'autofit-width': 'mdi-arrow-collapse-horizontal'
+    moon: 'weather-night',
+    contrast: 'contrast-circle',
+    'align-right': 'format-align-right',
+    'autofit-width': 'arrow-collapse-horizontal'
   }
-  return iconMap[iconName] || 'mdi-circle'
+  return iconMap[iconName] || 'circle'
 }
 </script>
 
@@ -70,7 +67,7 @@ const getIcon = (iconName: string) => {
   width: 100%;
   padding: 16px;
   border-radius: 16px;
-  border: 1px solid rgba(var(--v-theme-on-surface), 0.12);
+  border: 1px solid color-mix(in srgb, var(--gk-color-on-surface) 12%, transparent);
   background: transparent;
   transition: all 0.2s ease;
   cursor: pointer;
@@ -81,11 +78,11 @@ const getIcon = (iconName: string) => {
 }
 
 .base-option:hover {
-  background: rgba(var(--v-theme-on-surface), 0.08);
+  background: color-mix(in srgb, var(--gk-color-on-surface) 8%, transparent);
 }
 
 .base-option--selected {
-  background: rgba(var(--v-theme-on-surface), 0.08);
+  background: color-mix(in srgb, var(--gk-color-on-surface) 8%, transparent);
 }
 
 .base-option__top {
@@ -96,12 +93,8 @@ const getIcon = (iconName: string) => {
 }
 
 .base-option__icon {
-  width: 24px;
-  height: 24px;
   opacity: 0.7;
 }
-
-
 
 .base-option__bottom {
   display: flex;
@@ -114,13 +107,13 @@ const getIcon = (iconName: string) => {
   font-weight: 600;
   font-size: 13px;
   line-height: 18px;
-  color: rgb(var(--v-theme-on-surface));
+  color: var(--gk-color-on-surface);
   transition: color 0.2s ease;
 }
 
 .base-option__info {
   opacity: 0.6;
   cursor: help;
-  color: rgb(var(--v-theme-on-surface));
+  color: var(--gk-color-on-surface);
 }
 </style>

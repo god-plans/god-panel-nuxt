@@ -3,6 +3,14 @@ import { userSchema, type User } from '~/types/validation'
 
 const STORAGE_KEY = 'auth-token'
 
+function axiosErrorMessage(error: unknown, fallback: string): string {
+  if (error && typeof error === 'object' && 'response' in error) {
+    const data = (error as { response?: { data?: { message?: string } } }).response?.data
+    if (data?.message && typeof data.message === 'string') return data.message
+  }
+  return fallback
+}
+
 export const useAuthStore = defineStore('auth', () => {
   // State
   const user = ref<User | null>(null)
@@ -70,11 +78,11 @@ export const useAuthStore = defineStore('auth', () => {
 
         return { success: true }
       }
-    } catch (error) {
+    } catch (error: unknown) {
       console.error('Login failed:', error)
       return {
         success: false,
-        error: error.response?.data?.message || 'Login failed'
+        error: axiosErrorMessage(error, 'Login failed')
       }
     }
   }
@@ -103,11 +111,11 @@ export const useAuthStore = defineStore('auth', () => {
 
         return { success: true }
       }
-    } catch (error) {
+    } catch (error: unknown) {
       console.error('Registration failed:', error)
       return {
         success: false,
-        error: error.response?.data?.message || 'Registration failed'
+        error: axiosErrorMessage(error, 'Registration failed')
       }
     }
   }
@@ -139,11 +147,11 @@ export const useAuthStore = defineStore('auth', () => {
         user.value = { ...user.value, ...validatedUser }
         return { success: true }
       }
-    } catch (error) {
+    } catch (error: unknown) {
       console.error('Profile update failed:', error)
       return {
         success: false,
-        error: error.response?.data?.message || 'Profile update failed'
+        error: axiosErrorMessage(error, 'Profile update failed')
       }
     }
   }

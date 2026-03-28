@@ -12,7 +12,7 @@ export default {
   theme: {
     extend: {
       colors: {
-        // Vuetify primary colors integration
+        // Primary palette (used with Tailwind utilities; aligns with app theme presets)
         primary: {
           50: '#f0f9ff',
           100: '#e0f2fe',
@@ -140,7 +140,7 @@ export default {
     },
   },
   plugins: [
-    // Custom plugins for better Vuetify integration
+    // Small utility extensions (gradients, text-balance, etc.)
     function({ addUtilities }) {
       const newUtilities = {
         '.text-balance': {

@@ -14,7 +14,7 @@
         :style="{ color: option.value, ...(value === (option.key || option.name) && { backgroundColor: `${option.value}14` }) }"
         @click="handleClick(option.key || option.name)"
       >
-        <v-icon class="preset-option__icon">mdi-view-dashboard-outline</v-icon>
+        <AppIcon class="preset-option__icon" name="view-dashboard-outline" :size="28" />
         <span class="preset-option__label">{{ option.name }}</span>
       </button>
     </div>
@@ -22,8 +22,8 @@
 </template>
 
 <script setup lang="ts">
-import { computed } from 'vue'
 import { useI18n } from 'vue-i18n'
+import AppIcon from '~/components/ui/AppIcon.vue'
 
 const { t } = useI18n()
 
@@ -54,7 +54,7 @@ const handleClick = (value: string) => {
 <style scoped>
 .presets-options {
   padding: 32px 16px 16px 16px;
-  border: 1px solid rgba(var(--v-theme-on-surface), 0.12);
+  border: 1px solid color-mix(in srgb, var(--gk-color-on-surface) 12%, transparent);
   border-radius: 16px;
   position: relative;
 }
@@ -69,8 +69,8 @@ const handleClick = (value: string) => {
   font-size: 13px;
   font-weight: 600;
   line-height: 22px;
-  color: rgb(var(--v-theme-background));
-  background: rgb(var(--v-theme-on-surface));
+  color: var(--gk-color-bg);
+  background: var(--gk-color-on-surface);
   padding: 0 10px;
   border-radius: 22px;
   display: inline-flex;
@@ -116,7 +116,7 @@ const handleClick = (value: string) => {
   font-size: 0.75rem;
   font-weight: 500;
   margin-top: 4px;
-  color: rgb(var(--v-theme-on-surface));
+  color: var(--gk-color-on-surface);
   opacity: 0.8;
 }
 

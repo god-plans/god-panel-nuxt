@@ -26,16 +26,16 @@ const props = withDefaults(defineProps<Props>(), {
 const isVisible = ref(false)
 
 const onEnter = (el: Element) => {
-  // Add initial state for animation
-  el.style.opacity = '0'
-  el.style.transform = 'translateY(20px)'
+  const node = el as HTMLElement
+  node.style.opacity = '0'
+  node.style.transform = 'translateY(20px)'
 }
 
 const onAfterEnter = (el: Element) => {
-  // Animate to final state
-  el.style.transition = 'all 0.6s cubic-bezier(0.4, 0, 0.2, 1)'
-  el.style.opacity = '1'
-  el.style.transform = 'translateY(0)'
+  const node = el as HTMLElement
+  node.style.transition = 'all 0.6s cubic-bezier(0.4, 0, 0.2, 1)'
+  node.style.opacity = '1'
+  node.style.transform = 'translateY(0)'
 }
 
 // Use Intersection Observer for lazy loading

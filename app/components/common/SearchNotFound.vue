@@ -1,46 +1,37 @@
 <template>
   <div class="search-not-found">
     <div class="search-not-found__content">
-      <!-- Illustration/Icon -->
       <div class="search-not-found__illustration">
-        <v-icon
-          :icon="icon"
-          size="120"
-          :color="iconColor"
-          class="search-not-found__icon"
+        <AppIcon
+          :name="iconName"
+          :size="120"
+          class="search-not-found__icon opacity-60 text-[var(--gk-color-on-surface-muted)]"
         />
       </div>
 
-      <!-- Title and Description -->
       <div class="search-not-found__text">
         <h2 class="search-not-found__title">{{ title }}</h2>
         <p class="search-not-found__description">{{ description }}</p>
       </div>
 
-      <!-- Actions -->
       <div v-if="showAction" class="search-not-found__actions">
-        <v-btn
+        <GkButton
           v-if="actionText && actionHandler"
-          :color="actionColor"
-          :variant="actionVariant"
+          variant="primary"
           @click="actionHandler"
-          class="search-not-found__action-btn"
         >
           {{ actionText }}
-        </v-btn>
+        </GkButton>
 
-        <v-btn
+        <GkButton
           v-if="secondaryActionText && secondaryActionHandler"
-          :color="secondaryActionColor"
-          :variant="secondaryActionVariant"
+          variant="secondary"
           @click="secondaryActionHandler"
-          class="search-not-found__action-btn"
         >
           {{ secondaryActionText }}
-        </v-btn>
+        </GkButton>
       </div>
 
-      <!-- Additional Content Slot -->
       <div v-if="$slots.additional" class="search-not-found__additional">
         <slot name="additional" />
       </div>
@@ -49,6 +40,9 @@
 </template>
 
 <script setup lang="ts">
+import { computed } from 'vue'
+import { GkButton } from 'god-kit/vue'
+import AppIcon from '~/components/ui/AppIcon.vue'
 
 interface Props {
   title?: string
@@ -57,12 +51,8 @@ interface Props {
   iconColor?: string
   showAction?: boolean
   actionText?: string
-  actionColor?: string
-  actionVariant?: 'elevated' | 'flat' | 'tonal' | 'outlined' | 'text' | 'plain'
   actionHandler?: () => void
   secondaryActionText?: string
-  secondaryActionColor?: string
-  secondaryActionVariant?: 'elevated' | 'flat' | 'tonal' | 'outlined' | 'text' | 'plain'
   secondaryActionHandler?: () => void
 }
 
@@ -70,15 +60,12 @@ const props = withDefaults(defineProps<Props>(), {
   title: 'No results found',
   description: 'Try adjusting your search or filter criteria.',
   icon: 'mdi-magnify',
-  iconColor: 'grey-lighten-1',
   showAction: true,
   actionText: 'Clear filters',
-  actionColor: 'primary',
-  actionVariant: 'elevated',
   secondaryActionText: 'Go back',
-  secondaryActionColor: 'grey',
-  secondaryActionVariant: 'text'
 })
+
+const iconName = computed(() => props.icon.replace(/^mdi-/, ''))
 </script>
 
 <style scoped>
@@ -100,7 +87,6 @@ const props = withDefaults(defineProps<Props>(), {
 }
 
 .search-not-found__illustration {
-  opacity: 0.6;
   animation: float 3s ease-in-out infinite;
 }
 
@@ -113,26 +99,16 @@ const props = withDefaults(defineProps<Props>(), {
   }
 }
 
-.search-not-found__icon {
-  filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.1));
-}
-
-.search-not-found__text {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
-
 .search-not-found__title {
   font-size: 1.5rem;
   font-weight: 600;
-  color: rgb(var(--v-theme-on-surface));
+  color: var(--gk-color-on-surface);
   margin: 0;
 }
 
 .search-not-found__description {
   font-size: 1rem;
-  color: rgb(var(--v-theme-on-surface-variant));
+  color: var(--gk-color-on-surface-muted);
   margin: 0;
   line-height: 1.5;
 }
@@ -144,40 +120,15 @@ const props = withDefaults(defineProps<Props>(), {
   justify-content: center;
 }
 
-.search-not-found__action-btn {
-  min-width: 120px;
-}
-
-.search-not-found__additional {
-  width: 100%;
-}
-
-/* Responsive */
 @media (max-width: 600px) {
   .search-not-found {
     min-height: 300px;
     padding: 16px;
   }
 
-  .search-not-found__content {
-    gap: 20px;
-  }
-
-  .search-not-found__title {
-    font-size: 1.25rem;
-  }
-
-  .search-not-found__description {
-    font-size: 0.875rem;
-  }
-
   .search-not-found__actions {
     flex-direction: column;
     align-items: stretch;
-  }
-
-  .search-not-found__action-btn {
-    width: 100%;
   }
 }
 </style>

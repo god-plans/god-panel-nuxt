@@ -9,7 +9,7 @@
   - Proper text contrast for all components
   - Background and surface colors update automatically
   - Icons inherit correct colors
-  - All Vuetify components adapt to theme
+  - god-kit surfaces and tokens (`--gk-*`, `data-gk-theme`) follow the selected scheme
 
 ### 🎨 **Primary Color Presets**
 - **Status**: ✅ Fully Implemented
@@ -75,11 +75,10 @@
 
 ### Core Files
 
-1. **`app/plugins/vuetify.ts`**
-   - Vuetify instance creation and configuration
-   - Real-time theme updates via `watch`
-   - Dynamic color scheme conversion
-   - RTL and font family updates
+1. **`app/plugins/god-kit.client.ts`**
+   - `createGkKit` from `god-kit/vue/config` with `app/config/gk.config.ts`
+   - `useGkTheme()` synced with Pinia `settings.colorScheme` (light/dark)
+   - Optional `GkVueI18nAdapter` so `useGkLocale` tracks `@nuxtjs/i18n`
 
 2. **`app/stores/settings.ts`**
    - Pinia store for settings state management

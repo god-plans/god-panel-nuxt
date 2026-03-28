@@ -1,12 +1,11 @@
 <template>
   <div class="nav-info-box" :class="{ 'mini-mode': mini && !mobile, 'rtl-mode': isRTL }">
     <div class="info-header" v-if="!mini || mobile">
-      <v-icon size="16" class="info-icon">mdi-information-outline</v-icon>
+      <AppIcon name="information-outline" :size="16" class="info-icon" />
       <span class="info-title">{{ t("common.help") }}</span>
     </div>
 
     <div class="info-links">
-      <!-- GitHub Link -->
       <a
         href="https://github.com/god-plans/god-panel-nuxt"
         target="_blank"
@@ -14,11 +13,10 @@
         class="info-link"
         :title="t('common.github')"
       >
-        <v-icon size="18" class="link-icon">mdi-github</v-icon>
+        <AppIcon name="github" :size="18" class="link-icon" />
         <span v-if="!mini || mobile" class="link-text">{{ t("common.github") }}</span>
       </a>
 
-      <!-- Documentation Link -->
       <a
         href="https://docs.godplans.org/"
         target="_blank"
@@ -26,11 +24,10 @@
         class="info-link"
         :title="t('common.documentation')"
       >
-        <v-icon size="18" class="link-icon">mdi-book-open-page-variant</v-icon>
+        <AppIcon name="book-open-page-variant" :size="18" class="link-icon" />
         <span v-if="!mini || mobile" class="link-text">{{ t("common.documentation") }}</span>
       </a>
 
-      <!-- Support/Issues Link -->
       <a
         href="https://github.com/god-plans/god-panel-nuxt/issues"
         target="_blank"
@@ -38,7 +35,7 @@
         class="info-link"
         :title="t('common.support')"
       >
-        <v-icon size="18" class="link-icon">mdi-help-circle</v-icon>
+        <AppIcon name="help-circle" :size="18" class="link-icon" />
         <span v-if="!mini || mobile" class="link-text">{{ t("common.support") }}</span>
       </a>
     </div>
@@ -49,6 +46,7 @@
 import { useI18n } from "vue-i18n";
 import { computed } from "vue";
 import { useSettingsStore } from "../../stores/settings";
+import AppIcon from "~/components/ui/AppIcon.vue";
 
 const { t } = useI18n();
 const settingsStore = useSettingsStore();
@@ -64,8 +62,8 @@ defineProps<{
 <style scoped>
 .nav-info-box {
   padding: 16px;
-  border-top: 1px solid rgb(var(--v-theme-surface-variant));
-  background: rgba(var(--v-theme-surface-variant-rgb), 0.5);
+  border-top: 1px solid var(--gk-color-border);
+  background: color-mix(in srgb, var(--gk-color-border) 35%, transparent);
 }
 
 .info-header {
@@ -74,18 +72,18 @@ defineProps<{
   gap: 8px;
   margin-bottom: 12px;
   padding-bottom: 8px;
-  border-bottom: 1px solid rgba(var(--v-theme-on-surface-rgb), 0.1);
+  border-bottom: 1px solid color-mix(in srgb, var(--gk-color-on-surface) 10%, transparent);
 }
 
 .info-icon {
-  color: rgb(var(--v-theme-primary));
+  color: var(--gk-color-primary);
   opacity: 0.8;
 }
 
 .info-title {
   font-size: 0.875rem;
   font-weight: 600;
-  color: rgb(var(--v-theme-on-surface));
+  color: var(--gk-color-on-surface);
   text-transform: uppercase;
   letter-spacing: 0.5px;
 }
@@ -103,26 +101,26 @@ defineProps<{
   padding: 8px 12px;
   border-radius: 8px;
   text-decoration: none;
-  color: rgb(var(--v-theme-on-surface));
+  color: var(--gk-color-on-surface);
   transition: all 0.2s ease;
   font-size: 0.875rem;
   font-weight: 500;
 }
 
 .info-link:hover {
-  background: rgba(var(--v-theme-on-surface-rgb), 0.08);
-  color: rgb(var(--v-theme-primary));
+  background: color-mix(in srgb, var(--gk-color-on-surface) 8%, transparent);
+  color: var(--gk-color-primary);
   transform: translateX(2px);
 }
 
 .link-icon {
-  color: rgb(var(--v-theme-on-surface-variant));
+  color: var(--gk-color-on-surface-muted);
   transition: color 0.2s ease;
   flex-shrink: 0;
 }
 
 .info-link:hover .link-icon {
-  color: rgb(var(--v-theme-primary));
+  color: var(--gk-color-primary);
 }
 
 .link-text {
@@ -131,7 +129,6 @@ defineProps<{
   text-overflow: ellipsis;
 }
 
-/* Mini mode */
 .nav-info-box.mini-mode {
   padding: 12px 8px;
 }
@@ -155,7 +152,6 @@ defineProps<{
   display: none;
 }
 
-/* RTL Support */
 .rtl-mode .info-link:hover {
   transform: translateX(-2px);
 }
@@ -172,7 +168,6 @@ defineProps<{
   direction: ltr;
 }
 
-/* Mobile adjustments */
 @media (max-width: 959px) {
   .nav-info-box {
     padding: 12px;

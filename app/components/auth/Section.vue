@@ -1,5 +1,5 @@
 <template>
-  <div class="auth-section ">
+  <div class="auth-section">
     <div class="section-content">
       <h3 class="section-title">{{ title }}</h3>
 
@@ -9,11 +9,10 @@
     </div>
 
     <div class="section-image">
-      <v-img
+      <img
         :src="imgUrl"
         alt="Auth illustration"
-        aspect-ratio="4/3"
-        cover
+        class="w-full aspect-[4/3] object-cover rounded-lg"
       />
     </div>
   </div>
@@ -37,7 +36,7 @@ withDefaults(defineProps<Props>(), {
 
 <style scoped>
 .auth-section {
-  background-color: rgb(var(--v-theme-surface));
+  background-color: var(--gk-color-surface);
   background-size: cover;
   background-position: center;
   padding: 16px;
@@ -58,36 +57,23 @@ withDefaults(defineProps<Props>(), {
   text-align: center;
 }
 
-[dir="rtl"] .section-content {
-  text-align: center; /* Keep center alignment for RTL */
-}
-
 .section-title {
   font-size: 28px;
   font-weight: 600;
-  color: rgb(var(--v-theme-on-surface));
+  color: var(--gk-color-on-surface);
   margin-bottom: 16px;
 }
 
-[dir="rtl"] .section-title {
-  text-align: center; /* Keep center alignment for RTL */
-}
-
 .section-subtitle {
-  color: rgb(var(--v-theme-on-surface));
+  color: var(--gk-color-on-surface);
   font-size: 16px;
   margin-top: 8px;
-}
-
-[dir="rtl"] .section-subtitle {
-  text-align: center; /* Keep center alignment for RTL */
 }
 
 .section-image {
   width: 100%;
 }
 
-/* Responsive adjustments */
 @media (min-width: 960px) {
   .auth-section {
     display: flex;

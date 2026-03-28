@@ -7,7 +7,7 @@
     <MotionLazy>
     <!-- Mobile Navigation -->
     <DashboardNavMobile
-      v-model="mobileNavOpen"
+      v-model:open="mobileNavOpen"
       @close="closeMobileNav"
     />
 

@@ -1,38 +1,39 @@
 <template>
   <div class="loading-screen">
     <div class="loading-screen__content">
-      <!-- Logo -->
       <div class="loading-screen__logo">
-        <v-img
-          src="/logo-single.png"
+        <img
+          src="/logo.png"
           width="64"
           height="64"
+          alt=""
           class="loading-screen__logo-image"
         />
       </div>
 
-      <!-- Loading Animation -->
       <div class="loading-screen__animation">
         <div class="loading-spinner">
-          <div class="loading-spinner__dot" v-for="i in 3" :key="i" :style="{ animationDelay: `${i * 0.2}s` }"></div>
+          <div
+            v-for="i in 3"
+            :key="i"
+            class="loading-spinner__dot"
+            :style="{ animationDelay: `${i * 0.2}s` }"
+          />
         </div>
       </div>
 
-      <!-- Loading Text -->
       <div class="loading-screen__text">
         <h3 class="loading-screen__title">{{ title }}</h3>
         <p class="loading-screen__subtitle">{{ subtitle }}</p>
       </div>
 
-      <!-- Progress Bar -->
       <div v-if="showProgress" class="loading-screen__progress">
-        <v-progress-linear
-          :model-value="progress"
-          color="primary"
-          height="4"
-          rounded
-          class="loading-screen__progress-bar"
-        />
+        <div class="h-1 w-[200px] rounded-full bg-[var(--gk-color-border)] overflow-hidden">
+          <div
+            class="h-full rounded-full bg-[var(--gk-color-primary)] transition-all"
+            :style="{ width: progress + '%' }"
+          />
+        </div>
         <span class="loading-screen__progress-text">{{ progress }}%</span>
       </div>
     </div>
@@ -47,7 +48,7 @@ interface Props {
   progress?: number
 }
 
-const props = withDefaults(defineProps<Props>(), {
+withDefaults(defineProps<Props>(), {
   title: 'Loading...',
   subtitle: 'Please wait while we prepare your dashboard',
   showProgress: false,
@@ -62,7 +63,7 @@ const props = withDefaults(defineProps<Props>(), {
   left: 0;
   right: 0;
   bottom: 0;
-  background: rgb(var(--v-theme-background));
+  background: var(--gk-color-bg);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -83,7 +84,7 @@ const props = withDefaults(defineProps<Props>(), {
 }
 
 .loading-screen__logo-image {
-  filter: drop-shadow(0 4px 8px rgba(var(--v-theme-primary), 0.3));
+  filter: drop-shadow(0 4px 8px color-mix(in srgb, var(--gk-color-primary) 30%, transparent));
 }
 
 @keyframes logo-bounce {
@@ -107,7 +108,7 @@ const props = withDefaults(defineProps<Props>(), {
   width: 12px;
   height: 12px;
   border-radius: 50%;
-  background: rgb(var(--v-theme-primary));
+  background: var(--gk-color-primary);
   animation: loading-bounce 1.4s ease-in-out infinite both;
 }
 
@@ -137,13 +138,13 @@ const props = withDefaults(defineProps<Props>(), {
 .loading-screen__title {
   font-size: 1.5rem;
   font-weight: 600;
-  color: rgb(var(--v-theme-on-background));
+  color: var(--gk-color-on-surface);
   margin-bottom: 8px;
 }
 
 .loading-screen__subtitle {
   font-size: 0.875rem;
-  color: rgb(var(--v-theme-on-surface-variant));
+  color: var(--gk-color-on-surface-muted);
   margin: 0;
 }
 
@@ -155,17 +156,12 @@ const props = withDefaults(defineProps<Props>(), {
   gap: 12px;
 }
 
-.loading-screen__progress-bar {
-  width: 200px;
-}
-
 .loading-screen__progress-text {
   font-size: 0.75rem;
   font-weight: 500;
-  color: rgb(var(--v-theme-on-surface-variant));
+  color: var(--gk-color-on-surface-muted);
 }
 
-/* Responsive */
 @media (max-width: 600px) {
   .loading-screen__content {
     gap: 24px;
@@ -175,13 +171,5 @@ const props = withDefaults(defineProps<Props>(), {
   .loading-screen__title {
     font-size: 1.25rem;
   }
-
-  .loading-screen__progress-bar {
-    width: 150px;
-  }
 }
 </style>
-
-
-
-

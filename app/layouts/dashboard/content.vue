@@ -1,12 +1,11 @@
 <template>
-  <v-container
-    class="dashboard-content"
-    :fluid="!settingsStore.settings.compactLayout"
-    :max-width="settingsStore.settings.compactLayout ? maxWidth : undefined"
+  <div
+    class="dashboard-content mx-auto w-full"
+    :class="containerClass"
     :style="contentStyles"
   >
     <slot />
-  </v-container>
+  </div>
 </template>
 
 <script setup lang="ts">
@@ -21,6 +20,22 @@ const props = withDefaults(defineProps<Props>(), {
 })
 
 const settingsStore = useSettingsStore()
+
+const maxWidthClass: Record<string, string> = {
+  sm: 'max-w-screen-sm',
+  md: 'max-w-screen-md',
+  lg: 'max-w-screen-lg',
+  xl: 'max-w-screen-xl',
+}
+
+const containerClass = computed(() => {
+  const fluid = !settingsStore.settings.compactLayout
+  const mw = maxWidthClass[props.maxWidth] ?? 'max-w-screen-lg'
+  return [
+    fluid ? 'px-4 sm:px-6 lg:px-10' : '',
+    !fluid ? mw : '',
+  ].filter(Boolean)
+})
 
 const contentStyles = computed(() => ({
   display: 'flex',
@@ -41,19 +56,12 @@ const contentStyles = computed(() => ({
   flex-direction: column;
 }
 
-/* Mobile adjustments */
 @media (max-width: 959px) {
   .dashboard-content {
     padding-left: 8px !important;
     padding-right: 8px !important;
     padding-top: var(--layout-dashboard-content-pt) !important;
     padding-bottom: var(--layout-dashboard-content-pb) !important;
-  }
-
-  /* Override any Vuetify container padding on mobile */
-  .dashboard-content .v-container {
-    padding-left: 8px !important;
-    padding-right: 8px !important;
   }
 }
 </style>

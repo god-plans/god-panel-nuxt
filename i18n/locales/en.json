@@ -203,7 +203,7 @@
     "termsOfService": "Terms of Service",
     "status": "Status",
     "connect": "Connect",
-    "description": "A modern admin dashboard built with Nuxt.js, Vuetify, and Tailwind CSS. Features authentication, theming, and responsive design."
+    "description": "A modern admin dashboard built with Nuxt.js, god-kit, and Tailwind CSS. Features authentication, theming, and responsive design."
   },
   "theme": {
     "themeMode": "Theme Mode",

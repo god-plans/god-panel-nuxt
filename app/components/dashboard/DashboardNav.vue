@@ -1,11 +1,11 @@
 <template>
-  <v-navigation-drawer
-    v-model="drawer"
-    :permanent="!mobile"
-    :temporary="mobile"
-    :mini="mini && !mobile"
-    :width="getNavWidth()"
-    :location="isRTL ? 'right' : 'left'"
+  <GkNavigationDrawer
+    permanent
+    :rail="mini && !mobile"
+    :width="fullNavWidth"
+    :rail-width="88"
+    :location="isRTL ? 'end' : 'start'"
+    :dir="isRTL ? 'rtl' : 'ltr'"
     class="dashboard-nav"
     :class="{
       'nav-mini': mini && !mobile,
@@ -13,11 +13,10 @@
       'nav-rtl': isRTL,
     }"
   >
-    <!-- Header -->
     <div v-if="mobile" class="mobile-header">
-      <v-btn icon @click="$emit('open-mobile')" class="mobile-menu-btn">
-        <v-icon>mdi-menu</v-icon>
-      </v-btn>
+      <GkButton variant="ghost" slim class="mobile-menu-btn" @click="$emit('open-mobile')">
+        <AppIcon name="menu" :size="24" />
+      </GkButton>
       <span class="mobile-title">{{ t("common.menu") }}</span>
     </div>
 
@@ -27,163 +26,137 @@
         :size="mini ? 'sm' : 'md'"
         class="logo"
       />
-      <v-spacer v-if="!mini" />
-      <v-btn
-        icon
-        @click="$emit('toggle-mini')"
-        :size="mini ? 'small' : 'medium'"
+      <div class="flex-1" />
+      <GkButton
+        variant="ghost"
+        slim
         class="toggle-btn"
+        :aria-label="mini ? 'Expand navigation' : 'Collapse navigation'"
+        @click="$emit('toggle-mini')"
       >
-        <v-icon>{{ mini ? "mdi-chevron-right" : "mdi-chevron-left" }}</v-icon>
-      </v-btn>
+        <AppIcon :name="mini ? 'chevron-right' : 'chevron-left'" :size="20" />
+      </GkButton>
     </div>
 
-    <!-- Navigation Items -->
-    <v-list class="nav-list" density="compact">
+    <ul class="nav-list list-none p-0 m-0 flex flex-col flex-1 min-h-0">
       <template v-for="item in navItems" :key="item.key">
-        <!-- Normal link -->
-        <v-list-item
-          v-if="!item.children"
-          :to="item.path"
-          class="nav-item"
-          :class="{ 'nav-item-active': isActive(item.path) }"
-        >
-          <v-list-item-title
-            class="nav-title d-flex align-center gap-2"
+        <li v-if="!item.children">
+          <NuxtLink
+            :to="item.path"
+            class="nav-item flex items-center gap-2 px-3 py-2 mx-2 rounded-lg transition-colors"
             :class="{
-              'text-right': isRTL,
-              'justify-start': mini && !mobile,
+              'nav-item-active': isActive(item.path),
+              'justify-center': mini && !mobile,
             }"
           >
-            <v-icon size="20">{{ item.icon }}</v-icon>
-            <div v-if="!mini || mobile">
+            <AppIcon :name="item.icon.replace('mdi-', '')" :size="20" />
+            <span
+              v-if="!mini || mobile"
+              class="nav-title"
+              :class="{ 'text-right': isRTL }"
+            >
               {{ t(item.title) }}
+            </span>
+          </NuxtLink>
+        </li>
+
+        <li v-else class="nav-group">
+          <button
+            type="button"
+            class="nav-group-header w-full flex items-center gap-2 px-3 py-2 mx-2 rounded-lg text-left border-0 bg-transparent cursor-pointer"
+            :class="{
+              'nav-group-active': isActive(item.path),
+              'nav-group-expanded': expandedGroups[item.key],
+              'justify-center': mini && !mobile,
+            }"
+            @click="toggleGroup(item.key)"
+          >
+            <div v-if="mini && !mobile" class="nav-group-header-icon flex flex-col items-center gap-1">
+              <AppIcon :name="item.icon.replace('mdi-', '')" :size="20" />
+              <AppIcon
+                :name="expandedGroups[item.key] ? 'chevron-up' : 'chevron-down'"
+                :size="16"
+                class="expand-icon"
+                :class="{ expanded: expandedGroups[item.key] }"
+              />
             </div>
-          </v-list-item-title>
-        </v-list-item>
+            <template v-else>
+              <span class="nav-title flex-1 flex items-center gap-2" :class="{ 'text-right': isRTL }">
+                <AppIcon :name="item.icon.replace('mdi-', '')" :size="16" />
+                <span>{{ t(item.title) }}</span>
+              </span>
+              <AppIcon
+                :name="expandedGroups[item.key] ? 'chevron-up' : 'chevron-down'"
+                :size="16"
+                class="expand-icon shrink-0"
+                :class="{ expanded: expandedGroups[item.key] }"
+              />
+            </template>
+          </button>
 
-        <!-- Group with children -->
-        <template v-else>
-          <!-- Expanded normal version -->
-          <div class="nav-group">
-            <v-list-item
-              class="nav-group-header"
-              :class="{
-                'nav-group-active': isActive(item.path),
-                'nav-group-expanded': expandedGroups[item.key],
-              }"
-              @click="toggleGroup(item.key)"
-            >
-              <div v-if="mini" class="nav-group-header-icon">
-                <v-icon size="20">{{ item.icon }}</v-icon>
-                <v-icon
-                  size="16"
-                  class="expand-icon"
-                  :class="{ expanded: expandedGroups[item.key] }"
-                >
-                  {{
-                    expandedGroups[item.key]
-                      ? "mdi-chevron-up"
-                      : "mdi-chevron-down"
-                  }}
-                </v-icon>
-              </div>
-
-              <v-list-item-title
-                class="nav-title"
-                :class="{ 'text-right': isRTL }"
-              >
-                <div class="flex align-center gap-2 justify-between">
-                  <div class="d-flex align-center gap-2">
-                    <v-icon size="16" v-if="!mini">{{ item.icon }}</v-icon>
-
-                    <div v-if="!mini || mobile">
-                      {{ t(item.title) }}
-                    </div>
-                  </div>
-
-                  <div class="d-flex align-center gap-2">
-                    <v-icon
-                      size="16"
-                      class="expand-icon"
-                      :class="{ expanded: expandedGroups[item.key] }"
-                    >
-                      {{
-                        expandedGroups[item.key]
-                          ? "mdi-chevron-up"
-                          : "mdi-chevron-down"
-                      }}
-                    </v-icon>
-                  </div>
-                </div>
-              </v-list-item-title>
-            </v-list-item>
-
-            <!-- Sub Items -->
-            <v-list
-              v-if="expandedGroups[item.key]"
-              class="nav-sublist"
-              density="compact"
-            >
-              <v-list-item
-                v-for="child in item.children"
-                :key="child.key"
+          <ul
+            v-if="expandedGroups[item.key]"
+            class="nav-sublist list-none p-0 m-0"
+          >
+            <li v-for="child in item.children" :key="child.key">
+              <NuxtLink
                 :to="child.path"
-                class="nav-subitem"
-                :class="{ 'nav-subitem-active': isActive(child.path) }"
+                class="nav-subitem flex items-center gap-2 px-3 py-2 mx-2 rounded-md"
+                :class="{
+                  'nav-subitem-active': isActive(child.path),
+                  'justify-center': mini && !mobile,
+                }"
               >
-                <v-list-item-title
-                  class="nav-subtitle d-flex align-center gap-2"
+                <AppIcon :name="child.icon.replace('mdi-', '')" :size="16" />
+                <span
+                  v-if="!mini || mobile"
+                  class="nav-subtitle"
                   :class="{
                     'text-right': isRTL,
-                    'justify-center': mini && !mobile,
                   }"
                 >
-                  <v-icon size="16">{{ child.icon }}</v-icon>
-                  <div v-if="!mini || mobile">
-                    {{ t(child.title) }}
-                  </div>
-                </v-list-item-title>
-              </v-list-item>
-            </v-list>
-          </div>
-        </template>
+                  {{ t(child.title) }}
+                </span>
+              </NuxtLink>
+            </li>
+          </ul>
+        </li>
       </template>
-    </v-list>
+    </ul>
 
-    <!-- Footer -->
     <template #append>
       <DashboardNavInfo :mini="mini" :mobile="mobile" />
     </template>
-  </v-navigation-drawer>
+  </GkNavigationDrawer>
 </template>
 
 <script setup lang="ts">
 import { ref, computed, watchEffect } from "vue";
 import { useI18n } from "vue-i18n";
 import { useRoute } from "vue-router";
+import { GkButton, GkNavigationDrawer } from "god-kit/vue";
 import { dashboardNavItems, isActiveRoute } from "../../utils/routes";
 import { useSettingsStore } from "../../stores/settings";
 import Logo from "../common/Logo.vue";
 import DashboardNavInfo from "./DashboardNavInfo.vue";
+import AppIcon from "~/components/ui/AppIcon.vue";
 
 const { t } = useI18n();
 const props = defineProps<{ mini?: boolean; mobile?: boolean }>();
-const emit = defineEmits(["toggle-mini", "open-mobile"]);
+defineEmits(["toggle-mini", "open-mobile"]);
 
 const settingsStore = useSettingsStore();
 const route = useRoute();
 
 const navItems = ref(dashboardNavItems);
-const drawer = ref(!props.mobile);
 const expandedGroups = ref<Record<string, boolean>>({});
 const isRTL = computed(() => settingsStore.settings.direction === "rtl");
 
-const getNavWidth = () => {
+const fullNavWidth = computed(() => {
   if (props.mobile) return 300;
-  if (props.mini) return 88;
+  if (props.mini) return 300;
   return settingsStore.settings.compactLayout ? 260 : 300;
-};
+});
 
 const isActive = (path: string) => isActiveRoute(route.path, path);
 
@@ -206,23 +179,21 @@ watchEffect(initializeExpandedGroups);
 
 <style scoped>
 .dashboard-nav {
-  border-right: 1px solid rgb(var(--v-theme-surface-variant));
-  background: rgb(var(--v-theme-surface));
+  border-right: 1px solid var(--gk-color-border);
+  background: var(--gk-color-surface);
 }
 
-/* HEADER */
 .nav-header {
   display: flex;
   align-items: center;
   padding: 16px;
-  border-bottom: 1px solid rgb(var(--v-theme-surface-variant));
+  border-bottom: 1px solid var(--gk-color-border);
   min-height: 64px;
 }
 .toggle-btn {
   margin-left: 8px;
 }
 
-/* LIST BASE */
 .nav-list {
   padding: 8px 0;
 }
@@ -231,6 +202,8 @@ watchEffect(initializeExpandedGroups);
   margin: 2px 8px;
   border-radius: 8px;
   transition: all 0.2s ease;
+  color: var(--gk-color-on-surface);
+  text-decoration: none;
 }
 [dir="rtl"] .nav-item,
 [dir="rtl"] .nav-group-header {
@@ -239,25 +212,19 @@ watchEffect(initializeExpandedGroups);
 }
 .nav-item:hover,
 .nav-group-header:hover {
-  background: rgba(var(--v-theme-on-surface-rgb), 0.08);
+  background: color-mix(in srgb, var(--gk-color-on-surface) 8%, transparent);
 }
 
-/* ACTIVE STATES */
 .nav-item-active,
 .nav-group-active {
-  background: rgba(var(--v-theme-primary-rgb), 0.12);
-  color: rgb(var(--v-theme-primary));
+  background: color-mix(in srgb, var(--gk-color-primary) 15%, transparent);
+  color: var(--gk-color-primary);
 }
 .nav-item-active:hover,
 .nav-group-active:hover {
-  background: rgba(var(--v-theme-primary-rgb), 0.16);
-}
-.nav-item-active .v-icon,
-.nav-group-active .v-icon {
-  color: rgb(var(--v-theme-primary)) !important;
+  background: color-mix(in srgb, var(--gk-color-primary) 20%, transparent);
 }
 
-/* SUBLIST */
 .nav-sublist {
   padding-left: 16px;
   margin-top: 4px;
@@ -266,13 +233,15 @@ watchEffect(initializeExpandedGroups);
   border-radius: 6px;
   min-height: 36px;
   transition: all 0.2s ease;
+  color: var(--gk-color-on-surface);
+  text-decoration: none;
 }
 .nav-subitem:hover {
-  background: rgba(var(--v-theme-on-surface-rgb), 0.06);
+  background: color-mix(in srgb, var(--gk-color-on-surface) 6%, transparent);
 }
 .nav-subitem-active {
-  background: rgba(var(--v-theme-primary-rgb), 0.1);
-  color: rgb(var(--v-theme-primary));
+  background: color-mix(in srgb, var(--gk-color-primary) 12%, transparent);
+  color: var(--gk-color-primary);
 }
 .nav-subtitle {
   font-size: 0.85rem;
@@ -282,7 +251,6 @@ watchEffect(initializeExpandedGroups);
   direction: rtl;
 }
 
-/* MINI MODE */
 .nav-mini .nav-header {
   justify-content: center;
 }
@@ -296,27 +264,6 @@ watchEffect(initializeExpandedGroups);
   display: none;
 }
 
-/* MINI DROPDOWN TOOLTIP */
-.mini-submenu {
-  padding: 8px 0;
-}
-.mini-submenu-title {
-  font-weight: 600;
-  font-size: 0.85rem;
-  padding: 8px 12px;
-  border-bottom: 1px solid rgba(var(--v-theme-on-surface-rgb), 0.1);
-  display: flex;
-  align-items: center;
-}
-.mini-subitem {
-  border-radius: 6px;
-  margin: 2px 4px;
-}
-.mini-subitem:hover {
-  background: rgba(var(--v-theme-on-surface-rgb), 0.06);
-}
-
-/* RTL Support */
 .nav-rtl .nav-sublist {
   padding-left: 8px;
   padding-right: 16px;
@@ -325,12 +272,11 @@ watchEffect(initializeExpandedGroups);
   transform: rotate(180deg);
 }
 
-/* MOBILE HEADER */
 .mobile-header {
   display: flex;
   align-items: center;
   padding: 16px;
-  border-bottom: 1px solid rgb(var(--v-theme-surface-variant));
+  border-bottom: 1px solid var(--gk-color-border);
 }
 .mobile-menu-btn {
   margin-right: 12px;
@@ -339,18 +285,10 @@ watchEffect(initializeExpandedGroups);
   font-weight: 600;
 }
 
-/* FOOTER */
-.nav-footer {
-  border-top: 1px solid rgb(var(--v-theme-surface-variant));
-  padding: 8px 0;
-}
-
-/* RESPONSIVE */
 @media (max-width: 959px) {
   .dashboard-nav {
     position: absolute;
     z-index: 1000;
   }
 }
-
 </style>

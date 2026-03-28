@@ -48,18 +48,14 @@ export default defineNuxtConfig({
   },
 
 
-  // CSS
+  // CSS — god-kit tokens + component styles before app Tailwind layers
   css: [
+    'god-kit/tokens.css',
+    'god-kit/vue.css',
     '~/assets/css/main.css',
-    // Load MDI font for icons
-    'vuetify/lib/styles/main.sass',
-    '@mdi/font/css/materialdesignicons.min.css'
+    '@mdi/font/css/materialdesignicons.min.css',
   ],
 
-  // Build configuration
-  build: {
-    transpile: ['vuetify']
-  },
 
   // SSR
   ssr: true,
@@ -83,8 +79,8 @@ export default defineNuxtConfig({
         output: {
           manualChunks: {
             vendor: ['vue', 'vue-router'],
-            ui: ['vuetify', '@mdi/js'],
-            utils: ['axios', 'zod', 'clsx']
+            ui: ['@mdi/js'],
+            utils: ['axios', 'clsx']
           }
         }
       }

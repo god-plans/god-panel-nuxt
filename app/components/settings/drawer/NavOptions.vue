@@ -2,14 +2,13 @@
   <div class="nav-options">
     <div class="nav-options__header">
       <span class="nav-options__title">{{ t('settingsDrawer.nav') }}</span>
-      <v-tooltip location="right" v-if="tooltip">
-        <template #activator="{ props: tooltipProps }">
-          <v-icon v-bind="tooltipProps" size="14" class="nav-options__info">
-            mdi-information-outline
-          </v-icon>
+      <GkTooltip v-if="tooltip" :text="tooltip" placement="end">
+        <template #activator="{ props: tip }">
+          <span v-bind="tip" class="nav-options__info inline-flex">
+            <AppIcon name="information-outline" :size="14" />
+          </span>
         </template>
-        {{ tooltip }}
-      </v-tooltip>
+      </GkTooltip>
     </div>
 
     <div class="nav-options__content">
@@ -32,16 +31,20 @@
 
 <script setup lang="ts">
 import { useI18n } from 'vue-i18n'
+import { GkTooltip } from 'god-kit/vue'
+import AppIcon from '~/components/ui/AppIcon.vue'
 import LayoutOption from './LayoutOption.vue'
 
 const { t } = useI18n()
 
+type NavLayout = 'vertical' | 'horizontal' | 'mini'
+
 interface Props {
   value: {
-    layout: string
+    layout: NavLayout
   }
   options: {
-    layouts: string[]
+    layouts: NavLayout[]
   }
   hideNavLayout?: boolean
   hideNavColor?: boolean
@@ -58,7 +61,7 @@ const emit = defineEmits<{
   'click-option': [option: { layout?: string }]
 }>()
 
-const handleLayoutClick = (layout: string) => {
+const handleLayoutClick = (layout: NavLayout) => {
   emit('click-option', { layout })
 }
 </script>
@@ -66,12 +69,12 @@ const handleLayoutClick = (layout: string) => {
 <style scoped>
 .nav-options {
   padding: 32px 16px 16px 16px;
-  border: 1px solid rgba(var(--v-theme-on-surface), 0.12);
+  border: 1px solid color-mix(in srgb, var(--gk-color-on-surface) 12%, transparent);
   border-radius: 16px;
   position: relative;
   --item-radius: 12px;
-  --item-bg: rgba(var(--v-theme-on-surface), 0.2);
-  --item-border-color: rgba(var(--v-theme-on-surface), 0.08);
+  --item-bg: color-mix(in srgb, var(--gk-color-on-surface) 20%, transparent);
+  --item-border-color: color-mix(in srgb, var(--gk-color-on-surface) 8%, transparent);
 }
 
 .nav-options__header {
@@ -87,8 +90,8 @@ const handleLayoutClick = (layout: string) => {
   font-size: 13px;
   font-weight: 600;
   line-height: 22px;
-  color: rgb(var(--v-theme-background));
-  background: rgb(var(--v-theme-on-surface));
+  color: var(--gk-color-bg);
+  background: var(--gk-color-on-surface);
   padding: 0 10px;
   border-radius: 22px;
   display: inline-flex;
@@ -98,8 +101,8 @@ const handleLayoutClick = (layout: string) => {
 .nav-options__info {
   opacity: 0.48;
   cursor: pointer;
-  color: rgb(var(--v-theme-background));
-  background: rgb(var(--v-theme-on-surface));
+  color: var(--gk-color-bg);
+  background: var(--gk-color-on-surface);
   border-radius: 50%;
   padding: 4px;
 }
@@ -120,7 +123,7 @@ const handleLayoutClick = (layout: string) => {
   font-size: 11px;
   font-weight: 600;
   line-height: 14px;
-  color: rgba(var(--v-theme-on-surface), 0.7);
+  color: color-mix(in srgb, var(--gk-color-on-surface) 70%, transparent);
   text-transform: uppercase;
   letter-spacing: 0.5px;
 }

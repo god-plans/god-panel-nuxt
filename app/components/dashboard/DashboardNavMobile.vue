@@ -1,17 +1,16 @@
 <template>
-  <v-navigation-drawer
-    :model-value="open"
-    @update:model-value="$emit('update:open', $event)"
+  <GkNavigationDrawer
+    v-model="open"
     temporary
-    :location="settingsStore.settings.direction === 'rtl' ? 'right' : 'left'"
+    :location="settingsStore.settings.direction === 'rtl' ? 'end' : 'start'"
+    :dir="settingsStore.settings.direction === 'rtl' ? 'rtl' : 'ltr'"
     class="mobile-nav"
     :class="{
       'nav-rtl': settingsStore.settings.direction === 'rtl'
     }"
+    width="300"
     aria-label="Mobile navigation menu"
-    role="navigation"
   >
-    <!-- Header -->
     <div class="nav-header">
       <Logo
         variant="compact"
@@ -20,238 +19,219 @@
       />
     </div>
 
-    <!-- User Info -->
     <div class="user-info">
-      <v-avatar size="48" class="user-avatar">
-        <img :src="authStore.user?.photoURL || '/assets/images/avatar.webp'" :alt="authStore.displayName" />
-      </v-avatar>
-      <div class="user-details">
+      <img
+        :src="authStore.user?.photoURL || '/assets/images/avatar.webp'"
+        :alt="authStore.displayName || ''"
+        class="user-avatar h-12 w-12 rounded-full object-cover shrink-0"
+      />
+      <div class="user-details min-w-0">
         <div class="user-name">{{ authStore.displayName || 'Demo User' }}</div>
         <div class="user-role">{{ authStore.userRole || 'User' }}</div>
       </div>
     </div>
 
-    <!-- Navigation Items -->
-    <v-list class="nav-list" density="compact">
-      <div v-for="item in navItems" :key="item.key">
-        <!-- Main Navigation Item -->
-        <v-list-item
+    <ul class="nav-list list-none p-0 m-0 flex flex-col flex-1">
+      <li v-for="item in navItems" :key="item.key">
+        <NuxtLink
           v-if="!item.children"
           :to="item.path"
-          :active="isActive(item.path)"
-          class="nav-item"
-          :class="{ 'nav-item-active': isActive(item.path) }"
-          :aria-label="t(item.title)"
+          class="nav-item flex items-center gap-2 px-3 py-2 mx-2 rounded-lg"
+          :class="{
+            'nav-item-active': isActive(item.path),
+            'flex-row-reverse': settingsStore.settings.direction === 'rtl',
+          }"
           @click="close"
         >
-          <template v-if="settingsStore.settings.direction === 'rtl'" #append>
-            <v-icon size="20">{{ item.icon }}</v-icon>
-          </template>
-          <template v-else #prepend>
-            <v-icon size="20">{{ item.icon }}</v-icon>
-          </template>
-          <v-list-item-title class="nav-title" :class="{ 'text-right': settingsStore.settings.direction === 'rtl' }">
+          <AppIcon
+            v-if="settingsStore.settings.direction !== 'rtl'"
+            :name="item.icon.replace('mdi-', '')"
+            :size="20"
+          />
+          <span
+            class="nav-title flex-1"
+            :class="{ 'text-right': settingsStore.settings.direction === 'rtl' }"
+          >
             {{ t(item.title) }}
-          </v-list-item-title>
-          <template #prepend>
-            <v-chip
-              v-if="settingsStore.settings.direction === 'rtl' && item.badge"
-              :text="item.badge"
-              size="small"
-              color="primary"
-              variant="flat"
-            />
-          </template>
-          <template #append>
-            <v-chip
-              v-if="settingsStore.settings.direction !== 'rtl' && item.badge"
-              :text="item.badge"
-              size="small"
-              color="primary"
-              variant="flat"
-            />
-          </template>
-        </v-list-item>
+          </span>
+          <AppIcon
+            v-if="settingsStore.settings.direction === 'rtl'"
+            :name="item.icon.replace('mdi-', '')"
+            :size="20"
+          />
+          <span
+            v-if="item.badge"
+            class="inline-flex items-center rounded px-2 py-0.5 text-xs font-medium bg-[color-mix(in_srgb,var(--gk-color-primary)_15%,transparent)] text-[var(--gk-color-primary)]"
+          >
+            {{ item.badge }}
+          </span>
+        </NuxtLink>
 
-        <!-- Collapsible Navigation Group -->
         <div v-else class="nav-group">
-          <v-list-item
-            class="nav-group-header"
-            :class="{ 'nav-group-active': isActive(item.path), 'nav-group-expanded': expandedGroups[item.key] }"
+          <button
+            type="button"
+            class="nav-group-header w-full flex items-center gap-2 px-3 py-2 mx-2 rounded-lg border-0 bg-transparent cursor-pointer"
+            :class="{
+              'nav-group-active': isActive(item.path),
+              'nav-group-expanded': expandedGroups[item.key],
+              'flex-row-reverse': settingsStore.settings.direction === 'rtl',
+            }"
             @click="toggleGroup(item.key)"
           >
-            <template v-if="settingsStore.settings.direction === 'rtl'" #append>
-              <v-icon size="20">{{ item.icon }}</v-icon>
-            </template>
-            <template v-else #prepend>
-              <v-icon size="20">{{ item.icon }}</v-icon>
-            </template>
-            <v-list-item-title class="nav-title" :class="{ 'text-right': settingsStore.settings.direction === 'rtl' }">
-              {{ t(item.title) }}
-            </v-list-item-title>
-            <template #prepend>
-              <v-icon
-                v-if="settingsStore.settings.direction === 'rtl'"
-                size="16"
-                class="expand-icon"
-                :class="{ 'expanded': expandedGroups[item.key] }"
-              >
-                mdi-chevron-down
-              </v-icon>
-            </template>
-            <template #append>
-              <v-icon
-                v-if="settingsStore.settings.direction !== 'rtl'"
-                size="16"
-                class="expand-icon"
-                :class="{ 'expanded': expandedGroups[item.key] }"
-              >
-                mdi-chevron-down
-              </v-icon>
-            </template>
-          </v-list-item>
-
-          <!-- Sub Navigation Items -->
-          <v-list
-            v-if="expandedGroups[item.key]"
-            class="nav-sublist"
-            density="compact"
-          >
-            <v-list-item
-              v-for="child in item.children"
-              :key="child.key"
-              :to="child.path"
-              :active="isActive(child.path)"
-              class="nav-subitem"
-              :class="{ 'nav-subitem-active': isActive(child.path) }"
-              @click="close"
+            <AppIcon
+              v-if="settingsStore.settings.direction !== 'rtl'"
+              :name="item.icon.replace('mdi-', '')"
+              :size="20"
+            />
+            <span
+              class="nav-title flex-1"
+              :class="{ 'text-right': settingsStore.settings.direction === 'rtl' }"
             >
-              <template #prepend>
-                <v-icon v-if="settingsStore.settings.direction !== 'rtl'" size="16">{{ child.icon }}</v-icon>
-                <v-chip
-                  v-if="settingsStore.settings.direction === 'rtl' && child.badge"
-                  :text="child.badge"
-                  size="small"
-                  color="primary"
-                  variant="flat"
-                />
-              </template>
-              <template #append>
-                <v-icon v-if="settingsStore.settings.direction === 'rtl'" size="16">{{ child.icon }}</v-icon>
-                <v-chip
-                  v-if="settingsStore.settings.direction !== 'rtl' && child.badge"
-                  :text="child.badge"
-                  size="small"
-                  color="primary"
-                  variant="flat"
-                />
-              </template>
-              <v-list-item-title class="nav-subtitle" :class="{ 'text-right': settingsStore.settings.direction === 'rtl' }">
-                {{ t(child.title) }}
-              </v-list-item-title>
-            </v-list-item>
-          </v-list>
-        </div>
-      </div>
-    </v-list>
+              {{ t(item.title) }}
+            </span>
+            <AppIcon
+              v-if="settingsStore.settings.direction === 'rtl'"
+              :name="item.icon.replace('mdi-', '')"
+              :size="20"
+            />
+            <AppIcon
+              name="chevron-down"
+              :size="16"
+              class="expand-icon shrink-0"
+              :class="{ expanded: expandedGroups[item.key] }"
+            />
+          </button>
 
-    <!-- Footer Actions -->
+          <ul
+            v-if="expandedGroups[item.key]"
+            class="nav-sublist list-none p-0 m-0"
+          >
+            <li v-for="child in item.children" :key="child.key">
+              <NuxtLink
+                :to="child.path"
+                class="nav-subitem flex items-center gap-2 px-3 py-2 mx-2 rounded-md"
+                :class="{
+                  'nav-subitem-active': isActive(child.path),
+                  'flex-row-reverse': settingsStore.settings.direction === 'rtl',
+                }"
+                @click="close"
+              >
+                <AppIcon
+                  v-if="settingsStore.settings.direction !== 'rtl'"
+                  :name="child.icon.replace('mdi-', '')"
+                  :size="16"
+                />
+                <span
+                  class="nav-subtitle flex-1"
+                  :class="{ 'text-right': settingsStore.settings.direction === 'rtl' }"
+                >
+                  {{ t(child.title) }}
+                </span>
+                <AppIcon
+                  v-if="settingsStore.settings.direction === 'rtl'"
+                  :name="child.icon.replace('mdi-', '')"
+                  :size="16"
+                />
+                <span
+                  v-if="child.badge"
+                  class="inline-flex items-center rounded px-2 py-0.5 text-xs font-medium bg-[color-mix(in_srgb,var(--gk-color-primary)_15%,transparent)] text-[var(--gk-color-primary)]"
+                >
+                  {{ child.badge }}
+                </span>
+              </NuxtLink>
+            </li>
+          </ul>
+        </div>
+      </li>
+    </ul>
+
     <template #append>
       <div class="nav-footer">
-        <!-- Info Box for Mobile -->
         <DashboardNavInfo :mini="false" :mobile="true" />
 
-        <!-- Action Buttons -->
-        <v-list density="compact">
-          <v-list-item @click="handleSettings" class="nav-item">
-            <template #prepend>
-              <v-icon>mdi-cog</v-icon>
-            </template>
-            <v-list-item-title>{{ t('common.settings') }}</v-list-item-title>
-          </v-list-item>
-          <v-list-item @click="handleLogout" class="nav-item">
-            <template #prepend>
-              <v-icon>mdi-logout</v-icon>
-            </template>
-            <v-list-item-title>{{ t('common.logout') }}</v-list-item-title>
-          </v-list-item>
-        </v-list>
+        <ul class="list-none p-0 m-0">
+          <li>
+            <button
+              type="button"
+              class="nav-item w-full flex items-center gap-2 px-3 py-2 mx-2 rounded-lg border-0 bg-transparent cursor-pointer text-left"
+              @click="handleSettings"
+            >
+              <AppIcon name="cog" :size="20" />
+              {{ t('common.settings') }}
+            </button>
+          </li>
+          <li>
+            <button
+              type="button"
+              class="nav-item w-full flex items-center gap-2 px-3 py-2 mx-2 rounded-lg border-0 bg-transparent cursor-pointer text-left"
+              @click="handleLogout"
+            >
+              <AppIcon name="logout" :size="20" />
+              {{ t('common.logout') }}
+            </button>
+          </li>
+        </ul>
       </div>
     </template>
 
-    <!-- Logout Confirmation Dialog -->
     <LogoutConfirmDialog
       v-model="showLogoutDialog"
       @confirm="performLogout"
     />
-  </v-navigation-drawer>
+  </GkNavigationDrawer>
 </template>
 
 <script setup lang="ts">
 import { ref, computed, watchEffect } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useRoute, useRouter } from 'vue-router'
-import { dashboardNavItems, isActiveRoute, type NavItem } from '../../utils/routes'
+import { GkNavigationDrawer } from 'god-kit/vue'
+import { dashboardNavItems, isActiveRoute } from '../../utils/routes'
 import { useAuthStore } from '../../stores/auth'
 import LogoutConfirmDialog from '../common/LogoutConfirmDialog.vue'
 import Logo from '../common/Logo.vue'
 import { useSettingsStore } from '../../stores/settings'
 import DashboardNavInfo from './DashboardNavInfo.vue'
+import AppIcon from '~/components/ui/AppIcon.vue'
 
 const { t } = useI18n()
 const settingsStore = useSettingsStore()
 
-interface Props {
-  open: boolean
-}
-
-const props = defineProps<Props>()
+const open = defineModel<boolean>('open', { required: true })
 
 const emit = defineEmits<{
-  'update:open': [value: boolean]
-  'close': []
+  close: []
 }>()
 
 const route = useRoute()
 const router = useRouter()
 const authStore = useAuthStore()
 
-// Navigation items from centralized config
 const navItems = ref(dashboardNavItems)
-
-// Expanded groups state
 const expandedGroups = ref<Record<string, boolean>>({})
+const showLogoutDialog = ref(false)
 
-// Initialize expanded groups based on active route
 const initializeExpandedGroups = () => {
   navItems.value.forEach(item => {
     if (item.children) {
-      // Expand group if any child is active
       const hasActiveChild = item.children.some(child => isActiveRoute(route.path, child.path))
       expandedGroups.value[item.key] = hasActiveChild
     }
   })
 }
 
-// Toggle group expansion
 const toggleGroup = (key: string) => {
   expandedGroups.value[key] = !expandedGroups.value[key]
 }
 
-// Logout dialog state
-const showLogoutDialog = ref(false)
-
-// Computed properties
-const isActive = computed(() => (path: string) => {
-  return isActiveRoute(route.path, path)
-})
-
-// Watch for route changes to auto-expand relevant groups
 watchEffect(() => {
   initializeExpandedGroups()
 })
 
-// Methods
+const isActive = computed(() => (path: string) => {
+  return isActiveRoute(route.path, path)
+})
+
 const close = () => {
   emit('close')
 }
@@ -275,7 +255,7 @@ const performLogout = async () => {
 
 <style scoped>
 .mobile-nav {
-  background: rgb(var(--v-theme-surface));
+  background: var(--gk-color-surface);
 }
 
 .nav-header {
@@ -283,7 +263,7 @@ const performLogout = async () => {
   align-items: center;
   justify-content: center;
   padding: 16px;
-  border-bottom: 1px solid rgb(var(--v-theme-surface-variant));
+  border-bottom: 1px solid var(--gk-color-border);
   min-height: 80px;
 }
 
@@ -291,27 +271,23 @@ const performLogout = async () => {
   display: flex;
   align-items: center;
   padding: 16px;
-  border-bottom: 1px solid rgb(var(--v-theme-surface-variant));
+  border-bottom: 1px solid var(--gk-color-border);
 }
 
 .user-avatar {
   margin-right: 12px;
 }
 
-.user-details {
-  flex: 1;
-}
-
 .user-name {
   font-size: 1rem;
   font-weight: 600;
-  color: rgb(var(--v-theme-on-surface));
+  color: var(--gk-color-on-surface);
   margin-bottom: 2px;
 }
 
 .user-role {
   font-size: 0.75rem;
-  color: rgb(var(--v-theme-on-surface-variant));
+  color: var(--gk-color-on-surface-muted);
   text-transform: capitalize;
 }
 
@@ -324,24 +300,17 @@ const performLogout = async () => {
   margin: 2px 8px;
   border-radius: 8px;
   transition: all 0.2s ease;
+  color: var(--gk-color-on-surface);
+  text-decoration: none;
 }
 
 .nav-item:hover {
-  background: rgba(var(--v-theme-on-surface-rgb), 0.08);
+  background: color-mix(in srgb, var(--gk-color-on-surface) 8%, transparent);
 }
 
 .nav-item-active {
-  background: rgba(var(--v-theme-primary-rgb), 0.12);
-  color: rgb(var(--v-theme-primary));
-  box-shadow: var(--v-custom-shadows-z1);
-}
-
-.nav-item-active:hover {
-  background: rgba(var(--v-theme-primary-rgb), 0.16);
-}
-
-.nav-item-active .v-icon {
-  color: rgb(var(--v-theme-primary)) !important;
+  background: color-mix(in srgb, var(--gk-color-primary) 15%, transparent);
+  color: var(--gk-color-primary);
 }
 
 .nav-title {
@@ -349,38 +318,20 @@ const performLogout = async () => {
   font-weight: 500;
 }
 
-.nav-title.text-right {
-  text-align: right;
-}
-
-/* Navigation Groups */
-.nav-group {
-  position: relative;
-}
-
 .nav-group-header {
   margin: 2px 8px;
   border-radius: 8px;
   transition: all 0.2s ease;
-  cursor: pointer;
+  color: var(--gk-color-on-surface);
 }
 
 .nav-group-header:hover {
-  background: rgba(var(--v-theme-on-surface-rgb), 0.08);
+  background: color-mix(in srgb, var(--gk-color-on-surface) 8%, transparent);
 }
 
 .nav-group-active {
-  background: rgba(var(--v-theme-primary-rgb), 0.12);
-  color: rgb(var(--v-theme-primary));
-  box-shadow: var(--v-custom-shadows-z1);
-}
-
-.nav-group-active:hover {
-  background: rgba(var(--v-theme-primary-rgb), 0.16);
-}
-
-.nav-group-expanded {
-  background: rgba(var(--v-theme-on-surface-rgb), 0.04);
+  background: color-mix(in srgb, var(--gk-color-primary) 15%, transparent);
+  color: var(--gk-color-primary);
 }
 
 .expand-icon {
@@ -392,7 +343,6 @@ const performLogout = async () => {
   transform: rotate(180deg);
 }
 
-/* RTL specific styles */
 .nav-rtl .expand-icon:not(.expanded) {
   transform: rotate(90deg);
 }
@@ -401,7 +351,6 @@ const performLogout = async () => {
   transform: rotate(-90deg);
 }
 
-/* Sub Navigation */
 .nav-sublist {
   padding-left: 16px;
   padding-right: 8px;
@@ -421,38 +370,26 @@ const performLogout = async () => {
   padding-left: 12px;
   padding-right: 12px;
   transition: all 0.2s ease;
+  text-decoration: none;
+  color: var(--gk-color-on-surface);
 }
 
 .nav-subitem:hover {
-  background: rgba(var(--v-theme-on-surface-rgb), 0.06);
+  background: color-mix(in srgb, var(--gk-color-on-surface) 6%, transparent);
 }
 
 .nav-subitem-active {
-  background: rgba(var(--v-theme-primary-rgb), 0.10);
-  color: rgb(var(--v-theme-primary));
-  box-shadow: var(--v-custom-shadows-z1);
-}
-
-.nav-subitem-active:hover {
-  background: rgba(var(--v-theme-primary-rgb), 0.14);
-}
-
-.nav-subitem-active .v-icon {
-  color: rgb(var(--v-theme-primary)) !important;
+  background: color-mix(in srgb, var(--gk-color-primary) 12%, transparent);
+  color: var(--gk-color-primary);
 }
 
 .nav-subtitle {
   font-size: 0.85rem;
   font-weight: 500;
-  opacity: 0.9;
-}
-
-.nav-subtitle.text-right {
-  text-align: right;
 }
 
 .nav-footer {
-  border-top: 1px solid rgb(var(--v-theme-surface-variant));
+  border-top: 1px solid var(--gk-color-border);
   padding: 8px 0;
 }
 </style>

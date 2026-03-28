@@ -158,7 +158,7 @@
     "termsOfService": "شرایط خدمات",
     "status": "وضعیت",
     "connect": "ارتباط",
-    "description": "داشبورد مدیریت مدرن ساخته شده با Nuxt.js، Vuetify و Tailwind CSS. دارای احراز هویت، تم‌بندی و طراحی ریسپانسیو."
+    "description": "داشبورد مدیریت مدرن ساخته شده با Nuxt.js، god-kit و Tailwind CSS. دارای احراز هویت، تم‌بندی و طراحی ریسپانسیو."
   },
   "theme": {
     "themeMode": "حالت تم",

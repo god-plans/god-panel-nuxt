@@ -1,189 +1,209 @@
 <template>
-  <v-app-bar
-    :color="`rgb(var(--v-theme-surface))`"
-    elevation="0"
-    class="dashboard-header"
+  <header
+    class="dashboard-header flex min-h-14 items-center border-b px-2 md:px-4"
     :style="{
-      borderBottom: `1px solid rgb(var(--v-theme-surface-variant))`,
+      borderColor: 'var(--gk-color-border)',
+      background: 'var(--gk-color-surface)',
+      color: 'var(--gk-color-on-surface)',
     }"
   >
-    <!-- Mobile menu button -->
-    <v-app-bar-nav-icon @click="$emit('toggle-nav')" class="d-md-none" />
+    <GkButton
+      variant="ghost"
+      class="md:hidden shrink-0"
+      slim
+      :aria-label="t('common.menu')"
+      @click="$emit('toggle-nav')"
+    >
+      <AppIcon name="menu" :size="24" />
+    </GkButton>
 
-    <!-- Logo for mobile -->
-    <v-img
+    <Logo
       v-if="mobile"
-      src="/logo-single.png"
-      width="32"
-      height="32"
-      class="mr-3 d-lg-none"
-      contain
+      variant="icon"
+      size="sm"
+      class="mr-3 lg:hidden shrink-0"
     />
 
-    <!-- Breadcrumbs for desktop -->
-    <div  class="breadcrumbs lg:!block !hidden">
-      <v-breadcrumbs :items="breadcrumbItems">
-        <template #item="{ item }">
-          <v-breadcrumbs-item
-            :to="item.to"
-            :disabled="item.disabled"
-            class="breadcrumb-item"
-          >
-            {{ item.title }}
-          </v-breadcrumbs-item>
-        </template>
-      </v-breadcrumbs>
-    </div>
-
-    <v-spacer />
-
-    <!-- Search -->
-    <!-- <v-text-field
-      v-model="searchQuery"
-      :placeholder="t('settings.search')"
-      variant="outlined"
-      density="comfortable"
-      class="search-field"
-      hide-details
-      single-line
-      prepend-inner-icon="mdi-magnify"
-      
+    <nav
+      class="breadcrumbs hidden lg:flex items-center gap-1 text-sm ml-4"
+      aria-label="Breadcrumb"
     >
-    </v-text-field> -->
+      <template v-for="(item, index) in breadcrumbItems" :key="index">
+        <NuxtLink
+          v-if="item.to && !item.disabled"
+          :to="item.to"
+          class="breadcrumb-item hover:underline text-[var(--gk-color-on-surface)]"
+        >
+          {{ item.title }}
+        </NuxtLink>
+        <span v-else class="text-[var(--gk-color-on-surface-muted)]">
+          {{ item.title }}
+        </span>
+        <span
+          v-if="index < breadcrumbItems.length - 1"
+          class="text-[var(--gk-color-on-surface-muted)] px-1"
+          aria-hidden="true"
+        >
+          /
+        </span>
+      </template>
+    </nav>
 
-    <!-- Language Switcher -->
-    
-      <LanguageSwitcher />
-    
-    <!-- Settings Button -->
-    
-      <SettingsButton />
-    
+    <div class="flex-1" />
 
-    <!-- Notifications -->
-    <v-menu offset-y>
-      <template #activator="{ props }">
-        <v-btn icon v-bind="props" class="notification-btn ">
-          <v-badge
-            :content="notifications.length"
-            :value="notifications.length > 0"
-            color="error"
-            overlap
-          >
-            <v-icon>mdi-bell</v-icon>
-          </v-badge>
-        </v-btn>
+    <LanguageSwitcher />
+    <SettingsButton />
+
+    <GkMenu v-model="notifOpen" placement="bottom-end" class="shrink-0">
+      <template #activator="{ props: act }">
+        <GkButton
+          v-bind="act"
+          variant="ghost"
+          class="notification-btn"
+          slim
+          :aria-label="t('settings.notifications')"
+        >
+          <span class="relative inline-flex">
+            <AppIcon name="bell" :size="24" />
+            <span
+              v-if="notifications.length > 0"
+              class="absolute -top-1 -end-1 min-w-[18px] h-[18px] px-0.5 flex items-center justify-center rounded-full bg-red-600 text-white text-[10px] font-medium"
+            >
+              {{ notifications.length }}
+            </span>
+          </span>
+        </GkButton>
       </template>
 
-      <v-list class="notification-list">
-        <v-list-item v-if="notifications.length === 0">
-          <v-list-item-title>{{
-            t("settings.noNewNotifications")
-          }}</v-list-item-title>
-        </v-list-item>
-
-        <v-list-item
+      <ul
+        class="notification-list min-w-[280px] list-none p-0 m-0"
+        role="menu"
+      >
+        <li
+          v-if="notifications.length === 0"
+          class="px-3 py-2 text-sm"
+          role="menuitem"
+        >
+          {{ t("settings.noNewNotifications") }}
+        </li>
+        <li
           v-for="notification in notifications.slice(0, 5)"
           :key="notification.id"
+          class="flex gap-3 px-3 py-2 cursor-pointer hover:bg-[var(--gk-color-surface-muted)] rounded-md"
+          role="menuitem"
           @click="markAsRead(notification.id)"
         >
-          <template #prepend>
-            <v-avatar size="32">
-              <v-icon :color="notification.color">{{
-                notification.icon
-              }}</v-icon>
-            </v-avatar>
-          </template>
-          <v-list-item-title>{{ notification.title }}</v-list-item-title>
-          <v-list-item-subtitle>{{
-            notification.message
-          }}</v-list-item-subtitle>
-        </v-list-item>
-
-        <v-divider v-if="notifications.length > 0" />
-        <v-list-item
+          <span
+            class="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-[var(--gk-color-surface-muted)] text-[var(--gk-color-primary)]"
+          >
+            <AppIcon :name="notification.icon.replace('mdi-', '')" :size="20" />
+          </span>
+          <div class="min-w-0">
+            <div class="text-sm font-medium">{{ notification.title }}</div>
+            <div class="text-xs opacity-80 truncate">{{ notification.message }}</div>
+          </div>
+        </li>
+        <li v-if="notifications.length > 0" class="px-0 py-1">
+          <GkDivider />
+        </li>
+        <li
           v-if="notifications.length > 0"
+          class="px-3 py-2 text-sm text-[var(--gk-color-primary)] cursor-pointer"
+          role="menuitem"
           @click="viewAllNotifications"
         >
-          <v-list-item-title class="text-primary">{{
-            t("settings.viewAllNotifications")
-          }}</v-list-item-title>
-        </v-list-item>
-      </v-list>
-    </v-menu>
+          {{ t("settings.viewAllNotifications") }}
+        </li>
+      </ul>
+    </GkMenu>
 
-    <!-- User menu -->
-    <v-menu offset-y>
-      <template #activator="{ props }">
-        <v-btn icon v-bind="props" class="user-btn">
-          <v-avatar size="32">
-            <img
-              :src="authStore.user?.photoURL || '/assets/images/avatar.webp'"
-              :alt="authStore.displayName"
-            />
-          </v-avatar>
-        </v-btn>
+    <GkMenu v-model="userOpen" placement="bottom-end" class="shrink-0">
+      <template #activator="{ props: act }">
+        <GkButton
+          v-bind="act"
+          variant="ghost"
+          class="user-btn"
+          slim
+          :aria-label="authStore.displayName || 'User'"
+        >
+          <img
+            :src="authStore.user?.photoURL || '/assets/images/avatar.webp'"
+            :alt="authStore.displayName || ''"
+            class="h-8 w-8 rounded-full object-cover"
+          />
+        </GkButton>
       </template>
 
-      <v-list class="user-menu">
-        <v-list-item>
-          <template #prepend>
-            <v-avatar size="40">
-              <img
-                :src="authStore.user?.photoURL || '/assets/images/avatar.webp'"
-                :alt="authStore.displayName"
-              />
-            </v-avatar>
-          </template>
-          <v-list-item-title>{{
-            authStore.displayName || "Demo User"
-          }}</v-list-item-title>
-          <v-list-item-subtitle>{{
-            authStore.userEmail || "demo@example.com"
-          }}</v-list-item-subtitle>
-        </v-list-item>
+      <div class="user-menu min-w-[240px]">
+        <div class="flex gap-3 px-3 py-2 items-center">
+          <img
+            :src="authStore.user?.photoURL || '/assets/images/avatar.webp'"
+            :alt="authStore.displayName || ''"
+            class="h-10 w-10 rounded-full object-cover"
+          />
+          <div class="min-w-0">
+            <div class="text-sm font-medium truncate">
+              {{ authStore.displayName || "Demo User" }}
+            </div>
+            <div class="text-xs opacity-80 truncate">
+              {{ authStore.userEmail || "demo@example.com" }}
+            </div>
+          </div>
+        </div>
+        <GkDivider />
+        <ul class="list-none p-0 m-0">
+          <li>
+            <GkButton
+              variant="ghost"
+              block
+              class="justify-start !rounded-none"
+              @click="goToProfile"
+            >
+              <AppIcon name="account" class="me-2" />
+              {{ t("settings.profile") }}
+            </GkButton>
+          </li>
+          <li>
+            <GkButton
+              variant="ghost"
+              block
+              class="justify-start !rounded-none"
+              @click="goToSettings"
+            >
+              <AppIcon name="cog" class="me-2" />
+              {{ t("common.settings") }}
+            </GkButton>
+          </li>
+        </ul>
+        <GkDivider />
+        <GkButton
+          variant="ghost"
+          block
+          class="justify-start !rounded-none"
+          @click="handleLogout"
+        >
+          <AppIcon name="logout" class="me-2" />
+          {{ t("common.logout") }}
+        </GkButton>
+      </div>
+    </GkMenu>
 
-        <v-divider />
-
-        <v-list-item @click="goToProfile">
-          <template #prepend>
-            <v-icon>mdi-account</v-icon>
-          </template>
-          <v-list-item-title>{{ t("settings.profile") }}</v-list-item-title>
-        </v-list-item>
-
-        <v-list-item @click="goToSettings">
-          <template #prepend>
-            <v-icon>mdi-cog</v-icon>
-          </template>
-          <v-list-item-title>{{ t("common.settings") }}</v-list-item-title>
-        </v-list-item>
-
-        <v-divider />
-
-        <v-list-item @click="handleLogout">
-          <template #prepend>
-            <v-icon>mdi-logout</v-icon>
-          </template>
-          <v-list-item-title>{{ t("common.logout") }}</v-list-item-title>
-        </v-list-item>
-      </v-list>
-    </v-menu>
-
-    <!-- Logout Confirmation Dialog -->
     <LogoutConfirmDialog v-model="showLogoutDialog" @confirm="performLogout" />
-  </v-app-bar>
+  </header>
 </template>
 
 <script setup lang="ts">
 import { ref, computed } from "vue";
 import { useI18n } from "vue-i18n";
 import { useRouter, useRoute } from "vue-router";
+import { GkButton, GkDivider, GkMenu } from "god-kit/vue";
 import { generateBreadcrumbs } from "~/utils/routes";
 import { useAuthStore } from "~/stores/auth";
 import SettingsButton from "~/components/theme/SettingsButton.vue";
 import LanguageSwitcher from "~/components/theme/LanguageSwitcher.vue";
 import LogoutConfirmDialog from "~/components/common/LogoutConfirmDialog.vue";
+import AppIcon from "~/components/ui/AppIcon.vue";
+import Logo from "~/components/common/Logo.vue";
 
 const { t } = useI18n();
 
@@ -192,7 +212,7 @@ interface Props {
   isHorizontal?: boolean;
 }
 
-const props = withDefaults(defineProps<Props>(), {
+withDefaults(defineProps<Props>(), {
   mobile: false,
   isHorizontal: false,
 });
@@ -205,11 +225,10 @@ const router = useRouter();
 const route = useRoute();
 const authStore = useAuthStore();
 
-// Reactive data
-const searchQuery = ref("");
+const notifOpen = ref(false);
+const userOpen = ref(false);
 const showLogoutDialog = ref(false);
 
-// Breadcrumbs
 const breadcrumbItems = computed(() => {
   const breadcrumbs = generateBreadcrumbs(route.path);
   return breadcrumbs.map((crumb, index) => ({
@@ -219,7 +238,6 @@ const breadcrumbItems = computed(() => {
   }));
 });
 
-// Mock notifications - in real app, this would come from API
 const notifications = ref([
   {
     id: 1,
@@ -247,7 +265,6 @@ const notifications = ref([
   },
 ]);
 
-// Methods
 const markAsRead = (id: number) => {
   const notification = notifications.value.find((n) => n.id === id);
   if (notification) {
@@ -256,18 +273,22 @@ const markAsRead = (id: number) => {
 };
 
 const viewAllNotifications = () => {
+  notifOpen.value = false;
   router.push("/dashboard/notifications");
 };
 
 const goToProfile = () => {
+  userOpen.value = false;
   router.push("/dashboard/profile");
 };
 
 const goToSettings = () => {
+  userOpen.value = false;
   router.push("/dashboard/settings");
 };
 
 const handleLogout = () => {
+  userOpen.value = false;
   showLogoutDialog.value = true;
 };
 
@@ -279,52 +300,6 @@ const performLogout = async () => {
 </script>
 
 <style scoped>
-.dashboard-header {
-  background-color: rgb(var(--v-theme-surface)) !important;
-  color: rgb(var(--v-theme-on-surface));
-  display: flex;
-}
-
-.breadcrumbs {
-  margin-left: 16px;
-}
-
-.breadcrumb-item {
-  color: rgb(var(--v-theme-on-surface));
-  text-decoration: none;
-}
-
-.breadcrumb-item:hover {
-  color: rgb(var(--v-theme-on-surface));
-}
-
-.search-field {
-  max-width: 300px;
-  margin-right: 16px;
-}
-
-.search-field :deep(.v-field) {
-  background-color: rgb(var(--v-theme-surface)) !important;
-  color: rgb(var(--v-theme-on-surface)) !important;
-  border-color: rgb(var(--v-theme-outline)) !important;
-}
-
-.search-field :deep(.v-field:hover) {
-  border-color: rgb(var(--v-theme-outline-variant)) !important;
-}
-
-.search-field :deep(.v-field--focused) {
-  border-color: rgb(var(--v-theme-primary)) !important;
-}
-
-.search-field :deep(.v-field__input) {
-  color: rgb(var(--v-theme-on-surface)) !important;
-}
-
-.search-field :deep(.v-field__input::placeholder) {
-  color: rgb(var(--v-theme-on-surface)) !important;
-}
-
 .notification-btn,
 .user-btn {
   @media (max-width: 959px) {
@@ -333,50 +308,10 @@ const performLogout = async () => {
   @media (min-width: 960px) {
     margin-left: 8px;
   }
-  color: rgb(var(--v-theme-on-surface));
-}
-
-.notification-btn:hover,
-.user-btn:hover {
-  background-color: rgba(var(--v-theme-on-surface-rgb), 0.08);
-}
-
-.notification-list,
-.user-menu {
-  background-color: rgb(var(--v-theme-surface));
-  border: 1px solid rgb(var(--v-theme-surface-variant));
-  border-radius: 8px;
-}
-
-.notification-list :deep(.v-list-item),
-.user-menu :deep(.v-list-item) {
-  color: rgb(var(--v-theme-on-surface));
-}
-
-.notification-list :deep(.v-list-item:hover),
-.user-menu :deep(.v-list-item:hover) {
-  background-color: rgba(var(--v-theme-on-surface-rgb), 0.08);
-}
-
-/* RTL Support */
-[dir="rtl"] .dashboard-header {
-  direction: rtl;
-}
-
-[dir="rtl"] .dashboard-header .v-app-bar {
-  flex-direction: row-reverse;
-}
-
-[dir="rtl"] .search-field {
-  margin-left: 16px;
-  margin-right: 0;
 }
 
 [dir="rtl"] .notification-btn,
 [dir="rtl"] .user-btn {
-  @media (max-width: 959px) {
-    margin-right: 0px;
-  }
   @media (min-width: 960px) {
     margin-right: 8px;
   }
@@ -384,7 +319,7 @@ const performLogout = async () => {
 }
 
 @media (max-width: 959px) {
-  .search-field {
+  .breadcrumbs {
     display: none;
   }
 }

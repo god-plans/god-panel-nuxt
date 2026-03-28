@@ -1,75 +1,62 @@
 <template>
-  <v-app-bar
-    color="transparent"
-    elevation="0"
-    class="main-app-bar"
+  <header
+    class="main-app-bar flex items-center gap-4 px-4 py-3 border-b"
+    :style="{
+      borderColor: 'var(--gk-color-border)',
+      background: 'var(--gk-color-surface)',
+    }"
   >
-    <!-- Logo -->
-    <v-img
-      src="/logo-full.svg"
-      width="120"
-      class="logo"
-      contain
-    />
+    <Logo variant="compact" size="md" class="logo cursor-pointer" />
 
-    <v-spacer />
+    <div class="flex-1" />
 
-    <!-- Navigation Links -->
-    <div class="nav-links d-none d-md-flex">
-      <v-btn
+    <nav class="hidden md:flex items-center gap-2">
+      <NuxtLink
         v-for="link in navLinks"
         :key="link.key"
         :to="link.path"
-        variant="text"
-        class="nav-link"
+        class="nav-link px-3 py-2 rounded-lg text-sm font-medium"
         :class="{ 'nav-link-active': isActive(link.path) }"
       >
         {{ link.title }}
-      </v-btn>
-    </div>
+      </NuxtLink>
+    </nav>
 
-    <!-- Theme Toggle -->
-    <v-btn
-      icon
-      @click="toggleTheme"
-      class="theme-toggle"
-    >
-      <v-icon>{{ isDark ? 'mdi-weather-sunny' : 'mdi-weather-night' }}</v-icon>
-    </v-btn>
+    <GkButton variant="ghost" slim class="theme-toggle" @click="toggleTheme">
+      <AppIcon :name="isDark ? 'weather-sunny' : 'weather-night'" :size="22" />
+    </GkButton>
 
-    <!-- Mobile Menu -->
-    <v-menu offset-y>
-      <template #activator="{ props }">
-        <v-btn
-          icon
-          v-bind="props"
-          class="mobile-menu d-md-none"
-        >
-          <v-icon>mdi-menu</v-icon>
-        </v-btn>
+    <GkMenu v-model="mobileOpen" placement="bottom-end" class="md:hidden">
+      <template #activator="{ props: act }">
+        <GkButton v-bind="act" variant="ghost" slim class="mobile-menu">
+          <AppIcon name="menu" :size="22" />
+        </GkButton>
       </template>
-
-      <v-list>
-        <v-list-item
-          v-for="link in navLinks"
-          :key="link.key"
-          :to="link.path"
-          @click="close"
-        >
-          <v-list-item-title>{{ link.title }}</v-list-item-title>
-        </v-list-item>
-      </v-list>
-    </v-menu>
-  </v-app-bar>
+      <ul class="list-none p-0 m-0 min-w-[200px]">
+        <li v-for="link in navLinks" :key="link.key">
+          <NuxtLink
+            :to="link.path"
+            class="block px-3 py-2 rounded-md hover:bg-[var(--gk-color-surface-muted)]"
+            @click="mobileOpen = false"
+          >
+            {{ link.title }}
+          </NuxtLink>
+        </li>
+      </ul>
+    </GkMenu>
+  </header>
 </template>
 
 <script setup lang="ts">
-import { computed } from 'vue'
+import { computed, ref } from 'vue'
 import { useRoute } from 'vue-router'
-
+import { GkButton, GkMenu } from 'god-kit/vue'
+import AppIcon from '~/components/ui/AppIcon.vue'
+import Logo from '~/components/common/Logo.vue'
 
 const route = useRoute()
-
+const colorMode = useColorMode()
+const mobileOpen = ref(false)
 
 interface NavLink {
   key: string
@@ -77,72 +64,30 @@ interface NavLink {
   path: string
 }
 
-// Navigation links
 const navLinks = ref<NavLink[]>([
-  {
-    key: 'home',
-    title: 'Home',
-    path: '/'
-  },
-  {
-    key: 'features',
-    title: 'Features',
-    path: '/#features'
-  },
-  {
-    key: 'pricing',
-    title: 'Pricing',
-    path: '/pricing'
-  },
-  {
-    key: 'contact',
-    title: 'Contact',
-    path: '/contact'
-  }
+  { key: 'home', title: 'Home', path: '/' },
+  { key: 'features', title: 'Features', path: '/#features' },
+  { key: 'pricing', title: 'Pricing', path: '/pricing' },
+  { key: 'contact', title: 'Contact', path: '/contact' },
 ])
 
-// Computed properties
-const isActive = (path: string) => {
-  return route.path === path
-}
+const isActive = (path: string) => route.path === path
 
 const isDark = computed(() => colorMode.preference === 'dark')
 
-// Methods
 const toggleTheme = () => {
   colorMode.preference = isDark.value ? 'light' : 'dark'
 }
 </script>
 
 <style scoped>
-.main-app-bar {
-  border-bottom: 1px solid rgb(var(--v-theme-surface-variant));
-  background: rgb(var(--v-theme-surface));
-}
-
-.logo {
-  cursor: pointer;
-}
-
-.nav-links {
-  gap: 8px;
-}
-
 .nav-link {
-  text-transform: none;
-  font-weight: 500;
+  color: var(--gk-color-on-surface);
+  text-decoration: none;
 }
 
 .nav-link-active {
-  background: rgb(var(--v-theme-primary));
-  color: rgb(var(--v-theme-on-primary));
-}
-
-.theme-toggle {
-  margin-left: 8px;
-}
-
-.mobile-menu {
-  margin-left: 8px;
+  background: var(--gk-color-primary);
+  color: var(--gk-color-text-on-primary);
 }
 </style>

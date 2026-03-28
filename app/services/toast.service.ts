@@ -19,6 +19,7 @@ export class ToastService {
 
   // Default toast options
   private defaultOptions: ToastOptions = {
+    message: '',
     duration: 5000,
     position: 'bottom-right',
     dismissible: true,
@@ -84,6 +85,11 @@ export class ToastService {
       id,
       ...this.defaultOptions,
       ...options,
+      message: options.message,
+      position: options.position ?? this.defaultOptions.position!,
+      dismissible: options.dismissible ?? this.defaultOptions.dismissible!,
+      pauseOnHover: options.pauseOnHover ?? this.defaultOptions.pauseOnHover!,
+      showProgress: options.showProgress ?? this.defaultOptions.showProgress!,
       createdAt: new Date(),
       visible: true
     }
@@ -109,10 +115,13 @@ export class ToastService {
     const index = this.toasts.value.findIndex(toast => toast.id === id)
     if (index === -1) return
 
+    const current = this.toasts.value[index]
+    if (!current) return
+
     this.toasts.value[index] = {
-      ...this.toasts.value[index],
+      ...current,
       ...updates
-    }
+    } as Toast
   }
 
   // Dismiss toast
@@ -120,8 +129,8 @@ export class ToastService {
     const index = this.toasts.value.findIndex(toast => toast.id === id)
     if (index === -1) return
 
-    // Mark as not visible
-    this.toasts.value[index].visible = false
+    const t = this.toasts.value[index]
+    if (t) t.visible = false
 
     // Remove after animation
     setTimeout(() => {

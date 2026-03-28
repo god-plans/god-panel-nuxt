@@ -1,178 +1,105 @@
 <template>
-  <v-container fluid class="dashboard-overview">
-    <!-- Welcome Section -->
-    <v-row>
-      <v-col cols="12">
-        <div class="welcome-section">
-          <h1 class="text-h4 font-weight-bold mb-2">{{ t('pages.dashboard.welcomeBack') }}</h1>
-          <p class="text-body-1 text-medium-emphasis">{{ t('pages.dashboard.welcomeSubtitle') }}</p>
+  <div class="dashboard-overview w-full max-w-[1600px] mx-auto px-2">
+    <div class="mb-8">
+      <h1 class="text-h4 font-bold mb-2">{{ t('pages.dashboard.welcomeBack') }}</h1>
+      <p class="text-body-1 opacity-80">{{ t('pages.dashboard.welcomeSubtitle') }}</p>
+    </div>
+
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+      <div
+        v-for="stat in stats"
+        :key="stat.label"
+        class="stat-card rounded-xl border border-[var(--gk-color-border)] bg-[var(--gk-color-surface)] p-4 shadow-sm"
+      >
+        <div class="flex items-center gap-3">
+          <div
+            class="flex h-12 w-12 shrink-0 items-center justify-center rounded-full text-white"
+            :class="stat.avatarClass"
+          >
+            <AppIcon :name="stat.icon" :size="22" class="text-white" />
+          </div>
+          <div>
+            <div class="text-h6 font-bold">{{ stat.value }}</div>
+            <div class="text-caption opacity-70">{{ t(stat.label) }}</div>
+          </div>
         </div>
-      </v-col>
-    </v-row>
+      </div>
+    </div>
 
-    <!-- Stats Cards -->
-    <v-row class="mb-6">
-      <v-col cols="12" sm="6" md="3">
-        <v-card class="stat-card" >
-          <v-card-text class="pa-4">
-            <div class="d-flex align-center">
-              <v-avatar size="48" color="primary" class="me-3">
-                <v-icon color="white">mdi-account-group</v-icon>
-              </v-avatar>
-              <div>
-                <div class="text-h6 font-weight-bold">2,543</div>
-                <div class="text-caption text-medium-emphasis">{{ t('dashboard.totalUsers') }}</div>
-              </div>
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+      <div class="lg:col-span-8 rounded-xl border border-[var(--gk-color-border)] bg-[var(--gk-color-surface)] p-4 shadow-sm">
+        <h2 class="text-lg font-semibold mb-4">{{ t('pages.dashboard.analyticsOverview') }}</h2>
+        <div class="chart-placeholder flex flex-col items-center justify-center py-12 text-center">
+          <AppIcon name="chart-line" :size="64" class="opacity-30" />
+          <p class="text-body-1 mt-4">{{ t('dashboard.chartDisplay') }}</p>
+        </div>
+      </div>
+
+      <div class="lg:col-span-4 rounded-xl border border-[var(--gk-color-border)] bg-[var(--gk-color-surface)] p-4 shadow-sm">
+        <h2 class="text-lg font-semibold mb-4">{{ t('pages.dashboard.recentActivity') }}</h2>
+        <ul class="space-y-4 list-none p-0 m-0">
+          <li v-for="(item, i) in items" :key="i" class="flex gap-3 items-start">
+            <div
+              class="flex h-8 w-8 shrink-0 items-center justify-center rounded-full text-white"
+              :class="item.avatarClass"
+            >
+              <AppIcon :name="item.icon" :size="16" class="text-white" />
             </div>
-          </v-card-text>
-        </v-card>
-      </v-col>
-
-      <v-col cols="12" sm="6" md="3">
-        <v-card class="stat-card" >
-          <v-card-text class="pa-4">
-            <div class="d-flex align-center">
-              <v-avatar size="48" color="success" class="me-3">
-                <v-icon color="white">mdi-cart-plus</v-icon>
-              </v-avatar>
-              <div>
-                <div class="text-h6 font-weight-bold">156</div>
-                <div class="text-caption text-medium-emphasis">{{ t('dashboard.newOrders') }}</div>
-              </div>
+            <div>
+              <div class="text-body-2">{{ t(item.title) }}</div>
+              <div class="text-caption opacity-70">{{ item.time }}</div>
             </div>
-          </v-card-text>
-        </v-card>
-      </v-col>
-
-      <v-col cols="12" sm="6" md="3">
-        <v-card class="stat-card" >
-          <v-card-text class="pa-4">
-            <div class="d-flex align-center">
-              <v-avatar size="48" color="warning" class="me-3">
-                <v-icon color="white">mdi-package-variant</v-icon>
-              </v-avatar>
-              <div>
-                <div class="text-h6 font-weight-bold">89</div>
-                <div class="text-caption text-medium-emphasis">{{ t('dashboard.products') }}</div>
-              </div>
-            </div>
-          </v-card-text>
-        </v-card>
-      </v-col>
-
-      <v-col cols="12" sm="6" md="3">
-        <v-card class="stat-card" >
-          <v-card-text class="pa-4">
-            <div class="d-flex align-center">
-              <v-avatar size="48" color="info" class="me-3">
-                <v-icon color="white">mdi-chart-line</v-icon>
-              </v-avatar>
-              <div>
-                <div class="text-h6 font-weight-bold">$12,543</div>
-                <div class="text-caption text-medium-emphasis">{{ t('dashboard.revenue') }}</div>
-              </div>
-            </div>
-          </v-card-text>
-        </v-card>
-      </v-col>
-    </v-row>
-
-    <!-- Charts and Tables -->
-    <v-row>
-      <v-col cols="12" md="8">
-        <v-card class="chart-card" >
-          <v-card-title>{{ t('pages.dashboard.analyticsOverview') }}</v-card-title>
-          <v-card-text>
-            <div class="chart-placeholder">
-              <v-icon size="64" color="grey-lighten-1">mdi-chart-line</v-icon>
-              <p class="text-body-1 mt-4">{{ t('dashboard.chartDisplay') }}</p>
-            </div>
-          </v-card-text>
-        </v-card>
-      </v-col>
-
-      <v-col cols="12" md="4">
-        <v-card class="recent-activity" >
-          <v-card-title>{{ t('pages.dashboard.recentActivity') }}</v-card-title>
-          <v-card-text>
-            <v-list density="compact">
-              <v-list-item>
-                <template #prepend>
-                  <v-avatar size="32" color="primary">
-                    <v-icon size="16" color="white">mdi-account-plus</v-icon>
-                  </v-avatar>
-                </template>
-                <v-list-item-title class="text-body-2">{{ t('pages.dashboard.newUserRegistered') }}</v-list-item-title>
-                <v-list-item-subtitle class="text-caption">2 minutes ago</v-list-item-subtitle>
-              </v-list-item>
-
-              <v-list-item>
-                <template #prepend>
-                  <v-avatar size="32" color="success">
-                    <v-icon size="16" color="white">mdi-cart-plus</v-icon>
-                  </v-avatar>
-                </template>
-                <v-list-item-title class="text-body-2">{{ t('pages.dashboard.orderCompleted') }}</v-list-item-title>
-                <v-list-item-subtitle class="text-caption">5 minutes ago</v-list-item-subtitle>
-              </v-list-item>
-
-              <v-list-item>
-                <template #prepend>
-                  <v-avatar size="32" color="warning">
-                    <v-icon size="16" color="white">mdi-package-variant</v-icon>
-                  </v-avatar>
-                </template>
-                <v-list-item-title class="text-body-2">{{ t('pages.dashboard.productUpdated') }}</v-list-item-title>
-                <v-list-item-subtitle class="text-caption">10 minutes ago</v-list-item-subtitle>
-              </v-list-item>
-            </v-list>
-          </v-card-text>
-        </v-card>
-      </v-col>
-    </v-row>
-  </v-container>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
 </template>
 
 <script setup lang="ts">
 import { useI18n } from 'vue-i18n'
+import AppIcon from '~/components/ui/AppIcon.vue'
 
 const { t } = useI18n()
 
-// Page meta
+const stats = [
+  { value: '2,543', label: 'dashboard.totalUsers', icon: 'account-group', avatarClass: 'bg-[var(--gk-color-primary)]' },
+  { value: '156', label: 'dashboard.newOrders', icon: 'cart-plus', avatarClass: 'bg-[var(--gk-color-success)]' },
+  { value: '89', label: 'dashboard.products', icon: 'package-variant', avatarClass: 'bg-[var(--gk-color-warning)]' },
+  { value: '$12,543', label: 'dashboard.revenue', icon: 'chart-line', avatarClass: 'bg-[var(--gk-color-info)]' },
+]
+
+const items = [
+  { title: 'pages.dashboard.newUserRegistered', time: '2 minutes ago', icon: 'account-plus', avatarClass: 'bg-[var(--gk-color-primary)]' },
+  { title: 'pages.dashboard.orderCompleted', time: '5 minutes ago', icon: 'cart-plus', avatarClass: 'bg-[var(--gk-color-success)]' },
+  { title: 'pages.dashboard.productUpdated', time: '10 minutes ago', icon: 'package-variant', avatarClass: 'bg-[var(--gk-color-warning)]' },
+]
+
 definePageMeta({
   layout: 'dashboard',
   middleware: 'auth'
 })
 
-// SEO
 useHead({
   title: 'Dashboard - God Panel'
 })
 </script>
 
 <style scoped>
-.welcome-section {
-  margin-bottom: 24px;
+.text-h4 {
+  font-size: 1.5rem;
+  line-height: 2rem;
 }
-
-.stat-card {
-  transition: transform 0.2s ease;
+.text-h6 {
+  font-size: 1.125rem;
 }
-
-.stat-card:hover {
-  transform: translateY(-2px);
+.text-body-1 {
+  font-size: 1rem;
 }
-
-.chart-placeholder {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  height: 200px;
-  color: rgb(var(--v-theme-on-surface-variant));
+.text-body-2 {
+  font-size: 0.875rem;
 }
-
-.recent-activity .v-list-item {
-  min-height: 48px;
+.text-caption {
+  font-size: 0.75rem;
 }
 </style>

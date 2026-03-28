@@ -1,196 +1,124 @@
 <template>
-  <v-footer
-    color="transparent"
-    class="main-footer"
+  <footer
+    class="main-footer mt-auto border-t"
+    :style="{
+      borderColor: 'var(--gk-color-border)',
+      background: 'var(--gk-color-surface)',
+    }"
   >
-    <v-container>
-      <v-row>
-        <!-- Logo and Description -->
-        <v-col cols="12" md="4" class="footer-section">
-          <v-img
-            src="/logo-full.svg"
-            width="120"
-            class="footer-logo"
-            contain
-          />
-          <p class="footer-description">
+    <div class="max-w-7xl mx-auto px-4 py-12">
+      <div class="grid grid-cols-1 md:grid-cols-12 gap-8">
+        <div class="md:col-span-4 footer-section">
+          <Logo variant="compact" size="md" class="footer-logo mb-4" />
+          <p class="footer-description text-[var(--gk-color-on-surface-muted)] leading-relaxed">
             {{ t('footer.description') }}
           </p>
-        </v-col>
+        </div>
 
-        <!-- Quick Links -->
-        <v-col cols="12" md="2" class="footer-section">
+        <div class="md:col-span-2 footer-section">
           <h4 class="footer-title">{{ t('footer.product') }}</h4>
-          <div class="footer-links">
+          <div class="footer-links flex flex-col gap-2">
             <router-link to="/features" class="footer-link">{{ t('footer.features') }}</router-link>
             <router-link to="/pricing" class="footer-link">{{ t('footer.pricing') }}</router-link>
             <router-link to="/docs" class="footer-link">{{ t('footer.documentation') }}</router-link>
             <router-link to="/api" class="footer-link">{{ t('footer.api') }}</router-link>
           </div>
-        </v-col>
+        </div>
 
-        <!-- Company -->
-        <v-col cols="12" md="2" class="footer-section">
+        <div class="md:col-span-2 footer-section">
           <h4 class="footer-title">{{ t('footer.company') }}</h4>
-          <div class="footer-links">
+          <div class="footer-links flex flex-col gap-2">
             <router-link to="/about" class="footer-link">{{ t('footer.about') }}</router-link>
             <router-link to="/blog" class="footer-link">{{ t('footer.blog') }}</router-link>
             <router-link to="/careers" class="footer-link">{{ t('footer.careers') }}</router-link>
             <router-link to="/contact" class="footer-link">{{ t('footer.contact') }}</router-link>
           </div>
-        </v-col>
+        </div>
 
-        <!-- Support -->
-        <v-col cols="12" md="2" class="footer-section">
+        <div class="md:col-span-2 footer-section">
           <h4 class="footer-title">{{ t('footer.support') }}</h4>
-          <div class="footer-links">
+          <div class="footer-links flex flex-col gap-2">
             <router-link to="/help" class="footer-link">{{ t('footer.helpCenter') }}</router-link>
             <router-link to="/privacy" class="footer-link">{{ t('footer.privacyPolicy') }}</router-link>
             <router-link to="/terms" class="footer-link">{{ t('footer.termsOfService') }}</router-link>
             <router-link to="/status" class="footer-link">{{ t('footer.status') }}</router-link>
           </div>
-        </v-col>
+        </div>
 
-        <!-- Social Links -->
-        <v-col cols="12" md="2" class="footer-section">
+        <div class="md:col-span-2 footer-section">
           <h4 class="footer-title">{{ t('footer.connect') }}</h4>
-          <div class="social-links">
-            <v-btn
+          <div class="social-links flex gap-2">
+            <GkButton
               v-for="social in socialLinks"
               :key="social.key"
               :href="social.url"
               target="_blank"
-              icon
-              variant="text"
-              size="small"
+              rel="noopener noreferrer"
+              variant="ghost"
+              slim
               class="social-btn"
             >
-              <v-icon>{{ social.icon }}</v-icon>
-            </v-btn>
+              <AppIcon :name="social.icon.replace('mdi-', '')" :size="20" />
+            </GkButton>
           </div>
-        </v-col>
-      </v-row>
+        </div>
+      </div>
 
-      <!-- Copyright -->
-      <v-divider class="my-4" />
-      <div class="copyright">
+      <GkDivider class="my-6" />
+
+      <div class="copyright text-center text-sm text-[var(--gk-color-on-surface-muted)]">
         <p>&copy; {{ currentYear }} God Panel. All rights reserved.</p>
         <p>Made with ❤️ by God Plan Team</p>
       </div>
-    </v-container>
-  </v-footer>
+    </div>
+  </footer>
 </template>
 
 <script setup lang="ts">
 import { useI18n } from 'vue-i18n'
+import { GkButton, GkDivider } from 'god-kit/vue'
+import AppIcon from '~/components/ui/AppIcon.vue'
+import Logo from '~/components/common/Logo.vue'
 
 const { t } = useI18n()
+
 interface SocialLink {
   key: string
   icon: string
   url: string
 }
 
-// Social links
 const socialLinks = ref<SocialLink[]>([
-  {
-    key: 'github',
-    icon: 'mdi-github',
-    url: 'https://github.com'
-  },
-  {
-    key: 'twitter',
-    icon: 'mdi-twitter',
-    url: 'https://twitter.com'
-  },
-  {
-    key: 'linkedin',
-    icon: 'mdi-linkedin',
-    url: 'https://linkedin.com'
-  },
-  {
-    key: 'discord',
-    icon: 'mdi-discord',
-    url: 'https://discord.com'
-  }
+  { key: 'github', icon: 'mdi-github', url: 'https://github.com' },
+  { key: 'twitter', icon: 'mdi-twitter', url: 'https://twitter.com' },
+  { key: 'linkedin', icon: 'mdi-linkedin', url: 'https://linkedin.com' },
+  { key: 'discord', icon: 'mdi-discord', url: 'https://discord.com' },
 ])
 
-// Current year for copyright
 const currentYear = new Date().getFullYear()
 </script>
 
 <style scoped>
-.main-footer {
-  border-top: 1px solid rgb(var(--v-theme-surface-variant));
-  background: rgb(var(--v-theme-surface));
-  margin-top: auto;
-}
-
-.footer-section {
-  margin-bottom: 2rem;
-}
-
-.footer-logo {
-  margin-bottom: 1rem;
-}
-
-.footer-description {
-  color: rgb(var(--v-theme-on-surface-variant));
-  line-height: 1.6;
-  margin-bottom: 0;
-}
-
 .footer-title {
   font-size: 1.125rem;
   font-weight: 600;
-  color: rgb(var(--v-theme-on-surface));
+  color: var(--gk-color-on-surface);
   margin-bottom: 1rem;
 }
 
-.footer-links {
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-}
-
 .footer-link {
-  color: rgb(var(--v-theme-on-surface-variant));
+  color: var(--gk-color-on-surface-muted);
   text-decoration: none;
   transition: color 0.2s ease;
 }
 
 .footer-link:hover {
-  color: rgb(var(--v-theme-primary));
+  color: var(--gk-color-primary);
 }
 
-.social-links {
-  display: flex;
-  gap: 0.5rem;
-}
-
-.social-btn {
-  color: rgb(var(--v-theme-on-surface-variant));
-}
-
-.social-btn:hover {
-  color: rgb(var(--v-theme-primary));
-}
-
-.copyright {
-  text-align: center;
-  color: rgb(var(--v-theme-on-surface-variant));
-  font-size: 0.875rem;
-}
-
-.copyright p {
-  margin: 0.25rem 0;
-}
-
-/* Responsive */
 @media (max-width: 959px) {
   .footer-section {
     text-align: center;
-    margin-bottom: 2rem;
   }
 
   .social-links {

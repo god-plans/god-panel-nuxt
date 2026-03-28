@@ -1,58 +1,42 @@
 <template>
-  <v-tooltip :text="isFullscreen ? 'Exit Full Screen' : 'Full Screen'">
-    <template #activator="{ props }">
-      <v-btn
-        v-bind="props"
-        icon
-        variant="text"
-        size="small"
-        class="fullscreen-button"
-        @click="toggleFullscreen"
-      >
-        <v-icon>{{ isFullscreen ? 'mdi-fullscreen-exit' : 'mdi-fullscreen' }}</v-icon>
-      </v-btn>
+  <GkTooltip :text="isFullscreen ? 'Exit Full Screen' : 'Full Screen'">
+    <template #activator="{ props: tip }">
+      <GkButton v-bind="tip" variant="ghost" slim @click="toggle">
+        <AppIcon :name="isFullscreen ? 'fullscreen-exit' : 'fullscreen'" :size="20" />
+      </GkButton>
     </template>
-  </v-tooltip>
+  </GkTooltip>
 </template>
 
 <script setup lang="ts">
 import { ref, onMounted, onUnmounted } from 'vue'
+import { GkButton, GkTooltip } from 'god-kit/vue'
+import AppIcon from '~/components/ui/AppIcon.vue'
 
 const isFullscreen = ref(false)
 
-const toggleFullscreen = () => {
-  if (!document.fullscreenElement) {
-    document.documentElement.requestFullscreen()
-    isFullscreen.value = true
-  } else if (document.exitFullscreen) {
-    document.exitFullscreen()
-    isFullscreen.value = false
-  }
-}
-
-const handleFullscreenChange = () => {
+function sync() {
   isFullscreen.value = !!document.fullscreenElement
 }
 
-onMounted(() => {
-  document.addEventListener('fullscreenchange', handleFullscreenChange)
-})
+async function toggle() {
+  try {
+    if (document.fullscreenElement) {
+      await document.exitFullscreen()
+    } else {
+      await document.documentElement.requestFullscreen()
+    }
+  } catch {
+    /* ignore */
+  }
+  sync()
+}
 
+onMounted(() => {
+  sync()
+  document.addEventListener('fullscreenchange', sync)
+})
 onUnmounted(() => {
-  document.removeEventListener('fullscreenchange', handleFullscreenChange)
+  document.removeEventListener('fullscreenchange', sync)
 })
 </script>
-
-<style scoped>
-.fullscreen-button {
-  position: relative;
-}
-
-.fullscreen-button .v-icon {
-  transition: all 0.2s ease;
-}
-
-.fullscreen-button:hover .v-icon {
-  transform: scale(1.1);
-}
-</style>
