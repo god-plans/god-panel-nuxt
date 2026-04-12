@@ -46,8 +46,11 @@
 
     <div class="flex-1" />
 
-    <LanguageSwitcher />
+    <div class="me-2">
+    <LanguageSwitcher  />
+  </div>
     <SettingsButton />
+
 
     <GkMenu v-model="notifOpen" placement="bottom-end" class="shrink-0">
       <template #activator="{ props: act }">

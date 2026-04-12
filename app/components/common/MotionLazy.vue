@@ -36,6 +36,10 @@ const onAfterEnter = (el: Element) => {
   node.style.transition = 'all 0.6s cubic-bezier(0.4, 0, 0.2, 1)'
   node.style.opacity = '1'
   node.style.transform = 'translateY(0)'
+  // Non-none transform on an ancestor breaks position:fixed for descendants; clear after enter transition.
+  window.setTimeout(() => {
+    node.style.transform = ''
+  }, 650)
 }
 
 // Use Intersection Observer for lazy loading

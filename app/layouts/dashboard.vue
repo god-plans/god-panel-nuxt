@@ -3,17 +3,12 @@
     <!-- Progress Bar -->
     <ProgressBar :is-loading="isLoading" :progress="loadingProgress" />
 
-    <!-- Motion Lazy Container -->
-    <MotionLazy>
-    <!-- Mobile Navigation -->
+    <!-- Nav drawers must stay outside MotionLazy: that wrapper uses transform, which breaks position:fixed (drawer would scroll away). -->
     <DashboardNavMobile
       v-model:open="mobileNavOpen"
       @close="closeMobileNav"
     />
 
-    <!-- Layout Section -->
-    <div class="dashboard-layout" :class="{ 'compact-mode': settingsStore.settings.compactLayout, 'rtl-mode': settingsStore.settings.direction === 'rtl' }" :style="layoutVars">
-    <!-- Navigation Sidebar (drawer is fixed; padding on layout reserves space) -->
     <DashboardNav
       v-if="!isHorizontalLayout && !mobile"
       :mini="isMiniLayout"
@@ -21,6 +16,19 @@
       @toggle-mini="toggleNav"
     />
 
+    <!-- Motion Lazy Container (main column only — see nav comment above) -->
+    <MotionLazy>
+    <!-- Layout Section -->
+    <div
+      class="dashboard-layout"
+      :class="{
+        'compact-mode': settingsStore.settings.compactLayout,
+        'rtl-mode': settingsStore.settings.direction === 'rtl',
+        'dashboard-layout--nav-vertical': !isHorizontalLayout && !mobile && !isMiniLayout,
+        'dashboard-layout--nav-mini': !isHorizontalLayout && !mobile && isMiniLayout,
+      }"
+      :style="layoutVars"
+    >
     <!-- Header spans the full width above main content (beside sidebar), not between nav and content columns -->
     <div class="dashboard-main-area panel-page">
       <DashboardHeader
@@ -152,21 +160,22 @@ onMounted(() => {
   min-height: 100dvh;
 }
 
-.dashboard-layout:has(.dashboard-nav:not(.nav-mini)) {
+/* Sidebar is a sibling (not inside this div); reserve space for fixed nav */
+.dashboard-layout--nav-vertical {
   padding-left: var(--layout-nav-vertical-width);
 }
 
-.dashboard-layout:has(.dashboard-nav.nav-mini) {
+.dashboard-layout--nav-mini {
   padding-left: var(--layout-nav-mini-width);
 }
 
 /* RTL mode adjustments */
-.rtl-mode.dashboard-layout:has(.dashboard-nav:not(.nav-mini)) {
+.rtl-mode.dashboard-layout--nav-vertical {
   padding-left: 0;
   padding-right: var(--layout-nav-vertical-width);
 }
 
-.rtl-mode.dashboard-layout:has(.dashboard-nav.nav-mini) {
+.rtl-mode.dashboard-layout--nav-mini {
   padding-left: 0;
   padding-right: var(--layout-nav-mini-width);
 }
@@ -176,53 +185,28 @@ onMounted(() => {
   --layout-spacing-reduced: 0.75;
 }
 
-.compact-mode .dashboard-layout:has(.dashboard-nav:not(.nav-mini)) {
+.compact-mode .dashboard-layout--nav-vertical {
   padding-left: var(--layout-nav-vertical-width);
 }
 
-.compact-mode .dashboard-layout:has(.dashboard-nav.nav-mini) {
+.compact-mode .dashboard-layout--nav-mini {
   padding-left: var(--layout-nav-mini-width);
 }
 
 /* Compact + RTL mode adjustments */
-.compact-mode.rtl-mode.dashboard-layout:has(.dashboard-nav:not(.nav-mini)) {
+.compact-mode.rtl-mode.dashboard-layout--nav-vertical {
   padding-left: 0;
   padding-right: var(--layout-nav-vertical-width);
 }
 
-.compact-mode.rtl-mode.dashboard-layout:has(.dashboard-nav.nav-mini) {
+.compact-mode.rtl-mode.dashboard-layout--nav-mini {
   padding-left: 0;
   padding-right: var(--layout-nav-mini-width);
 }
 
 @media (max-width: 959px) {
-  /* .dashboard-layout {
-    padding-left: 16px !important;
-    padding-right: 16px !important;
-  }
-
-  .rtl-mode.dashboard-layout {
-    padding-left: 16px !important;
-    padding-right: 16px !important;
-  } */
-
-  /* Mobile navigation adjustments */
-  .dashboard-layout:has(.dashboard-nav:not(.nav-mini)) {
-    padding-left: 16px !important;
-    padding-right: 16px !important;
-  }
-
-  .rtl-mode.dashboard-layout:has(.dashboard-nav:not(.nav-mini)) {
-    padding-left: 16px !important;
-    padding-right: 16px !important;
-  }
-
-  .dashboard-layout:has(.dashboard-nav.nav-mini) {
-    padding-left: 16px !important;
-    padding-right: 16px !important;
-  }
-
-  .rtl-mode.dashboard-layout:has(.dashboard-nav.nav-mini) {
+  /* Vertical nav is not shown; main column uses full width with page gutters */
+  .dashboard-layout {
     padding-left: 16px !important;
     padding-right: 16px !important;
   }
