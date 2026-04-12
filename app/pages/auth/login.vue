@@ -32,10 +32,7 @@
         </GkField>
 
         <div class="password-field flex flex-col gap-2">
-          <NuxtLink to="/auth/forgot-password" class="forgot-link">
-            {{ t('auth.forgotPassword') }}
-          </NuxtLink>
-
+       
           <GkField :label="t('auth.password')" :error="errors.password?.[0]">
             <div class="flex gap-2 items-start">
               <GkInput
@@ -46,7 +43,7 @@
                 :placeholder="t('auth.passwordPlaceholder')"
                 class="flex-1"
               />
-              <GkButton
+              <!-- <GkButton
                 type="button"
                 variant="ghost"
                 slim
@@ -54,9 +51,13 @@
                 @click="passwordVisible = !passwordVisible"
               >
                 <AppIcon :name="passwordVisible ? 'eye-off' : 'eye'" :size="20" />
-              </GkButton>
+              </GkButton> -->
             </div>
           </GkField>
+          <NuxtLink to="/auth/forgot-password" class="forgot-link">
+            {{ t('auth.forgotPassword') }}
+          </NuxtLink>
+
         </div>
 
         <GkButton
