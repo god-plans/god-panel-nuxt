@@ -29,6 +29,17 @@
       </a>
 
       <a
+        href="https://godkit.godplans.org/"
+        target="_blank"
+        rel="noopener noreferrer"
+        class="info-link"
+        :title="t('common.godKitDocs')"
+      >
+        <AppIcon name="palette-outline" :size="18" class="link-icon" />
+        <span v-if="!mini || mobile" class="link-text">{{ t("common.godKitDocs") }}</span>
+      </a>
+
+      <a
         href="https://github.com/god-plans/god-panel-nuxt/issues"
         target="_blank"
         rel="noopener noreferrer"

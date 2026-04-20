@@ -109,6 +109,12 @@ export const dashboardNavItems: NavItem[] = [
     icon: 'mdi-cog'
   },
   {
+    key: 'god-kit-docs',
+    title: 'common.godKitDocs',
+    path: 'https://godkit.godplans.org/',
+    icon: 'mdi-book-open-variant'
+  },
+  {
     key: 'toast-demo',
     title: 'Toast Demo',
     path: paths.dashboard.toastDemo,

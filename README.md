@@ -1,6 +1,6 @@
 # God Panel - Modern Admin Dashboard
 
-A modern, feature-rich admin dashboard built with **Nuxt.js 4**, **[god-kit](https://www.npmjs.com/package/god-kit)** (Vue UI primitives and design tokens), **Tailwind CSS**, and **TypeScript**. This project provides a complete admin panel solution with authentication, theming, RTL support, and a responsive design.
+A modern, feature-rich admin dashboard built with **Nuxt.js 4**, **[god-kit](https://www.npmjs.com/package/god-kit)** ([documentation](https://godkit.godplans.org/), Vue UI primitives and design tokens), **Tailwind CSS**, and **TypeScript**. This project provides a complete admin panel solution with authentication, theming, RTL support, and a responsive design.
 
 ## ✨ Features
 
