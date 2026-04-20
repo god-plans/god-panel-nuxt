@@ -38,6 +38,9 @@ export default defineNuxtConfig({
       /** When set, error-handler can forward to Sentry (wire in `error-handler.client.ts`) */
       sentryDsn: process.env.NUXT_PUBLIC_SENTRY_DSN || '',
       enableMockData: process.env.ENABLE_MOCK_DATA === 'true',
+      /** God Kit docs (override via NUXT_PUBLIC_GOD_KIT_DOCS) */
+      godKitDocumentation:
+        process.env.NUXT_PUBLIC_GOD_KIT_DOCS || 'https://godkit.godplans.org/',
     },
     private: {
       jwtSecret: process.env.JWT_SECRET,
