@@ -1,6 +1,6 @@
 {
   "name": "god-panel-nuxt",
-  "version": "2.0.0",
+  "version": "2.1.0",
   "description": "God Panel — Nuxt admin dashboard with god-kit, Tailwind CSS, and Pinia",
   "godKitDocumentation": "https://godkit.godplans.org/",
   "author": "God Plan Team",
@@ -18,8 +18,9 @@
     "typecheck": "nuxt typecheck"
   },
   "dependencies": {
-    "@mdi/font": "^7.4.47",
-    "@mdi/js": "^7.4.47",
+    "@iconify-json/simple-icons": "^1.2.79",
+    "@iconify-json/solar": "^1.2.5",
+    "@nuxt/icon": "^2.2.1",
     "@nuxtjs/color-mode": "^3.5.2",
     "@nuxtjs/i18n": "^10.1.1",
     "@nuxtjs/tailwindcss": "^6.14.0",
@@ -27,17 +28,18 @@
     "axios": "^1.12.2",
     "clsx": "^2.1.1",
     "date-fns": "^4.1.0",
-    "god-kit": "latest",
-    "nuxt": "^4.1.3",
+    "god-kit": "^0.8.1",
+    "nuxt": "^4.4.2",
     "pinia": "^3.0.3",
     "tailwind-merge": "^3.3.1",
-    "zod": "^3.24.0",
     "vue": "^3.5.22",
-    "vue-router": "^4.5.1",
-    "vue-tsc": "^3.1.1"
+    "vue-router": "^5.0.3",
+    "zod": "^3.24.0"
   },
   "devDependencies": {
+    "@types/node": "^22.15.21",
     "sass": "^1.93.3",
-    "sass-embedded": "^1.93.3"
+    "sass-embedded": "^1.93.3",
+    "typescript": "^5.7.2"
   }
 }

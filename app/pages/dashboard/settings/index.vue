@@ -25,7 +25,25 @@
               <li>{{ t('pages.settings.layoutOptions') }}</li>
               <li>{{ t('pages.settings.fontCustomization') }}</li>
               <li>{{ t('pages.settings.highContrast') }}</li>
+              <li>{{ t('pages.settings.solarIconStyle') }}</li>
             </ul>
+          </div>
+
+          <GkDivider class="my-4" />
+
+          <div class="info-section">
+            <h4>{{ t('pages.settings.resources') }}</h4>
+            <p>
+              {{ t('pages.settings.godKitDocsBlurb') }}
+              <a
+                :href="config.public.godKitDocumentation"
+                class="settings-docs-link"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                {{ t('pages.settings.godKitDocsLink') }}
+              </a>
+            </p>
           </div>
 
           <GkDivider class="my-4" />
@@ -53,6 +71,7 @@ import ThemeSettings from '~/components/theme/ThemeSettings.vue'
 import AppIcon from '~/components/ui/AppIcon.vue'
 
 const { t } = useI18n()
+const config = useRuntimeConfig()
 
 definePageMeta({
   layout: 'dashboard',
@@ -96,5 +115,16 @@ useHead({
 .info-section p {
   color: var(--gk-color-on-surface-muted);
   line-height: 1.6;
+}
+
+.settings-docs-link {
+  color: var(--gk-color-primary);
+  font-weight: 600;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.settings-docs-link:hover {
+  color: color-mix(in srgb, var(--gk-color-primary) 85%, var(--gk-color-on-surface));
 }
 </style>

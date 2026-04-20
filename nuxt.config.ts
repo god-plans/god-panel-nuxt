@@ -12,8 +12,19 @@ export default defineNuxtConfig({
     '@nuxtjs/tailwindcss',
     '@pinia/nuxt',
     '@nuxtjs/color-mode',
-    "@nuxtjs/i18n",
+    '@nuxtjs/i18n',
+    '@nuxt/icon',
   ],
+
+  /**
+   * Bundle icon JSON into the server build so SSR hosts without JSON import
+   * support still resolve icons (see Nuxt Icon serverBundle docs).
+   */
+  icon: {
+    serverBundle: {
+      externalizeIconsJson: false,
+    },
+  },
 
   // Auto-imports for better DX
   imports: {
@@ -30,6 +41,9 @@ export default defineNuxtConfig({
       /** When set, error-handler can forward to Sentry (wire in `error-handler.client.ts`) */
       sentryDsn: process.env.NUXT_PUBLIC_SENTRY_DSN || '',
       enableMockData: process.env.ENABLE_MOCK_DATA === 'true',
+      /** God Kit docs (override via NUXT_PUBLIC_GOD_KIT_DOCS) */
+      godKitDocumentation:
+        process.env.NUXT_PUBLIC_GOD_KIT_DOCS || 'https://godkit.godplans.org/',
     },
     private: {
       jwtSecret: process.env.JWT_SECRET,
@@ -51,8 +65,7 @@ export default defineNuxtConfig({
 
 
   // CSS — god-kit tokens + component styles before app Tailwind layers
-  // MDI webfont: large payload (~400KB+ woff2). Future path: tree-shake with @mdi/js + inline SVG
-  // or a small sprite for icons used in AppIcon; measure LCP before/after.
+  // Icons: `@nuxt/icon` + Iconify (`@iconify-json/solar`, `simple-icons`) via `AppIcon`.
   css: [
     'god-kit/tokens.css',
     'god-kit/vue.css',
@@ -60,7 +73,6 @@ export default defineNuxtConfig({
     // After main/Tailwind so `.dn-*` nav rules are reliably bundled (avoid @import in main.css)
     '~/assets/css/dashboard-nav.css',
     '~/assets/css/panel-shell.css',
-    '@mdi/font/css/materialdesignicons.min.css',
   ],
 
 
@@ -86,12 +98,11 @@ export default defineNuxtConfig({
         output: {
           manualChunks: {
             vendor: ['vue', 'vue-router'],
-            ui: ['@mdi/js'],
-            utils: ['axios', 'clsx']
-          }
-        }
-      }
-    }
+            utils: ['axios', 'clsx'],
+          },
+        },
+      },
+    },
   },
 
   // Experimental features
@@ -103,7 +114,12 @@ export default defineNuxtConfig({
   // TypeScript
   typescript: {
     strict: true,
-    typeCheck: false // Disable during development for better performance
+    typeCheck: false, // Disable during development for better performance
+    tsConfig: {
+      compilerOptions: {
+        types: ['node'],
+      },
+    },
   },
 
   // App configuration
