@@ -9,7 +9,8 @@ const defaultSettings: Settings = {
   primaryColor: 'default',
   navLayout: 'vertical',
   compactLayout: true,
-  fontFamily: 'Inter'
+  fontFamily: 'Inter',
+  iconStyle: 'linear',
 }
 
 export const useSettingsStore = defineStore('settings', () => {

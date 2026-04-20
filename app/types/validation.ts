@@ -55,7 +55,9 @@ export const settingsSchema = z.object({
   primaryColor: z.enum(['default', 'purple', 'cyan', 'blue', 'orange', 'red']),
   navLayout: z.enum(['vertical', 'horizontal', 'mini']),
   compactLayout: z.boolean(),
-  fontFamily: z.enum(['Inter', 'Roboto', 'Poppins', 'Barlow', 'DM Sans', 'Nunito Sans'])
+  fontFamily: z.enum(['Inter', 'Roboto', 'Poppins', 'Barlow', 'DM Sans', 'Nunito Sans']),
+  /** App icons: Solar linear (outline) vs solid (filled) */
+  iconStyle: z.enum(['linear', 'solid']).default('linear'),
 })
 
 // API Response Schemas

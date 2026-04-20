@@ -1,7 +1,15 @@
 /**
  * Maps legacy MDI-style `AppIcon` names (with or without `mdi-`) to Iconify ids.
- * Default pack: **Solar** (bold). Brands use **simple-icons**.
+ * Solar icons are stored as **-bold** (filled); `iconStyle: 'linear'` swaps to **-linear**.
+ * Brands (`simple-icons:*`) are unchanged.
  */
+
+export type AppIconStyle = 'linear' | 'solid'
+
+function applySolarVariant(iconId: string, iconStyle: AppIconStyle): string {
+  if (iconStyle === 'solid' || !iconId.startsWith('solar:')) return iconId
+  return iconId.replace(/-bold$/, '-linear')
+}
 const LEGACY_TO_ICONIFY: Record<string, string> = {
   account: 'solar:user-circle-bold',
   'account-group': 'solar:users-group-rounded-bold',
@@ -78,12 +86,18 @@ const LEGACY_TO_ICONIFY: Record<string, string> = {
   'folder-multiple': 'solar:folder-2-bold',
 }
 
-export function resolveAppIconifyIcon(raw: string): string {
+export function resolveAppIconifyIcon(
+  raw: string,
+  iconStyle: AppIconStyle = 'linear'
+): string {
   const trimmed = raw.trim()
-  if (trimmed.includes(':')) return trimmed
+  if (trimmed.includes(':')) {
+    return applySolarVariant(trimmed, iconStyle)
+  }
 
   const key = trimmed.replace(/^mdi-/i, '').toLowerCase()
-  return LEGACY_TO_ICONIFY[key] ?? 'solar:record-circle-bold'
+  const resolved = LEGACY_TO_ICONIFY[key] ?? 'solar:record-circle-bold'
+  return applySolarVariant(resolved, iconStyle)
 }
 
 export function appIconNormalizedKey(raw: string): string {

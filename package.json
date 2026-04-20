@@ -1,6 +1,6 @@
 {
   "name": "god-panel-nuxt",
-  "version": "2.0.0",
+  "version": "2.1.0",
   "description": "God Panel — Nuxt admin dashboard with god-kit, Tailwind CSS, and Pinia",
   "godKitDocumentation": "https://godkit.godplans.org/",
   "author": "God Plan Team",

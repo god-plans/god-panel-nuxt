@@ -10,6 +10,7 @@
 
 <script setup lang="ts">
 import { computed } from 'vue'
+import { useSettingsStore } from '~/stores/settings'
 import { resolveAppIconifyIcon, appIconNormalizedKey } from '~/utils/app-icon-resolve'
 
 const props = withDefaults(
@@ -23,7 +24,11 @@ const props = withDefaults(
   { spin: false }
 )
 
-const iconifyName = computed(() => resolveAppIconifyIcon(props.name))
+const settingsStore = useSettingsStore()
+
+const iconifyName = computed(() =>
+  resolveAppIconifyIcon(props.name, settingsStore.settings.iconStyle)
+)
 
 const showSpin = computed(
   () => props.spin || appIconNormalizedKey(props.name) === 'loading'

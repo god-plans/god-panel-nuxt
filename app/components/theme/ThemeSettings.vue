@@ -84,6 +84,31 @@
       </GkField>
 
       <div class="setting-group">
+        <label class="setting-label">{{ t('settingsDrawer.icons') }}</label>
+        <div class="flex flex-wrap gap-2">
+          <GkButton
+            :variant="localSettings.iconStyle === 'linear' ? 'primary' : 'secondary'"
+            size="sm"
+            @click="localSettings.iconStyle = 'linear'"
+          >
+            <AppIcon name="menu" :size="16" class="me-1" />
+            {{ t('settingsDrawer.iconStyleLinearShort') }}
+          </GkButton>
+          <GkButton
+            :variant="localSettings.iconStyle === 'solid' ? 'primary' : 'secondary'"
+            size="sm"
+            @click="localSettings.iconStyle = 'solid'"
+          >
+            <AppIcon name="view-dashboard" :size="16" class="me-1" />
+            {{ t('settingsDrawer.iconStyleSolidShort') }}
+          </GkButton>
+        </div>
+        <p class="mt-1 text-caption text-[var(--gk-color-on-surface-muted)]">
+          {{ t('settingsDrawer.iconStyleHelp') }}
+        </p>
+      </div>
+
+      <div class="setting-group">
         <label class="flex items-center gap-2 cursor-pointer">
           <GkCheckbox v-model="isHighContrast" :aria-label="t('settingsDrawer.highContrast')" />
           <span>{{ t('settingsDrawer.highContrast') }}</span>

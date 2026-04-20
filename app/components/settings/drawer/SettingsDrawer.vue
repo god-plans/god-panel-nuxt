@@ -84,6 +84,24 @@
             :selected="settingsStore.settings.compactLayout"
             @click="toggleCompactLayout"
           />
+
+          <BaseOption
+            v-if="!hideIconStyle"
+            icon="menu"
+            :label="t('settingsDrawer.iconStyleLinear')"
+            :tooltip="t('settingsDrawer.iconStyleLinearHint')"
+            :selected="settingsStore.settings.iconStyle === 'linear'"
+            @click="settingsStore.updateField('iconStyle', 'linear')"
+          />
+
+          <BaseOption
+            v-if="!hideIconStyle"
+            icon="view-dashboard"
+            :label="t('settingsDrawer.iconStyleSolid')"
+            :tooltip="t('settingsDrawer.iconStyleSolidHint')"
+            :selected="settingsStore.settings.iconStyle === 'solid'"
+            @click="settingsStore.updateField('iconStyle', 'solid')"
+          />
         </div>
 
         <NavOptions
@@ -146,6 +164,7 @@ interface Props {
   hideNavLayout?: boolean
   hideDirection?: boolean
   hideColorScheme?: boolean
+  hideIconStyle?: boolean
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -156,7 +175,8 @@ const props = withDefaults(defineProps<Props>(), {
   hideContrast: false,
   hideNavLayout: false,
   hideDirection: false,
-  hideColorScheme: false
+  hideColorScheme: false,
+  hideIconStyle: false,
 })
 
 const settingsStore = useSettingsStore()
