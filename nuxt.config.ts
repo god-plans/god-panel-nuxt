@@ -16,10 +16,13 @@ export default defineNuxtConfig({
     '@nuxt/icon',
   ],
 
-  /** Solar + brands: keep JSON external so server bundle stays lean */
+  /**
+   * Bundle icon JSON into the server build so SSR hosts without JSON import
+   * support still resolve icons (see Nuxt Icon serverBundle docs).
+   */
   icon: {
     serverBundle: {
-      externalizeIconsJson: true,
+      externalizeIconsJson: false,
     },
   },
 
@@ -111,7 +114,12 @@ export default defineNuxtConfig({
   // TypeScript
   typescript: {
     strict: true,
-    typeCheck: false // Disable during development for better performance
+    typeCheck: false, // Disable during development for better performance
+    tsConfig: {
+      compilerOptions: {
+        types: ['node'],
+      },
+    },
   },
 
   // App configuration

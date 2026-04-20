@@ -20,6 +20,14 @@ All notable changes to **God Panel Nuxt** are documented in this file. Versions 
 
 - **`@mdi/font`** and **`@mdi/js`** (replaced by the Iconify workflow above).
 
+### Tooling and documentation
+
+- **TypeScript:** `npm run typecheck` with `@types/node`, `typescript.tsConfig.compilerOptions.types`, **`vue-router` ^5** (Nuxt 4.4), **`nuxt` ^4.4.2**, **`typescript`** devDependency.
+- **Dependencies:** `god-kit` pinned to **`^0.8.1`** (replaces `latest`).
+- **Nuxt Icon:** `icon.serverBundle.externalizeIconsJson` **`false`** for SSR hosts without JSON imports.
+- **Docs:** README dev URL **3333**; [docs/DEMO_AND_API.md](./docs/DEMO_AND_API.md); [DESIGN_IMPROVEMENTS.md](./DESIGN_IMPROVEMENTS.md) aligned with Solar / Iconify.
+- **CI:** [.github/workflows/ci.yml](.github/workflows/ci.yml) — `npm ci`, `typecheck`, `build` on push/PR to `main`, `dev`, `master`.
+
 ## [2.0.0] - earlier
 
 Initial tracked major version. For older history, see the Git log on the repository’s default branch.

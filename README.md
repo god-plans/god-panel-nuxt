@@ -73,7 +73,7 @@ A modern, feature-rich admin dashboard built with **Nuxt.js 4**, **[god-kit](htt
    pnpm dev
    ```
 
-   Visit `http://localhost:3000` to see the application.
+   Visit `http://localhost:3333` (or the port set in [`nuxt.config.ts`](nuxt.config.ts) under `devServer.port`) to see the application.
 
 ## 🚀 Build & Production
 
@@ -195,7 +195,10 @@ The application supports multiple theme configurations:
 **Optional observability:** Set `NUXT_PUBLIC_SENTRY_DSN` when wiring `@sentry/nuxt`; see `app/plugins/error-handler.client.ts`.
 
 ### Release QA (manual)
-Before shipping, verify: **LTR + RTL** (e.g. Persian), **mini rail** and **compact** layout, **mobile drawer**, **settings save** (including primary preset and **dark mode**), and **dynamic fonts** (`useDynamicFonts`).
+Before shipping, verify: **LTR + RTL** (e.g. Persian), **mini rail** and **compact** layout, **mobile drawer**, **settings save** (including primary preset and **dark mode**), and **dynamic fonts** (`useDynamicFonts`). Run **`npm run typecheck`** in CI or locally before releases.
+
+### Demo vs production API
+Dashboard and analytics pages may use **placeholder metrics and charts** until a real backend is connected. See **[docs/DEMO_AND_API.md](./docs/DEMO_AND_API.md)** for `NUXT_PUBLIC_API_URL`, optional **`ENABLE_MOCK_DATA`**, and how auth/settings services relate to a live API.
 
 ### Layouts
 Choose from different dashboard layouts:
