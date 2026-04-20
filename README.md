@@ -32,7 +32,7 @@ A modern, feature-rich admin dashboard built with **Nuxt.js 4**, **[god-kit](htt
 - **State Management:** Pinia
 - **Validation:** Zod
 - **HTTP Client:** Axios
-- **Icons:** Material Design Icons
+- **Icons:** [Solar](https://icon-sets.iconify.design/solar/) (via [`@nuxt/icon`](https://github.com/nuxt/icon) + `@iconify-json/solar`), with [Simple Icons](https://simpleicons.org/) for brand marks — see `app/utils/app-icon-resolve.ts` for legacy name mapping
 - **Persistence:** Cookies + LocalStorage
 
 ## 📦 Installation

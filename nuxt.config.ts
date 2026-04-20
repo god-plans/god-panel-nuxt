@@ -12,8 +12,16 @@ export default defineNuxtConfig({
     '@nuxtjs/tailwindcss',
     '@pinia/nuxt',
     '@nuxtjs/color-mode',
-    "@nuxtjs/i18n",
+    '@nuxtjs/i18n',
+    '@nuxt/icon',
   ],
+
+  /** Solar + brands: keep JSON external so server bundle stays lean */
+  icon: {
+    serverBundle: {
+      externalizeIconsJson: true,
+    },
+  },
 
   // Auto-imports for better DX
   imports: {
@@ -51,8 +59,7 @@ export default defineNuxtConfig({
 
 
   // CSS — god-kit tokens + component styles before app Tailwind layers
-  // MDI webfont: large payload (~400KB+ woff2). Future path: tree-shake with @mdi/js + inline SVG
-  // or a small sprite for icons used in AppIcon; measure LCP before/after.
+  // Icons: `@nuxt/icon` + Iconify (`@iconify-json/solar`, `simple-icons`) via `AppIcon`.
   css: [
     'god-kit/tokens.css',
     'god-kit/vue.css',
@@ -60,7 +67,6 @@ export default defineNuxtConfig({
     // After main/Tailwind so `.dn-*` nav rules are reliably bundled (avoid @import in main.css)
     '~/assets/css/dashboard-nav.css',
     '~/assets/css/panel-shell.css',
-    '@mdi/font/css/materialdesignicons.min.css',
   ],
 
 
@@ -86,12 +92,11 @@ export default defineNuxtConfig({
         output: {
           manualChunks: {
             vendor: ['vue', 'vue-router'],
-            ui: ['@mdi/js'],
-            utils: ['axios', 'clsx']
-          }
-        }
-      }
-    }
+            utils: ['axios', 'clsx'],
+          },
+        },
+      },
+    },
   },
 
   // Experimental features
