@@ -333,3 +333,16 @@
   padding-inline-start: 0.5rem;
   border-inline-start-width: 1px;
 }
+
+/**
+ * Responsive visibility for the permanent sidebar.
+ *
+ * This lives here rather than in DashboardNav.vue's <style scoped> because
+ * GkNavigationDrawer forwards `class` to an inner surface element that carries
+ * no scope id — a scoped rule silently never matches.
+ */
+@media (max-width: 959px) {
+  .dashboard-nav {
+    display: none !important;
+  }
+}

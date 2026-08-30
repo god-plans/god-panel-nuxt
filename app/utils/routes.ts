@@ -1,69 +1,38 @@
-// Route paths configuration
-// Similar to Next.js paths.js but adapted for Nuxt.js
-
-const ROOTS = {
-  AUTH: '/auth',
-  DASHBOARD: '/dashboard',
-} as const
+/**
+ * Every route and sidebar entry in one place.
+ *
+ * To add a page: create the file under `app/pages/`, add its path to `paths`,
+ * then add an entry to `dashboardNavItems`. `title` is an i18n key — add the
+ * matching string to `i18n/locales/en.json` and `fa.json`.
+ */
 
 export const paths = {
-  // AUTH
-  // DASHBOARD
+  auth: {
+    login: '/auth/login',
+    register: '/auth/register',
+    forgotPassword: '/auth/forgot-password',
+  },
   dashboard: {
-    root: ROOTS.DASHBOARD,
+    root: '/dashboard',
+    analytics: '/dashboard/analytics',
+    settings: '/dashboard/settings',
+    profile: '/dashboard/profile',
+    notifications: '/dashboard/notifications',
     group: {
-      root: `${ROOTS.DASHBOARD}/group`,
-      one: `${ROOTS.DASHBOARD}/group/one`,
-      two: `${ROOTS.DASHBOARD}/group/two`,
+      root: '/dashboard/group',
+      one: '/dashboard/group/one',
+      two: '/dashboard/group/two',
     },
-    // Additional routes for the Nuxt version
-    analytics: `${ROOTS.DASHBOARD}/analytics`,
-    settings: `${ROOTS.DASHBOARD}/settings`,
-    profile: `${ROOTS.DASHBOARD}/profile`,
-    notifications: `${ROOTS.DASHBOARD}/notifications`,
-    toastDemo: `${ROOTS.DASHBOARD}/toast-demo`,
   },
 } as const
 
-// Type-safe route helper functions
-export const getRoute = (path: string) => path
-
-// Helper function to check if a nav item or its children are active
-const isItemActive = (item: NavItem, currentPath: string): boolean => {
-  // Check if current item is active
-  if (currentPath === item.path || currentPath.startsWith(item.path + '/')) {
-    return true
-  }
-
-  // Check if any children are active
-  if (item.children) {
-    return item.children.some(child => isItemActive(child, currentPath))
-  }
-
-  return false
-}
-
-export const isActiveRoute = (currentPath: string, routePath: string) => {
-  // First check direct match or starts with
-  if (currentPath === routePath || currentPath.startsWith(routePath + '/')) {
-    return true
-  }
-
-  // For parent items with children, check if any child is active
-  const parentItem = dashboardNavItems.find(item =>
-    item.children && item.children.some(child =>
-      currentPath === child.path || currentPath.startsWith(child.path + '/')
-    )
-  )
-
-  return parentItem?.path === routePath
-}
-
-// Navigation items configuration
 export interface NavItem {
   key: string
+  /** i18n key, e.g. `common.dashboard`. */
   title: string
+  /** Internal path, or an `https://` URL to open in a new tab. */
   path: string
+  /** `AppIcon` name — see `app/utils/app-icon-resolve.ts`. */
   icon: string
   badge?: string | number
   children?: NavItem[]
@@ -74,111 +43,104 @@ export const dashboardNavItems: NavItem[] = [
     key: 'dashboard',
     title: 'common.dashboard',
     path: paths.dashboard.root,
-    icon: 'mdi-view-dashboard'
+    icon: 'view-dashboard',
   },
   {
     key: 'analytics',
     title: 'common.analytics',
     path: paths.dashboard.analytics,
-    icon: 'mdi-chart-line'
+    icon: 'chart-line',
   },
   {
     key: 'group',
     title: 'common.group',
     path: paths.dashboard.group.root,
-    icon: 'mdi-folder-multiple',
+    icon: 'folder-multiple',
     children: [
-      {
-        key: 'group-one',
-        title: 'common.one',
-        path: paths.dashboard.group.one,
-        icon: 'mdi-numeric-5-circle'
-      },
-      {
-        key: 'group-two',
-        title: 'common.two',
-        path: paths.dashboard.group.two,
-        icon: 'mdi-numeric-6-circle'
-      }
-    ]
+      { key: 'group-one', title: 'common.one', path: paths.dashboard.group.one, icon: 'numeric-5-circle' },
+      { key: 'group-two', title: 'common.two', path: paths.dashboard.group.two, icon: 'numeric-6-circle' },
+    ],
   },
   {
     key: 'settings',
     title: 'common.settings',
     path: paths.dashboard.settings,
-    icon: 'mdi-cog'
+    icon: 'cog',
   },
   {
     key: 'god-kit-docs',
     title: 'common.godKitDocs',
     path: 'https://godkit.godplans.org/',
-    icon: 'mdi-book-open-variant'
+    icon: 'book-open-variant',
   },
-  {
-    key: 'toast-demo',
-    title: 'Toast Demo',
-    path: paths.dashboard.toastDemo,
-    icon: 'mdi-bell-alert'
-  }
 ]
 
-// Route name mappings for breadcrumbs
-const routeTranslations: Record<string, string> = {
-  'dashboard': 'routes.dashboard',
-  'analytics': 'routes.analytics',
-  'settings': 'routes.settings',
-  'profile': 'routes.profile',
-  'notifications': 'routes.notifications',
-  'group': 'routes.group',
-  'one': 'routes.one',
-  'two': 'routes.two'
+function isUnder(currentPath: string, path: string): boolean {
+  return currentPath === path || currentPath.startsWith(`${path}/`)
 }
 
-// Helper function to find nav item recursively
-const findNavItem = (items: NavItem[], path: string): NavItem | null => {
+/** Every nav path, parents and children alike. */
+function allNavPaths(items: NavItem[]): string[] {
+  return items.flatMap((item) => [item.path, ...allNavPaths(item.children ?? [])])
+}
+
+/**
+ * True when `routePath` is the nav entry that best matches the current page.
+ *
+ * The "best" qualifier is what keeps `/dashboard` from lighting up alongside
+ * `/dashboard/analytics` — every dashboard route starts with `/dashboard`, so a
+ * plain prefix test would mark the overview active on every single page.
+ */
+export function isActiveRoute(currentPath: string, routePath: string): boolean {
+  if (!isUnder(currentPath, routePath)) return false
+
+  const bestMatch = allNavPaths(dashboardNavItems)
+    .filter((path) => isUnder(currentPath, path))
+    .reduce((longest, path) => (path.length > longest.length ? path : longest), '')
+
+  if (routePath === bestMatch) return true
+
+  // A parent also stays highlighted while one of its own children is the match.
+  const parent = dashboardNavItems.find((item) => item.path === routePath)
+  return !!parent?.children?.some((child) => isUnder(currentPath, child.path))
+}
+
+/** i18n keys for path segments that are not themselves nav items. */
+const SEGMENT_TITLES: Record<string, string> = {
+  dashboard: 'routes.dashboard',
+  analytics: 'routes.analytics',
+  settings: 'routes.settings',
+  profile: 'routes.profile',
+  notifications: 'routes.notifications',
+  group: 'routes.group',
+  one: 'routes.one',
+  two: 'routes.two',
+}
+
+function findNavItem(items: NavItem[], path: string): NavItem | undefined {
   for (const item of items) {
-    if (item.path === path) {
-      return item
-    }
-    if (item.children) {
-      const found = findNavItem(item.children, path)
-      if (found) return found
-    }
+    if (item.path === path) return item
+    const child = item.children && findNavItem(item.children, path)
+    if (child) return child
   }
-  return null
 }
 
-// Breadcrumb helper
-export const generateBreadcrumbs = (currentPath: string): NavItem[] => {
-  const breadcrumbs: NavItem[] = []
-  const pathSegments = currentPath.split('/').filter(Boolean)
+export function generateBreadcrumbs(currentPath: string): Array<{ title: string; path: string }> {
+  let accumulated = ''
 
-  let accumulatedPath = ''
+  return currentPath
+    .split('/')
+    .filter(Boolean)
+    .map((segment) => {
+      accumulated += `/${segment}`
+      const navItem = findNavItem(dashboardNavItems, accumulated)
 
-  pathSegments.forEach((segment, index) => {
-    accumulatedPath += `/${segment}`
-
-    // Find matching nav item (including in children)
-    const navItem = findNavItem(dashboardNavItems, accumulatedPath)
-
-    if (navItem) {
-      breadcrumbs.push({
-        ...navItem,
-        path: accumulatedPath
-      })
-    } else {
-      // Check if this segment has a translation key
-      const translationKey = routeTranslations[segment]
-      const title = translationKey ? translationKey : segment.charAt(0).toUpperCase() + segment.slice(1)
-
-      breadcrumbs.push({
-        key: segment,
-        title: title,
-        path: accumulatedPath,
-        icon: 'mdi-circle-small'
-      })
-    }
-  })
-
-  return breadcrumbs
+      return {
+        path: accumulated,
+        title:
+          navItem?.title ??
+          SEGMENT_TITLES[segment] ??
+          segment.charAt(0).toUpperCase() + segment.slice(1),
+      }
+    })
 }

@@ -1,207 +1,138 @@
 import { defineStore } from 'pinia'
-import { userSchema, type User } from '~/types/validation'
+import { userSchema, type LoginForm, type User } from '~/types/validation'
 
-const STORAGE_KEY = 'auth-token'
+/**
+ * Demo account for the starter. It exists so the panel runs with no backend at
+ * all; delete `DEMO_USER` and set `NUXT_PUBLIC_DEMO_MODE=false` once your API
+ * is wired up and `login()` will talk only to `NUXT_PUBLIC_API_URL`.
+ */
+const DEMO_CREDENTIALS = { email: 'godpanel@test.com', password: 'god123' }
 
-function axiosErrorMessage(error: unknown, fallback: string): string {
-  if (error && typeof error === 'object' && 'response' in error) {
-    const data = (error as { response?: { data?: { message?: string } } }).response?.data
-    if (data?.message && typeof data.message === 'string') return data.message
-  }
-  return fallback
+const DEMO_USER: User = {
+  id: 'demo-user-1',
+  displayName: 'Demo User',
+  email: DEMO_CREDENTIALS.email,
+  photoURL: '/assets/images/avatar.webp',
+  phoneNumber: '+1 234 567 890',
+  role: 'admin',
 }
 
+export type AuthResult = { success: true } | { success: false; error: string }
+
 export const useAuthStore = defineStore('auth', () => {
-  // State
   const user = ref<User | null>(null)
-  const loading = ref(true)
+  /** False until `restore()` has settled, so guards never redirect mid-check. */
+  const ready = ref(false)
 
-  // Getters
   const isAuthenticated = computed(() => !!user.value)
-  const isAdmin = computed(() => user.value?.role === 'admin')
-  const isManager = computed(() => user.value?.role === 'manager')
-  const userRole = computed(() => user.value?.role || 'user')
-  const displayName = computed(() => user.value?.displayName || '')
-  const userEmail = computed(() => user.value?.email || '')
+  const role = computed(() => user.value?.role ?? 'user')
+  const isAdmin = computed(() => role.value === 'admin')
+  const displayName = computed(() => user.value?.displayName ?? '')
+  const email = computed(() => user.value?.email ?? '')
 
-  // Actions
-  const initialize = async () => {
-    loading.value = true
+  const token = useAuthToken()
+  const isDemoMode = () => useRuntimeConfig().public.demoMode
+
+  function startDemoSession() {
+    user.value = DEMO_USER
+    token.value = 'demo-token'
+  }
+
+  /**
+   * Rebuilds the session from the token cookie. Runs once, from the auth
+   * plugin, before the first route guard fires.
+   */
+  async function restore() {
+    if (ready.value) return
     try {
-      if (process.client) {
-        const token = localStorage.getItem(STORAGE_KEY)
-        if (token) {
-          // Verify token with API
-          const { $axios } = useNuxtApp()
-          const response = await $axios.get('/auth/me', {
-            headers: {
-              Authorization: `Bearer ${token}`
-            }
-          })
+      if (!token.value) return
 
-          if (response.data?.user) {
-            const validatedUser = userSchema.parse(response.data.user)
-            user.value = { ...validatedUser, accessToken: token }
-          }
-        }
+      if (isDemoMode() && token.value === 'demo-token') {
+        user.value = DEMO_USER
+        return
       }
+
+      const data = await useApi()<{ user: unknown }>('/auth/me')
+      user.value = userSchema.parse(data.user)
     } catch (error) {
-      console.error('Auth initialization failed:', error)
-      logout()
+      console.warn('Could not restore session:', error)
+      user.value = null
+      token.value = null
     } finally {
-      loading.value = false
+      ready.value = true
     }
   }
 
-  const login = async (credentials: { email: string; password: string }) => {
-    // In development mode, use demo login for sample credentials
-    if (credentials.email === 'godpanel@test.com' && credentials.password === 'god123') {
-      demoLogin()
+  async function login(credentials: LoginForm): Promise<AuthResult> {
+    if (
+      isDemoMode() &&
+      credentials.email === DEMO_CREDENTIALS.email &&
+      credentials.password === DEMO_CREDENTIALS.password
+    ) {
+      startDemoSession()
       return { success: true }
     }
 
     try {
-      const { $axios } = useNuxtApp()
-      const response = await $axios.post('/auth/login', credentials)
+      const data = await useApi()<{ user: unknown; accessToken: string }>('/auth/login', {
+        method: 'POST',
+        body: credentials,
+      })
 
-      const { user: userData, accessToken } = response.data
-
-      if (userData && accessToken) {
-        const validatedUser = userSchema.parse(userData)
-        user.value = { ...validatedUser, accessToken }
-
-        if (process.client) {
-          localStorage.setItem(STORAGE_KEY, accessToken)
-        }
-
-        // Token is automatically set by the axios plugin
-
-        return { success: true }
-      }
-    } catch (error: unknown) {
-      console.error('Login failed:', error)
-      return {
-        success: false,
-        error: axiosErrorMessage(error, 'Login failed')
-      }
-    }
-  }
-
-  const register = async (userData: {
-    email: string
-    password: string
-    firstName: string
-    lastName: string
-  }) => {
-    try {
-      const { $axios } = useNuxtApp()
-      const response = await $axios.post('/auth/register', userData)
-
-      const { user: newUser, accessToken } = response.data
-
-      if (newUser && accessToken) {
-        const validatedUser = userSchema.parse(newUser)
-        user.value = { ...validatedUser, accessToken }
-
-        if (process.client) {
-          localStorage.setItem(STORAGE_KEY, accessToken)
-        }
-
-        // Token is automatically set by the axios plugin
-
-        return { success: true }
-      }
-    } catch (error: unknown) {
-      console.error('Registration failed:', error)
-      return {
-        success: false,
-        error: axiosErrorMessage(error, 'Registration failed')
-      }
-    }
-  }
-
-  const logout = async () => {
-    try {
-      // Call logout API to invalidate server-side session
-      const { $axios } = useNuxtApp()
-      await $axios.post('/auth/logout')
+      token.value = data.accessToken
+      user.value = userSchema.parse(data.user)
+      return { success: true }
     } catch (error) {
-      console.warn('Logout API call failed:', error)
-      // Continue with local logout even if API call fails
-    } finally {
-      // Clear local state regardless of API response
-      user.value = null
-      if (process.client) {
-        localStorage.removeItem(STORAGE_KEY)
+      return { success: false, error: apiErrorMessage(error, 'Login failed. Please try again.') }
+    }
+  }
+
+  async function logout() {
+    const wasDemo = token.value === 'demo-token'
+    // Clear locally first: the user asked to leave, so the UI should not wait
+    // on — or be blocked by — an API that may be unreachable.
+    user.value = null
+    token.value = null
+
+    if (wasDemo || !isDemoMode()) {
+      try {
+        await useApi()('/auth/logout', { method: 'POST' })
+      } catch {
+        // A failed server-side invalidation must not keep the user signed in.
       }
     }
   }
 
-  const updateProfile = async (updates: Partial<User>) => {
+  async function updateProfile(updates: Partial<User>): Promise<AuthResult> {
     try {
-      const { $axios } = useNuxtApp()
-      const response = await $axios.patch('/auth/profile', updates)
-
-      if (response.data?.user) {
-        const validatedUser = userSchema.parse(response.data.user)
-        user.value = { ...user.value, ...validatedUser }
+      if (isDemoMode() && token.value === 'demo-token') {
+        user.value = { ...user.value!, ...updates }
         return { success: true }
       }
-    } catch (error: unknown) {
-      console.error('Profile update failed:', error)
-      return {
-        success: false,
-        error: axiosErrorMessage(error, 'Profile update failed')
-      }
-    }
-  }
 
-  // Demo login for development
-  const demoLogin = () => {
-    const demoUser = {
-      id: 'demo-user-1',
-      displayName: 'Demo User',
-      email: 'demo@example.com',
-      photoURL: '/assets/images/avatar.webp',
-      phoneNumber: '+1234567890',
-      role: 'admin' as const,
-      createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString(),
-      accessToken: 'demo-token'
-    }
-    user.value = demoUser
-    if (process.client) {
-      localStorage.setItem(STORAGE_KEY, 'demo-token')
-    }
-  }
-
-  // Initialize auth state
-  if (process.client) {
-    // For development, auto-login with demo user
-    if (process.dev) {
-      demoLogin()
-    } else {
-      initialize()
+      const data = await useApi()<{ user: unknown }>('/auth/profile', {
+        method: 'PATCH',
+        body: updates,
+      })
+      user.value = userSchema.parse(data.user)
+      return { success: true }
+    } catch (error) {
+      return { success: false, error: apiErrorMessage(error, 'Profile update failed.') }
     }
   }
 
   return {
-    // State
     user,
-    loading,
-    // Getters
+    ready,
     isAuthenticated,
+    role,
     isAdmin,
-    isManager,
-    userRole,
     displayName,
-    userEmail,
-    // Actions
-    initialize,
+    email,
+    demoCredentials: DEMO_CREDENTIALS,
+    restore,
     login,
-    register,
     logout,
     updateProfile,
-    demoLogin
   }
 })
