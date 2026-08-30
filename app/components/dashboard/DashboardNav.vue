@@ -67,10 +67,9 @@ const { navItems, expandedGroups, toggleGroup, isItemActive } =
 const isRTL = computed(() => settingsStore.settings.direction === 'rtl')
 const showLabels = computed(() => !props.mini)
 
-const fullNavWidth = computed(() => {
-  if (props.mini) return 300
-  return settingsStore.settings.compactLayout ? 260 : 300
-})
+const fullNavWidth = computed(() =>
+  settingsStore.settings.compactLayout ? 260 : 300
+)
 </script>
 
 <style scoped>
@@ -108,10 +107,9 @@ const fullNavWidth = computed(() => {
   margin-top: auto;
 }
 
-@media (max-width: 959px) {
-  .dashboard-nav {
-    position: absolute;
-    z-index: 1000;
-  }
-}
+/*
+ * The mobile breakpoint rule lives in `assets/css/dashboard-nav.css`:
+ * GkNavigationDrawer forwards `class` to an inner element with no scope id,
+ * so a scoped `display: none` here would never match.
+ */
 </style>

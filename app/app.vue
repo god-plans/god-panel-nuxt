@@ -1,66 +1,30 @@
 <template>
-  <div id="app" :dir="settingsStore.settings.direction">
+  <div id="app" :dir="settings.settings.direction">
     <NuxtRouteAnnouncer />
     <NuxtLayout>
       <NuxtPage />
     </NuxtLayout>
 
     <GkSnackbarHost />
-
     <SettingsDrawer />
   </div>
 </template>
 
-<style scoped>
-/* Component-specific styles only - global styles moved to main.css */
-</style>
+<script setup lang="ts">
+import { watch } from 'vue'
+import { GkSnackbarHost } from 'god-kit/vue'
+import SettingsDrawer from '~/components/settings/drawer/SettingsDrawer.vue'
 
-<script setup>
-import { onErrorCaptured, onMounted, watch } from "vue";
-import { useSettingsStore } from "~/stores/settings";
-import { useDynamicFonts } from "~/composables/useDynamicFonts";
-import SettingsDrawer from "~/components/settings/drawer/SettingsDrawer.vue";
-import { useI18n } from "vue-i18n";
-import { GkSnackbarHost, pushGkSnackbar } from "god-kit/vue";
+// Language restore and <html lang/dir> live in `plugins/i18n.ts` — they have to
+// run before render, which a component's setup is too late for.
+const settings = useSettingsStore()
+const { loadFont } = useDynamicFonts()
 
-const { setLocale, locale } = useI18n();
-
-const langFromCookie = useCookie("lang");
-if (langFromCookie.value && langFromCookie.value !== locale.value) {
-  setLocale(langFromCookie.value);
-} else if (!langFromCookie.value) {
-  setLocale("en");
-  langFromCookie.value = "en";
-}
-
-const settingsStore = useSettingsStore();
-
-const { loadFont } = useDynamicFonts();
-
-if (process.client) {
-  onMounted(() => {
-    loadFont(settingsStore.settings.fontFamily);
-  });
-
+if (import.meta.client) {
   watch(
-    () => settingsStore.settings.fontFamily,
-    (newFont) => {
-      loadFont(newFont);
-    },
-    { immediate: false }
-  );
+    () => settings.settings.fontFamily,
+    (font) => loadFont(font),
+    { immediate: true }
+  )
 }
-
-function showGlobalError(message) {
-  pushGkSnackbar({
-    message,
-    variant: "danger",
-    timeout: 5000,
-  });
-}
-
-onErrorCaptured((error) => {
-  console.error("Global error:", error);
-  showGlobalError("An unexpected error occurred");
-});
 </script>

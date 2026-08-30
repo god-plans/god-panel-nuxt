@@ -1,15 +1,21 @@
 <template>
-  <div class="max-w-4xl mx-auto my-4 panel-card p-6">
-    <div class="grid grid-cols-1 gap-4">
-      <h1 class="text-xl font-semibold">Group Two</h1>
-      <p class="opacity-80">Dashboard group page placeholder.</p>
-    </div>
+  <div>
+    <PageHeader :title="t('common.two')" :subtitle="t('pages.groups.childDescription')" />
+    <PanelCard padding="none">
+      <EmptyState
+        icon="numeric-6-circle"
+        :title="t('pages.groups.emptyTitle')"
+        :description="t('pages.groups.emptyDescription')"
+      />
+    </PanelCard>
   </div>
 </template>
 
 <script setup lang="ts">
-definePageMeta({
-  layout: 'dashboard',
-  middleware: 'auth'
-})
+import { useI18n } from 'vue-i18n'
+
+const { t } = useI18n()
+
+definePageMeta({ layout: 'dashboard', middleware: 'auth' })
+useHead({ title: 'Group Two — God Panel' })
 </script>

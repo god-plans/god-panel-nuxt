@@ -1,47 +1,104 @@
+<template>
+  <GkMenu v-model="menuOpen" placement="bottom-end">
+    <template #activator="{ props: activator }">
+      <GkButton
+        v-bind="activator"
+        variant="ghost"
+        slim
+        :aria-label="t('settings.language')"
+      >
+        <img :src="current.flag" :alt="current.label" class="language-switcher__flag">
+      </GkButton>
+    </template>
+
+    <ul class="panel-menu-surface language-switcher__menu" role="menu">
+      <li v-for="option in LOCALES" :key="option.code">
+        <button
+          type="button"
+          class="language-switcher__option"
+          :class="{ 'language-switcher__option--active': locale === option.code }"
+          role="menuitemradio"
+          :aria-checked="locale === option.code"
+          @click="select(option)"
+        >
+          <img :src="option.flag" :alt="option.label" class="language-switcher__flag">
+          <span>{{ option.label }}</span>
+        </button>
+      </li>
+    </ul>
+  </GkMenu>
+</template>
+
 <script setup lang="ts">
-import { ref } from "vue";
-import { GkButton, GkMenu } from "god-kit/vue";
+import { computed, ref } from 'vue'
+import { useI18n } from 'vue-i18n'
+import { GkButton, GkMenu } from 'god-kit/vue'
 
-const usFlagIcon = "/assets/icons/us-flag.svg";
-const iranFlagIcon = "/assets/icons/iran-flag.svg";
+interface LocaleOption {
+  code: 'en' | 'fa'
+  label: string
+  flag: string
+  dir: 'ltr' | 'rtl'
+}
 
-const { setLocale, locale } = useI18n();
-const langFromCookie = useCookie("lang");
+const LOCALES: LocaleOption[] = [
+  { code: 'en', label: 'English (US)', flag: '/assets/icons/us-flag.svg', dir: 'ltr' },
+  { code: 'fa', label: 'فارسی (ایران)', flag: '/assets/icons/iran-flag.svg', dir: 'rtl' },
+]
 
-const menuOpen = ref(false);
+const { t, locale, setLocale } = useI18n()
+const settings = useSettingsStore()
+const menuOpen = ref(false)
 
-function set(lang: "en" | "fa") {
-  if (locale.value !== lang) {
-    setLocale(lang);
-    langFromCookie.value = lang;
-  }
-  menuOpen.value = false;
+const current = computed(() => LOCALES.find((l) => l.code === locale.value) ?? LOCALES[0]!)
+
+async function select(option: LocaleOption) {
+  menuOpen.value = false
+  if (locale.value === option.code) return
+
+  await setLocale(option.code)
+  // Switching to Persian should flip the layout in one action; the RTL toggle
+  // in the settings drawer can still override it afterwards.
+  settings.updateField('direction', option.dir)
 }
 </script>
 
-<template>
-  <GkMenu v-model="menuOpen" placement="bottom-end">
-    <template #activator="{ props: act }">
-      <GkButton v-bind="act" variant="ghost" slim class="flex items-center justify-center">
-        <div v-if="locale === 'en'" class="flex items-center gap-x-2">
-          <img :src="usFlagIcon" alt="US Flag" class="w-5 h-5" />
-        </div>
-        <div v-else class="flex items-center gap-x-2">
-          <img :src="iranFlagIcon" alt="Iran Flag" class="w-5 h-5" />
-        </div>
-      </GkButton>
-    </template>
-    <section
-      class="flex flex-col justify-start items-start gap-2 sm:gap-4 bg-[var(--gk-color-surface)] p-4 rounded-xl border border-[var(--gk-color-border)] text-[var(--gk-color-on-surface)]"
-    >
-      <button type="button" class="flex items-center gap-x-1 w-full text-left" @click="set('en')">
-        <img :src="usFlagIcon" alt="US Flag" class="w-5 h-5" />
-        <span>English (US)</span>
-      </button>
-      <button type="button" class="flex items-center gap-x-1 w-full text-left" @click="set('fa')">
-        <img :src="iranFlagIcon" alt="Iran Flag" class="w-5 h-5" />
-        <span>Farsi (IR)</span>
-      </button>
-    </section>
-  </GkMenu>
-</template>
+<style scoped>
+.language-switcher__flag {
+  width: 20px;
+  height: 20px;
+  border-radius: 3px;
+  object-fit: cover;
+}
+
+.language-switcher__menu {
+  list-style: none;
+  min-width: 180px;
+  margin: 0;
+  padding: 0.25rem;
+}
+
+.language-switcher__option {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  width: 100%;
+  padding: 0.5rem;
+  border: 0;
+  border-radius: var(--panel-radius-sm);
+  background: none;
+  color: inherit;
+  font-size: 0.875rem;
+  text-align: start;
+  cursor: pointer;
+}
+
+.language-switcher__option:hover {
+  background: color-mix(in srgb, var(--gk-color-primary) 8%, transparent);
+}
+
+.language-switcher__option--active {
+  color: var(--gk-color-primary);
+  font-weight: 600;
+}
+</style>

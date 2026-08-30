@@ -1,216 +1,199 @@
 <template>
-  <div class="login-page">
-    <div class="form-header">
-      <h5 class="form-title">{{ t('auth.signInToAccount') }}</h5>
+  <div class="login">
+    <header class="login__header">
+      <h1 class="login__title">{{ t('auth.signInToAccount') }}</h1>
+      <p class="login__sub">
+        {{ t('auth.dontHaveAccount') }}
+        <NuxtLink to="/auth/register" class="login__link">{{ t('auth.signUp') }}</NuxtLink>
+      </p>
+    </header>
 
-      <div class="register-link">
-        <span class="register-text">{{ t('auth.dontHaveAccount') }}</span>
-        <NuxtLink to="/auth/register" class="register-link-text">
-          {{ t('auth.signUp') }}
-        </NuxtLink>
-      </div>
-    </div>
-
-    <GkAlert type="info" variant="info" class="info-alert mb-6">
-      {{ t('auth.demoCredentialsWith') }} <strong>{{ form.email }}</strong> {{ t('auth.demoCredentials') }} <strong>{{ form.password }}</strong>
+    <GkAlert v-if="demoMode" variant="info" class="mb-6">
+      {{ t('auth.demoCredentialsWith') }} <strong>{{ demo.email }}</strong>
+      {{ t('auth.demoCredentials') }} <strong>{{ demo.password }}</strong>
+      <GkButton variant="ghost" slim class="mt-2" @click="fillDemo">
+        {{ t('auth.useDemoCredentials') }}
+      </GkButton>
     </GkAlert>
 
-    <GkAlert v-if="errorMsg" type="error" variant="danger" class="error-alert mb-6" role="alert">
-      {{ errorMsg }}
+    <GkAlert v-if="errorMessage" variant="danger" class="mb-6" role="alert">
+      {{ errorMessage }}
     </GkAlert>
 
-    <div class="login-form">
-      <form @submit.prevent="handleSubmit" class="flex flex-col gap-6">
-        <GkField :label="t('auth.email')" :error="errors.email?.[0]">
+    <form class="login__form" novalidate @submit.prevent="submit">
+      <GkField :label="t('auth.email')" :error="errors.email">
+        <GkInput
+          v-model="form.email"
+          type="email"
+          name="email"
+          autocomplete="username"
+          placeholder="you@example.com"
+        />
+      </GkField>
+
+      <GkField :label="t('auth.password')" :error="errors.password">
+        <div class="login__password">
           <GkInput
-            v-model="form.email"
-            type="email"
-            name="email"
-            autocomplete="username"
-            placeholder="godpanel"
+            v-model="form.password"
+            :type="passwordVisible ? 'text' : 'password'"
+            name="password"
+            autocomplete="current-password"
+            :placeholder="t('auth.passwordPlaceholder')"
+            class="login__password-input"
           />
-        </GkField>
-
-        <div class="password-field flex flex-col gap-2">
-       
-          <GkField :label="t('auth.password')" :error="errors.password?.[0]">
-            <div class="flex gap-2 items-start">
-              <GkInput
-                v-model="form.password"
-                :type="passwordVisible ? 'text' : 'password'"
-                name="password"
-                autocomplete="current-password"
-                :placeholder="t('auth.passwordPlaceholder')"
-                class="flex-1"
-              />
-              <!-- <GkButton
-                type="button"
-                variant="ghost"
-                slim
-                :aria-label="passwordVisible ? 'Hide password' : 'Show password'"
-                @click="passwordVisible = !passwordVisible"
-              >
-                <AppIcon :name="passwordVisible ? 'eye-off' : 'eye'" :size="20" />
-              </GkButton> -->
-            </div>
-          </GkField>
-          <NuxtLink to="/auth/forgot-password" class="forgot-link">
-            {{ t('auth.forgotPassword') }}
-          </NuxtLink>
-
+          <GkButton
+            type="button"
+            variant="ghost"
+            slim
+            :aria-label="passwordVisible ? t('auth.hidePassword') : t('auth.showPassword')"
+            :aria-pressed="passwordVisible"
+            @click="passwordVisible = !passwordVisible"
+          >
+            <AppIcon :name="passwordVisible ? 'eye-off' : 'eye'" :size="20" />
+          </GkButton>
         </div>
+      </GkField>
 
-        <GkButton
-          type="submit"
-          block
-          :loading="isSubmitting"
-          class="signin-btn"
-        >
-          {{ isSubmitting ? t('auth.signInLoading') : t('auth.signIn') }}
-        </GkButton>
-      </form>
-    </div>
+      <NuxtLink to="/auth/forgot-password" class="login__link login__forgot">
+        {{ t('auth.forgotPassword') }}
+      </NuxtLink>
+
+      <GkButton type="submit" block :loading="submitting" class="login__submit">
+        {{ submitting ? t('auth.signInLoading') : t('auth.signIn') }}
+      </GkButton>
+    </form>
   </div>
 </template>
 
 <script setup lang="ts">
 import { reactive, ref } from 'vue'
-import { ZodError } from 'zod'
-import { loginSchema, type LoginForm } from '~/types/validation'
 import { useI18n } from 'vue-i18n'
 import { GkAlert, GkButton, GkField, GkInput } from 'god-kit/vue'
-import AppIcon from '~/components/ui/AppIcon.vue'
+import { loginSchema, type LoginForm } from '~/types/validation'
 
 const { t } = useI18n()
-
-const authStore = useAuthStore()
+const route = useRoute()
 const router = useRouter()
+const auth = useAuthStore()
 
+const demoMode = useRuntimeConfig().public.demoMode
+const demo = auth.demoCredentials
+
+const form = reactive<LoginForm>({ email: '', password: '' })
+const errors = reactive<{ email?: string; password?: string }>({})
+const errorMessage = ref('')
 const passwordVisible = ref(false)
-const errorMsg = ref('')
+const submitting = ref(false)
 
-const form = reactive<LoginForm>({
-  email: 'godpanel@test.com',
-  password: 'god123'
-})
-
-const errors = ref<Record<string, string[]>>({})
-const isSubmitting = ref(false)
-
-const validateForm = () => {
-  try {
-    loginSchema.parse(form)
-    errors.value = {}
-    return true
-  } catch (error: unknown) {
-    if (error instanceof ZodError) {
-      errors.value = error.flatten().fieldErrors as Record<string, string[]>
-    }
-    return false
-  }
+function fillDemo() {
+  form.email = demo.email
+  form.password = demo.password
 }
 
-const handleSubmit = async () => {
-  if (!validateForm()) return
+function validate(): boolean {
+  const result = loginSchema.safeParse(form)
+  errors.email = undefined
+  errors.password = undefined
 
-  isSubmitting.value = true
-  errorMsg.value = ''
+  if (result.success) return true
 
-  try {
-    const result = await authStore.login(form)
-
-    if (result?.success) {
-      await router.push('/dashboard')
-    } else {
-      errorMsg.value = result?.error || 'Login failed. Please try again.'
+  for (const issue of result.error.issues) {
+    const field = issue.path[0]
+    if (field === 'email' || field === 'password') {
+      errors[field] ??= issue.message
     }
-  } catch (error: unknown) {
-    console.error('Login error:', error)
-    errorMsg.value = error instanceof Error ? error.message : 'Login failed. Please try again.'
-  } finally {
-    isSubmitting.value = false
   }
+  return false
 }
 
-definePageMeta({
-  layout: 'auth',
-  middleware: 'guest'
-})
+async function submit() {
+  errorMessage.value = ''
+  if (!validate()) return
 
-useHead({
-  title: t('auth.signInToAccount') + ' - God Panel'
-})
+  submitting.value = true
+  const result = await auth.login(form)
+  submitting.value = false
+
+  if (!result.success) {
+    errorMessage.value = result.error
+    return
+  }
+
+  // Return the user to the page the auth middleware pulled them off of.
+  const redirect = route.query.redirect
+  await router.push(typeof redirect === 'string' ? redirect : '/dashboard')
+}
+
+definePageMeta({ layout: 'auth', middleware: 'guest' })
+useHead({ title: 'Sign in — God Panel' })
 </script>
 
 <style scoped>
-.login-page {
+.login {
   width: 100%;
-  margin: 0 auto;
 }
 
-.form-header {
-  margin-bottom: 32px;
+.login__header {
+  margin-bottom: 2rem;
 }
 
-.form-title {
-  font-size: 24px;
+.login__title {
+  margin: 0 0 0.5rem;
+  font-size: 1.5rem;
   font-weight: 600;
   color: var(--gk-color-on-surface);
-  margin-bottom: 16px;
-  text-align: start;
 }
 
-.register-link {
-  display: flex;
-  align-items: center;
-  justify-content: flex-start;
-  gap: 4px;
+.login__sub {
+  margin: 0;
+  font-size: 0.875rem;
+  color: var(--gk-color-on-surface-muted);
 }
 
-.register-text {
-  font-size: 14px;
-  color: var(--gk-color-on-surface);
-}
-
-.register-link-text {
-  font-size: 14px;
+.login__link {
   color: var(--gk-color-primary);
-  text-decoration: none;
   font-weight: 500;
-  text-align: start;
-}
-
-.forgot-link {
-  font-size: 14px;
-  color: var(--gk-color-primary);
   text-decoration: none;
-  align-self: flex-start;
 }
 
-[dir="ltr"] .forgot-link {
-  align-self: flex-end;
-}
-
-.forgot-link:hover {
+.login__link:hover {
   text-decoration: underline;
 }
 
-.signin-btn {
+.login__form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.login__password {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.login__password-input {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.login__forgot {
+  align-self: flex-end;
+  font-size: 0.875rem;
+}
+
+[dir='rtl'] .login__forgot {
+  align-self: flex-start;
+}
+
+.login__submit {
   height: 44px;
-  margin-top: 8px;
-}
-
-[dir="rtl"] .login-form {
-  direction: rtl;
-}
-
-[dir="rtl"] .register-link {
-  flex-direction: row-reverse;
+  margin-top: 0.25rem;
 }
 
 @media (max-width: 480px) {
-  .form-title {
-    font-size: 20px;
+  .login__title {
+    font-size: 1.25rem;
   }
 }
 </style>

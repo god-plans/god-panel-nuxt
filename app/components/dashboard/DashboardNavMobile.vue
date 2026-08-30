@@ -22,7 +22,7 @@
           {{ authStore.displayName || 'Demo User' }}
         </div>
         <div class="mobile-nav__role">
-          {{ authStore.userRole || 'User' }}
+          {{ authStore.role || 'User' }}
         </div>
       </div>
     </div>
