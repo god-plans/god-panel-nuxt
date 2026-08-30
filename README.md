@@ -1,276 +1,362 @@
-# God Panel - Modern Admin Dashboard
+# God Panel
 
-A modern, feature-rich admin dashboard built with **Nuxt.js 4**, **[god-kit](https://www.npmjs.com/package/god-kit)** ([documentation](https://godkit.godplans.org/), Vue UI primitives and design tokens), **Tailwind CSS**, and **TypeScript**. This project provides a complete admin panel solution with authentication, theming, RTL support, and a responsive design.
+A Nuxt 4 admin dashboard starter: authentication, theming (light/dark, 6 accent colours, RTL), i18n, and a small set of layout components built on [god-kit](https://godkit.godplans.org/).
 
-## ✨ Features
-
-- 🚀 **Nuxt.js 4** - Latest version with SSR and SSG support
-- 🎨 **god-kit** - Accessible `Gk*` components and `--gk-*` design tokens
-- 💨 **CSS Variables** - Dynamic theming with CSS custom properties
-- 🔒 **TypeScript** - Full type safety with Zod validation
-- ✅ **Zod Validation** - Comprehensive runtime type validation
-- 🌍 **RTL Support** - Right-to-left language support
-- 🔐 **JWT Authentication** - Secure authentication with API integration
-- 🎯 **Pinia Store** - Centralized state management
-- 🌐 **i18n Ready** - Internationalization support
-- 📱 **Responsive Design** - Mobile-first approach
-- 🎭 **Advanced Theme System** - Light/Dark mode with custom colors and fonts
-- 📊 **Dashboard Layouts** - Multiple layout options (vertical, horizontal, mini)
-- 🧭 **Breadcrumb Navigation** - Automatic breadcrumb generation
-- 📈 **Progress Indicators** - Loading bars and animations
-- 🎯 **Settings Drawer** - Comprehensive theme and layout customization
-- 🏗️ **Component Library** - Reusable components (LoadingScreen, SearchNotFound, etc.)
-- 🔄 **Motion Animations** - Smooth transitions and lazy loading
-- 💾 **Dual Persistence** - LocalStorage and cookies for SSR support
-
-## 🛠️ Tech Stack
-
-- **Framework:** Nuxt.js 4
-- **UI Library:** god-kit (`createGkKit`, `Gk*` components)
-- **Styling:** Tailwind CSS + god-kit tokens (`--gk-*`) and `app/assets/css/main.css`
-- **Language:** TypeScript
-- **State Management:** Pinia
-- **Validation:** Zod
-- **HTTP Client:** Axios
-- **Icons:** [Solar](https://icon-sets.iconify.design/solar/) (via [`@nuxt/icon`](https://github.com/nuxt/icon) + `@iconify-json/solar`), with [Simple Icons](https://simpleicons.org/) for brand marks — see `app/utils/app-icon-resolve.ts` for legacy name mapping
-- **Persistence:** Cookies + LocalStorage
-
-## 📦 Installation
-
-1. **Clone the repository**
-   ```bash
-   git clone https://github.com/your-username/god-panel-nuxt.git
-   cd god-panel-nuxt
-   ```
-
-2. **Install dependencies**
-   ```bash
-   # npm
-   npm install
-
-   # yarn
-   yarn install
-
-   # pnpm
-   pnpm install
-   ```
-
-3. **Environment Setup**
-   Create a `.env` file in the root directory:
-   ```env
-   NUXT_PUBLIC_API_URL=http://localhost:4000
-   ```
-
-4. **Development Server**
-   ```bash
-   # npm
-   npm run dev
-
-   # yarn
-   yarn dev
-
-   # pnpm
-   pnpm dev
-   ```
-
-   Visit `http://localhost:3333` (or the port set in [`nuxt.config.ts`](nuxt.config.ts) under `devServer.port`) to see the application.
-
-## 🚀 Build & Production
+It runs with **no backend** — a demo account is built in — so you can see the whole UI in one command and replace the sample data page by page.
 
 ```bash
-# Build for production
-npm run build
-
-# Preview production build
-npm run preview
-
-# Generate static site
-npm run generate
+npm install
+npm run dev          # http://localhost:3333
 ```
 
-## 🌐 Deployment
+Sign in with **`godpanel@test.com`** / **`god123`**, or press **Fill demo credentials** on the login page.
 
-### Netlify Deployment (Recommended)
+---
 
-God Panel is configured for easy deployment to Netlify with optimized settings.
+## Contents
 
-#### Quick Deploy
+- [Make it yours in 15 minutes](#make-it-yours-in-15-minutes)
+- [Adding a page](#adding-a-page)
+- [Connecting your API](#connecting-your-api)
+- [Building a page](#building-a-page) — the reusable components
+- [Theming](#theming)
+- [Translations](#translations)
+- [Project layout](#project-layout)
+- [Environment variables](#environment-variables)
+- [Deploying](#deploying)
+- [Upgrading god-kit](#upgrading-god-kit)
 
-1. **Connect to Netlify:**
-   - Go to [Netlify Dashboard](https://app.netlify.com/)
-   - Click "Add new site" → "Import an existing project"
-   - Connect your GitHub repository
+---
 
-2. **Configure Build Settings:**
-   ```
-   Build command: npm ci && npx nuxt prepare && npm run generate
-   Publish directory: .output/public
-   Node version: 20
-   ```
+## Make it yours in 15 minutes
 
-3. **Environment Variables (Optional):**
-   ```
-   NUXT_PUBLIC_SITE_URL=https://your-site-name.netlify.app
-   NUXT_PUBLIC_API_URL=https://your-api-endpoint.com
-   ENABLE_MOCK_DATA=true  # For demo purposes
-   ```
+Work top to bottom; each step is independent.
 
-4. **Deploy:** Click "Deploy site"
+| # | Goal | File |
+|---|------|------|
+| 1 | Name and favicon | `nuxt.config.ts` → `app.head`, `runtimeConfig.public.appName` |
+| 2 | Logo images | `public/logo.png`, `public/full-logo.png`, `god-pure-*.png` — used by `app/components/common/Logo.vue` |
+| 3 | Default theme | `defaultSettings` in `app/stores/settings.ts` |
+| 4 | Sidebar links | `dashboardNavItems` in `app/utils/routes.ts` |
+| 5 | Point at your API | `NUXT_PUBLIC_API_URL`, then `NUXT_PUBLIC_DEMO_MODE=false` |
+| 6 | Replace sample data | `app/pages/dashboard/index.vue`, `analytics/index.vue`, `app/composables/useNotifications.ts` |
 
-#### Manual CLI Deployment
+---
 
-```bash
-# Install Netlify CLI
-npm install -g netlify-cli
+## Adding a page
 
-# Login to Netlify
-netlify login
+Three steps, in this order.
 
-# Use the provided deployment script
-./deploy-netlify.sh
+**1. Create the page.** Every dashboard page uses the `dashboard` layout and the `auth` middleware:
 
-# Or deploy manually
-npm ci && npx nuxt prepare && npm run generate
-netlify deploy --dir=.output/public --prod
+```vue
+<!-- app/pages/dashboard/customers/index.vue -->
+<template>
+  <div>
+    <PageHeader :title="t('pages.customers.title')" :subtitle="t('pages.customers.subtitle')">
+      <template #actions>
+        <GkButton>{{ t('common.add') }}</GkButton>
+      </template>
+    </PageHeader>
+
+    <PanelCard :title="t('pages.customers.recent')" padding="lg">
+      <EmptyState :title="t('common.noData')" />
+    </PanelCard>
+  </div>
+</template>
+
+<script setup lang="ts">
+import { useI18n } from 'vue-i18n'
+import { GkButton } from 'god-kit/vue'
+
+const { t } = useI18n()
+
+definePageMeta({ layout: 'dashboard', middleware: 'auth' })
+useHead({ title: 'Customers — God Panel' })
+</script>
 ```
 
-### Other Deployment Options
+`PageHeader`, `PanelCard`, `EmptyState`, `StatCard` and `AppIcon` need **no import** — components are auto-imported by plain name (`components.pathPrefix: false` in `nuxt.config.ts`). `Gk*` components are imported from `god-kit/vue` as shown.
 
-- **Vercel:** Configure build command as `npm run build` and output directory as `.output/public`
-- **Railway:** Use Nixpacks or custom build command
-- **Docker:** The build output in `.output/public` can be served by any static file server
+**2. Add the route and sidebar entry** in `app/utils/routes.ts`:
 
-### 📚 Deployment Documentation
+```ts
+export const paths = {
+  dashboard: {
+    // ...
+    customers: '/dashboard/customers',
+  },
+} as const
 
-For detailed deployment instructions, see [DEPLOYMENT.md](./DEPLOYMENT.md)
-
-## 📁 Project Structure
-
-```
-god-panel-nuxt/
-├── app/
-│   └── app.vue                 # Root: GkSnackbarHost, settings drawer, RTL
-├── assets/
-│   └── css/
-│       └── main.css           # Global styles
-├── components/                 # Vue components
-├── composables/                # Vue composables
-├── layouts/                    # Page layouts
-│   ├── default.vue
-│   └── dashboard.vue
-├── middleware/                 # Route middleware
-│   ├── auth.ts
-│   └── guest.ts
-├── pages/                      # File-based routing
-│   ├── index.vue
-│   ├── dashboard/
-│   │   └── index.vue
-│   └── auth/
-│       └── login.vue
-├── plugins/                    # Nuxt plugins
-│   └── god-kit.client.ts       # createGkKit + i18n + theme sync
-├── public/                     # Static assets
-├── stores/                     # Pinia stores
-│   ├── auth.ts
-│   └── settings.ts
-├── types/                      # TypeScript types
-│   ├── index.ts
-│   └── validation.ts
-├── utils/                      # Utility functions
-└── nuxt.config.ts             # Nuxt configuration
+export const dashboardNavItems: NavItem[] = [
+  // ...
+  { key: 'customers', title: 'common.customers', path: paths.dashboard.customers, icon: 'account-group' },
+]
 ```
 
-## 🎨 Customization
+`title` is an i18n key, not literal text. `icon` is an `AppIcon` name — see [Icons](#icons).
 
-### Themes
-The application supports multiple theme configurations:
-- Light/Dark mode
-- Custom color schemes
-- RTL/LTR direction support
+**3. Add the strings** to **both** `i18n/locales/en.json` and `i18n/locales/fa.json`. The two files must have identical keys; a key present in only one falls back to English at runtime.
 
-**Source of truth:** Pinia `settings` (`colorScheme`, `primaryColor`, `direction`, …) drives the UI. **`app/plugins/god-kit.client.ts`** syncs **`useGkTheme()`** and **`@nuxtjs/color-mode`** with `settings.colorScheme`. **`app/plugins/ssr-primary-preset.server.ts`** injects primary CSS variables on SSR for correct first paint.
+Breadcrumbs and the active-item highlight follow automatically from `dashboardNavItems`.
 
-**Notifications:** Use **`GkSnackbarHost`** in `app.vue` and **`pushGkSnackbar`** from `god-kit/vue` (or **`useToast()`**, which delegates to the same queue). Legacy `ToastContainer` has been removed.
+---
 
-**Optional observability:** Set `NUXT_PUBLIC_SENTRY_DSN` when wiring `@sentry/nuxt`; see `app/plugins/error-handler.client.ts`.
+## Connecting your API
 
-### Release QA (manual)
-Before shipping, verify: **LTR + RTL** (e.g. Persian), **mini rail** and **compact** layout, **mobile drawer**, **settings save** (including primary preset and **dark mode**), and **dynamic fonts** (`useDynamicFonts`). Run **`npm run typecheck`** in CI or locally before releases.
+`useApi()` is the entire networking layer — a preconfigured [`$fetch`](https://nuxt.com/docs/api/utils/dollarfetch) that adds the base URL and bearer token, and clears the token on `401`:
 
-### Demo vs production API
-Dashboard and analytics pages may use **placeholder metrics and charts** until a real backend is connected. See **[docs/DEMO_AND_API.md](./docs/DEMO_AND_API.md)** for `NUXT_PUBLIC_API_URL`, optional **`ENABLE_MOCK_DATA`**, and how auth/settings services relate to a live API.
+```ts
+const api = useApi()
 
-### Layouts
-Choose from different dashboard layouts:
-- Vertical sidebar
-- Horizontal navigation
-- Mini sidebar mode
+const customers = await api<Customer[]>('/customers')
+await api('/customers', { method: 'POST', body: form })
+```
 
-## 🔧 Configuration
+For page data, prefer `useFetch` so it runs during SSR and is not re-fetched on hydration:
 
-### Nuxt Config
-Key configuration options in `nuxt.config.ts`:
-
-```typescript
-export default defineNuxtConfig({
-  modules: [
-    '@nuxtjs/tailwindcss',
-    '@pinia/nuxt',
-    '@nuxtjs/color-mode',
-    '@nuxtjs/i18n'
-  ],
-
-  // god-kit CSS order: tokens.css → vue.css → app CSS (see nuxt.config.ts)
+```ts
+const { data, pending, error } = await useFetch<Customer[]>('/customers', {
+  baseURL: useRuntimeConfig().public.apiUrl,
 })
 ```
 
-## 📱 Responsive Design
+### Switching off demo mode
 
-The application is fully responsive and works on:
-- Desktop computers
-- Tablets
-- Mobile devices
-- Different screen orientations
+Demo mode is what lets the panel run with no backend. With `NUXT_PUBLIC_DEMO_MODE=false`:
 
-## 🌐 Internationalization
+- `godpanel@test.com` stops working; `login()` posts to `POST /auth/login`
+- the demo banner disappears from the login page
 
-Built-in support for multiple languages with RTL support for Arabic, Hebrew, and other RTL languages.
+Your API needs three endpoints:
 
-## 🔐 Authentication
+| Method | Path | Request | Response |
+|--------|------|---------|----------|
+| `POST` | `/auth/login` | `{ email, password }` | `{ user, accessToken }` |
+| `GET` | `/auth/me` | — | `{ user }` |
+| `POST` | `/auth/logout` | — | any |
 
-JWT-based authentication system with:
-- Login/Register pages
-- Protected routes
-- Role-based access control
-- Automatic token refresh
+`user` must satisfy `userSchema` in `app/types/validation.ts` (`id`, `displayName`, `email`, `role`, optional `photoURL` / `phoneNumber`). The response is parsed through that schema, so a mismatch fails loudly at the boundary instead of producing `undefined` deep in a component.
 
-## 📊 Features Overview
+The token is stored in an `auth-token` **cookie**, not `localStorage`, so route middleware can read it during SSR and render the right page on the first request.
 
-- **Dashboard:** Rich overview with stats cards, analytics charts, and recent activity
-- **Authentication:** Complete JWT auth flow with API integration and error handling
-- **Settings:** Advanced theme customization with tooltips and dual persistence
-- **Navigation:** Responsive navigation with breadcrumbs and multiple layout options
-- **Components:** Comprehensive component library (ProgressBar, MotionLazy, LoadingScreen, SearchNotFound)
-- **State Management:** Centralized state with Pinia and type-safe stores
-- **API Integration:** Axios-based API communication with interceptors and error handling
-- **Theming:** Dynamic theme system with CSS variables and font switching
-- **Animations:** Motion animations and lazy loading for enhanced UX
+---
 
-## 🤝 Contributing
+## Building a page
 
-1. Fork the repository
-2. Create a feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit your changes (`git commit -m 'Add some amazing feature'`)
-4. Push to the branch (`git push origin feature/amazing-feature`)
-5. Open a Pull Request
+Five components cover most screens. Use them instead of re-styling `div`s, so spacing and surfaces stay consistent.
 
-## 📄 License
+### `PageHeader`
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+```vue
+<PageHeader title="Customers" subtitle="Everyone who has ordered." kicker="Sales">
+  <template #actions><GkButton>Export</GkButton></template>
+</PageHeader>
+```
 
-## 🙏 Acknowledgments
+### `PanelCard`
 
-- [Nuxt.js](https://nuxt.com/) - The framework
-- [god-kit](https://www.npmjs.com/package/god-kit) - UI primitives and theming
-- [Tailwind CSS](https://tailwindcss.com/) - Styling
-- [Minimals](https://minimals.cc/) - Original design inspiration
+The standard surface — one border, one shadow, one radius.
+
+```vue
+<PanelCard title="Revenue" icon="chart-line" padding="lg" interactive>
+  <template #actions><GkButton variant="ghost" slim>⋯</GkButton></template>
+  …
+</PanelCard>
+```
+
+`padding`: `none` · `sm` · `md` (default) · `lg`. `interactive` adds the hover lift for cards that link somewhere.
+
+### `StatCard`
+
+```vue
+<StatCard icon="cart-plus" label="Orders" value="156" tone="success" change="+8.2%" />
+```
+
+`tone` colours the icon (`primary` · `success` · `warning` · `danger` · `info`). `changeTone` colours the delta and is separate on purpose — set `change-tone="up"` on a *falling* number when down is the good outcome (bounce rate, error count).
+
+### `EmptyState`
+
+```vue
+<EmptyState bordered icon="bell" title="No notifications" description="You're all caught up.">
+  <GkButton>Refresh</GkButton>
+</EmptyState>
+```
+
+### `AppIcon`
+
+```vue
+<AppIcon name="chart-line" :size="20" />
+```
+
+Takes a short name mapped in `app/utils/app-icon-resolve.ts`, or any Iconify id (`solar:home-2-bold`). Names respect the **linear / solid** setting from the settings drawer. To add an icon, add a line to `LEGACY_TO_ICONIFY` — store the `-bold` variant and the linear swap happens automatically.
+
+### Notifications and toasts
+
+```ts
+import { pushGkSnackbar } from 'god-kit/vue'
+
+pushGkSnackbar({ message: 'Saved', variant: 'success' })
+```
+
+`GkSnackbarHost` is already mounted in `app.vue`. Header notifications come from `useNotifications()` — replace the body of that composable with your own request and the header needs no changes.
+
+---
+
+## Theming
+
+`app/stores/settings.ts` is the single source of truth. It persists to a **cookie**, so the server renders the user's theme on the first paint — no flash of the wrong colours.
+
+| Setting | Values |
+|---------|--------|
+| `colorScheme` | `light` · `dark` |
+| `direction` | `ltr` · `rtl` |
+| `contrast` | `default` · `high` |
+| `primaryColor` | `default` · `purple` · `cyan` · `blue` · `orange` · `red` |
+| `navLayout` | `vertical` · `mini` · `horizontal` |
+| `compactLayout` | `boolean` |
+| `fontFamily` | `Inter` · `Roboto` · `Poppins` · `Barlow` · `DM Sans` · `Nunito Sans` |
+| `iconStyle` | `linear` · `solid` |
+
+Change the shipped defaults in `defaultSettings`; users override them from the settings drawer (the gear in the header).
+
+### Colours in your own CSS
+
+Use god-kit tokens, never hex values — a hardcoded colour cannot follow the theme switcher:
+
+```css
+color: var(--gk-color-on-surface);
+background: var(--gk-color-surface);
+border: 1px solid var(--gk-color-border);
+```
+
+The same tokens are available as Tailwind utilities through god-kit's preset: `bg-gk-surface`, `text-gk-primary`, `border-gk-border`. Panel-level surface helpers (`.panel-card`, `.panel-header-bar`, `.panel-section-title`) live in `app/assets/css/panel-shell.css`.
+
+Tailwind's `dark:` variant is wired to the in-app toggle (`darkMode: ['selector', …]` in `tailwind.config.js`), not to the OS setting.
+
+---
+
+## Translations
+
+`i18n/locales/en.json` and `fa.json`. **The two files must have the same keys.**
+
+Choosing Persian from the header also flips the layout to RTL; the RTL toggle in the settings drawer can override that afterwards. The chosen language is stored in a `lang` cookie and applied during SSR by `app/plugins/i18n.ts`.
+
+Check both files still line up:
+
+```bash
+node -e "const f=n=>{const o={},w=(d,p='')=>Object.entries(d).forEach(([k,v])=>typeof v==='object'?w(v,p+k+'.'):o[p+k]=v);w(require('./i18n/locales/'+n+'.json'));return Object.keys(o)};const e=f('en'),a=f('fa');const d=[...e.filter(k=>!a.includes(k)).map(k=>'fa missing '+k),...a.filter(k=>!e.includes(k)).map(k=>'en missing '+k)];console.log(d.length?d.join('\n'):'locales in sync')"
+```
+
+When writing RTL-safe CSS use logical properties — `margin-inline-start`, `padding-inline`, `inset-inline-end`, `text-align: start` — rather than `left` / `right`.
+
+---
+
+## Project layout
+
+```
+app/
+├── app.vue                    # Root: layout, snackbar host, settings drawer
+├── error.vue                  # Nuxt error + 404 page (NOT pages/error.vue)
+├── assets/css/
+│   ├── main.css               # Tailwind entry, base + typography, RTL, scrollbars
+│   ├── panel-shell.css        # .panel-* surface helpers
+│   └── dashboard-nav.css      # .dn-* sidebar styles
+├── components/
+│   ├── ui/                    # PageHeader, PanelCard, StatCard, EmptyState, AppIcon
+│   ├── common/                # Logo, LogoutConfirmDialog
+│   ├── dashboard/             # Sidebar, mobile drawer, header
+│   ├── settings/drawer/       # Theme drawer
+│   └── theme/                 # Theme settings, language switcher
+├── composables/
+│   ├── useApi.ts              # $fetch wrapper + auth token cookie
+│   ├── useNotifications.ts    # Header notification list
+│   └── useDynamicFonts.ts     # Webfont loading
+├── layouts/                   # dashboard.vue, auth.vue
+├── middleware/                # auth.ts, guest.ts
+├── pages/                     # File-based routes
+├── plugins/
+│   ├── auth.ts                # Restores the session before the first guard
+│   ├── god-kit.client.ts      # createGkKit + theme sync
+│   ├── i18n.ts                # Locale restore + <html lang/dir>
+│   ├── error-handler.client.ts
+│   └── ssr-primary-preset.server.ts
+├── stores/                    # auth.ts, settings.ts
+├── types/validation.ts        # Zod schemas — the only source of shared types
+└── utils/                     # routes.ts, app-icon-resolve.ts, gk-primary-presets.ts
+```
+
+Components are auto-imported by plain filename, so **filenames must be unique** across `app/components/`.
+
+---
+
+## Environment variables
+
+All optional — the panel runs with none of them.
+
+| Variable | Default | Purpose |
+|----------|---------|---------|
+| `NUXT_PUBLIC_API_URL` | `http://localhost:4000` | Base URL for `useApi()` |
+| `NUXT_PUBLIC_DEMO_MODE` | `true` | `false` disables the demo account |
+| `NUXT_PUBLIC_SITE_URL` | — | Canonical site URL |
+| `NUXT_PUBLIC_SENTRY_DSN` | — | Enables the reporting hook in `error-handler.client.ts` |
+| `NUXT_PUBLIC_GOD_KIT_DOCS` | god-kit docs | Docs link in the sidebar and settings |
+
+```bash
+# .env
+NUXT_PUBLIC_API_URL=https://api.example.com
+NUXT_PUBLIC_DEMO_MODE=false
+```
+
+> Leaving `NUXT_PUBLIC_DEMO_MODE=true` in production means anyone can sign in with the demo account. Set it to `false` before you ship.
+
+---
+
+## Deploying
+
+```bash
+npm run build     # Node server → .output/  (node .output/server/index.mjs)
+npm run generate  # Static site → .output/public/
+```
+
+Use `build` — the panel is server-rendered, which is what makes the auth guard and theme work on the first request. `generate` produces a static site where every visitor gets the same pre-rendered HTML.
+
+**Netlify / Vercel:** build `npm run build`, and let the platform's Nuxt preset handle the output; no publish directory to set by hand. **Docker / VPS:** run `node .output/server/index.mjs` behind your reverse proxy.
+
+Set the environment variables above in the platform dashboard, not in a committed `.env`.
+
+---
+
+## Upgrading god-kit
+
+The panel depends on `god-kit@^0.8.9`.
+
+**god-kit 0.8.10 fixes an SSR hydration mismatch** in every teleporting component (`GkMenu`, `GkDialog`, `GkTooltip`, `GkSnackbar`, `GkNavigationDrawer`) and adds a `hint` prop to `GkField`. Until it is published, the browser console shows *"Hydration completed but contains mismatches"* on pages that use those components.
+
+Once `god-kit@0.8.10` is on npm:
+
+```bash
+npm install god-kit@^0.8.10
+```
+
+`app/pages/dashboard/profile/index.vue` already passes `hint` to a `GkField`; on 0.8.9 the prop is simply ignored.
+
+---
+
+## Commands
+
+| Command | Description |
+|---------|-------------|
+| `npm run dev` | Dev server on port 3333 |
+| `npm run build` | Production build |
+| `npm run preview` | Serve the production build |
+| `npm run generate` | Static site |
+| `npm run typecheck` | `vue-tsc` over the app |
+
+---
+
+## License
+
+AGPL-3.0-only — see [LICENSE](./LICENSE).
+
+Built with [Nuxt](https://nuxt.com/), [god-kit](https://godkit.godplans.org/), [Tailwind CSS](https://tailwindcss.com/) and [Pinia](https://pinia.vuejs.org/). Design inspired by [Minimals](https://minimals.cc/).
