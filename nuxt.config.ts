@@ -2,12 +2,8 @@
 export default defineNuxtConfig({
   compatibilityDate: '2025-07-15',
   devtools: { enabled: true },
-  devServer: {
-    port: 3333,
-    // host: '0.0.0.0'
-  },
+  devServer: { port: 3333 },
 
-  // Modules
   modules: [
     '@nuxtjs/tailwindcss',
     '@pinia/nuxt',
@@ -17,155 +13,97 @@ export default defineNuxtConfig({
   ],
 
   /**
-   * Bundle icon JSON into the server build so SSR hosts without JSON import
-   * support still resolve icons (see Nuxt Icon serverBundle docs).
+   * Flat component names: `app/components/ui/StatCard.vue` is `<StatCard />`
+   * anywhere, with no import line. Keep component filenames unique.
    */
-  icon: {
-    serverBundle: {
-      externalizeIconsJson: false,
-    },
-  },
+  components: [{ path: '~/components', pathPrefix: false }],
 
-  // Auto-imports for better DX
-  imports: {
-    autoImport: true
-  },
-
-  // Runtime config for API
-  runtimeConfig: {
-    public: {
-      apiUrl: process.env.NUXT_PUBLIC_API_URL || 'http://localhost:4000',
-      appName: 'God Panel',
-      version: '1.0.0',
-      siteUrl: process.env.NUXT_PUBLIC_SITE_URL,
-      /** When set, error-handler can forward to Sentry (wire in `error-handler.client.ts`) */
-      sentryDsn: process.env.NUXT_PUBLIC_SENTRY_DSN || '',
-      enableMockData: process.env.ENABLE_MOCK_DATA === 'true',
-      /** God Kit docs (override via NUXT_PUBLIC_GOD_KIT_DOCS) */
-      godKitDocumentation:
-        process.env.NUXT_PUBLIC_GOD_KIT_DOCS || 'https://godkit.godplans.org/',
-    },
-    private: {
-      jwtSecret: process.env.JWT_SECRET,
-      refreshTokenExpiry: process.env.REFRESH_TOKEN_EXPIRY || '7d',
-    }
-  },
-
-  // Color mode configuration
-  colorMode: {
-    preference: 'light',
-    fallback: 'light',
-    hid: 'nuxt-color-mode-script',
-    globalName: '__NUXT_COLOR_MODE__',
-    componentName: 'ColorScheme',
-    classPrefix: '',
-    classSuffix: '',
-    storageKey: 'nuxt-color-mode'
-  },
-
-
-  // CSS — god-kit tokens + component styles before app Tailwind layers
-  // Icons: `@nuxt/icon` + Iconify (`@iconify-json/solar`, `simple-icons`) via `AppIcon`.
+  // god-kit tokens and component styles load before the app's Tailwind layers.
   css: [
     'god-kit/tokens.css',
     'god-kit/vue.css',
-    '~/assets/css/main.css',
-    // After main/Tailwind so `.dn-*` nav rules are reliably bundled (avoid @import in main.css)
-    '~/assets/css/dashboard-nav.css',
     '~/assets/css/panel-shell.css',
+    '~/assets/css/dashboard-nav.css',
   ],
 
-
-  // SSR
-  ssr: true,
-
-  // Nitro configuration for better performance
-  nitro: {
-    compressPublicAssets: true,
-    minify: true,
-    experimental: {
-      wasm: true
-    }
+  /**
+   * `main.css` holds the `@tailwind` directives. Naming it here stops the module
+   * from also injecting its own default stylesheet — which would emit Tailwind twice.
+   */
+  tailwindcss: {
+    cssPath: '~/assets/css/main.css',
   },
 
-  // Vite configuration for optimization
-  vite: {
-    optimizeDeps: {
-      include: ['vue', 'vue-router', 'pinia', '@vueuse/core']
-    },
-    build: {
-      rollupOptions: {
-        output: {
-          manualChunks: {
-            vendor: ['vue', 'vue-router'],
-            utils: ['axios', 'clsx'],
-          },
-        },
-      },
+  runtimeConfig: {
+    public: {
+      /** Base URL every `useApi()` request is sent to. */
+      apiUrl: process.env.NUXT_PUBLIC_API_URL || 'http://localhost:4000',
+      appName: 'God Panel',
+      siteUrl: process.env.NUXT_PUBLIC_SITE_URL || '',
+      /** Set to `false` once a real backend is wired up — see `stores/auth.ts`. */
+      demoMode: process.env.NUXT_PUBLIC_DEMO_MODE !== 'false',
+      /** When set, `plugins/error-handler.client.ts` can forward to Sentry. */
+      sentryDsn: process.env.NUXT_PUBLIC_SENTRY_DSN || '',
+      godKitDocumentation:
+        process.env.NUXT_PUBLIC_GOD_KIT_DOCS || 'https://godkit.godplans.org/',
     },
   },
 
-  // Experimental features
-  experimental: {
-    payloadExtraction: false,
-    viewTransition: true
+  /**
+   * The theme is driven by the `settings` store; color-mode only mirrors it so
+   * Tailwind's `dark:` variant (class strategy, see tailwind.config.js) and
+   * god-kit's `data-gk-theme` stay on the same value.
+   */
+  colorMode: {
+    preference: 'light',
+    fallback: 'light',
+    classSuffix: '',
+    storageKey: 'nuxt-color-mode',
   },
 
-  // TypeScript
-  typescript: {
-    strict: true,
-    typeCheck: false, // Disable during development for better performance
-    tsConfig: {
-      compilerOptions: {
-        types: ['node'],
-      },
-    },
+  i18n: {
+    strategy: 'no_prefix',
+    defaultLocale: 'en',
+    detectBrowserLanguage: false,
+    langDir: './locales/',
+    locales: [
+      { code: 'en', language: 'en-US', dir: 'ltr', files: ['en.json'] },
+      { code: 'fa', language: 'fa-IR', dir: 'rtl', files: ['fa.json'] },
+    ],
   },
 
-  // App configuration
+  /**
+   * Bundles icon JSON into the server build so SSR hosts without JSON import
+   * support still resolve icons (see Nuxt Icon serverBundle docs).
+   */
+  icon: {
+    serverBundle: { externalizeIconsJson: false },
+  },
+
   app: {
+    // Honours `prefers-reduced-motion` via `@media` in main.css.
+    pageTransition: { name: 'page', mode: 'out-in' },
     head: {
-      title: 'Gods Projects - Divine Innovation',
+      titleTemplate: '%s',
       meta: [
-        { name: 'description', content: 'Modern dashboard built with divine innovation and cutting-edge technology.' },
+        { name: 'description', content: 'God Panel — Nuxt 4 admin dashboard built on god-kit.' },
         { name: 'viewport', content: 'width=device-width, initial-scale=1' },
-        { name: 'theme-color', content: '#6366f1' }
+        { name: 'theme-color', content: '#6366f1' },
       ],
       link: [
         { rel: 'icon', type: 'image/png', href: '/god-pure-dark.png' },
-        { rel: 'apple-touch-icon', href: '/god-pure-dark.png' }
-      ]
-    }
-  },
-  i18n: {
-    locales: [
-      {
-        code: "fa",
-        language: "fa-IR",
-        dir: "rtl",
-
-        files: [
-          "fa.json",
-
-        ],
-      },
-      {
-        code: "en",
-        language: "en-US",
-        files: [
-          "en.json",
-        ],
-        dir: "ltr",
-      },
-    ],
-    strategy: "no_prefix", // 'prefix_except_default', 'prefix', 'no_prefix', 'prefix_and_default',
-    defaultLocale: "en",
-    detectBrowserLanguage: false,
-
-    langDir: "./locales/",
-
+        { rel: 'apple-touch-icon', href: '/god-pure-dark.png' },
+      ],
+    },
   },
 
+  nitro: {
+    compressPublicAssets: true,
+  },
 
-
+  typescript: {
+    strict: true,
+    // `npm run typecheck` runs vue-tsc; keeping it out of dev keeps HMR fast.
+    typeCheck: false,
+  },
 })

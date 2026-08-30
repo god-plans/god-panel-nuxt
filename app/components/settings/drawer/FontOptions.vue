@@ -11,7 +11,7 @@
         type="button"
         class="font-option"
         :class="{ 'font-option--selected': value === font }"
-        :style="{ fontFamily: getFontFamily(font) }"
+        :style="{ fontFamily: fontFamily(font) }"
         @click="handleClick(font)"
       >
         <AppIcon
@@ -46,17 +46,8 @@ const handleClick = (font: string) => {
   emit('click-option', font)
 }
 
-const getFontFamily = (font: string) => {
-  const fontMap: Record<string, string> = {
-    'Inter': 'Inter, sans-serif',
-    'Roboto': 'Roboto, sans-serif',
-    'Poppins': 'Poppins, sans-serif',
-    'Barlow': 'Barlow, sans-serif',
-    'DM Sans': 'DM Sans, sans-serif',
-    'Nunito Sans': 'Nunito Sans, sans-serif'
-  }
-  return fontMap[font] || font
-}
+// Single source of truth for font families lives in the composable.
+const { fontFamily } = useDynamicFonts()
 </script>
 
 <style scoped>
