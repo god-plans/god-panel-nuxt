@@ -190,11 +190,11 @@ const fontSelectOptions = [
 ]
 
 const applySettings = () => {
-  settingsStore.updateSettings(localSettings)
+  settingsStore.update(localSettings)
 }
 
 const resetToDefaults = () => {
-  settingsStore.resetSettings()
+  settingsStore.reset()
   Object.assign(localSettings, settingsStore.settings)
 }
 

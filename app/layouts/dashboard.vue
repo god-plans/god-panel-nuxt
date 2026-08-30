@@ -1,220 +1,112 @@
 <template>
-  <div>
-    <!-- Progress Bar -->
-    <ProgressBar :is-loading="isLoading" :progress="loadingProgress" />
-
-    <!-- Nav drawers must stay outside MotionLazy: that wrapper uses transform, which breaks position:fixed (drawer would scroll away). -->
-    <DashboardNavMobile
-      v-model:open="mobileNavOpen"
-      @close="closeMobileNav"
-    />
+  <div
+    class="dashboard-layout"
+    :class="{
+      'dashboard-layout--compact': settings.settings.compactLayout,
+      'dashboard-layout--rtl': settings.isRtl,
+      'dashboard-layout--nav-vertical': hasSidebar && !settings.isMiniLayout,
+      'dashboard-layout--nav-mini': hasSidebar && settings.isMiniLayout,
+    }"
+    :style="layoutVars"
+  >
+    <!--
+      Both navs are always rendered and shown/hidden with CSS. Deciding in JS
+      would need the viewport width, which the server does not have — the layout
+      would flip on hydration.
+    -->
+    <DashboardNavMobile v-model:open="mobileNavOpen" />
 
     <DashboardNav
-      v-if="!isHorizontalLayout && !mobile"
-      :mini="isMiniLayout"
-      class="lg:block "
-      @toggle-mini="toggleNav"
+      v-if="hasSidebar"
+      :mini="settings.isMiniLayout"
+      @toggle-mini="toggleMini"
     />
 
-    <!-- Motion Lazy Container (main column only — see nav comment above) -->
-    <MotionLazy>
-    <!-- Layout Section -->
-    <div
-      class="dashboard-layout"
-      :class="{
-        'compact-mode': settingsStore.settings.compactLayout,
-        'rtl-mode': settingsStore.settings.direction === 'rtl',
-        'dashboard-layout--nav-vertical': !isHorizontalLayout && !mobile && !isMiniLayout,
-        'dashboard-layout--nav-mini': !isHorizontalLayout && !mobile && isMiniLayout,
-      }"
-      :style="layoutVars"
-    >
-    <!-- Header spans the full width above main content (beside sidebar), not between nav and content columns -->
-    <div class="dashboard-main-area panel-page">
-      <DashboardHeader
-        :is-horizontal="isHorizontalLayout"
-        :is-mobile="mobile"
-        @toggle-nav="openMobileNav"
-      />
+    <div class="dashboard-layout__main panel-page">
+      <DashboardHeader @toggle-nav="mobileNavOpen = true" />
 
-      <DashboardMain :is-nav-horizontal="isHorizontalLayout">
-        <DashboardContent max-width="xl">
+      <main class="dashboard-layout__content">
+        <div class="dashboard-layout__inner">
           <slot />
-        </DashboardContent>
-      </DashboardMain>
+        </div>
+      </main>
     </div>
-    </div>
-
-   
-    </MotionLazy>
   </div>
 </template>
 
 <script setup lang="ts">
-import DashboardMain from '~/layouts/dashboard/main.vue'
-import DashboardContent from '~/layouts/dashboard/content.vue'
+import { computed, ref } from 'vue'
 import DashboardNav from '~/components/dashboard/DashboardNav.vue'
 import DashboardNavMobile from '~/components/dashboard/DashboardNavMobile.vue'
 import DashboardHeader from '~/components/dashboard/DashboardHeader.vue'
-import ProgressBar from '~/components/common/ProgressBar.vue'
-import MotionLazy from '~/components/common/MotionLazy.vue'
-import { useSettingsStore } from '~/stores/settings'
-import { useRouter } from 'vue-router'
-import { ref, computed, onMounted } from 'vue'
 
-const settingsStore = useSettingsStore()
+const settings = useSettingsStore()
 const mobileNavOpen = ref(false)
 
-// Loading states for progress bar
-const isLoading = ref(false)
-const loadingProgress = ref(0)
+const hasSidebar = computed(() => !settings.isHorizontalLayout)
 
-// Mobile detection
-const mobile = ref(false)
-onMounted(() => {
-  const checkMobile = () => {
-    mobile.value = window.innerWidth < 960
+function toggleMini() {
+  settings.updateField('navLayout', settings.isMiniLayout ? 'vertical' : 'mini')
+}
+
+const layoutVars = computed(() => {
+  const compact = settings.settings.compactLayout
+  return {
+    '--layout-nav-mini-width': '88px',
+    '--layout-nav-vertical-width': compact ? '260px' : '300px',
+    '--layout-content-pt': compact ? '16px' : '24px',
+    '--layout-content-pb': compact ? '32px' : '48px',
+    '--layout-content-px': compact ? '20px' : '32px',
   }
-  checkMobile()
-  window.addEventListener('resize', checkMobile)
-})
-
-const isHorizontalLayout = computed(() => settingsStore.settings.navLayout === 'horizontal')
-const isMiniLayout = computed(() => settingsStore.settings.navLayout === 'mini')
-
-const layoutVars = computed(() => ({
-  '--layout-transition-easing': 'linear',
-  '--layout-transition-duration': '120ms',
-  '--layout-nav-mini-width': '88px',
-  '--layout-nav-vertical-width': settingsStore.settings.compactLayout ? '260px' : '300px',
-  '--layout-nav-horizontal-height': settingsStore.settings.compactLayout ? '56px' : '64px',
-  '--layout-dashboard-content-pt': settingsStore.settings.compactLayout ? '4px' : '8px',
-  '--layout-dashboard-content-pb': settingsStore.settings.compactLayout ? '32px' : '64px',
-  '--layout-dashboard-content-px': settingsStore.settings.compactLayout ? '24px' : '40px'
-}))
-
-const toggleNav = () => {
-  const newLayout = settingsStore.settings.navLayout === 'vertical' ? 'mini' : 'vertical'
-  settingsStore.updateField('navLayout', newLayout)
-}
-
-const openMobileNav = () => {
-  mobileNavOpen.value = true
-}
-
-const closeMobileNav = () => {
-  mobileNavOpen.value = false
-}
-
-// Route loading simulation
-const router = useRouter()
-let progressInterval: NodeJS.Timeout | null = null
-
-const startLoading = () => {
-  isLoading.value = true
-  loadingProgress.value = 0
-
-  progressInterval = setInterval(() => {
-    loadingProgress.value += Math.random() * 15
-    if (loadingProgress.value >= 90) {
-      if (progressInterval) clearInterval(progressInterval)
-    }
-  }, 100)
-}
-
-const completeLoading = () => {
-  loadingProgress.value = 100
-  setTimeout(() => {
-    isLoading.value = false
-    loadingProgress.value = 0
-  }, 200)
-}
-
-// Watch for route changes
-onMounted(() => {
-  router.beforeEach(() => {
-    startLoading()
-  })
-
-  router.afterEach(() => {
-    completeLoading()
-  })
 })
 </script>
 
 <style scoped>
 .dashboard-layout {
   display: flex;
-  flex-direction: row;
-  min-height: 100vh;
-  transition: all var(--layout-transition-duration) var(--layout-transition-easing);
-}
-
-/* Column: top bar + scrollable main (sidebar is position:fixed and does not consume flex width) */
-.dashboard-main-area {
-  display: flex;
-  flex: 1 1 auto;
-  flex-direction: column;
-  min-width: 0;
   min-height: 100vh;
   min-height: 100dvh;
 }
 
-/* Sidebar is a sibling (not inside this div); reserve space for fixed nav */
+/* The sidebar is position:fixed, so it takes no flex width — reserve it here. */
 .dashboard-layout--nav-vertical {
-  padding-left: var(--layout-nav-vertical-width);
+  padding-inline-start: var(--layout-nav-vertical-width);
 }
 
 .dashboard-layout--nav-mini {
-  padding-left: var(--layout-nav-mini-width);
+  padding-inline-start: var(--layout-nav-mini-width);
 }
 
-/* RTL mode adjustments */
-.rtl-mode.dashboard-layout--nav-vertical {
-  padding-left: 0;
-  padding-right: var(--layout-nav-vertical-width);
+.dashboard-layout__main {
+  display: flex;
+  flex: 1 1 auto;
+  flex-direction: column;
+  min-width: 0;
 }
 
-.rtl-mode.dashboard-layout--nav-mini {
-  padding-left: 0;
-  padding-right: var(--layout-nav-mini-width);
+.dashboard-layout__content {
+  display: flex;
+  flex: 1 1 auto;
+  justify-content: center;
+  min-width: 0;
+  padding: var(--layout-content-pt) var(--layout-content-px) var(--layout-content-pb);
 }
 
-/* Compact mode adjustments */
-.compact-mode {
-  --layout-spacing-reduced: 0.75;
+.dashboard-layout__inner {
+  width: 100%;
+  max-width: 1600px;
+  min-width: 0;
 }
 
-.compact-mode .dashboard-layout--nav-vertical {
-  padding-left: var(--layout-nav-vertical-width);
-}
-
-.compact-mode .dashboard-layout--nav-mini {
-  padding-left: var(--layout-nav-mini-width);
-}
-
-/* Compact + RTL mode adjustments */
-.compact-mode.rtl-mode.dashboard-layout--nav-vertical {
-  padding-left: 0;
-  padding-right: var(--layout-nav-vertical-width);
-}
-
-.compact-mode.rtl-mode.dashboard-layout--nav-mini {
-  padding-left: 0;
-  padding-right: var(--layout-nav-mini-width);
-}
-
+/* Below the sidebar breakpoint the fixed nav is hidden (see dashboard-nav.css). */
 @media (max-width: 959px) {
-  /* Vertical nav is not shown; main column uses full width with page gutters */
-  .dashboard-layout {
-    padding-left: 16px !important;
-    padding-right: 16px !important;
+  .dashboard-layout--nav-vertical,
+  .dashboard-layout--nav-mini {
+    padding-inline-start: 0;
   }
 
-  /* Ensure proper spacing on mobile for all layout items */
-  .dashboard-layout > * {
-    margin-left: 0 !important;
-    margin-right: 0 !important;
+  .dashboard-layout__content {
+    padding-inline: 16px;
   }
 }
 </style>

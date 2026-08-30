@@ -4,7 +4,7 @@
     slim
     aria-label="Open settings"
     title="Open settings"
-    @click="settingsStore.onOpenDrawer"
+    @click="settingsStore.openDrawer"
   >
     <AppIcon name="cog" :size="22" />
   </GkButton>

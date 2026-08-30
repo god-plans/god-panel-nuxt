@@ -1,8 +1,8 @@
 import { defineStore } from 'pinia'
-import { settingsSchema, type Settings } from '~/types/validation'
-import { useCookie } from '#app'
+import { partialSettingsSchema, type Settings } from '~/types/validation'
 
-const defaultSettings: Settings = {
+/** Change these to re-brand the panel's out-of-the-box look. */
+export const defaultSettings: Settings = {
   colorScheme: 'light',
   direction: 'ltr',
   contrast: 'high',
@@ -14,105 +14,63 @@ const defaultSettings: Settings = {
 }
 
 export const useSettingsStore = defineStore('settings', () => {
-  // State
-  const settings = ref<Settings>(defaultSettings)
-  const openDrawer = ref(false)
-
-  // Cookies for SSR support
-  const settingsCookie = useCookie('settings', {
-    default: () => defaultSettings,
-    encode: JSON.stringify,
-    decode: JSON.parse,
-    maxAge: 60 * 60 * 24 * 365, // 1 year
+  /**
+   * Persisted in a cookie rather than `localStorage` so the server renders the
+   * user's theme on first paint — no flash of the default light theme.
+   */
+  const cookie = useCookie<Partial<Settings>>('settings', {
+    default: () => ({ ...defaultSettings }),
+    maxAge: 60 * 60 * 24 * 365,
+    sameSite: 'lax',
   })
 
-  // Getters
+  const settings = ref<Settings>(readCookie())
+  const drawerOpen = ref(false)
+
+  /** Unknown or stale keys degrade to defaults instead of wiping the theme. */
+  function readCookie(): Settings {
+    const parsed = partialSettingsSchema.safeParse(cookie.value)
+    return { ...defaultSettings, ...(parsed.success ? parsed.data : {}) }
+  }
+
   const isRtl = computed(() => settings.value.direction === 'rtl')
+  const isDark = computed(() => settings.value.colorScheme === 'dark')
   const isMiniLayout = computed(() => settings.value.navLayout === 'mini')
   const isHorizontalLayout = computed(() => settings.value.navLayout === 'horizontal')
-  const isVerticalLayout = computed(() => settings.value.navLayout === 'vertical')
-  const isDarkMode = computed(() => settings.value.colorScheme === 'dark')
-  const canReset = computed(() => {
-    return JSON.stringify(settings.value) !== JSON.stringify(defaultSettings)
-  })
+  const canReset = computed(
+    () => JSON.stringify(settings.value) !== JSON.stringify(defaultSettings)
+  )
 
-  // Actions
-  const initialize = () => {
-    // Always start with defaults
+  function persist() {
+    cookie.value = { ...settings.value }
+  }
+
+  function update(patch: Partial<Settings>) {
+    settings.value = { ...settings.value, ...patch }
+    persist()
+  }
+
+  function updateField<K extends keyof Settings>(field: K, value: Settings[K]) {
+    update({ [field]: value } as Partial<Settings>)
+  }
+
+  function reset() {
     settings.value = { ...defaultSettings }
-
-    // Try to load from cookies first (works on both server and client)
-    try {
-      const cookieSettings = settingsCookie.value
-      if (cookieSettings && typeof cookieSettings === 'object') {
-        const validated = settingsSchema.parse(cookieSettings)
-        settings.value = { ...defaultSettings, ...validated }
-        return
-      }
-    } catch (error) {
-      if (process.client) {
-        console.warn('Invalid settings in cookie, using defaults:', error)
-      }
-    }
-
+    persist()
   }
-
-  const updateSettings = (newSettings: Partial<Settings>) => {
-    settings.value = { ...settings.value, ...newSettings }
-    saveToStorage()
-  }
-
-  const updateField = <K extends keyof Settings>(field: K, value: Settings[K]) => {
-    settings.value[field] = value
-    saveToStorage()
-  }
-
-  const resetSettings = () => {
-    settings.value = { ...defaultSettings }
-    saveToStorage()
-  }
-
-  const saveToStorage = () => {
-    // Save to cookies for SSR support
-    settingsCookie.value = settings.value
-  }
-
-  // Drawer actions
-  const onOpenDrawer = () => {
-    openDrawer.value = true
-  }
-
-  const onCloseDrawer = () => {
-    openDrawer.value = false
-  }
-
-  const onReset = () => {
-    settings.value = { ...defaultSettings }
-    saveToStorage()
-  }
-
-  // Initialize on store creation
-  // Always initialize to ensure SSR compatibility
-  initialize()
 
   return {
-    // State
     settings,
-    openDrawer,
-    // Getters
+    drawerOpen,
     isRtl,
+    isDark,
     isMiniLayout,
     isHorizontalLayout,
-    isVerticalLayout,
     canReset,
-    isDarkMode,
-    // Actions
-    initialize,
-    updateSettings,
+    update,
     updateField,
-    resetSettings,
-    onOpenDrawer,
-    onCloseDrawer,
-    onReset
+    reset,
+    openDrawer: () => (drawerOpen.value = true),
+    closeDrawer: () => (drawerOpen.value = false),
   }
 })

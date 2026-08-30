@@ -1,108 +1,134 @@
 <template>
-  <div class="dashboard-overview w-full max-w-[1600px] mx-auto px-2">
-    <div class="mb-8">
-      <h1 class="panel-section-title mb-2">{{ t('pages.dashboard.welcomeBack') }}</h1>
-      <p class="panel-section-subtitle">{{ t('pages.dashboard.welcomeSubtitle') }}</p>
-    </div>
+  <div>
+    <PageHeader
+      :title="t('pages.dashboard.welcomeBack')"
+      :subtitle="t('pages.dashboard.welcomeSubtitle')"
+    />
 
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
-      <div
+    <div class="dashboard-grid">
+      <StatCard
         v-for="stat in stats"
         :key="stat.label"
-        class="stat-card panel-card panel-card--interactive p-4 motion-safe:hover:-translate-y-0.5 transition-transform"
-      >
-        <div class="flex min-h-[3rem] items-center gap-3">
-          <div
-            class="flex h-12 w-12 shrink-0 items-center justify-center rounded-full text-white"
-            :class="stat.avatarClass"
-          >
-            <AppIcon :name="stat.icon" :size="22" class="text-white" />
-          </div>
-          <div class="flex min-w-0 flex-col justify-center gap-0.5 leading-none">
-            <div class="text-h6 font-bold leading-tight">{{ stat.value }}</div>
-            <div class="text-caption leading-tight opacity-70">{{ t(stat.label) }}</div>
-          </div>
-        </div>
-      </div>
+        :icon="stat.icon"
+        :label="t(stat.label)"
+        :value="stat.value"
+        :tone="stat.tone"
+        :change="stat.change"
+      />
     </div>
 
-    <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
-      <div class="lg:col-span-8 panel-card p-4">
-        <h2 class="text-lg font-semibold mb-4">{{ t('pages.dashboard.analyticsOverview') }}</h2>
-        <div class="chart-placeholder flex flex-col items-center justify-center py-12 text-center">
-          <AppIcon name="chart-line" :size="64" class="opacity-30" />
-          <p class="text-body-1 mt-4">{{ t('dashboard.chartDisplay') }}</p>
-        </div>
-      </div>
+    <div class="dashboard-columns">
+      <PanelCard :title="t('pages.dashboard.analyticsOverview')" padding="lg" class="dashboard-columns__main">
+        <EmptyState
+          bordered
+          icon="chart-line"
+          :title="t('dashboard.chartDisplay')"
+          :description="t('dashboard.chartDisplayHint')"
+        />
+      </PanelCard>
 
-      <div class="lg:col-span-4 panel-card p-4">
-        <h2 class="text-lg font-semibold mb-4">{{ t('pages.dashboard.recentActivity') }}</h2>
-        <ul class="m-0 list-none space-y-4 p-0">
-          <li v-for="(item, i) in items" :key="i" class="flex items-center gap-3">
-            <div
-              class="flex h-8 w-8 shrink-0 items-center justify-center rounded-full text-white"
-              :class="item.avatarClass"
-            >
-              <AppIcon :name="item.icon" :size="16" class="text-white" />
-            </div>
-            <div class="flex min-w-0 flex-col justify-center gap-0.5 leading-none">
-              <div class="text-body-2 leading-tight">{{ t(item.title) }}</div>
-              <div class="text-caption leading-tight opacity-70">{{ item.time }}</div>
-            </div>
+      <PanelCard :title="t('pages.dashboard.recentActivity')" padding="lg">
+        <ul class="activity">
+          <li v-for="item in activity" :key="item.title" class="activity__item">
+            <span class="activity__icon" :style="{ '--tone': `var(--gk-color-${item.tone})` }">
+              <AppIcon :name="item.icon" :size="16" />
+            </span>
+            <span class="activity__text">
+              <span class="activity__title">{{ t(item.title) }}</span>
+              <span class="activity__time">{{ t('common.minutesAgo', { count: item.minutes }) }}</span>
+            </span>
           </li>
         </ul>
-      </div>
+      </PanelCard>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
 import { useI18n } from 'vue-i18n'
-import AppIcon from '~/components/ui/AppIcon.vue'
 
 const { t } = useI18n()
 
+// Sample figures so the starter renders something meaningful with no backend.
+// Swap for `const { data } = await useFetch('/dashboard/stats')` when yours is ready.
 const stats = [
-  { value: '2,543', label: 'dashboard.totalUsers', icon: 'account-group', avatarClass: 'bg-[var(--gk-color-primary)]' },
-  { value: '156', label: 'dashboard.newOrders', icon: 'cart-plus', avatarClass: 'bg-[var(--gk-color-success)]' },
-  { value: '89', label: 'dashboard.products', icon: 'package-variant', avatarClass: 'bg-[var(--gk-color-warning)]' },
-  { value: '$12,543', label: 'dashboard.revenue', icon: 'chart-line', avatarClass: 'bg-[var(--gk-color-info)]' },
-]
+  { value: '2,543', label: 'dashboard.totalUsers', icon: 'account-group', tone: 'primary', change: '+12.5%' },
+  { value: '156', label: 'dashboard.newOrders', icon: 'cart-plus', tone: 'success', change: '+8.2%' },
+  { value: '89', label: 'dashboard.products', icon: 'package-variant', tone: 'warning', change: '+3.1%' },
+  { value: '$12,543', label: 'dashboard.revenue', icon: 'chart-line', tone: 'info', change: '+22.4%' },
+] as const
 
-const items = [
-  { title: 'pages.dashboard.newUserRegistered', time: '2 minutes ago', icon: 'account-plus', avatarClass: 'bg-[var(--gk-color-primary)]' },
-  { title: 'pages.dashboard.orderCompleted', time: '5 minutes ago', icon: 'cart-plus', avatarClass: 'bg-[var(--gk-color-success)]' },
-  { title: 'pages.dashboard.productUpdated', time: '10 minutes ago', icon: 'package-variant', avatarClass: 'bg-[var(--gk-color-warning)]' },
-]
+const activity = [
+  { title: 'pages.dashboard.newUserRegistered', minutes: 2, icon: 'account-plus', tone: 'primary' },
+  { title: 'pages.dashboard.orderCompleted', minutes: 5, icon: 'cart-plus', tone: 'success' },
+  { title: 'pages.dashboard.productUpdated', minutes: 10, icon: 'package-variant', tone: 'warning' },
+] as const
 
-definePageMeta({
-  layout: 'dashboard',
-  middleware: 'auth'
-})
-
-useHead({
-  title: 'Dashboard - God Panel'
-})
+definePageMeta({ layout: 'dashboard', middleware: 'auth' })
+useHead({ title: 'Dashboard — God Panel' })
 </script>
 
 <style scoped>
-.text-h4 {
-  font-size: 1.5rem;
-  line-height: 2rem;
+.dashboard-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 1rem;
+  margin-bottom: 1.5rem;
 }
-.text-h6 {
-  font-size: 1.125rem;
-  line-height: 1.25;
+
+.dashboard-columns {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.5rem;
 }
-.text-body-1 {
-  font-size: 1rem;
+
+@media (min-width: 1024px) {
+  .dashboard-columns {
+    grid-template-columns: 2fr 1fr;
+  }
 }
-.text-body-2 {
+
+.activity {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.activity__item {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.activity__icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 32px;
+  height: 32px;
+  border-radius: 999px;
+  background: var(--tone);
+  color: var(--gk-color-text-on-primary, #fff);
+}
+
+.activity__text {
+  display: flex;
+  flex-direction: column;
+  gap: 0.125rem;
+  min-width: 0;
+}
+
+.activity__title {
   font-size: 0.875rem;
-  line-height: 1.35;
+  line-height: 1.3;
 }
-.text-caption {
+
+.activity__time {
   font-size: 0.75rem;
-  line-height: 1.25;
+  color: var(--gk-color-on-surface-muted);
 }
 </style>

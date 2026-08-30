@@ -1,8 +1,7 @@
-export default defineNuxtRouteMiddleware((to, from) => {
-  const authStore = useAuthStore()
-
-  // If user is authenticated, redirect to dashboard
-  if (authStore.isAuthenticated && !authStore.loading) {
+/** Keeps signed-in users out of the auth pages. */
+export default defineNuxtRouteMiddleware(() => {
+  const auth = useAuthStore()
+  if (auth.isAuthenticated) {
     return navigateTo('/dashboard')
   }
 })

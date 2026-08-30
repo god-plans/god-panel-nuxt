@@ -10,7 +10,7 @@
       @click="$emit('navigate')"
     >
       <span class="dn-nav-item__icon" aria-hidden="true">
-        <AppIcon :name="navIconName(item.icon)" :size="iconSize" />
+        <AppIcon :name="item.icon" :size="iconSize" />
       </span>
       <span
         v-if="showLabels"
@@ -35,7 +35,7 @@
       @click="$emit('navigate')"
     >
       <span class="dn-nav-item__icon" aria-hidden="true">
-        <AppIcon :name="navIconName(item.icon)" :size="iconSize" />
+        <AppIcon :name="item.icon" :size="iconSize" />
       </span>
       <span
         v-if="showLabels"
@@ -58,7 +58,6 @@
 import { computed } from 'vue'
 import { useI18n } from 'vue-i18n'
 import type { NavItem } from '~/utils/routes'
-import { navIconName } from '~/utils/nav'
 import AppIcon from '~/components/ui/AppIcon.vue'
 
 const { t } = useI18n()

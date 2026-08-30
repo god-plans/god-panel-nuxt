@@ -1,9 +1,9 @@
 <template>
-  <div class="register-placeholder">
-    <h1>{{ t('auth.signUp') }}</h1>
-    <p>This is a placeholder page. Registration feature coming soon.</p>
-    <NuxtLink to="/auth/login" class="back-link">
-      {{ t('auth.signInHere') }}
+  <div class="auth-placeholder">
+    <h1 class="auth-placeholder__title">{{ t('auth.createAccount') }}</h1>
+    <p class="auth-placeholder__text">{{ t('auth.registerComingSoon') }}</p>
+    <NuxtLink to="/auth/login" class="auth-placeholder__link">
+      {{ t('auth.backToSignIn') }}
     </NuxtLink>
   </div>
 </template>
@@ -13,32 +13,36 @@ import { useI18n } from 'vue-i18n'
 
 const { t } = useI18n()
 
-// Page meta
-definePageMeta({
-  layout: 'auth',
-  middleware: 'guest'
-})
-
-// SEO
-useHead({
-  title: t('auth.createAccount') + ' - God Panel'
-})
+definePageMeta({ layout: 'auth', middleware: 'guest' })
+useHead({ title: 'Create account — God Panel' })
 </script>
 
 <style scoped>
-.register-placeholder {
+.auth-placeholder {
   text-align: center;
-  padding: 2rem;
 }
 
-.back-link {
+.auth-placeholder__title {
+  margin: 0 0 0.75rem;
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: var(--gk-color-on-surface);
+}
+
+.auth-placeholder__text {
+  margin: 0;
+  color: var(--gk-color-on-surface-muted);
+}
+
+.auth-placeholder__link {
   display: inline-block;
-  margin-top: 1rem;
+  margin-top: 1.5rem;
   color: var(--gk-color-primary);
+  font-weight: 500;
   text-decoration: none;
 }
 
-.back-link:hover {
+.auth-placeholder__link:hover {
   text-decoration: underline;
 }
 </style>

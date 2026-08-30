@@ -37,7 +37,7 @@ const componentType = computed(() => {
 });
 
 const logoSrc = computed(() => {
-  const isDarkMode = settingsStore.isDarkMode;
+  const isDarkMode = settingsStore.isDark;
   switch (props.variant) {
     case "full":
       return isDarkMode ? "/god-pure-dark-full.png" : "/full-logo.png";

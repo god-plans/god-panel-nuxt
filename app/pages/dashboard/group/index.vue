@@ -1,5 +1,14 @@
 <template>
-  <Blank :title="$t('pages.groups.management')" />
+  <div>
+    <PageHeader :title="t('pages.groups.management')" />
+    <PanelCard padding="none">
+      <EmptyState
+        icon="folder-multiple"
+        :title="t('pages.groups.emptyTitle')"
+        :description="t('pages.groups.emptyDescription')"
+      />
+    </PanelCard>
+  </div>
 </template>
 
 <script setup lang="ts">
@@ -7,14 +16,6 @@ import { useI18n } from 'vue-i18n'
 
 const { t } = useI18n()
 
-// Page meta
-definePageMeta({
-  layout: 'dashboard',
-  middleware: 'auth'
-})
-
-// SEO
-useHead({
-  title: 'Group Management - God Panel'
-})
+definePageMeta({ layout: 'dashboard', middleware: 'auth' })
+useHead({ title: 'Groups — God Panel' })
 </script>

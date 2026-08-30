@@ -6,6 +6,9 @@
 .cache
 dist
 
+# TypeScript incremental build cache
+*.tsbuildinfo
+
 # Node dependencies
 node_modules
 

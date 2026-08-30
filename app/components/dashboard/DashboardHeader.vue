@@ -1,349 +1,449 @@
 <template>
-  <header
-    class="dashboard-header panel-header-bar flex w-full min-h-[64px] shrink-0 items-center px-2 md:px-4 z-[1] text-[var(--gk-color-on-surface)]"
-  >
+  <header class="dashboard-header panel-header-bar">
     <GkButton
       variant="ghost"
-      class="nav-hamburger shrink-0"
       slim
+      class="dashboard-header__hamburger"
       :aria-label="t('common.menu')"
       @click="$emit('toggle-nav')"
     >
       <AppIcon name="menu" :size="24" />
     </GkButton>
 
-    <Logo
-      v-if="mobile"
-      variant="icon"
-      size="sm"
-      class="mr-3 lg:hidden shrink-0"
-    />
+    <Logo variant="icon" size="sm" class="dashboard-header__logo" />
 
-    <nav
-      class="breadcrumbs hidden lg:flex items-center gap-1 text-sm ml-4"
-      aria-label="Breadcrumb"
-    >
-      <template v-for="(item, index) in breadcrumbItems" :key="index">
+    <nav class="dashboard-header__breadcrumbs" :aria-label="t('common.breadcrumb')">
+      <template v-for="(crumb, index) in breadcrumbs" :key="crumb.path">
         <NuxtLink
-          v-if="item.to && !item.disabled"
-          :to="item.to"
-          class="breadcrumb-item hover:underline text-[var(--gk-color-on-surface)]"
+          v-if="index < breadcrumbs.length - 1"
+          :to="crumb.path"
+          class="dashboard-header__crumb"
         >
-          {{ item.title }}
+          {{ crumb.title }}
         </NuxtLink>
-        <span v-else class="text-[var(--gk-color-on-surface-muted)]">
-          {{ item.title }}
+        <span v-else class="dashboard-header__crumb dashboard-header__crumb--current" aria-current="page">
+          {{ crumb.title }}
         </span>
-        <span
-          v-if="index < breadcrumbItems.length - 1"
-          class="text-[var(--gk-color-on-surface-muted)] px-1"
-          aria-hidden="true"
-        >
-          /
-        </span>
+        <span v-if="index < breadcrumbs.length - 1" class="dashboard-header__sep" aria-hidden="true">/</span>
       </template>
     </nav>
 
-    <div class="flex-1" />
+    <div class="dashboard-header__spacer" />
 
-    <div class="me-2">
-    <LanguageSwitcher  />
-  </div>
-    <SettingsButton />
+    <div class="dashboard-header__actions">
+      <LanguageSwitcher />
+      <SettingsButton />
 
-
-    <GkMenu v-model="notifOpen" placement="bottom-end" class="shrink-0">
-      <template #activator="{ props: act }">
-        <GkButton
-          v-bind="act"
-          variant="ghost"
-          class="notification-btn"
-          slim
-          :aria-label="t('settings.notifications')"
-        >
-          <span class="relative inline-flex">
-            <AppIcon name="bell" :size="24" />
-            <span
-              v-if="notifications.length > 0"
-              class="absolute -top-1 -end-1 min-w-[18px] h-[18px] px-0.5 flex items-center justify-center rounded-full bg-red-600 text-white text-[10px] font-medium"
-            >
-              {{ notifications.length }}
-            </span>
-          </span>
-        </GkButton>
-      </template>
-
-      <ul
-        class="notification-list panel-menu-surface min-w-[280px] list-none p-1 m-0 overflow-hidden"
-        role="menu"
-      >
-        <li
-          v-if="notifications.length === 0"
-          class="px-3 py-3 text-sm text-[var(--gk-color-on-surface-muted)]"
-          role="menuitem"
-        >
-          {{ t("settings.noNewNotifications") }}
-        </li>
-        <li
-          v-for="notification in notifications.slice(0, 5)"
-          :key="notification.id"
-          class="flex gap-3 px-2 py-2 cursor-pointer rounded-[var(--panel-radius-sm)] hover:bg-[color-mix(in_srgb,var(--gk-color-primary)_8%,transparent)]"
-          role="menuitem"
-          @click="markAsRead(notification.id)"
-        >
-          <span
-            class="flex h-8 w-8 shrink-0 items-center justify-center rounded-[var(--panel-radius-sm)] bg-[color-mix(in_srgb,var(--gk-color-primary)_12%,transparent)] text-[var(--gk-color-primary)] shadow-[inset_0_0_0_1px_color-mix(in_srgb,var(--gk-color-primary)_22%,transparent)]"
+      <GkMenu v-model="notifOpen" placement="bottom-end">
+        <template #activator="{ props: activator }">
+          <GkButton
+            v-bind="activator"
+            variant="ghost"
+            slim
+            :aria-label="t('settings.notifications')"
           >
-            <AppIcon :name="notification.icon.replace('mdi-', '')" :size="20" />
-          </span>
-          <div class="min-w-0">
-            <div class="text-sm font-medium">{{ notification.title }}</div>
-            <div class="text-xs opacity-80 truncate">{{ notification.message }}</div>
-          </div>
-        </li>
-        <li v-if="notifications.length > 0" class="px-1 py-0">
-          <div class="panel-divider my-1" role="separator" />
-        </li>
-        <li
-          v-if="notifications.length > 0"
-          class="px-2 py-2 text-sm font-medium text-[var(--gk-color-primary)] cursor-pointer rounded-[var(--panel-radius-sm)] hover:bg-[color-mix(in_srgb,var(--gk-color-primary)_8%,transparent)]"
-          role="menuitem"
-          @click="viewAllNotifications"
-        >
-          {{ t("settings.viewAllNotifications") }}
-        </li>
-      </ul>
-    </GkMenu>
+            <span class="dashboard-header__bell">
+              <AppIcon name="bell" :size="24" />
+              <span v-if="unread.length" class="dashboard-header__badge">
+                {{ unread.length }}
+              </span>
+            </span>
+          </GkButton>
+        </template>
 
-    <GkMenu v-model="userOpen" placement="bottom-end" class="shrink-0">
-      <template #activator="{ props: act }">
-        <GkButton
-          v-bind="act"
-          variant="ghost"
-          class="user-btn"
-          slim
-          :aria-label="authStore.displayName || 'User'"
-        >
-          <img
-            :src="authStore.user?.photoURL || '/assets/images/avatar.webp'"
-            :alt="authStore.displayName || ''"
-            class="h-8 w-8 rounded-full object-cover"
-          />
-        </GkButton>
-      </template>
-
-      <div class="user-menu panel-menu-surface text-start min-w-[240px] overflow-hidden p-1">
-        <div class="flex gap-3 px-2 py-2 items-center rounded-[var(--panel-radius-sm)]">
-          <img
-            :src="authStore.user?.photoURL || '/assets/images/avatar.webp'"
-            :alt="authStore.displayName || ''"
-            class="h-10 w-10 rounded-full object-cover ring-2 ring-[color-mix(in_srgb,var(--gk-color-primary)_25%,transparent)]"
-          />
-          <div class="min-w-0">
-            <div class="text-sm font-semibold truncate">
-              {{ authStore.displayName || "Demo User" }}
-            </div>
-            <div class="text-xs text-[var(--gk-color-on-surface-muted)] truncate">
-              {{ authStore.userEmail || "demo@example.com" }}
-            </div>
+        <div class="panel-menu-surface dashboard-header__panel">
+          <div class="dashboard-header__panel-head">
+            <span class="font-semibold">{{ t('settings.notifications') }}</span>
+            <button
+              v-if="unread.length"
+              type="button"
+              class="dashboard-header__link"
+              @click="markAllAsRead"
+            >
+              {{ t('settings.markAllRead') }}
+            </button>
           </div>
+
+          <div class="panel-divider" role="separator" />
+
+          <ul class="dashboard-header__list" role="menu">
+            <li v-if="!items.length" class="dashboard-header__empty" role="menuitem">
+              {{ t('settings.noNewNotifications') }}
+            </li>
+            <li v-for="item in items.slice(0, 5)" :key="item.id" role="menuitem">
+              <button
+                type="button"
+                class="dashboard-header__item"
+                :class="{ 'dashboard-header__item--read': item.read }"
+                @click="markAsRead(item.id)"
+              >
+                <span class="dashboard-header__item-icon">
+                  <AppIcon :name="item.icon" :size="20" />
+                </span>
+                <span class="dashboard-header__item-text">
+                  <span class="dashboard-header__item-title">{{ item.title }}</span>
+                  <span class="dashboard-header__item-message">{{ item.message }}</span>
+                </span>
+              </button>
+            </li>
+          </ul>
         </div>
-        <div class="panel-divider my-1" role="separator" />
-        <ul class="list-none p-0 m-0">
-          <li>
-            <GkButton
-              variant="ghost"
-              block
-              class="justify-start !rounded-none"
-              @click="goToProfile"
-            >
-              <AppIcon name="account" class="me-2" />
-              {{ t("settings.profile") }}
-            </GkButton>
-          </li>
-          <li>
-            <GkButton
-              variant="ghost"
-              block
-              class="justify-start !rounded-none"
-              @click="goToSettings"
-            >
-              <AppIcon name="cog" class="me-2" />
-              {{ t("common.settings") }}
-            </GkButton>
-          </li>
-        </ul>
-        <div class="panel-divider my-1" role="separator" />
-        <GkButton
-          variant="ghost"
-          block
-          class="justify-start !rounded-[var(--panel-radius-sm)] text-[var(--gk-color-danger)] hover:bg-[color-mix(in_srgb,var(--gk-color-danger)_8%,transparent)]"
-          @click="handleLogout"
-        >
-          <AppIcon name="logout" class="me-2" />
-          {{ t("common.logout") }}
-        </GkButton>
-      </div>
-    </GkMenu>
+      </GkMenu>
 
-    <LogoutConfirmDialog v-model="showLogoutDialog" @confirm="performLogout" />
+      <GkMenu v-model="userOpen" placement="bottom-end">
+        <template #activator="{ props: activator }">
+          <GkButton
+            v-bind="activator"
+            variant="ghost"
+            slim
+            :aria-label="t('settings.account')"
+          >
+            <img
+              :src="auth.user?.photoURL || FALLBACK_AVATAR"
+              :alt="auth.displayName"
+              class="dashboard-header__avatar"
+            >
+          </GkButton>
+        </template>
+
+        <div class="panel-menu-surface dashboard-header__panel dashboard-header__panel--user">
+          <div class="dashboard-header__identity">
+            <img
+              :src="auth.user?.photoURL || FALLBACK_AVATAR"
+              :alt="auth.displayName"
+              class="dashboard-header__avatar dashboard-header__avatar--lg"
+            >
+            <span class="min-w-0">
+              <span class="dashboard-header__item-title">{{ auth.displayName }}</span>
+              <span class="dashboard-header__item-message">{{ auth.email }}</span>
+            </span>
+          </div>
+
+          <div class="panel-divider" role="separator" />
+
+          <GkButton variant="ghost" block class="dashboard-header__menu-btn" @click="go('/dashboard/profile')">
+            <AppIcon name="account" :size="18" class="me-2" />
+            {{ t('settings.profile') }}
+          </GkButton>
+          <GkButton variant="ghost" block class="dashboard-header__menu-btn" @click="go('/dashboard/settings')">
+            <AppIcon name="cog" :size="18" class="me-2" />
+            {{ t('common.settings') }}
+          </GkButton>
+
+          <div class="panel-divider" role="separator" />
+
+          <GkButton
+            variant="ghost"
+            block
+            class="dashboard-header__menu-btn dashboard-header__menu-btn--danger"
+            @click="askLogout"
+          >
+            <AppIcon name="logout" :size="18" class="me-2" />
+            {{ t('common.logout') }}
+          </GkButton>
+        </div>
+      </GkMenu>
+    </div>
+
+    <LogoutConfirmDialog v-model="logoutOpen" @confirm="logout" />
   </header>
 </template>
 
 <script setup lang="ts">
-import { ref, computed } from "vue";
-import { useI18n } from "vue-i18n";
-import { useRouter, useRoute } from "vue-router";
-import { GkButton, GkMenu } from "god-kit/vue";
-import { generateBreadcrumbs } from "~/utils/routes";
-import { useAuthStore } from "~/stores/auth";
-import SettingsButton from "~/components/theme/SettingsButton.vue";
-import LanguageSwitcher from "~/components/theme/LanguageSwitcher.vue";
-import LogoutConfirmDialog from "~/components/common/LogoutConfirmDialog.vue";
-import AppIcon from "~/components/ui/AppIcon.vue";
-import Logo from "~/components/common/Logo.vue";
+import { computed, ref } from 'vue'
+import { useI18n } from 'vue-i18n'
+import { GkButton, GkMenu } from 'god-kit/vue'
+import { generateBreadcrumbs } from '~/utils/routes'
+import SettingsButton from '~/components/theme/SettingsButton.vue'
+import LanguageSwitcher from '~/components/theme/LanguageSwitcher.vue'
+import LogoutConfirmDialog from '~/components/common/LogoutConfirmDialog.vue'
+import AppIcon from '~/components/ui/AppIcon.vue'
+import Logo from '~/components/common/Logo.vue'
 
-const { t } = useI18n();
+const FALLBACK_AVATAR = '/assets/images/avatar.webp'
 
-interface Props {
-  mobile?: boolean;
-  isHorizontal?: boolean;
+defineEmits<{ 'toggle-nav': [] }>()
+
+const { t } = useI18n()
+const route = useRoute()
+const router = useRouter()
+const auth = useAuthStore()
+const { items, unread, markAsRead, markAllAsRead } = useNotifications()
+
+const notifOpen = ref(false)
+const userOpen = ref(false)
+const logoutOpen = ref(false)
+
+const breadcrumbs = computed(() =>
+  generateBreadcrumbs(route.path).map((crumb) => ({
+    path: crumb.path,
+    // Nav titles are i18n keys; generated segments are already human-readable.
+    title: crumb.title.includes('.') ? t(crumb.title) : crumb.title,
+  }))
+)
+
+function go(path: string) {
+  userOpen.value = false
+  router.push(path)
 }
 
-withDefaults(defineProps<Props>(), {
-  mobile: false,
-  isHorizontal: false,
-});
+function askLogout() {
+  userOpen.value = false
+  logoutOpen.value = true
+}
 
-defineEmits<{
-  "toggle-nav": [];
-}>();
-
-const router = useRouter();
-const route = useRoute();
-const authStore = useAuthStore();
-
-const notifOpen = ref(false);
-const userOpen = ref(false);
-const showLogoutDialog = ref(false);
-
-const breadcrumbItems = computed(() => {
-  const breadcrumbs = generateBreadcrumbs(route.path);
-  return breadcrumbs.map((crumb, index) => ({
-    title: crumb.title.includes(".") ? t(crumb.title) : crumb.title,
-    to: index === breadcrumbs.length - 1 ? undefined : crumb.path,
-    disabled: index === breadcrumbs.length - 1,
-  }));
-});
-
-const notifications = ref([
-  {
-    id: 1,
-    title: "New order received",
-    message: "Order #1234 has been placed",
-    icon: "mdi-cart",
-    color: "success",
-    read: false,
-  },
-  {
-    id: 2,
-    title: "Payment failed",
-    message: "Payment for order #1233 failed",
-    icon: "mdi-credit-card-off",
-    color: "error",
-    read: false,
-  },
-  {
-    id: 3,
-    title: "New user registered",
-    message: "John Doe joined your platform",
-    icon: "mdi-account-plus",
-    color: "info",
-    read: false,
-  },
-]);
-
-const markAsRead = (id: number) => {
-  const notification = notifications.value.find((n) => n.id === id);
-  if (notification) {
-    notification.read = true;
-  }
-};
-
-const viewAllNotifications = () => {
-  notifOpen.value = false;
-  router.push("/dashboard/notifications");
-};
-
-const goToProfile = () => {
-  userOpen.value = false;
-  router.push("/dashboard/profile");
-};
-
-const goToSettings = () => {
-  userOpen.value = false;
-  router.push("/dashboard/settings");
-};
-
-const handleLogout = () => {
-  userOpen.value = false;
-  showLogoutDialog.value = true;
-};
-
-const performLogout = async () => {
-  showLogoutDialog.value = false;
-  await authStore.logout();
-  await router.push("/auth/login");
-};
+async function logout() {
+  logoutOpen.value = false
+  await auth.logout()
+  await router.push('/auth/login')
+}
 </script>
 
 <style scoped>
 .dashboard-header {
-  /* Ensure content sits above gradient hairline */
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  width: 100%;
+  min-height: 64px;
+  padding-inline: 0.75rem;
+  color: var(--gk-color-on-surface);
+  /* Keeps the gradient hairline behind the controls. */
   isolation: isolate;
+  backdrop-filter: blur(8px);
 }
 
-/* god-kit GkButton defaults to centered inner; menus should align to start */
-.user-menu :deep(.gk-btn) {
-  justify-content: flex-start;
+.dashboard-header__spacer {
+  flex: 1 1 auto;
 }
 
-.user-menu :deep(.gk-btn__inner) {
-  justify-content: flex-start;
+.dashboard-header__actions {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
 }
 
-.notification-btn,
-.user-btn {
-  @media (max-width: 959px) {
-    margin-left: 0px;
-  }
-  @media (min-width: 960px) {
-    margin-left: 8px;
-  }
-}
-
-[dir="rtl"] .notification-btn,
-[dir="rtl"] .user-btn {
-  @media (min-width: 960px) {
-    margin-right: 8px;
-  }
-  margin-left: 0;
-}
-
-@media (max-width: 959px) {
-  .breadcrumbs {
-    display: none;
-  }
-}
-
-/* Align with dashboard layout: mobile = max-width 959px (same as DashboardNav / dashboard.vue) */
-.nav-hamburger {
+.dashboard-header__hamburger,
+.dashboard-header__logo {
   display: none;
 }
 
 @media (max-width: 959px) {
-  .nav-hamburger {
+  .dashboard-header__hamburger {
     display: inline-flex;
   }
+
+  .dashboard-header__logo {
+    display: block;
+    margin-inline-end: 0.5rem;
+  }
+}
+
+/* Breadcrumbs */
+.dashboard-header__breadcrumbs {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  margin-inline-start: 0.75rem;
+  font-size: 0.875rem;
+  min-width: 0;
+}
+
+@media (max-width: 959px) {
+  .dashboard-header__breadcrumbs {
+    display: none;
+  }
+}
+
+.dashboard-header__crumb {
+  color: var(--gk-color-on-surface-muted);
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.dashboard-header__crumb:hover {
+  color: var(--gk-color-primary);
+  text-decoration: underline;
+}
+
+.dashboard-header__crumb--current {
+  color: var(--gk-color-on-surface);
+  font-weight: 600;
+}
+
+.dashboard-header__sep {
+  color: var(--gk-color-on-surface-muted);
+  opacity: 0.5;
+}
+
+/* Notification bell */
+.dashboard-header__bell {
+  position: relative;
+  display: inline-flex;
+}
+
+.dashboard-header__badge {
+  position: absolute;
+  top: -4px;
+  inset-inline-end: -4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 18px;
+  height: 18px;
+  padding-inline: 3px;
+  border-radius: 999px;
+  background: var(--gk-color-danger);
+  color: var(--gk-color-base-white, #fff);
+  font-size: 10px;
+  font-weight: 600;
+  line-height: 1;
+}
+
+/* Dropdown panels */
+.dashboard-header__panel {
+  min-width: 288px;
+  padding: 0.25rem;
+  overflow: hidden;
+}
+
+.dashboard-header__panel--user {
+  min-width: 248px;
+}
+
+.dashboard-header__panel-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  padding: 0.5rem 0.625rem;
+  font-size: 0.875rem;
+}
+
+.dashboard-header__link {
+  border: 0;
+  background: none;
+  padding: 0;
+  color: var(--gk-color-primary);
+  font-size: 0.75rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.dashboard-header__link:hover {
+  text-decoration: underline;
+}
+
+.dashboard-header__list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.dashboard-header__empty {
+  padding: 0.75rem 0.625rem;
+  color: var(--gk-color-on-surface-muted);
+  font-size: 0.875rem;
+}
+
+.dashboard-header__item {
+  display: flex;
+  gap: 0.625rem;
+  width: 100%;
+  padding: 0.5rem;
+  border: 0;
+  border-radius: var(--panel-radius-sm);
+  background: none;
+  text-align: start;
+  cursor: pointer;
+  color: inherit;
+}
+
+.dashboard-header__item:hover {
+  background: color-mix(in srgb, var(--gk-color-primary) 8%, transparent);
+}
+
+.dashboard-header__item--read {
+  opacity: 0.55;
+}
+
+.dashboard-header__item-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 32px;
+  height: 32px;
+  border-radius: var(--panel-radius-sm);
+  background: color-mix(in srgb, var(--gk-color-primary) 12%, transparent);
+  color: var(--gk-color-primary);
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--gk-color-primary) 22%, transparent);
+}
+
+.dashboard-header__item-text {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.dashboard-header__item-title {
+  display: block;
+  font-size: 0.875rem;
+  font-weight: 600;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.dashboard-header__item-message {
+  display: block;
+  font-size: 0.75rem;
+  color: var(--gk-color-on-surface-muted);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* User menu */
+.dashboard-header__identity {
+  display: flex;
+  align-items: center;
+  gap: 0.625rem;
+  padding: 0.5rem;
+}
+
+.dashboard-header__avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 999px;
+  object-fit: cover;
+}
+
+.dashboard-header__avatar--lg {
+  width: 40px;
+  height: 40px;
+  box-shadow: 0 0 0 2px color-mix(in srgb, var(--gk-color-primary) 25%, transparent);
+}
+
+/* GkButton centres its content; menu rows read better left-aligned. */
+.dashboard-header__menu-btn :deep(.gk-btn__inner),
+.dashboard-header__menu-btn:deep(.gk-btn__inner) {
+  justify-content: flex-start;
+}
+
+.dashboard-header__menu-btn {
+  justify-content: flex-start;
+  border-radius: var(--panel-radius-sm);
+}
+
+.dashboard-header__menu-btn--danger {
+  color: var(--gk-color-danger);
+}
+
+.dashboard-header__menu-btn--danger:hover {
+  background: color-mix(in srgb, var(--gk-color-danger) 8%, transparent);
 }
 </style>

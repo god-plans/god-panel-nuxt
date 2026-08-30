@@ -1,151 +1,110 @@
 <template>
-  <div class="analytics-page w-full max-w-[1600px] mx-auto px-2 pb-8 min-h-full">
-    <div class="page-header mb-6">
-      <h1 class="panel-section-title">{{ t('dashboard.analytics') }}</h1>
-      <p class="panel-section-subtitle mt-2">{{ t('dashboard.analyticsDescription') }}</p>
+  <div>
+    <PageHeader
+      :title="t('dashboard.analytics')"
+      :subtitle="t('dashboard.analyticsDescription')"
+    />
+
+    <div class="analytics-grid">
+      <StatCard
+        v-for="metric in metrics"
+        :key="metric.label"
+        :icon="metric.icon"
+        :label="t(metric.label)"
+        :value="metric.value"
+        :tone="metric.tone"
+        :change="t(metric.change, { value: metric.delta })"
+        :change-tone="metric.changeTone"
+      />
     </div>
 
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
-      <div
-        v-for="m in metrics"
-        :key="m.label"
-        class="metric-card panel-card panel-card--interactive p-5 h-full transition-transform motion-safe:hover:-translate-y-0.5"
-      >
-        <div class="metric-header flex items-center mb-3">
-          <AppIcon :name="m.icon" :size="24" :class="m.iconColor" />
-          <span class="metric-label ms-2 text-sm opacity-80">{{ m.label }}</span>
-        </div>
-        <div class="metric-value text-3xl font-bold mb-2">{{ m.value }}</div>
-        <div class="metric-change text-xs flex items-center gap-1" :class="m.changeClass">
-          <AppIcon :name="m.trendIcon" :size="16" />
-          {{ m.changeText }}
-        </div>
-      </div>
-    </div>
+    <div class="analytics-columns">
+      <PanelCard :title="t('pages.analytics.trafficOverview')" padding="lg">
+        <EmptyState
+          bordered
+          icon="chart-areaspline"
+          :title="t('pages.analytics.chartsComingSoon')"
+          :description="t('pages.analytics.chartsHint')"
+        />
+      </PanelCard>
 
-    <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 mb-6">
-      <div class="lg:col-span-8 panel-card p-6">
-        <h2 class="text-lg font-semibold mb-4 text-[var(--gk-color-text)]">Traffic Overview</h2>
-        <div
-          class="chart-placeholder h-[300px] flex flex-col items-center justify-center text-center rounded-[var(--gk-radius-md)] border border-dashed border-[var(--gk-color-border)] bg-[var(--gk-color-bg)] px-6"
-        >
-          <AppIcon name="chart-areaspline" :size="64" class="text-[var(--gk-color-text-muted)] opacity-70" />
-          <p class="text-h6 mt-4 text-[var(--gk-color-text)]">Charts coming soon</p>
-          <p class="text-body-2 mt-1 max-w-sm">
-            Real traffic visualizations will load here when analytics is connected. Heavy chart libraries can be code-split via dynamic import.
-          </p>
-        </div>
-      </div>
-
-      <div class="lg:col-span-4 panel-card p-6">
-        <h2 class="text-lg font-semibold mb-4">Top Pages</h2>
-        <ul class="space-y-3 list-none p-0 m-0">
-          <li v-for="p in topPages" :key="p.path" class="flex flex-col border-b border-[var(--gk-color-border)] pb-2 last:border-0">
-            <span class="font-medium">{{ p.path }}</span>
-            <span class="text-sm opacity-70">{{ p.views }}</span>
+      <PanelCard :title="t('pages.analytics.topPages')" padding="lg">
+        <ul class="rows">
+          <li v-for="page in topPages" :key="page.path" class="rows__item">
+            <span class="rows__label">{{ page.path }}</span>
+            <span class="rows__value">{{ page.views.toLocaleString() }}</span>
           </li>
         </ul>
-      </div>
+      </PanelCard>
     </div>
 
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-      <div class="panel-card p-6">
-        <h2 class="text-lg font-semibold mb-4 text-[var(--gk-color-text)]">Device Breakdown</h2>
-        <div class="device-stats flex flex-col gap-4">
-          <div v-for="d in devices" :key="d.name">
-            <div class="flex justify-between items-center mb-1">
-              <span class="flex items-center gap-2 font-medium">
-                <AppIcon :name="d.icon" :size="20" :class="d.iconColor" />
-                {{ d.name }}
+    <div class="analytics-columns analytics-columns--even">
+      <PanelCard :title="t('pages.analytics.deviceBreakdown')" padding="lg">
+        <div class="bars">
+          <div v-for="device in devices" :key="device.name" class="bars__row">
+            <div class="bars__head">
+              <span class="bars__name">
+                <AppIcon :name="device.icon" :size="18" />
+                {{ t(device.name) }}
               </span>
-              <span class="font-semibold">{{ d.pct }}%</span>
+              <span class="bars__pct">{{ device.pct }}%</span>
             </div>
-            <div class="h-2 rounded-full bg-[var(--gk-color-border)] overflow-hidden">
+            <div
+              class="bars__track"
+              role="meter"
+              :aria-valuenow="device.pct"
+              aria-valuemin="0"
+              aria-valuemax="100"
+              :aria-label="t(device.name)"
+            >
               <div
-                class="h-full rounded-full transition-all"
-                :class="d.barClass"
-                :style="{ width: d.pct + '%' }"
+                class="bars__fill"
+                :style="{ width: `${device.pct}%`, background: `var(--gk-color-${device.tone})` }"
               />
             </div>
           </div>
         </div>
-      </div>
+      </PanelCard>
 
-      <div class="panel-card p-6">
-        <h2 class="text-lg font-semibold mb-4 text-[var(--gk-color-text)]">Geographic Data</h2>
-        <div class="flex flex-col gap-3">
-          <div
-            v-for="g in geo"
-            :key="g.country"
-            class="flex justify-between py-2 border-b border-[var(--gk-color-border)] last:border-0"
-          >
-            <span class="font-medium">{{ g.country }}</span>
-            <span class="font-semibold text-[var(--gk-color-primary)]">{{ g.pct }}%</span>
-          </div>
-        </div>
-      </div>
+      <PanelCard :title="t('pages.analytics.geographicData')" padding="lg">
+        <ul class="rows">
+          <li v-for="row in geo" :key="row.country" class="rows__item">
+            <span class="rows__label">{{ row.country }}</span>
+            <span class="rows__value rows__value--accent">{{ row.pct }}%</span>
+          </li>
+        </ul>
+      </PanelCard>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
 import { useI18n } from 'vue-i18n'
-import AppIcon from '~/components/ui/AppIcon.vue'
 
 const { t } = useI18n()
 
+// Sample figures — replace with your analytics source.
 const metrics = [
-  {
-    label: t('dashboard.pageViews'),
-    value: '45,231',
-    icon: 'eye',
-    iconColor: 'text-[var(--gk-color-primary)]',
-    changeText: '+12.5% from last month',
-    trendIcon: 'trending-up',
-    changeClass: 'text-[var(--gk-color-success)]',
-  },
-  {
-    label: 'Unique Visitors',
-    value: '12,543',
-    icon: 'account-multiple',
-    iconColor: 'text-[var(--gk-color-success)]',
-    changeText: '+8.2% from last month',
-    trendIcon: 'trending-up',
-    changeClass: 'text-[var(--gk-color-success)]',
-  },
-  {
-    label: 'Avg. Session',
-    value: '4m 32s',
-    icon: 'clock-outline',
-    iconColor: 'text-[var(--gk-color-warning)]',
-    changeText: '-2.1% from last month',
-    trendIcon: 'trending-down',
-    changeClass: 'text-[var(--gk-color-danger)]',
-  },
-  {
-    label: 'Bounce Rate',
-    value: '24.3%',
-    icon: 'exit-run',
-    iconColor: 'text-[var(--gk-color-danger)]',
-    changeText: '-5.4% from last month',
-    trendIcon: 'trending-down',
-    changeClass: 'text-[var(--gk-color-success)]',
-  },
-]
+  { label: 'dashboard.pageViews', value: '45,231', icon: 'eye', tone: 'primary', change: 'dashboard.sinceLastMonth', delta: '+12.5%', changeTone: 'up' },
+  { label: 'pages.analytics.uniqueVisitors', value: '12,543', icon: 'account-multiple', tone: 'success', change: 'dashboard.sinceLastMonth', delta: '+8.2%', changeTone: 'up' },
+  { label: 'pages.analytics.avgSession', value: '4m 32s', icon: 'clock-outline', tone: 'warning', change: 'dashboard.sinceLastMonth', delta: '-2.1%', changeTone: 'down' },
+  // A falling bounce rate is an improvement, so this delta reads as positive.
+  { label: 'pages.analytics.bounceRate', value: '24.3%', icon: 'exit-run', tone: 'danger', change: 'dashboard.sinceLastMonth', delta: '-5.4%', changeTone: 'up' },
+] as const
 
 const topPages = [
-  { path: '/dashboard', views: '8,542 views' },
-  { path: '/products', views: '6,231 views' },
-  { path: '/analytics', views: '4,128 views' },
-  { path: '/users', views: '3,542 views' },
-  { path: '/settings', views: '2,891 views' },
+  { path: '/dashboard', views: 8542 },
+  { path: '/products', views: 6231 },
+  { path: '/analytics', views: 4128 },
+  { path: '/users', views: 3542 },
+  { path: '/settings', views: 2891 },
 ]
 
 const devices = [
-  { name: 'Desktop', pct: 65, icon: 'monitor', iconColor: 'text-[var(--gk-color-primary)]', barClass: 'bg-[var(--gk-color-primary)]' },
-  { name: 'Mobile', pct: 28, icon: 'cellphone', iconColor: 'text-[var(--gk-color-success)]', barClass: 'bg-[var(--gk-color-success)]' },
-  { name: 'Tablet', pct: 7, icon: 'tablet', iconColor: 'text-[var(--gk-color-warning)]', barClass: 'bg-[var(--gk-color-warning)]' },
-]
+  { name: 'pages.analytics.desktop', pct: 65, icon: 'monitor', tone: 'primary' },
+  { name: 'pages.analytics.mobile', pct: 28, icon: 'cellphone', tone: 'success' },
+  { name: 'pages.analytics.tablet', pct: 7, icon: 'tablet', tone: 'warning' },
+] as const
 
 const geo = [
   { country: 'United States', pct: 34 },
@@ -156,25 +115,111 @@ const geo = [
   { country: 'Others', pct: 6 },
 ]
 
-definePageMeta({
-  layout: 'dashboard',
-  middleware: 'auth'
-})
-
-useHead({
-  title: 'Analytics - God Panel'
-})
+definePageMeta({ layout: 'dashboard', middleware: 'auth' })
+useHead({ title: 'Analytics — God Panel' })
 </script>
 
 <style scoped>
-.analytics-page {
-  background: transparent;
+.analytics-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 1rem;
+  margin-bottom: 1.5rem;
 }
 
-.text-h4 {
-  font-size: 1.5rem;
+.analytics-columns {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.5rem;
+  margin-bottom: 1.5rem;
 }
-.text-h6 {
-  font-size: 1.125rem;
+
+@media (min-width: 1024px) {
+  .analytics-columns {
+    grid-template-columns: 2fr 1fr;
+  }
+
+  .analytics-columns--even {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+.rows {
+  display: flex;
+  flex-direction: column;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.rows__item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.625rem 0;
+  border-bottom: 1px solid var(--gk-color-border);
+}
+
+.rows__item:last-child {
+  border-bottom: 0;
+}
+
+.rows__label {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 0.875rem;
+  font-weight: 500;
+}
+
+.rows__value {
+  flex-shrink: 0;
+  font-size: 0.875rem;
+  color: var(--gk-color-on-surface-muted);
+}
+
+.rows__value--accent {
+  font-weight: 600;
+  color: var(--gk-color-primary);
+}
+
+.bars {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.bars__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.375rem;
+  font-size: 0.875rem;
+}
+
+.bars__name {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-weight: 500;
+}
+
+.bars__pct {
+  font-weight: 600;
+}
+
+.bars__track {
+  height: 8px;
+  border-radius: 999px;
+  background: var(--gk-color-border);
+  overflow: hidden;
+}
+
+.bars__fill {
+  height: 100%;
+  border-radius: 999px;
+  transition: width 0.3s ease;
 }
 </style>

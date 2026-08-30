@@ -1,130 +1,117 @@
 <template>
-  <div class="settings-page w-full">
-      <div class="page-header">
-        <h1 class="panel-section-title mb-2">{{ t('pages.settings.title') }}</h1>
-        <p class="panel-section-subtitle">
-          {{ t('pages.settings.subtitle') }}
-        </p>
-      </div>
+  <div>
+    <PageHeader :title="t('pages.settings.title')" :subtitle="t('pages.settings.subtitle')" />
 
-      <div class="settings-content grid w-full grid-cols-1 gap-8 md:grid-cols-2 md:items-start">
-        <ThemeSettings />
+    <div class="settings">
+      <ThemeSettings />
 
-        <div class="panel-card p-6">
-          <h2 class="text-h6 mb-4 flex items-center gap-2 font-semibold">
-            <AppIcon name="information" :size="22" />
-            {{ t('pages.settings.aboutThemeSystem') }}
-          </h2>
+      <PanelCard :title="t('pages.settings.aboutThemeSystem')" icon="information" padding="lg">
+        <section class="settings__section">
+          <h3 class="settings__heading">{{ t('pages.settings.themeFeatures') }}</h3>
+          <ul class="settings__list">
+            <li>{{ t('pages.settings.lightDarkMode') }}</li>
+            <li>{{ t('pages.settings.rtlLtrSupport') }}</li>
+            <li>{{ t('pages.settings.primaryColors') }}</li>
+            <li>{{ t('pages.settings.layoutOptions') }}</li>
+            <li>{{ t('pages.settings.fontCustomization') }}</li>
+            <li>{{ t('pages.settings.highContrast') }}</li>
+            <li>{{ t('pages.settings.solarIconStyle') }}</li>
+          </ul>
+        </section>
 
-          <div class="info-section">
-            <h4>{{ t('pages.settings.themeFeatures') }}</h4>
-            <ul>
-              <li>{{ t('pages.settings.lightDarkMode') }}</li>
-              <li>{{ t('pages.settings.rtlLtrSupport') }}</li>
-              <li>{{ t('pages.settings.primaryColors') }}</li>
-              <li>{{ t('pages.settings.layoutOptions') }}</li>
-              <li>{{ t('pages.settings.fontCustomization') }}</li>
-              <li>{{ t('pages.settings.highContrast') }}</li>
-              <li>{{ t('pages.settings.solarIconStyle') }}</li>
-            </ul>
-          </div>
+        <div class="panel-divider settings__divider" role="separator" />
 
-          <GkDivider class="my-4" />
+        <section class="settings__section">
+          <h3 class="settings__heading">{{ t('pages.settings.resources') }}</h3>
+          <p class="settings__text">
+            {{ t('pages.settings.godKitDocsBlurb') }}
+            <a
+              :href="docsUrl"
+              class="settings__link"
+              target="_blank"
+              rel="noopener noreferrer"
+            >{{ t('pages.settings.godKitDocsLink') }}</a>
+          </p>
+        </section>
 
-          <div class="info-section">
-            <h4>{{ t('pages.settings.resources') }}</h4>
-            <p>
-              {{ t('pages.settings.godKitDocsBlurb') }}
-              <a
-                :href="config.public.godKitDocumentation"
-                class="settings-docs-link"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                {{ t('pages.settings.godKitDocsLink') }}
-              </a>
-            </p>
-          </div>
+        <div class="panel-divider settings__divider" role="separator" />
 
-          <GkDivider class="my-4" />
+        <section class="settings__section">
+          <h3 class="settings__heading">{{ t('pages.settings.colorPalette') }}</h3>
+          <p class="settings__text">{{ t('pages.settings.colorPaletteDesc') }}</p>
+        </section>
 
-          <div class="info-section">
-            <h4>{{ t('pages.settings.colorPalette') }}</h4>
-            <p>{{ t('pages.settings.colorPaletteDesc') }}</p>
-          </div>
+        <div class="panel-divider settings__divider" role="separator" />
 
-          <GkDivider class="my-4" />
-
-          <div class="info-section">
-            <h4>{{ t('pages.settings.typography') }}</h4>
-            <p>{{ t('pages.settings.typographyDesc') }}</p>
-          </div>
-        </div>
-      </div>
+        <section class="settings__section">
+          <h3 class="settings__heading">{{ t('pages.settings.typography') }}</h3>
+          <p class="settings__text">{{ t('pages.settings.typographyDesc') }}</p>
+        </section>
+      </PanelCard>
+    </div>
   </div>
 </template>
 
 <script setup lang="ts">
 import { useI18n } from 'vue-i18n'
-import { GkDivider } from 'god-kit/vue'
 import ThemeSettings from '~/components/theme/ThemeSettings.vue'
-import AppIcon from '~/components/ui/AppIcon.vue'
 
 const { t } = useI18n()
-const config = useRuntimeConfig()
+const docsUrl = useRuntimeConfig().public.godKitDocumentation
 
-definePageMeta({
-  layout: 'dashboard',
-  middleware: 'auth'
-})
-
-useHead({
-  title: 'Settings - God Panel'
-})
+definePageMeta({ layout: 'dashboard', middleware: 'auth' })
+useHead({ title: 'Settings — God Panel' })
 </script>
 
 <style scoped>
-.settings-page {
-  padding: 24px 0;
+.settings {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.5rem;
+  align-items: start;
 }
 
-.page-header {
-  margin-bottom: 32px;
+@media (min-width: 900px) {
+  .settings {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
 }
 
-.info-section {
-  margin-bottom: 16px;
+.settings__section + .settings__section {
+  margin-top: 1rem;
 }
 
-.info-section h4 {
-  font-size: 16px;
+.settings__heading {
+  margin: 0 0 0.5rem;
+  font-size: 0.9375rem;
   font-weight: 600;
   color: var(--gk-color-on-surface);
-  margin-bottom: 8px;
 }
 
-.info-section ul {
-  padding-left: 20px;
+.settings__list {
+  margin: 0;
+  padding-inline-start: 1.25rem;
   color: var(--gk-color-on-surface-muted);
 }
 
-.info-section li {
-  margin-bottom: 4px;
+.settings__list li + li {
+  margin-top: 0.25rem;
 }
 
-.info-section p {
-  color: var(--gk-color-on-surface-muted);
+.settings__text {
+  margin: 0;
   line-height: 1.6;
+  color: var(--gk-color-on-surface-muted);
 }
 
-.settings-docs-link {
+.settings__divider {
+  margin-block: 1rem;
+}
+
+.settings__link {
   color: var(--gk-color-primary);
   font-weight: 600;
   text-decoration: underline;
   text-underline-offset: 2px;
-}
-
-.settings-docs-link:hover {
-  color: color-mix(in srgb, var(--gk-color-primary) 85%, var(--gk-color-on-surface));
 }
 </style>

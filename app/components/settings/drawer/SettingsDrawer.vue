@@ -1,6 +1,6 @@
 <template>
   <GkNavigationDrawer
-    v-model="settingsStore.openDrawer"
+    v-model="settingsStore.drawerOpen"
     :location="settingsStore.settings.direction === 'rtl' ? 'left' : 'right'"
     :width="360"
     class="settings-drawer"
@@ -38,7 +38,7 @@
 
         <GkTooltip :text="t('common.close')">
           <template #activator="{ props: tip }">
-            <GkButton v-bind="tip" variant="ghost" slim @click="settingsStore.onCloseDrawer">
+            <GkButton v-bind="tip" variant="ghost" slim @click="settingsStore.closeDrawer">
               <AppIcon name="close" :size="20" />
             </GkButton>
           </template>
@@ -181,14 +181,8 @@ const props = withDefaults(defineProps<Props>(), {
 
 const settingsStore = useSettingsStore()
 
-const fontOptions = [
-  'Inter',
-  'Roboto',
-  'Poppins',
-  'Barlow',
-  'DM Sans',
-  'Nunito Sans'
-]
+// Fonts come from the composable so the list can never drift from what loads.
+const { availableFonts: fontOptions } = useDynamicFonts()
 
 const toggleColorScheme = () => {
   const newScheme = settingsStore.settings.colorScheme === 'light' ? 'dark' : 'light'
@@ -224,7 +218,7 @@ const handleFontClick = (value: string) => {
 }
 
 const handleReset = () => {
-  settingsStore.onReset()
+  settingsStore.reset()
 }
 </script>
 
