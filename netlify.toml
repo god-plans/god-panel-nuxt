@@ -1,0 +1,13 @@
+# Netlify builds the panel with Nuxt's `netlify` preset (auto-detected on
+# Netlify). Pages are server-rendered by a Netlify Function, so the auth guard
+# can read the session cookie on the first request; static assets go to `dist`.
+[build]
+  command = "npm run build"
+  publish = "dist"
+
+[build.environment]
+  # Matches the Node version CI builds with (.github/workflows/ci.yml).
+  NODE_VERSION = "22"
+  # Demo login (godpanel@test.com / god123) works with no backend. Set this to
+  # "false" in the Netlify UI once a real API is behind NUXT_PUBLIC_API_URL.
+  NUXT_PUBLIC_DEMO_MODE = "true"
