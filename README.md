@@ -1,6 +1,6 @@
 # God Panel
 
-A Nuxt 4 admin dashboard starter: authentication, theming (light/dark, 6 accent colours, RTL), i18n, and a small set of layout components built on [god-kit](https://godkit.godplans.org/).
+A Nuxt 4 admin dashboard starter: authentication, theming (light/dark, 6 accent colours, RTL), i18n, and a small set of layout components built on [god-kit](https://god-kit.netlify.app/).
 
 It runs with **no backend** — a demo account is built in — so you can see the whole UI in one command and replace the sample data page by page.
 
@@ -359,4 +359,4 @@ npm install god-kit@^0.8.10
 
 AGPL-3.0-only — see [LICENSE](./LICENSE).
 
-Built with [Nuxt](https://nuxt.com/), [god-kit](https://godkit.godplans.org/), [Tailwind CSS](https://tailwindcss.com/) and [Pinia](https://pinia.vuejs.org/). Design inspired by [Minimals](https://minimals.cc/).
+Built with [Nuxt](https://nuxt.com/), [god-kit](https://god-kit.netlify.app/), [Tailwind CSS](https://tailwindcss.com/) and [Pinia](https://pinia.vuejs.org/). Design inspired by [Minimals](https://minimals.cc/).

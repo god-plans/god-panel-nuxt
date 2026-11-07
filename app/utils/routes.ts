@@ -70,7 +70,7 @@ export const dashboardNavItems: NavItem[] = [
   {
     key: 'god-kit-docs',
     title: 'common.godKitDocs',
-    path: 'https://godkit.godplans.org/',
+    path: 'https://god-kit.netlify.app/',
     icon: 'book-open-variant',
   },
 ]

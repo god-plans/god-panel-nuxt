@@ -4,7 +4,7 @@
   "description": "God Panel — Nuxt 4 admin dashboard starter built on god-kit, Tailwind CSS and Pinia",
   "author": "God Plan Team",
   "license": "AGPL-3.0-only",
-  "homepage": "https://godkit.godplans.org/",
+  "homepage": "https://god-kit.netlify.app/",
   "type": "module",
   "private": true,
   "engines": {

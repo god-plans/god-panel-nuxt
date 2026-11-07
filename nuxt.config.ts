@@ -45,7 +45,7 @@ export default defineNuxtConfig({
       /** When set, `plugins/error-handler.client.ts` can forward to Sentry. */
       sentryDsn: process.env.NUXT_PUBLIC_SENTRY_DSN || '',
       godKitDocumentation:
-        process.env.NUXT_PUBLIC_GOD_KIT_DOCS || 'https://godkit.godplans.org/',
+        process.env.NUXT_PUBLIC_GOD_KIT_DOCS || 'https://god-kit.netlify.app/',
     },
   },
 

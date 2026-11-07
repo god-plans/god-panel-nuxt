@@ -18,7 +18,7 @@
       </a>
 
       <a
-        href="https://docs.godplans.org/"
+        href="https://god-panel-documention.netlify.app/"
         target="_blank"
         rel="noopener noreferrer"
         class="info-link"
@@ -29,7 +29,7 @@
       </a>
 
       <a
-        href="https://godkit.godplans.org/"
+        href="https://god-kit.netlify.app/"
         target="_blank"
         rel="noopener noreferrer"
         class="info-link"
